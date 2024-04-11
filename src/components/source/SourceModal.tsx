@@ -44,6 +44,13 @@ const CrowdTangleFormSchema = Yup.object().shape({
   ),
 });
 
+const TelegramFormSchema = Yup.object().shape({
+  sourceNickname: Yup.string().required('Source name is a required field'),
+  sourceCredentials: Yup.string().required(
+    'A credential is required to create a source'
+  ),
+});
+
 const sourceFormSchema = Yup.object().shape({
   sourceNickname: Yup.string().required('Source nickname required'),
   sourceKeywords: Yup.string(),
@@ -59,11 +66,13 @@ const mediaTypes = [
   'elmo',
   'SMS GH',
   'facebook',
+  'telegram'
 ];
 const mediaUrls = {
   twitter: 'https://twitter.com/',
   facebook: 'https://www.facebook.com/',
   instagram: 'https://www.instagram.com/',
+  telegram: 'https://www.telegram.com/'
 };
 
 export default function SourceModal(props: IProps) {
@@ -112,6 +121,13 @@ export default function SourceModal(props: IProps) {
           nickname: values.sourceNickname,
           url: mediaUrls['facebook'],
         };
+      case 'telegram':
+        return {
+          credentials: values.sourceCredentials,
+          media: sourceMediaType,
+          nickname: values.sourceNickname,
+          url: mediaUrls['telegram'],
+        };
       default:
         return {};
     }
@@ -126,6 +142,9 @@ export default function SourceModal(props: IProps) {
   );
   const crowdtangleCredentials = props.credentials.filter(
     (cred) => cred.type === 'crowdtangle'
+  );
+  const telegramCredentials = props.credentials.filter(
+    (cred) => cred.type === 'telegram'
   );
 
   const twitterFormJSX = (
@@ -279,6 +298,145 @@ export default function SourceModal(props: IProps) {
                   </Alert>
                 )}
               </Form.Group>
+            </Container>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='secondary' onClick={() => setModalShow(false)}>
+              Cancel
+            </Button>
+            <Button variant='primary' type='submit' disabled={isSubmitting}>
+              Submit
+            </Button>
+          </Modal.Footer>
+        </Form>
+      )}
+    </Formik>
+  );
+  
+  const TelegramFormJSX = (
+    <Formik
+      initialValues={{
+        sourceNickname: props.source?.nickname || '',
+        sourceCredentials:
+          props.source?.credentials._id || defaultCredential?._id,
+      }}
+      validationSchema={TelegramFormSchema}
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
+        if (props.source) {
+          editSourceMutation.mutate(formValuesToSource(values));
+        } else {
+          newSourceMutation.mutate(formValuesToSource(values));
+        }
+      }}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleSubmit,
+        handleBlur,
+        isSubmitting,
+        /* and other goodies */
+      }) => (
+        <Form>
+          <Modal.Header closeButton>
+            <Modal.Title>Create source</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Container>
+              <FormGroup controlId='sourceMedia' className='mb-3'>
+                <FormLabel>Media</FormLabel>
+                <FormSelect
+                  value={sourceMediaType}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                    setSourceMediaType(e.target.value);
+                    handleChange(e);
+                  }}
+                  onBlur={handleBlur}
+                >
+                  {mediaTypes.map((mediaType) => {
+                    return (
+                      <option key={mediaType} value={mediaType}>
+                        {capitalizeFirstLetter(mediaType)}
+                      </option>
+                    );
+                  })}
+                </FormSelect>
+              </FormGroup>
+              <FormGroup controlId='sourceNickname' className={'mb-3'}>
+                <FormLabel>Name</FormLabel>
+                <Field
+                  name={'sourceNickname'}
+                  type='text'
+                  className={
+                    errors.sourceNickname
+                      ? 'form-control is-invalid'
+                      : 'form-control'
+                  }
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.sourceNickname && (
+                  <div
+                    className='invalid-feedback'
+                    style={{ display: 'block' }}
+                  >
+                    {errors.sourceNickname}
+                  </div>
+                )}
+                <FormText muted>
+                  Providing a name keeps track of which source a report is from.
+                </FormText>
+              </FormGroup>
+              <FormGroup className='mb-3'>
+                <FormLabel>Credentials</FormLabel>
+                <Field
+                  as='select'
+                  name='sourceCredentials'
+                  className={
+                    errors.sourceCredentials
+                      ? 'form-control is-invalid'
+                      : 'form-control'
+                  }
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  disabled={!telegramCredentials.length}
+                >
+                  <option value='none'> Select credential </option>
+                  {props.credentials.map((cred: Credential) => {
+                    if (cred.type === 'telegram') {
+                      return (
+                        <option key={cred._id} value={cred._id}>
+                          {cred.name}
+                        </option>
+                      );
+                    }
+                  })}
+                </Field>
+                {errors.sourceCredentials && (
+                  <div
+                    className='invalid-feedback'
+                    style={{ display: 'block' }}
+                  >
+                    {errors.sourceCredentials}
+                  </div>
+                )}
+
+                <FormText muted>
+                  Select which API credentials will be used for API calls. Find
+                  more info on the Crowdtangle API{' '}
+                  <a href='https://help.crowdtangle.com/en/articles/1189612-crowdtangle-api'>
+                    here
+                  </a>
+                  .
+                </FormText>
+                {!telegramCredentials.length && (
+                  <Alert key='danger' variant='danger' className='mt-2'>
+                    No credentials found. Please create credentials first.
+                  </Alert>
+                )}
+              </FormGroup>
             </Container>
           </Modal.Body>
           <Modal.Footer>
@@ -462,6 +620,7 @@ export default function SourceModal(props: IProps) {
         {sourceMediaType === 'twitter' && <>{twitterFormJSX}</>}
         {(sourceMediaType === 'facebook' ||
           sourceMediaType === 'instagram') && <>{crowdtangleFormJSX}</>}
+          {sourceMediaType === 'telegram' && <>{TelegramFormJSX}</>}
       </Modal>
     </>
   );

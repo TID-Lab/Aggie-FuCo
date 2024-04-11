@@ -21,7 +21,7 @@ function _configureTransports(name) {
 
   return [
     logger.SES.disabled ? null : new SESTransport(logger.SES),
-    logger.Slack.disabled ? null : new SlackTransport(logger.Slack),
+    // logger.Slack.disabled ? null : new SlackTransport(logger.Slack),
     logger.file.disabled ? null : new winston.transports.File(logger.file),
     logger.console.disabled ? null : new winston.transports.Console(logger.console),
   ].filter(Boolean);
