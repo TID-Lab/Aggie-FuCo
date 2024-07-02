@@ -92,7 +92,6 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.1.0",
     "passport.socketio": "^3.7.0",
-    "pm2": "^4.4.0",
     "prop-types": "^15.8.1",
     "react-bootstrap": "^2.2.1",
     "react-bootstrap-typeahead": "^6.0.0-alpha.10",
