@@ -1,3 +1,5 @@
+// deprecated / not being used
+
 const { Server } = require('socket.io');
 const logger = require('../logger');
 const { httpServer } = require('../api');

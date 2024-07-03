@@ -9,7 +9,7 @@ var dbTools = require('../database-tools');
 var Report = require('../../backend/models/report');
 var User = require('../../backend/models/user');
 var Source = require('../../backend/models/source');
-var Trend = require('../../backend/models/trend');
+//var Trend = require('../../backend/models/trend');
 var Group = require('../../backend/models/group');
 var SMTCTag = require('../../backend/models/tag');
 var expect = require('chai').expect;
@@ -18,9 +18,9 @@ var _ = require('lodash');
 
 module.exports = _.clone(dbTools);
 
-before(function(done) {
+before(function (done) {
   this.timeout(4000);
-  dbTools.initDb(function(err) {
+  dbTools.initDb(function (err) {
     if (err) return done(err);
     dbTools.resetDb(done);
   });
@@ -28,16 +28,16 @@ before(function(done) {
 after(dbTools.disconnectDropDb);
 
 function expectModelsEmpty(done) {
-  User.find({}, function(err, results) {
+  User.find({}, function (err, results) {
     if (err) return done(err);
     expect(results).to.have.length(1);
-    async.each([Report, Source, Trend, Group, SMTCTag], expectEmpty, done);
+    async.each([Report, Source, Group, SMTCTag], expectEmpty, done);
   });
 }
 module.exports.expectModelsEmpty = expectModelsEmpty;
 
 function expectEmpty(model, done) {
-  model.find({}, function(err, results) {
+  model.find({}, function (err, results) {
     if (err) return done(err);
     expect(results).to.be.empty;
     done();
@@ -64,7 +64,7 @@ module.exports.compare = compare;
 
 // Expect listener to not emit reports
 function expectToNotEmitReport(listener, done) {
-  listener.once('report', function() {
+  listener.once('report', function () {
     done(new Error('Should not emit reports'));
   });
 }
@@ -72,7 +72,7 @@ module.exports.expectToNotEmitReport = expectToNotEmitReport;
 
 // Expect listener to emit specific errors
 function expectToEmitError(listener, message, done) {
-  listener.once('error', function(err) {
+  listener.once('error', function (err) {
     expect(err).to.be.an.instanceof(Error);
     expect(err.message).to.contain(message);
     done();
@@ -82,19 +82,19 @@ module.exports.expectToEmitError = expectToEmitError;
 
 // Expect listener to emit warnings
 function expectToEmitWarning(listener, done) {
-  listener.once('warning', function(err) {
+  listener.once('warning', function (err) {
     expect(err).to.be.an.instanceof(Error);
     done();
   });
 }
 module.exports.expectToEmitWarning = expectToEmitWarning;
 
-var EventCounter = function(emitter, eventName) {
+var EventCounter = function (emitter, eventName) {
   var self = this;
   this.num = 0;
   this.emitter = emitter;
   this.eventName = eventName;
-  this.listener = function() {
+  this.listener = function () {
     self.num++;
     self.emit('new');
   };
@@ -103,24 +103,24 @@ var EventCounter = function(emitter, eventName) {
 
 util.inherits(EventCounter, EventEmitter);
 
-EventCounter.prototype.waitForEvents = function(num, callback) {
+EventCounter.prototype.waitForEvents = function (num, callback) {
   var self = this;
   if (this.num >= num) return setImmediate(callback);
-  this.on('new', function() {
+  this.on('new', function () {
     if (self.num === num) {
       setImmediate(callback);
     }
   });
 };
 
-EventCounter.prototype.kill = function() {
+EventCounter.prototype.kill = function () {
   this.emitter.removeListener(this.eventName, this.listener);
 };
 
 module.exports.EventCounter = EventCounter;
 
 function tagQueryTester(model, tags, n) {
-  return function(done) {
+  return function (done) {
     var query;
     if (model === 'report') {
       var ReportQuery = require('../../backend/models/query/report-query');
@@ -133,7 +133,7 @@ function tagQueryTester(model, tags, n) {
         tags: tags
       });
     }
-    query.run(function(err, records) {
+    query.run(function (err, records) {
       if (err) return done(err);
       expect(records).to.have.keys(['total', 'results']);
       expect(records.total).to.equal(n);
