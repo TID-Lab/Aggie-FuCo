@@ -7,8 +7,8 @@ import {
   Tag,
   User,
   VeracityOptions,
-} from '../../objectTypes';
-import React, { useEffect, useState } from 'react';
+} from "../../objectTypes";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Card,
@@ -20,40 +20,40 @@ import {
   FormGroup,
   Collapse,
   ButtonToolbar,
-} from 'react-bootstrap';
+} from "react-bootstrap";
 import GroupTable, {
   LoadingGroupTable,
-} from '../../components/group/GroupTable';
-import StatsBar from '../../components/StatsBar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+} from "../../components/group/GroupTable";
+import StatsBar from "../../components/StatsBar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
   faFilter,
   faPlusCircle,
   faSearch,
-} from '@fortawesome/free-solid-svg-icons';
-import { useQuery, useQueryClient } from 'react-query';
-import { getSources } from '../../api/sources';
-import { getGroups } from '../../api/groups';
-import { getTags } from '../../api/tags';
-import { getUsers } from '../../api/users';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import GroupModal from '../../components/group/GroupModal';
-import { AxiosError } from 'axios';
-import ErrorCard from '../../components/ErrorCard';
+} from "@fortawesome/free-solid-svg-icons";
+import { useQuery, useQueryClient } from "react-query";
+import { getSources } from "../../api/sources";
+import { getGroups } from "../../api/groups";
+import { getTags } from "../../api/tags";
+import { getUsers } from "../../api/users";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import GroupModal from "../../components/group/GroupModal";
+import { AxiosError } from "axios";
+import ErrorCard from "../../components/ErrorCard";
 import AggiePagination, {
   LoadingPagination,
-} from '../../components/AggiePagination';
-import { Field, Formik, Form } from 'formik';
+} from "../../components/AggiePagination";
+import { Field, Formik, Form } from "formik";
 import {
   CLOSED_OPTIONS,
   ESCALATED_OPTIONS,
   parseFilterFields,
   VERACITY_OPTIONS,
-} from '../../helpers';
-import DatePickerField from '../../components/DatePickerField';
-import TagsTypeahead from '../../components/tag/TagsTypeahead';
-import { io, Socket } from 'socket.io-client';
+} from "../../helpers";
+import DatePickerField from "../../components/DatePickerField";
+import TagsTypeahead from "../../components/tag/TagsTypeahead";
+import { io, Socket } from "socket.io-client";
 
 const ITEMS_PER_PAGE = 50;
 
@@ -69,18 +69,18 @@ const GroupsIndex = (props: IProps) => {
 
   // This
   const [queryState, setQueryState] = useState<GroupSearchState>({
-    locationName: searchParams.get('locationName'),
-    veracity: searchParams.get('veracity'),
-    escalated: searchParams.get('escalated') === 'true',
-    closed: searchParams.get('closed') === 'true',
-    totalReports: Number(searchParams.get('totalReports')),
-    assignedTo: searchParams.get('assignedTo'),
-    creator: searchParams.get('creator'),
-    title: searchParams.get('title'),
-    after: searchParams.get('after'),
-    before: searchParams.get('before'),
-    idnum: Number(searchParams.get('idnum')),
-    page: Number(searchParams.get('page') || '0'),
+    locationName: searchParams.get("locationName"),
+    veracity: searchParams.get("veracity"),
+    escalated: searchParams.get("escalated") === "true",
+    closed: searchParams.get("closed") === "true",
+    totalReports: Number(searchParams.get("totalReports")),
+    assignedTo: searchParams.get("assignedTo"),
+    creator: searchParams.get("creator"),
+    title: searchParams.get("title"),
+    after: searchParams.get("after"),
+    before: searchParams.get("before"),
+    idnum: Number(searchParams.get("idnum")),
+    page: Number(searchParams.get("page") || "0"),
   });
 
   // This clears search state and search params
@@ -121,43 +121,43 @@ const GroupsIndex = (props: IProps) => {
 
   const [showFilterParams, setShowFilterParams] = useState(false);
   const sourcesQuery = useQuery<Source[] | undefined, AxiosError>(
-    'sources',
+    "sources",
     getSources,
     {
       onError: (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
-          navigate('/login');
+          navigate("/login");
         }
       },
     }
   );
   const groupsQuery = useQuery<Groups | undefined, AxiosError>(
-    ['groups', queryState],
+    ["groups", queryState],
     () => {
       return getGroups(queryState);
     },
     {
       onError: (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
-          navigate('/login');
+          navigate("/login");
         }
       },
     }
   );
-  const tagsQuery = useQuery<Tag[] | undefined, AxiosError>('tags', getTags, {
+  const tagsQuery = useQuery<Tag[] | undefined, AxiosError>("tags", getTags, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
-        navigate('/login');
+        navigate("/login");
       }
     },
   });
   const usersQuery = useQuery<User[] | undefined, AxiosError>(
-    'users',
+    "users",
     getUsers,
     {
       onError: (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
-          navigate('/login');
+          navigate("/login");
         }
       },
     }
@@ -176,10 +176,13 @@ const GroupsIndex = (props: IProps) => {
 
   useEffect(() => {
     if (!socket) {
-      socket = io('ws://localhost:3000/groups');
-
+      const SocketURL =
+        process.env.NODE_ENV === "production"
+          ? window.location.host
+          : "ws://localhost:3000";
+      socket = io(`${SocketURL}/groups`);
       socket.onAny((eventName, message) => {
-        console.log('Message Received from Server', eventName, message);
+        console.log("Message Received from Server", eventName, message);
         groupsQuery.refetch();
       });
     }
@@ -187,21 +190,21 @@ const GroupsIndex = (props: IProps) => {
 
   return (
     <div>
-      <Container fluid className={'mt-4'}>
+      <Container fluid className={"mt-4"}>
         <Row>
           <Col></Col>
           <Col xl={9}>
             <Formik
               initialValues={{
-                creator: searchParams.get('creator') || '',
-                idnum: searchParams.get('idnum') || '',
-                veracity: searchParams.get('veracity') || '',
-                escalated: searchParams.get('escalated') || '',
-                closed: searchParams.get('closed') || '',
-                before: searchParams.get('before') || '',
-                after: searchParams.get('after') || '',
-                totalReports: searchParams.get('totalReports') || '',
-                assignedTo: searchParams.get('assignedTo') || '',
+                creator: searchParams.get("creator") || "",
+                idnum: searchParams.get("idnum") || "",
+                veracity: searchParams.get("veracity") || "",
+                escalated: searchParams.get("escalated") || "",
+                closed: searchParams.get("closed") || "",
+                before: searchParams.get("before") || "",
+                after: searchParams.get("after") || "",
+                totalReports: searchParams.get("totalReports") || "",
+                assignedTo: searchParams.get("assignedTo") || "",
               }}
               onSubmit={(values, { setSubmitting, resetForm }) => {
                 setSearchParams(parseFilterFields(values));
@@ -212,9 +215,9 @@ const GroupsIndex = (props: IProps) => {
                 <Form>
                   <Card className='mb-3' bg='light'>
                     <Card.Body className='pb-2 pt-2'>
-                      <Row className={'justify-content-between'}>
+                      <Row className={"justify-content-between"}>
                         <Col>
-                          <InputGroup className={'mt-2 mb-2'}>
+                          <InputGroup className={"mt-2 mb-2"}>
                             <Field
                               id='keyword'
                               name='keywords'
@@ -244,14 +247,14 @@ const GroupsIndex = (props: IProps) => {
                                 name='veracity'
                                 className='form-select'
                               >
-                                <option key={'none'} value={''}>
+                                <option key={"none"} value={""}>
                                   All
                                 </option>
                                 {VERACITY_OPTIONS.map((option) => {
                                   return (
                                     <option
                                       value={option}
-                                      key={'veracity_' + option}
+                                      key={"veracity_" + option}
                                     >
                                       {option}
                                     </option>
@@ -276,9 +279,9 @@ const GroupsIndex = (props: IProps) => {
                                   return (
                                     <option
                                       value={option}
-                                      key={'escalated_' + option}
+                                      key={"escalated_" + option}
                                     >
-                                      {option === 'true' ? 'Yes' : 'No'}
+                                      {option === "true" ? "Yes" : "No"}
                                     </option>
                                   );
                                 })}
@@ -296,7 +299,7 @@ const GroupsIndex = (props: IProps) => {
                                 name='assignedTo'
                                 className='form-select'
                               >
-                                <option value={''}>All</option>
+                                <option value={""}>All</option>
                                 {usersQuery.isFetched &&
                                   usersQuery.data &&
                                   usersQuery.data.map((user: User) => {
@@ -317,7 +320,7 @@ const GroupsIndex = (props: IProps) => {
                                 name='creator'
                                 className='form-select'
                               >
-                                <option value={''} key={'none'}>
+                                <option value={""} key={"none"}>
                                   All
                                 </option>
                                 {usersQuery.isFetched &&
@@ -345,16 +348,16 @@ const GroupsIndex = (props: IProps) => {
                                 name='closed'
                                 className='form-select'
                               >
-                                <option value={''} key={'none'}>
+                                <option value={""} key={"none"}>
                                   All
                                 </option>
                                 {CLOSED_OPTIONS.map((option) => {
                                   return (
                                     <option
                                       value={option}
-                                      key={'closed_' + option}
+                                      key={"closed_" + option}
                                     >
-                                      {option === 'true' ? 'Yes' : 'No'}
+                                      {option === "true" ? "Yes" : "No"}
                                     </option>
                                   );
                                 })}
@@ -379,7 +382,7 @@ const GroupsIndex = (props: IProps) => {
                             <FormGroup className='mt-2 mb-2'>
                               <FormLabel>Created before</FormLabel>
                               <DatePickerField
-                                className={'form-control'}
+                                className={"form-control"}
                                 name='before'
                               />
                             </FormGroup>
@@ -388,13 +391,13 @@ const GroupsIndex = (props: IProps) => {
                             <FormGroup className='mt-2 mb-2'>
                               <FormLabel>Created after</FormLabel>
                               <DatePickerField
-                                className={'form-control'}
+                                className={"form-control"}
                                 name='after'
                               />
                             </FormGroup>
                           </Col>
                         </Row>
-                        <Row className={'float-end'}>
+                        <Row className={"float-end"}>
                           <ButtonToolbar>
                             {queryState.escalated ||
                               queryState.closed ||
@@ -407,24 +410,24 @@ const GroupsIndex = (props: IProps) => {
                               hasValues(values) ||
                               (filterTags.length > 0 && (
                                 <Button
-                                  variant={'outline-secondary'}
+                                  variant={"outline-secondary"}
                                   onClick={() => {
                                     clearFilterParams();
-                                    values.escalated = '';
-                                    values.closed = '';
-                                    values.after = '';
-                                    values.before = '';
-                                    values.totalReports = '';
-                                    values.assignedTo = '';
-                                    values.creator = '';
-                                    values.veracity = '';
+                                    values.escalated = "";
+                                    values.closed = "";
+                                    values.after = "";
+                                    values.before = "";
+                                    values.totalReports = "";
+                                    values.assignedTo = "";
+                                    values.creator = "";
+                                    values.veracity = "";
                                     setFilterTags([]);
                                   }}
-                                  className={'me-2'}
+                                  className={"me-2"}
                                 >
                                   <FontAwesomeIcon
                                     icon={faClose}
-                                    className={'me-2'}
+                                    className={"me-2"}
                                   />
                                   Clear filter(s)
                                 </Button>
@@ -453,7 +456,7 @@ const GroupsIndex = (props: IProps) => {
               usersQuery.data && (
                 <Card>
                   <Card.Header className='pe-2 ps-2'>
-                    <ButtonToolbar className={'justify-content-between'}>
+                    <ButtonToolbar className={"justify-content-between"}>
                       <div>
                         <Button
                           variant='outline-secondary'
@@ -491,7 +494,7 @@ const GroupsIndex = (props: IProps) => {
                     users={usersQuery.data}
                   />
                   <Card.Footer className='pe-2 ps-2'>
-                    <ButtonToolbar className={'justify-content-end'}>
+                    <ButtonToolbar className={"justify-content-end"}>
                       {groupsQuery.data &&
                         groupsQuery.data.total &&
                         groupsQuery.data.total > 0 && (
@@ -521,7 +524,7 @@ const GroupsIndex = (props: IProps) => {
             {groupsQuery.isLoading && (
               <Card>
                 <Card.Header className='pe-2 ps-2'>
-                  <ButtonToolbar className={'justify-content-between'}>
+                  <ButtonToolbar className={"justify-content-between"}>
                     <div>
                       <Button
                         variant='outline-secondary'
@@ -538,7 +541,7 @@ const GroupsIndex = (props: IProps) => {
                       <Button variant='primary' size='sm' disabled>
                         <FontAwesomeIcon
                           icon={faPlusCircle}
-                          className={'me-1'}
+                          className={"me-1"}
                         ></FontAwesomeIcon>
                         <span> Create group </span>
                       </Button>
@@ -551,7 +554,7 @@ const GroupsIndex = (props: IProps) => {
                 <LoadingGroupTable />
               </Card>
             )}
-            <div className={'pb-5'}></div>
+            <div className={"pb-5"}></div>
           </Col>
           <Col>
             <div className='d-none d-xl-block'>{/*<StatsBar/>*/}</div>

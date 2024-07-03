@@ -5,12 +5,19 @@ const EventRouter = require('./event-router');
 const oldCl = console.log.bind(console);
 console.log = (...args) => oldCl(chalk.green(args));
 
+
+const isDev = process.env.ENVIRONMENT === 'development'
+
 module.exports = (httpServer) => {
-  const serverSocket = new Server(httpServer, {
+  //only for development
+  const devConfig = {
     cors: {
       origin: 'http://localhost:8000',
-    },
-  });
+    }
+  }
+  const serverConfig = isDev ? devConfig : {};
+
+  const serverSocket = new Server(httpServer, serverConfig);
 
   console.log(`${chalk.green('Started Server Socket')}`);
 

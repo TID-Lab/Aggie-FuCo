@@ -1,8 +1,8 @@
 const { Server } = require('socket.io');
 const httpServer = require('http').createServer();
-const { io } = require('socket.io-client');
 
-const port = 37778;
+
+const port = process.env.SOCKET_FRONTEND_PORT || 37778;
 let eventServer = null,
   socketToClient = null,
   waitingForServerSocket = [],
