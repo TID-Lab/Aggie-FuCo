@@ -16,7 +16,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const authRoutes = require('./api/routes/authRoutes');
 const User = require('./models/user');
-var mailer = require('./mailer.js');
+//var mailer = require('./mailer.js');
 var _ = require('underscore');
 var readLineSync = require('readline-sync');
 var { version: packageVersion } = require('../package.json');
@@ -281,7 +281,8 @@ server.listen(app.get('port'), function () {
   logger.info('✔ Aggie is listening to protocol ' + protocol);
 });
 
-require('./rooms')(server);
+require('./api/sockets/frontend-create-rooms')(server);
+
 
 module.exports = childProcess;
 module.exports.app = app;

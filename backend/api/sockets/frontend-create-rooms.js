@@ -1,6 +1,6 @@
 const { Server } = require('socket.io');
 const chalk = require('chalk');
-const EventRouter = require('../event-router');
+const EventRouter = require('./event-router');
 
 const oldCl = console.log.bind(console);
 console.log = (...args) => oldCl(chalk.green(args));

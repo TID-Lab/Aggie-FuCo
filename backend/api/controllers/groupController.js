@@ -6,7 +6,7 @@ const _ = require('lodash');
 var writelog = require('../../writeLog');
 var tags = require('../../shared/tags');
 const Report = require('../../models/report');
-const eventRouter = require('../../event-router');
+const eventRouter = require('../sockets/event-router');
 
 exports.group_create = (req, res) => {
   req.body.creator = req.user;

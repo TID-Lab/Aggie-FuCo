@@ -9,7 +9,7 @@ var SESTransport = require('./ses-transport')
 var SlackTransport = require("winston-slack-webhook-transport");
 
 /** Log custom timestamp */
-var loggerTimestamp = function() {
+var loggerTimestamp = function () {
   return moment.utc().format('ddd, D MMM YYYY HH:mm:ss z');
 };
 
@@ -23,7 +23,7 @@ function _configureTransports(name) {
     logger.SES.disabled ? null : new SESTransport(logger.SES),
     // logger.Slack.disabled ? null : new SlackTransport(logger.Slack),
     logger.file.disabled ? null : new winston.transports.File(logger.file),
-    logger.console.disabled ? null : new winston.transports.Console(logger.console),
+    logger.console?.disabled ? null : new winston.transports.Console(logger.console),
   ].filter(Boolean);
 }
 
@@ -43,12 +43,12 @@ _loggers.master = _configureLogger('master');
 
 // initialize specific logger
 // called by backend.js
-module.exports.init = function(loggerName) {
+module.exports.init = function (loggerName) {
   _loggers[loggerName] = _configureLogger(loggerName);
 };
 
 // log to specific logger
-module.exports.log = function(loggerName, level, message, metadata) {
+module.exports.log = function (loggerName, level, message, metadata) {
   var logger = _loggers[loggerName];
   if (!logger) return;
 

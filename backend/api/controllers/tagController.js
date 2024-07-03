@@ -2,7 +2,7 @@
 var SMTCTag = require('../../models/tag');
 var _ = require('lodash');
 const validator = require('validator');
-const eventRouter = require('../../event-router');
+const eventRouter = require('../sockets/event-router');
 
 // Get a list of all Tags
 exports.tag_tags = (req, res) => {
