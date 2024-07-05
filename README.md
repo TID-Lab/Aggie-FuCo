@@ -6,15 +6,15 @@ Aggie is a web application for using social media and other resources to track g
 
 Aggie can retrieve data from several sources:
 
-* [Twitter](https://search.twitter.com) (tweets matching a keyword search)
-* [Telegram](https://telegram.org)
-* [Crowdtangle](https://www.crowdtangle.com/) (Facebook, Instagram, and Reddit posts from publicly accessible groups and pages)
-* [RSS](http://en.wikipedia.org/wiki/RSS) (article titles and descriptions)
-* [ELMO](http://getelmo.org) (answers to survey questions)
+- [Twitter](https://search.twitter.com) (tweets matching a keyword search)
+- [Telegram](https://telegram.org)
+- [Crowdtangle](https://www.crowdtangle.com/) (Facebook, Instagram, and Reddit posts from publicly accessible groups and pages)
+- [RSS](http://en.wikipedia.org/wiki/RSS) (article titles and descriptions)
+- [ELMO](http://getelmo.org) (answers to survey questions)
 
-Items (called *reports*) from all sources are streamed into the application. Monitors can quickly triage incoming reports by marking them as *relevant* or *irrelevant*.
+Items (called _reports_) from all sources are streamed into the application. Monitors can quickly triage incoming reports by marking them as _relevant_ or _irrelevant_.
 
-Relevant reports can be grouped into *groups* for further monitoring and follow-up.
+Relevant reports can be grouped into _groups_ for further monitoring and follow-up.
 
 Reports are fully searchable and filterable via a fast web interface.
 
@@ -22,7 +22,7 @@ Report queries can be saved and tracked over time via a series of visual analyti
 
 Aggie is built for scalability and can handle hundreds of incoming reports per second. The backend fetching and analytics systems feature a modular design well-suited to parallelism and multi-core architectures.
 
-Users can be assigned to *admin*, *manager*, *monitor*, and *viewer* roles, each with appropriate permissions.
+Users can be assigned to _admin_, _manager_, _monitor_, and _viewer_ roles, each with appropriate permissions.
 
 Aggie is built using Angular.js and Express.js, both state-of-the-art development frameworks.
 
@@ -32,12 +32,12 @@ Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
 ## Table of Contents
 
-* [Using the Application](#using-the-application)
-* [Source Installation](#source-installation)
-* [Maintenance](#maintenance)
-* [Project Configuration](#project-configuration)
-* [Architecture](#architecture)
-* [Building and Publishing Aggie's documentation](#building-and-publishing-aggies-documentation)
+- [Using the Application](#using-the-application)
+- [Source Installation](#source-installation)
+- [Maintenance](#maintenance)
+- [Project Configuration](#project-configuration)
+- [Architecture](#architecture)
+- [Building and Publishing Aggie's documentation](#building-and-publishing-aggies-documentation)
 
 ## Using the Application
 
@@ -51,56 +51,61 @@ We recommend the **[semi-automated installation script](#semi-automated-installa
 
 Again, see below for automated installation.
 
-1. **node.js** (v12.16 LTS)
+1. **node.js** (v18.20 LTS)
    1. Use [Node Version Manager](https://github.com/nvm-sh/nvm).
       - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
       - After installing nvm:
-          1. Navigate to the aggie project directory: `cd aggie`.
-          1. Run `nvm install` to install the version specified in `.nvmrc`.
+        1. Navigate to the aggie project directory: `cd aggie`.
+        1. Run `nvm install` to install the version specified in `.nvmrc`.
 1. **Mongo DB** (requires >= 4.2.0)
-    1. Follow the [installation instructions](https://docs.mongodb.com/v4.2/installation/#mongodb-community-edition-installation-tutorials) for your operating system.
-    1. Make sure MongoDB is running:
-        1. On Linux run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
-    1. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
+   1. Follow the [installation instructions](https://docs.mongodb.com/v4.2/installation/#mongodb-community-edition-installation-tutorials) for your operating system.
+   1. Make sure MongoDB is running:
+      1. On Linux run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
+   1. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
 1. (optional) **SMTP email server**
-    1. Required in production for adding new users.
+   1. Required in production for adding new users.
 1. (optional) **JRE**
-    - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
-    - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
-1. (optional) **Python** (requires >= 2.7) 
-    - Python 2.7 is required to use the hate speech classifier (presently only available for Burmese language).
-    - Python 2.7 is required because one of the dependencies ([Burmese Language Tools](https://github.com/MyanmarOnlineAdvertising/myanmar_language_tools)) for segmenting Burmese text is written in Python 2.7.
-
+   - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
+   - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
+1. (optional) **Python** (requires >= 2.7)
+   - Python 2.7 is required to use the hate speech classifier (presently only available for Burmese language).
+   - Python 2.7 is required because one of the dependencies ([Burmese Language Tools](https://github.com/MyanmarOnlineAdvertising/myanmar_language_tools)) for segmenting Burmese text is written in Python 2.7.
 
 ### Installation notes
 
 Again, see below for automated installation.
 
 1. Clone the [aggie repo](https://github.com/TID-Lab/aggie).
-    - In your terminal, navigate to your main projects folder (e.g. Documents).
-    - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
-    - `cd aggie`
+   - you can use github-desktop, or clone using git.
+   - In your terminal, navigate to your main projects folder (e.g. Documents).
+   - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
+   - `cd aggie`
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
-    -  Set `adminPassword` to the default password your want to use for the `admin` user during installation.
-    - For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
-    - If using hate speech indication icons, set hateSpeechThreshold at the threshold the icon appears (.0 - 1) and set enable to true.
+   - Set `adminPassword` to the default password your want to use for the `admin` user during installation.
+   - For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
+   - If using hate speech indication icons, set hateSpeechThreshold at the threshold the icon appears (.0 - 1) and set enable to true.
 1. (optional, rarely needed) To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
-    - If you do not have the certificate you can create a new self-signed certificate with the following command:
-  `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
-    - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
-    - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
-1.  Hate speech detection is available for Burmese language. Set up steps are listed in Semi-automated installation script. In config/secrets.json, set the detectHateSpeech parameter to true. The API will run on http://localhost:5000. User will never directly interact with this API.
+   - If you do not have the certificate you can create a new self-signed certificate with the following command:
+     `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
+   - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
+   - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
+1. Hate speech detection is available for Burmese language. Set up steps are listed in Semi-automated installation script. In config/secrets.json, set the detectHateSpeech parameter to true. The API will run on http://localhost:5000. User will never directly interact with this API.
 1. Run `npm install` from the project directory.
-    - This installs all dependencies and concatenates the angular application.
-1. (optional) Run `npm install -g gulp mocha karma-cli protractor migrate`.
-    - This installs some tools globally which can then be run from the command line for testing.
-    - You will most likely need Google Chrome installed on your computer for the protractor tests to run.
-    - This is optional, as `npx` provides easy access to the local copies of these that are installed by `npm install`
-1. To start server in production mode, run `npm start`. Use `npm run dev` for development.
-    - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
-1. Navigate to `https://localhost:3000` in your browser.
-    - This will show you the running site. Login with the user name and password from your terminal mentioned above.
-    - If you did not set up the SSL certificate, use `http://localhost:3000` instead
+   - This installs all dependencies.
+
+### Development
+
+1. Use `npm run dev:all` for development.
+   - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
+   - you can run frontend and backend in separate shells with `npm run dev:frontend` and `npm run dev:backend`
+1. Navigate to `https://localhost:8000` in your browser.
+   - This will show you the running site. Login with the user name and password from your terminal mentioned above.
+
+### Production
+
+1. build react app with `npm run build`
+1. run `npm start`
+   - remember to have your `ENVIRONMENT=production` in the `.env` file.
 
 ### Semi-automated installation script
 
@@ -135,7 +140,7 @@ crontab -e
 # (e.g. if it's 12:15pm, write `16` instead of `X`):
 X * * * * PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && sudo /usr/bin/certbot renew --no-self-upgrade > ${HOME}/certbot-cron.log 2>&1
 
-# Then wait until that time occurs, and verify that it logged a renewal attempt: 
+# Then wait until that time occurs, and verify that it logged a renewal attempt:
 cat ~/certbot-cron.log
 # You should see something like "Cert not yet due for renewal / No renewals were attempted."
 # which means the certificate is valid and the cron job is running.
@@ -184,7 +189,7 @@ npm install forever -g # install `forever` npm module.
 pip install virtualenv # install virtual environment.
 virtualenv venv # create virtual environment.
 source venv/bin/activate # activate virtual environment
-pip install -r requirements.txt # install dependencies 
+pip install -r requirements.txt # install dependencies
 # User input: Set `detectHateSpeech: true`.
 $EDITOR config/secrets.json
 # User input: Set the script to run on startup.
@@ -284,20 +289,20 @@ npx pm2 restart aggie # Serve the new version.
 
 1. To run migrations run `npx migrate`.
 1. To run unit tests, run `npm test`.
-    - **Leave your HTTPS certificate files unencrypted for testing**. If necessary, re-run `openssl` with the `-nodes` option as described above.
-    - Calling `npm run mocha` will run just the backend tests
-    - Calling `npm run karma` will run just the frontend tests
+   - **Leave your HTTPS certificate files unencrypted for testing**. If necessary, re-run `openssl` with the `-nodes` option as described above.
+   - Calling `npm run mocha` will run just the backend tests
+   - Calling `npm run karma` will run just the frontend tests
 1. To monitor code while developing, run `npx gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
 1. To run end-to-end tests:
-    1. first start Aggie on the test database with `npm run testrun`
-    1. then run protractor with `npm run protractor`
+   1. first start Aggie on the test database with `npm run testrun`
+   1. then run protractor with `npm run protractor`
 1. To run end-to-end tests with external APIs
-    1. Set up the appropriate keys in `secrets.json` (e.g. Twitter)
-    1. start Aggie on the test database with `npm run testrun`
-    1. run protractor with `npm run protractor-with-apis`
+   1. Set up the appropriate keys in `secrets.json` (e.g. Twitter)
+   1. start Aggie on the test database with `npm run testrun`
+   1. run protractor with `npm run protractor-with-apis`
 1. To verify if the CRON job for updating Account Ids <-> Crowdtangle List Names and Saved Searches works
-    1. Empty the contents of config/crowdtangle_list.json.
-    1. Let the CRON job run at midnight UTC and check if the config/crowdtangle_list.json is updated with Account Ids <-> Crowdtangle List Names and Saved Searches.
+   1. Empty the contents of config/crowdtangle_list.json.
+   1. Let the CRON job run at midnight UTC and check if the config/crowdtangle_list.json is updated with Account Ids <-> Crowdtangle List Names and Saved Searches.
 
 ## Project Configuration
 
@@ -311,38 +316,39 @@ Set `config.adminParty=true` if you want to run tests.
 
 #### Twitter
 
-  1. Follow [these instructions](https://developer.twitter.com/en/docs/basics/authentication/oauth-1-0a/obtaining-user-access-tokens) to generate tokens to use the Twitter API.
-  1. Go to Settings > Configuration and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
+1. Follow [these instructions](https://developer.twitter.com/en/docs/basics/authentication/oauth-1-0a/obtaining-user-access-tokens) to generate tokens to use the Twitter API.
+1. Go to Settings > Configuration and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
 
 #### CrowdTangle
 
-  1. Create a dashboard on CrowdTangle and generate the dashboard token.
-  1. Add your CT API token to `config/secrets.json`.
-  1. Run `npm run update-ct-lists` to fetch data.
-      - This will update `config/crowdtangle_list.json`.
-      - This also happens automatically every night at midnight while Aggie is running.
+1. Create a dashboard on CrowdTangle and generate the dashboard token.
+1. Add your CT API token to `config/secrets.json`.
+1. Run `npm run update-ct-lists` to fetch data.
+   - This will update `config/crowdtangle_list.json`.
+   - This also happens automatically every night at midnight while Aggie is running.
 
 Note: To have git ignore changes, run `git update-index --skip-worktree config/crowdtangle_list.json`
 
 #### WhatsApp
 
 The WhatsApp feature is documented in a [conference paper](http://idl.iscram.org/files/andresmoreno/2017/1498_AndresMoreno_etal2017.pdf). As WhatsApp does not currently offer an API, a Firefox extension in Linux is used to redirect notifications from [web.whatsapp.com](http://web.whatsapp.com) to Aggie server. Thus, you need a Linux computer accessing WhatsApp through Firefox for this to work. Follow these steps to have it working.
-  1. Install Firefox in Linux using your distribution preferred method.
-  1. Install [GNotifier](https://addons.mozilla.org/firefox/addon/gnotifier/) add-on in Firefox.
-  1. Configure the add-on [about:addons](about:addons):
-       * Set Notification Engine to Custom command
-       * Set the custom command to `curl --data-urlencode "keyword=<your own keyword>" --data-urlencode "from=%title" --data-urlencode "text=%text" http://<IP address|domain name>:2222/whatsapp`
-           * We suggest setting your `keyword` to a unique string of text with out spaces or symbols, e.g., the phone number of the WhatsApp account used for Aggie. This keyword must be the same one as the one specified in the Aggie application, when creating the WhatsApp Aggie source.
-           * Replace `IP address|domain` with the address or domain where Aggie is installed (e.g., `localhost` for testing).
-  1. Visit [web.whatsapp.com](http://web.whatsapp.com), follow instructions, and _enable browser notifications_
-  1. Notifications will not be sent to Aggie when browser focus is on the WhatsApp tab, so move away from that tab if not replying to anyone.
+
+1. Install Firefox in Linux using your distribution preferred method.
+1. Install [GNotifier](https://addons.mozilla.org/firefox/addon/gnotifier/) add-on in Firefox.
+1. Configure the add-on [about:addons](about:addons):
+   - Set Notification Engine to Custom command
+   - Set the custom command to `curl --data-urlencode "keyword=<your own keyword>" --data-urlencode "from=%title" --data-urlencode "text=%text" http://<IP address|domain name>:2222/whatsapp`
+     - We suggest setting your `keyword` to a unique string of text with out spaces or symbols, e.g., the phone number of the WhatsApp account used for Aggie. This keyword must be the same one as the one specified in the Aggie application, when creating the WhatsApp Aggie source.
+     - Replace `IP address|domain` with the address or domain where Aggie is installed (e.g., `localhost` for testing).
+1. Visit [web.whatsapp.com](http://web.whatsapp.com), follow instructions, and _enable browser notifications_
+1. Notifications will not be sent to Aggie when browser focus is on the WhatsApp tab, so move away from that tab if not replying to anyone.
 
 #### ELMO
 
-  1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
-  1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
-  1. Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
-  1. Go to Settings > Configuration and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
+1. Log in to your ELMO instance with an account having coordinator or higher privileges on the mission you want to track.
+1. In your ELMO instance, mark one or more forms as public (via the Edit Form page). Note the Form ID in the URL bar (e.g. if URL ends in `/m/mymission/forms/123`, the ID is `123`).
+1. Visit your profile page (click the icon bearing your username in the top-right corner) and copy your API key (click 'Regenerate' if necessary).
+1. Go to Settings > Configuration and edit the ELMO settings. Remember to toggle the switch on, once you have saved the settings.
 
 ### Google Places
 
@@ -364,7 +370,8 @@ Email service is required to create new users.
 ### Fetching
 
 1. Set `fetching` value to enable/disable fetching for all sources at global level.
-  - This is also changed during runtime based on user choice.
+
+- This is also changed during runtime based on user choice.
 
 ### Logging
 
@@ -377,7 +384,7 @@ Set various logging options in `logger` section.
   - Set `to` and `from` email ids. Make sure `from` has been authorised in your Amazon SES configuration.
 - `Slack` section is for Slack messages.
   - Set the webhook URL to send logs to a specific Slack channel
-- **DO NOT** set `level` to *debug*. Recommended value is *error*.
+- **DO NOT** set `level` to _debug_. Recommended value is _error_.
 
 Only the `console` and `file` transports are enabled by default. Transports can be disabled using the `"disabled"` field included in each section in the `config/secrets.json` file.
 
@@ -398,9 +405,9 @@ Aggie consists of two largely separate frontend and backend apps. Some model cod
 
 The backend is a Node.js/Express app responsible for fetching and analyzing data and servicing API requests. There are three main modules, each of which runs in its own process:
 
-* API module
-* Fetching module
-* Analytics module
+- API module
+- Fetching module
+- Analytics module
 
 See README files in the `lib` subdirectories for more info on each module.
 
@@ -415,8 +422,8 @@ The frontend is a single-page Angular.js app that runs in the browser and interf
 The documentation is in the `docs` directory. These are automatically built and
 pushed on each commit for the `master` and `develop` branches in Github:
 
-* `develop`: [http://aggie.readthedocs.io/en/latest](http://aggie.readthedocs.io/en/latest/)
-* `master`: [http://aggie.readthedocs.io/en/stable](http://aggie.readthedocs.io/en/stable/)
+- `develop`: [http://aggie.readthedocs.io/en/latest](http://aggie.readthedocs.io/en/latest/)
+- `master`: [http://aggie.readthedocs.io/en/stable](http://aggie.readthedocs.io/en/stable/)
 
 To build the docs locally, do the following:
 
