@@ -23,8 +23,8 @@
   },
   "subdomain": "aggie",
   "engines": {
-    "node": "^16.13.0",
-    "npm": "^8.1.4"
+    "node": "^18.20.0",
+    "npm": "^10.7.0"
   },
   "nodemonConfig": {
     "ignore": [
