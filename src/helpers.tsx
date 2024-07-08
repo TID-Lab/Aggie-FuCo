@@ -7,12 +7,12 @@ import {
   Report,
   Source,
   Tag,
-  VeracityOptions
+  VeracityOptions,
 } from "./objectTypes";
-import {useLocation} from "react-router-dom";
-import {FormikValues} from "formik";
+import { useLocation } from "react-router-dom";
+import { FormikValues } from "formik";
 
-export function tagById (tagId: string, tags: Tag[] | null) {
+export function tagById(tagId: string, tags: Tag[] | null) {
   // Written for speed, not for best functional programming practices
   if (tags) {
     if (tags.length === 0) return null; // No tags, no return
@@ -25,7 +25,10 @@ export function tagById (tagId: string, tags: Tag[] | null) {
   return null;
 }
 
-export const tagsById = (tagIds: string[] | null | undefined, tags: Tag[] | null | undefined) => {
+export const tagsById = (
+  tagIds: string[] | null | undefined,
+  tags: Tag[] | null | undefined
+) => {
   // This is O(n^2) but should be fine if n is low
   if (tags && tagIds) {
     if (tags.length === 0) return []; // No tags, no return
@@ -37,9 +40,9 @@ export const tagsById = (tagIds: string[] | null | undefined, tags: Tag[] | null
     return out;
   }
   return [];
-}
+};
 
-export function sourceById (sourceId: string, sources: Source[]) {
+export function sourceById(sourceId: string, sources: Source[]) {
   // Written for speed, not for best functional programming practices
   if (sources) {
     if (sources.length === 0) return null; // No tags, no return
@@ -52,7 +55,7 @@ export function sourceById (sourceId: string, sources: Source[]) {
   return null;
 }
 
-export function sourcesById (sourceIds: string[], sources: Source[]) {
+export function sourcesById(sourceIds: string[], sources: Source[]) {
   // This is O(n^2) but should be fine if n is low
   // Also this is impossible to make run faster unless an alternative data struct is used
   if (sources.length === 0) return null; // No tags, no return
@@ -66,7 +69,7 @@ export function sourcesById (sourceIds: string[], sources: Source[]) {
   return out;
 }
 
-export function sourcesNamesById (sourceIds: string[], sources: Source[]) {
+export function sourcesNamesById(sourceIds: string[], sources: Source[]) {
   // This is O(n^2) but should be fine if n is low
   // Also this is impossible to make run faster unless an alternative data struct is used
   if (sources.length === 0) return null; // No tags, no return
@@ -80,7 +83,7 @@ export function sourcesNamesById (sourceIds: string[], sources: Source[]) {
   return out;
 }
 
-export function reportById (reportId: string, reports: Report[]) {
+export function reportById(reportId: string, reports: Report[]) {
   // Written for speed, not for best functional programming practices
   if (reports) {
     if (reports.length === 0) return null; // No tags, no return
@@ -93,7 +96,7 @@ export function reportById (reportId: string, reports: Report[]) {
   return null;
 }
 
-export function groupById (groupId: string, groups: Group[]) {
+export function groupById(groupId: string, groups: Group[]) {
   // Written for speed, not for best functional programming practices
   if (groups) {
     if (groups.length === 0) return null; // No tags, no return
@@ -114,6 +117,36 @@ export function booleanValueToChecked(input: boolean) {
   if (input) return "on";
   else return "off";
 }
+export const objectsToIds = (objects: hasId[]) => {
+  const listOfIds = objects.map((object) => {
+    return object._id;
+  });
+  return listOfIds;
+};
+
+export const stringToDate = (str: string) => {
+  return new Date(str);
+};
+
+export const facebookUrlToEmbedUrl = (url: string) => {
+  let embedUrl = url.slice(8, url.length);
+  return (
+    "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2F" +
+    embedUrl +
+    "&width=500&show_text=true"
+  );
+};
+
+export const hasSearchParams = (searchParams: URLSearchParams) => {
+  // TODO: Is there a better way of finding the length of searchParams?
+  let counter = 0;
+  for (const [index, element] of searchParams.entries()) {
+    counter++;
+  }
+  if (searchParams.has("page") && counter == 1) return false;
+  else if (searchParams.toString() !== "") return true;
+  else return false;
+};
 
 /**
  *
@@ -127,24 +160,36 @@ export const reportImageUrl = (report: Report) => {
     if (report.metadata.rawAPIResponse.extended_tweet) {
       if (report.metadata.rawAPIResponse.extended_tweet.entities) {
         if (report.metadata.rawAPIResponse.extended_tweet.entities.media) {
-          return report.metadata.rawAPIResponse.extended_tweet.entities.media[0].media_url_https;
+          return report.metadata.rawAPIResponse.extended_tweet.entities.media[0]
+            .media_url_https;
         }
       }
     } else if (report.metadata.rawAPIResponse.retweeted_status) {
       // This sources the image url from a retweet.
       if (report.metadata.rawAPIResponse.retweeted_status.extended_tweet) {
-        if (report.metadata.rawAPIResponse.retweeted_status.extended_tweet.entities) {
-          if (report.metadata.rawAPIResponse.retweeted_status.extended_tweet.entities.media) {
-            return report.metadata.rawAPIResponse.retweeted_status.extended_tweet.entities.media[0].media_url_https;
+        if (
+          report.metadata.rawAPIResponse.retweeted_status.extended_tweet
+            .entities
+        ) {
+          if (
+            report.metadata.rawAPIResponse.retweeted_status.extended_tweet
+              .entities.media
+          ) {
+            return report.metadata.rawAPIResponse.retweeted_status
+              .extended_tweet.entities.media[0].media_url_https;
           }
         }
       }
-    } else if (report.metadata.mediaUrl && report.metadata.mediaUrl[0] && report.metadata.mediaUrl[0].url) {
+    } else if (
+      report.metadata.mediaUrl &&
+      report.metadata.mediaUrl[0] &&
+      report.metadata.mediaUrl[0].url
+    ) {
       return report.metadata.mediaUrl[0].url;
     }
   }
   return null;
-}
+};
 /**
  * This function returns the full text content of a social media post.
  * @param report to return the full text of
@@ -156,14 +201,18 @@ export const reportFullContent = (report: Report) => {
       return report.metadata.rawAPIResponse.extended_tweet.full_text;
     } else if (report.metadata.rawAPIResponse.retweeted_status) {
       if (report.metadata.rawAPIResponse.retweeted_status.extended_tweet) {
-        if (report.metadata.rawAPIResponse.retweeted_status.extended_tweet.full_text) {
-          return report.metadata.rawAPIResponse.retweeted_status.extended_tweet.full_text;
+        if (
+          report.metadata.rawAPIResponse.retweeted_status.extended_tweet
+            .full_text
+        ) {
+          return report.metadata.rawAPIResponse.retweeted_status.extended_tweet
+            .full_text;
         }
       }
     }
   }
   return null;
-}
+};
 
 export const reportAuthorUrl = (report: Report) => {
   if (report.metadata.accountUrl) {
@@ -172,7 +221,7 @@ export const reportAuthorUrl = (report: Report) => {
     // Twitter
     return "https://twitter.com/" + report.author;
   }
-}
+};
 
 export const reportAuthor = (report: Report) => {
   if (report._media[0] === "twitter") {
@@ -180,32 +229,7 @@ export const reportAuthor = (report: Report) => {
   } else {
     return report.author;
   }
-}
-
-export const objectsToIds = (objects: hasId[]) => {
-  const listOfIds = objects.map((object) => {
-    return object._id;
-  })
-  return listOfIds;
-}
-
-export const stringToDate = (str: string) => {
-  return new Date(str);
-}
-
-export const facebookUrlToEmbedUrl = (url: string) => {
-  let embedUrl = url.slice(8, url.length);
-  return "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2F" + embedUrl + "&width=500&show_text=true";
-}
-
-export const hasSearchParams = (searchParams: URLSearchParams) => {
-  // TODO: Is there a better way of finding the length of searchParams?
-  let counter = 0;
-  for (const [index, element] of searchParams.entries()) { counter++; }
-  if (searchParams.has("page") && counter == 1) return false;
-  else if (searchParams.toString() !== "") return true;
-  else return false;
-}
+};
 
 export const ctListToOptions = (ctList: CTList) => {
   /*
@@ -213,16 +237,24 @@ export const ctListToOptions = (ctList: CTList) => {
    */
   const ctListSet = new Set();
   if (ctList.lists) {
-    const ctListArr = Object.keys(ctList.lists).map((key)=> {return ctList.lists[key]});
+    const ctListArr = Object.keys(ctList.lists).map((key) => {
+      return ctList.lists[key];
+    });
     if (ctListArr) {
       const ctListTypes = ctListArr[0];
       if (ctListTypes) {
-        const ctListTypesArr = Object.keys(ctListTypes).map((key) => {return ctListTypes[key]});
+        const ctListTypesArr = Object.keys(ctListTypes).map((key) => {
+          return ctListTypes[key];
+        });
         if (ctListTypesArr) {
           //@ts-ignore
-          Object.values(ctListTypes["crowdtangle_list_account_pairs"]).forEach((value: string[]) => ctListSet.add(value[0]));
+          Object.values(ctListTypes["crowdtangle_list_account_pairs"]).forEach(
+            (value: any) => ctListSet.add(value[0] )
+          );
           //@ts-ignore
-          Object.values(ctListTypes["crowdtangle_saved_searches"]).forEach((value: string[]) => ctListSet.add(value[0]));
+          Object.values(ctListTypes["crowdtangle_saved_searches"]).forEach(
+            (value:any) => ctListSet.add(value[0])
+          );
           //@ts-ignore
           let optionJSX = [];
 
@@ -230,46 +262,59 @@ export const ctListToOptions = (ctList: CTList) => {
           ctListSet.forEach((option: string) => {
             if (option) {
               //@ts-ignore
-              optionJSX.push(<option key={option} value={option}>{option}</option>)
+              optionJSX.push(
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              );
             }
-          })
+          });
           //@ts-ignore
           return optionJSX;
         }
       }
     }
   }
-  return <></>
-}
+  return <></>;
+};
 
 export const compareIds = (objectOne: hasId, objectTwo: hasId) => {
   return objectOne._id === objectTwo._id;
-}
+};
 
-export const parseFilterFields = (values: FormikValues, filterTags: Tag[] = []) => {
+export const parseFilterFields = (
+  values: FormikValues,
+  filterTags: Tag[] = []
+) => {
   let parsedFields = Object.assign(removeEmptyStrings(values));
   console.log(parsedFields);
   if (filterTags.length > 0) {
     let tagsURL = "";
-    filterTags.forEach((tagId)=> {
-      if (typeof(tagId) === "string") {
-        tagsURL += (tagId + ",");
+    filterTags.forEach((tagId) => {
+      if (typeof tagId === "string") {
+        tagsURL += tagId + ",";
       } else {
-        tagsURL += (tagId._id + ",");
+        tagsURL += tagId._id + ",";
       }
     });
     tagsURL = tagsURL.slice(0, -1);
     parsedFields.tags = tagsURL;
   }
   return parsedFields;
-}
+};
 
 function removeEmptyStrings(obj: FormikValues) {
   return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== ""));
 }
 
-export const searchParamsToObj = (searchParams: URLSearchParams) => {return Object.fromEntries(searchParams.entries())};
+export const searchParamsToObj = (searchParams: URLSearchParams) => {
+  return Object.fromEntries(searchParams.entries());
+};
 
-export const VERACITY_OPTIONS: VeracityOptions[] = ["Unconfirmed", "Confirmed False", "Confirmed True"];
+export const VERACITY_OPTIONS: VeracityOptions[] = [
+  "Unconfirmed",
+  "Confirmed False",
+  "Confirmed True",
+];
 export const ESCALATED_OPTIONS: EscalatedOptions[] = ["true", "false"];
 export const CLOSED_OPTIONS: ClosedOptions[] = ["true", "false"];

@@ -1,23 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import {QueryClient, QueryClientProvider} from "react-query";
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import "./index.css";
+import App from "./App";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import { QueryClient, QueryClientProvider } from "react-query";
+import reportWebVitals from "./reportWebVitals";
 
 //https://dev-listener.medium.com/react-routes-nodejs-routes-2875f148065b
-const queryClient = new QueryClient()
-ReactDOM.render((
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
+const queryClient = new QueryClient();
+ReactDOM.render(
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <App/>
+        <App />
       </BrowserRouter>
-      </QueryClientProvider>
-    </React.StrictMode>
-), document.getElementById('root'));
+    </QueryClientProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
+);
 // React Query in 100 seconds https://www.youtube.com/watch?v=novnyCaa7To
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
