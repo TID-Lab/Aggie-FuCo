@@ -1,30 +1,9 @@
 // Handles CRUD requests for users.
 var User = require('../../models/user');
-// mailer = require('../../mailer');
 const passport = require('passport');
 const validator = require('validator');
 
-// const sendEmail = (user, req, callback) => {
-//   // Only send email if not in test mode.
-//   if (process.env.NODE_ENV == 'test') callback(null);
-//   else {
-//     const token = password.encodeToken(user);
-//     mailer.sendFromTemplate(
-//       {
-//         template: 'newUser',
-//         user: user,
-//         token: token,
-//         host: req.headers.host,
-//         protocol: req.protocol,
-//         acceptLanguage: req.headers['accept-language'],
-//       },
-//       (err) => {
-//         if (err) callback(err);
-//         else callback(null);
-//       }
-//     );
-//   }
-// };
+
 
 exports.user_users = (req, res) => {
   User.find({}, function (err, users) {

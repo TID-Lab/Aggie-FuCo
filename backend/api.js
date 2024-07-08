@@ -231,19 +231,7 @@ setTimeout(function () {
   socketHandler.addListeners('report', require('./models/report').schema);
   socketHandler.addListeners('tag', require('./models/tag').schema);
   streamer.addListeners('group', require('./models/group').schema);
-  // Add listener to reload config and emit event to mailer
-  /*
-  settingsController.addListener('settingsUpdated', function(arguments) {
-    config.get({ reload: true });
-    switch (arguments.setting) {
-    case 'email:transport':
-      _.bind(mailer.reloadTransport, mailer)();
-      break;
-    case 'email':
-      _.bind(mailer.reloadConfig, mailer)();
-      break;
-    }
-  });*/
+
 }, 500);
 
 // Add CRON job for updating CrowdTangle List

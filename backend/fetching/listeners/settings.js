@@ -5,10 +5,10 @@ const childProcess = require('../../child-process');
 
 function registerListeners() {
     // this path is relative to the child-process.js file.
-    const emitter = childProcess.setupEventProxy({
-        emitter: './api/email-handler',
-        emitterModule: 'api'
-    });
+    // const emitter = childProcess.setupEventProxy({
+    //     emitter: './api/email-handler',
+    //     emitterModule: 'api'
+    // });
     emitter.on('fetching:start', onFetchingStart);
     emitter.on('fetching:stop', onFetchingStop);
     emitter.on('settingsUpdated', onSettingsUpdated);
