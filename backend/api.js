@@ -15,7 +15,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const authRoutes = require('./api/routes/authRoutes');
 const User = require('./models/user');
-var _ = require('underscore');
 var readLineSync = require('readline-sync');
 var { version: packageVersion } = require('../package.json');
 const cors = require('cors');

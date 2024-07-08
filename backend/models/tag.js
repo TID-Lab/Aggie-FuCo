@@ -2,7 +2,6 @@
 
 var database = require('../database');
 var mongoose = database.mongoose;
-var _ = require('underscore');
 
 var lengthValidator = function (str) {
   return validator.isLength(str, { min: 0, max: 40 });

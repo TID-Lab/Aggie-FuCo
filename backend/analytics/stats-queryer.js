@@ -3,10 +3,10 @@
 const async = require('async');
 const Report = require('../models/report');
 const Group = require('../models/group');
-const _ = require('underscore');
+const _ = require('lodash');
 const ONE_MINUTE = 60 * 1000;
 
-var StatsQueryer = function() {
+var StatsQueryer = function () {
   this.handlers = {
     all: this._countAll,
     groups: this._countAllGroups,
@@ -15,7 +15,7 @@ var StatsQueryer = function() {
   };
 };
 
-StatsQueryer.prototype.count = function(type, callback) {
+StatsQueryer.prototype.count = function (type, callback) {
   type || (type = 'all');
 
   let handler = this.handlers[type];
@@ -25,7 +25,7 @@ StatsQueryer.prototype.count = function(type, callback) {
   handler.call(this, callback);
 };
 
-StatsQueryer.prototype._countReports = function(query, callback) {
+StatsQueryer.prototype._countReports = function (query, callback) {
   query || (query = {});
   if (!_.isEmpty(query)) {
     Report.countDocuments(query, callback);
@@ -34,12 +34,12 @@ StatsQueryer.prototype._countReports = function(query, callback) {
   }
 };
 
-StatsQueryer.prototype._countGroups = function(query, callback) {
+StatsQueryer.prototype._countGroups = function (query, callback) {
   query || (query = {});
   Group.countDocuments(query, callback);
 };
 
-StatsQueryer.prototype._countAllReports = function(callback) {
+StatsQueryer.prototype._countAllReports = function (callback) {
   async.parallel({
     totalReports: this._countReports.bind(this, {}),
     totalReportsUnread: this._countReports.bind(this, { read: false }),
@@ -49,27 +49,27 @@ StatsQueryer.prototype._countAllReports = function(callback) {
   }, callback);
 };
 
-StatsQueryer.prototype._countReportsPerMinute = function(callback) {
-  return this._countReports({ storedAt: { $gte: minuteAgo() } }, function(err, results) {
+StatsQueryer.prototype._countReportsPerMinute = function (callback) {
+  return this._countReports({ storedAt: { $gte: minuteAgo() } }, function (err, results) {
     if (err) return callback(err);
     callback(err, { totalReportsPerMinute: results });
   });
 };
 
 
-StatsQueryer.prototype._countAllGroups = function(callback) {
+StatsQueryer.prototype._countAllGroups = function (callback) {
   async.parallel({
     totalGroups: this._countGroups,
     totalEscalatedGroups: this._countGroups.bind(this, { escalated: true })
   }, callback);
 };
 
-StatsQueryer.prototype._countAll = function(callback) {
+StatsQueryer.prototype._countAll = function (callback) {
   var self = this;
   async.parallel({
     reports: this._countAllReports.bind(this),
     groups: this._countAllGroups.bind(this)
-  }, function(err, results) {
+  }, function (err, results) {
     if (err) return callback(err);
 
     _.extend(results.reports, results.groups);

@@ -3,9 +3,9 @@
 var Group = require('../group');
 var Query = require('../query');
 var util = require('util');
-var _ = require('underscore');
+var _ = require('lodash');
 
-var GroupQuery = function(options) {
+var GroupQuery = function (options) {
   options = options || {};
   this.title = options.title;
   this.locationName = options.locationName;
@@ -21,12 +21,12 @@ var GroupQuery = function(options) {
 _.extend(GroupQuery, Query);
 util.inherits(GroupQuery, Query);
 
-GroupQuery.prototype.run = function(callback) {
+GroupQuery.prototype.run = function (callback) {
   Group.queryGroups(this, callback);
 };
 
 // Normalize query for comparison
-GroupQuery.prototype.normalize = function() {
+GroupQuery.prototype.normalize = function () {
   var query = _.pick(this, _.without(Group.filterAttributes, 'updatedAt'));
   if (query.title) query.title = query.title.toLowerCase();
   return query;

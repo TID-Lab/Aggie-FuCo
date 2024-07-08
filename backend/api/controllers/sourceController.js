@@ -2,7 +2,7 @@
 'use strict';
 
 var Source = require('../../models/source');
-var _ = require('underscore');
+var _ = require('lodash');
 var writelog = require('../../writeLog');
 
 
@@ -10,7 +10,7 @@ var writelog = require('../../writeLog');
 exports.source_create = (req, res) => {
   // set user as the logged in user
   if (req.user) req.body.user = req.user._id;
-  Source.create(req.body, function(err, source) {
+  Source.create(req.body, function (err, source) {
     if (err) {
       return res.status(err.status).send(err.message);
     }
@@ -27,14 +27,14 @@ exports.source_sources = (req, res) => {
       { path: 'user', select: 'username' },
       { path: 'credentials' }
     ])
-    .exec(function(err, sources) {
+    .exec(function (err, sources) {
       if (err) res.status(err.status).send(err.message);
       else res.status(200).send(sources);
     });
 }
 
 exports.source_details = (req, res) => {
-  Source.findByIdWithLatestEvents(req.params._id, function(err, source) {
+  Source.findByIdWithLatestEvents(req.params._id, function (err, source) {
     if (err) return res.status(err.status).send(err.message);
     else if (!source) return res.sendStatus(404);
     Source.populate(
@@ -43,7 +43,7 @@ exports.source_details = (req, res) => {
         { path: 'user', select: 'username' },
         { path: 'credentials' }
       ],
-      function(err, source) {
+      function (err, source) {
         if (err) res.status(err.status).send(err.message);
         else res.send(200, source);
       });
@@ -53,16 +53,16 @@ exports.source_details = (req, res) => {
 exports.source_update = (req, res, next) => {
   if (req.params._id === '_events') return next();
   // Find source to update
-  Source.findById(req.params._id, function(err, source) {
+  Source.findById(req.params._id, function (err, source) {
     if (err) return res.status(err.status).send(err.message);
     if (!source) return res.sendStatus(404);
 
     // Update the actual values
-    _.each(_.omit(req.body, ['_id', 'user', 'events']), function(val, key) {
+    _.forEach(_.omit(req.body, ['_id', 'user', 'events']), function (val, key) {
       source[key] = val;
     });
     // Save source
-    source.save(function(err, numberAffected) {
+    source.save(function (err, numberAffected) {
       if (err) res.status(err.status).send(err.message);
       else if (!numberAffected) res.sendStatus(404);
       else {
@@ -74,7 +74,7 @@ exports.source_update = (req, res, next) => {
 }
 
 exports.source_reset_errors = (req, res) => {
-  Source.resetUnreadErrorCount(req.params._id, function(err, source) {
+  Source.resetUnreadErrorCount(req.params._id, function (err, source) {
     if (err) return res.status(err.status).send(err.message);
     else if (!source) return res.sendStatus(404);
     res.status(200).send(source);
@@ -84,7 +84,7 @@ exports.source_reset_errors = (req, res) => {
 // Delete a Source
 exports.source_delete = (req, res, next) => {
   if (req.params._id === '_all') return next();
-  Source.findById(req.params._id, function(err, source) {
+  Source.findById(req.params._id, function (err, source) {
     if (err) return res.status(err.status).send(err.message);
     if (!source) return res.sendStatus(404);
     source.remove((err) => {
@@ -97,11 +97,11 @@ exports.source_delete = (req, res, next) => {
 
 // Delete all Sources
 exports.source_delete_all = (req, res) => {
-  Source.find(function(err, sources) {
+  Source.find(function (err, sources) {
     if (err) return res.status(err.status).send(err.message);
     if (sources.length === 0) return res.sendStatus(200);
     var remaining = sources.length;
-    sources.forEach(function(source) {
+    sources.forEach(function (source) {
       // Delete each source explicitly to catch it in model
       source.remove((err) => {
         if (err) {
@@ -117,11 +117,11 @@ exports.source_delete_all = (req, res) => {
 
 // update sources TODO: This doesn't work I'm just putting a placeholder here.
 exports.source_update_all = (req, res) => {
-  Source.find(function(err, sources) {
+  Source.find(function (err, sources) {
     if (err) return res.status(err.status).send(err.message);
     if (sources.length === 0) return res.sendStatus(200);
     var remaining = sources.length;
-    sources.forEach(function(source) {
+    sources.forEach(function (source) {
       // Delete each source explicitly to catch it in model
       source.remove((err) => {
         if (err) {

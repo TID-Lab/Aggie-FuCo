@@ -1,7 +1,7 @@
 // Represents a query and a set of clients that are currently watching that query.
 // This way, the query only needs to be run once and the results can be streamed to multiple people.
 
-var _ = require('underscore');
+var _ = require('lodash');
 
 var SocketQueryGroup = function(query, client) {
   this.query = query;
@@ -19,7 +19,7 @@ SocketQueryGroup.prototype.remove = function(client) {
 };
 
 SocketQueryGroup.prototype.has = function(client) {
-  return _.contains(this.clients, client);
+  return _.includes(this.clients, client);
 };
 
 SocketQueryGroup.prototype.isEmpty = function() {

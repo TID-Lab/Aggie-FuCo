@@ -3,16 +3,16 @@
 const EventEmitter = require('events').EventEmitter;
 const util = require('util');
 const EventProxy = require('./event-proxy');
-const  _ = require('underscore');
+const _ = require('lodash');
 
 // Avoid orphan processes by exiting when parent dies
-process.on('disconnect', function() { process.exit(1); });
+process.on('disconnect', function () { process.exit(1); });
 
-var ChildProcess = function() {
+var ChildProcess = function () {
   this.eventProxies = [];
   var self = this;
   // Listen to message from parent process
-  process.on('message', function(message) {
+  process.on('message', function (message) {
     // Reply to 'ping' with 'pong' for testing purposes
     if (message === 'ping') self.sendToParent('pong');
     else if (message.event === 'register') self.registerOutgoingEmitter(message);
@@ -24,7 +24,7 @@ util.inherits(ChildProcess, EventEmitter);
 
 // Wrapper around `process.send()`
 // data - This value represents the argument passed to an event, and it has to be an object
-ChildProcess.prototype.sendToParent = function(event, data) {
+ChildProcess.prototype.sendToParent = function (event, data) {
   data = data || {};
   if (typeof data === 'object') {
     data.event = event;
@@ -38,21 +38,21 @@ ChildProcess.prototype.sendToParent = function(event, data) {
 };
 
 // Forward message from parent to the appropriate listeners
-ChildProcess.prototype.forwardMessage = function(message) {
-  this.eventProxies.forEach(function(eventProxy) {
+ChildProcess.prototype.forwardMessage = function (message) {
+  this.eventProxies.forEach(function (eventProxy) {
     // Determine if event proxy has the correct event type registered
-    if (_.contains(eventProxy.events, message.event)) {
+    if (_.includes(eventProxy.events, message.event)) {
       eventProxy.emit(message.event, message);
     }
   });
 };
 
 // Create an event proxy and register it with the parent process manager
-ChildProcess.prototype.setupEventProxy = function(options) {
+ChildProcess.prototype.setupEventProxy = function (options) {
   var self = this;
   var eventProxy = new EventProxy(options);
   this.eventProxies.push(eventProxy);
-  eventProxy.on('newListener', function(event, listener) {
+  eventProxy.on('newListener', function (event, listener) {
     // Add new event to event proxy
     eventProxy.events.push(event);
     // Send to parent to register new route
@@ -62,15 +62,15 @@ ChildProcess.prototype.setupEventProxy = function(options) {
 };
 
 // Register an outgoing event emitter for child-to-parent messaging
-ChildProcess.prototype.registerOutgoingEmitter = function(options) {
+ChildProcess.prototype.registerOutgoingEmitter = function (options) {
   var self = this;
   // Load module to listen to, with an optional emitter component
   var emitter = require(options.emitter);
   if (options.subclass) emitter = emitter[options.subclass];
   // Listen to registered event
-  if (!_.contains(_.keys(emitter._events), options.registeredEvent)) {
+  if (!_.includes(_.keys(emitter._events), options.registeredEvent)) {
     // Events emitted by the backend can have up to 1 argument (data)
-    emitter.on(options.registeredEvent, function(data, other) {
+    emitter.on(options.registeredEvent, function (data, other) {
       if (other) throw new Error('Events can only have one argument');
       // Send to parent so that it can be forwarded to the appropriate module
       self.sendToParent(options.registeredEvent, data);

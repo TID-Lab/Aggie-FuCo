@@ -9,7 +9,7 @@ const database = require('../database');
 const mongoose = database.mongoose;
 const SchemaTypes = mongoose.SchemaTypes;
 const validator = require('validator');
-const _ = require('underscore');
+const _ = require('lodash');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Report = require('./report');
 require('./tag');
@@ -54,7 +54,7 @@ let schema = new mongoose.Schema({
 schema.pre('save', function (next) {
   if (this.isNew) this.storedAt = new Date();
   this.updatedAt = new Date();
-  if (!_.contains(Group.statusOptions, this.status)) {
+  if (!_.includes(Group.statusOptions, this.status)) {
     return next(new Error.Validation('status_error'));
   }
 

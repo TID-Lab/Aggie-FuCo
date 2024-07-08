@@ -4,7 +4,7 @@
 const cookieParser = require('cookie-parser');
 const { Server: SocketIOServer, Socket } = require('socket.io');
 const passportSocketIo = require('passport.socketio');
-const _ = require('underscore');
+const _ = require('lodash');
 const streamer = require('./streamer');
 const Source = require('../models/source');
 const Query = require('../models/query');
@@ -17,12 +17,12 @@ const EventEmitter = require('events').EventEmitter;
 
 // override the emit function to add logging
 var emit = Socket.prototype.emit;
-Socket.prototype.emit = function(event, data) {
+Socket.prototype.emit = function (event, data) {
   console.debug(event, data);
   emit.apply(this, arguments);
 };
 
-var SocketHandler = function(app, server, auth) {
+var SocketHandler = function (app, server, auth) {
   this.app = app;
   this.server = server;
   this.auth = auth;
@@ -47,21 +47,21 @@ var SocketHandler = function(app, server, auth) {
 
 util.inherits(SocketHandler, EventEmitter);
 
-SocketHandler.prototype.addListeners = function(type, emitter) {
+SocketHandler.prototype.addListeners = function (type, emitter) {
   if (!this.bindings[type]) return;
   this.bindings[type].call(this, emitter);
 };
 
 // Forward streamer data directly to client
-SocketHandler.prototype.streamerSocketForward = function(event, socket) {
+SocketHandler.prototype.streamerSocketForward = function (event, socket) {
   streamer.removeAllListeners(event)
-  streamer.on(event, function(data) {
+  streamer.on(event, function (data) {
     socket.emit(event, data);
   });
 };
 
 // Add a client as a listener to a query
-SocketHandler.prototype.addClient = function(query, id) {
+SocketHandler.prototype.addClient = function (query, id) {
   if (!query || query === {}) return;
   var hash = query.hash || Query.hash(query);
   // Store a list of clients listening to each query
@@ -76,7 +76,7 @@ SocketHandler.prototype.addClient = function(query, id) {
 };
 
 // Remove a client from listening to queries
-SocketHandler.prototype.removeClient = function(query, id) {
+SocketHandler.prototype.removeClient = function (query, id) {
   if (!query || !query.hash || !_.has(this.queryGroups, query.hash)) return;
   this.queryGroups[query.hash].remove(id);
   // Destroy query if no clients are listening
@@ -86,14 +86,14 @@ SocketHandler.prototype.removeClient = function(query, id) {
   }
 };
 
-SocketHandler.prototype.emitAllErrorsCount = function(emitter) {
+SocketHandler.prototype.emitAllErrorsCount = function (emitter) {
   // Send total error counts on client connect
-  Source.countAllErrors(function(err, count) {
+  Source.countAllErrors(function (err, count) {
     if (!err) emitter.emit('sourceErrorCountUpdated', { unreadErrorCount: count });
   });
 };
 
-SocketHandler.prototype._configureSocketIO = function() {
+SocketHandler.prototype._configureSocketIO = function () {
   var self = this;
   var io = this.io;
   // Authorize sockets
@@ -102,17 +102,17 @@ SocketHandler.prototype._configureSocketIO = function() {
     key: self.auth.key,
     secret: self.auth.secret,
     store: self.auth.store,
-    success: function(data, accept) {
+    success: function (data, accept) {
       accept(null, true);
     },
-    fail: function(data, message, error, accept) {
+    fail: function (data, message, error, accept) {
       if (process.env.ADMIN_PARTY.toLowerCase() === "true") accept(null, true);
       else accept(message, false);
     }
   }));
 };
 
-SocketHandler.prototype._connect = function(socket) {
+SocketHandler.prototype._connect = function (socket) {
   var self = this;
 
   this.clientQuery = null;
@@ -128,33 +128,33 @@ SocketHandler.prototype._connect = function(socket) {
 
   // Send source updates back to client
   self.removeAllListeners('sourceErrorCountUpdated');
-  self.on('sourceErrorCountUpdated', function() {
+  self.on('sourceErrorCountUpdated', function () {
     self.emitAllErrorsCount(socket);
   });
 
   // Allow client to join a specific room
-  socket.on('join', function(room) {
+  socket.on('join', function (room) {
     socket.join(room);
     self.emit('join:' + room);
   });
 
   // Allow client to leave a specifc room
-  socket.on('leave', function(room) {
+  socket.on('leave', function (room) {
     socket.leave(room);
     self.emit('leave:' + room);
   });
 
   // Remove client from query list
-  socket.on('disconnect', function() {
+  socket.on('disconnect', function () {
     self.removeClient(self.clientQuery, socket.id);
   });
 };
 
 // Listen for query events from client
-SocketHandler.prototype._streamerQueryListen = function(event, QueryType, socket) {
+SocketHandler.prototype._streamerQueryListen = function (event, QueryType, socket) {
   var self = this;
 
-  socket.on(event, function(queryData) {
+  socket.on(event, function (queryData) {
     // Remove client from prior query to avoid multiple streams
     self.removeClient(self.clientQuery, socket.id);
     // Instantiate and normalize client query
@@ -167,10 +167,10 @@ SocketHandler.prototype._streamerQueryListen = function(event, QueryType, socket
 };
 
 // Send data back to client for matching queries
-SocketHandler.prototype._streamerQueryCheck = function(event, QueryType, socket) {
+SocketHandler.prototype._streamerQueryCheck = function (event, QueryType, socket) {
   var self = this;
   streamer.removeAllListeners(event);
-  streamer.on(event, function(query, data) {
+  streamer.on(event, function (query, data) {
     var clientQuery = self.clientQuery;
     // Determine if current client query matches the query
     if (QueryType.compare(query, new QueryType(clientQuery)) &&
@@ -181,75 +181,75 @@ SocketHandler.prototype._streamerQueryCheck = function(event, QueryType, socket)
   });
 };
 
-SocketHandler.prototype._addSourceLocalListeners = function(emitter) {
+SocketHandler.prototype._addSourceLocalListeners = function (emitter) {
   var self = this;
   // Listens to changes in source metadata
-  emitter.on('source:save', function() {
+  emitter.on('source:save', function () {
     emitAllSources(self);
   });
-  emitter.on('source:remove', function() {
-    process.nextTick(function() {
+  emitter.on('source:remove', function () {
+    process.nextTick(function () {
       emitAllSources(self);
     });
   });
 
   // Listens to updates to any source error count
-  emitter.on('sourceErrorCountUpdated', function() {
+  emitter.on('sourceErrorCountUpdated', function () {
     self.emit('sourceErrorCountUpdated');
   });
 };
 
-SocketHandler.prototype._addSourceListeners = function(emitter) {
+SocketHandler.prototype._addSourceListeners = function (emitter) {
   var self = this;
 
   // Listens to changes in source metadata
-  emitter.on('source:save', function() {
+  emitter.on('source:save', function () {
     emitAllSources(self);
   });
-  emitter.on('source:remove', function() {
-    process.nextTick(function() {
+  emitter.on('source:remove', function () {
+    process.nextTick(function () {
       emitAllSources(self);
     });
   });
 
   // Send sources to client
   this.removeAllListeners('sources');
-  this.on('sources', function(sources) {
+  this.on('sources', function (sources) {
     self.io.sockets.emit('sources', sources);
   });
 
   // Listens to updates to any source error count
-  emitter.on('sourceErrorCountUpdated', function() {
+  emitter.on('sourceErrorCountUpdated', function () {
     self.emit('sourceErrorCountUpdated');
   });
 };
 
-SocketHandler.prototype._addReportLocalListeners = function(emitter) {
+SocketHandler.prototype._addReportLocalListeners = function (emitter) {
   var self = this;
-  emitter.on('report:updated', function(report) {
+  emitter.on('report:updated', function (report) {
     self.io.sockets.in('reports').emit('report:updated', report);
   });
 };
 
-SocketHandler.prototype._addTagLocalListeners = function(emitter) {
+SocketHandler.prototype._addTagLocalListeners = function (emitter) {
   var self = this;
-  emitter.on('tag:new', function(tag) {
+  emitter.on('tag:new', function (tag) {
     self.io.sockets.in('tags').emit('tag:new', tag);
   });
-  emitter.on('tag:removed', function(id) {
+  emitter.on('tag:removed', function (id) {
     self.io.sockets.in('tags').emit('tag:removed', id);
   });
 }
 
-SocketHandler.prototype._addStatsListeners = function(emitter) {
+SocketHandler.prototype._addStatsListeners = function (emitter) {
   var self = this;
-  emitter.on('stats', function(stats) {
+  emitter.on('stats', function (stats) {
     // emit data to stats rooom
     self.io.sockets.in('stats').emit('stats', stats);
   });
 };
 
-SocketHandler.prototype._addTrendsListeners = function(emitter) {
+SocketHandler.prototype._addTrendsListeners = function (emitter) {
   var self = this;
 
   // Clean-up old listeners
@@ -257,13 +257,13 @@ SocketHandler.prototype._addTrendsListeners = function(emitter) {
 
   // Send trends to client
   this.removeAllListeners('trend');
-  this.on('trend', function(trend) {
+  this.on('trend', function (trend) {
     self.io.sockets.emit('trend', trend);
   });
 
   // Listens to new trends being analyzed
-  emitter.on('trend', function() {
-    Trend.findPaginatedCounts(function(err, trends) {
+  emitter.on('trend', function () {
+    Trend.findPaginatedCounts(function (err, trends) {
       if (err) self.emit('error', err);
       else self.emit('trend', trends);
     });
@@ -271,7 +271,7 @@ SocketHandler.prototype._addTrendsListeners = function(emitter) {
 };
 
 function emitAllSources(emitter) {
-  Source.find({}, '-events', { lean: true }, function(err, sources) {
+  Source.find({}, '-events', { lean: true }, function (err, sources) {
     if (!err && sources) emitter.emit('sources', sources);
   });
 }

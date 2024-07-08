@@ -3,7 +3,7 @@
 
 var nconf = require('nconf');
 var path = require('path');
-var _ = require('underscore');
+var _ = require('lodash');
 var mkdirp = require('mkdirp')
 
 // load server config, synchronously, so that its immediately available
@@ -20,16 +20,22 @@ var _configuration = nconf.get();
 
 // set defaults
 _.defaults(_configuration, { api_request_timeout: 60, logger: {} });
-_.defaults(_configuration.logger, { SES: {}, file: {}, master: {}, api: {},
-                                   fetching: {}, analytics: {} });
+_.defaults(_configuration.logger, {
+  SES: {}, file: {}, master: {}, api: {},
+  fetching: {}, analytics: {}
+});
 _.defaults(_configuration.logger.SES, { level: 'error', silent: false });
-_.defaults(_configuration.logger.file, { level: 'debug', silent: false,
-                                        colorize: true, timestamp: true,
-                                        maxsize: 5242880, maxFiles: 10,
-                                        json: false, prettyPrint: true });
+_.defaults(_configuration.logger.file, {
+  level: 'debug', silent: false,
+  colorize: true, timestamp: true,
+  maxsize: 5242880, maxFiles: 10,
+  json: false, prettyPrint: true
+});
 _.defaults(_configuration.logger.master, { filename: 'logs/master.log' });
-_.defaults(_configuration.logger.api, { filename: 'logs/api.log', log_requests: false,
-                                       log_responses: false });
+_.defaults(_configuration.logger.api, {
+  filename: 'logs/api.log', log_requests: false,
+  log_responses: false
+});
 _.defaults(_configuration.logger.fetching, { filename: 'logs/fetching.log' });
 _.defaults(_configuration.logger.analytics, { filename: 'logs/analytics.log' });
 
@@ -40,7 +46,7 @@ mkdirp.sync(path.dirname(_configuration.logger.fetching.filename));
 mkdirp.sync(path.dirname(_configuration.logger.analytics.filename));
 
 // return configuration
-module.exports.get = function(options) {
+module.exports.get = function (options) {
   if (options && options.reload) {
     // Load again to get changes done in different processes
     nconf.load();
@@ -50,31 +56,31 @@ module.exports.get = function(options) {
 };
 
 // update fetching flag
-module.exports.updateFetching = function(flag, cb) {
-  cb = cb || function() {};
+module.exports.updateFetching = function (flag, cb) {
+  cb = cb || function () { };
   nconf.set('fetching', !!flag);
-  nconf.save(function(err) {
+  nconf.save(function (err) {
     return cb(err);
   });
 };
 
 // update settings
-module.exports.update = function(type, settings, cb) {
-  cb = cb || function() {};
+module.exports.update = function (type, settings, cb) {
+  cb = cb || function () { };
 
   nconf.set(type, settings);
-  nconf.save(function(err) {
+  nconf.save(function (err) {
     return cb(err);
   });
 };
 
 // clear settings
-module.exports.clear = function(key, cb) {
-  cb = cb || function() {};
+module.exports.clear = function (key, cb) {
+  cb = cb || function () { };
 
   nconf.clear(key);
 
-  nconf.save(function(err) {
+  nconf.save(function (err) {
     return cb(err);
   });
 };

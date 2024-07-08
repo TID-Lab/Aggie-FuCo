@@ -2,13 +2,13 @@
 // Stops running queries if no new reports arriving. Resumes when report flow resumes.
 // Watches for changes to report status and group. Streams them as they occur.
 'use strict'
-const _ = require('underscore');
+const _ = require('lodash');
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
 
 const QUERY_INTERVAL = 1000; // 1s
 
-let Streamer = function() {
+let Streamer = function () {
   this.queries = [];
   this.status = 'idle';
   this.throttledQuery = _.throttle(this.query, QUERY_INTERVAL);
@@ -21,23 +21,23 @@ let Streamer = function() {
 
 util.inherits(Streamer, EventEmitter);
 
-Streamer.prototype.addListeners = function(type, emitter) {
+Streamer.prototype.addListeners = function (type, emitter) {
   this.bindings[type] && this.bindings[type].call(this, emitter);
 };
 
 // Track query, avoid duplicates
-Streamer.prototype.addQuery = function(query) {
-  const found = _.findWhere(this.queries, query);
+Streamer.prototype.addQuery = function (query) {
+  const found = _.find(this.queries, query);
   if (!found) this.queries.push(query);
 };
 
 // Remove query from list
-Streamer.prototype.removeQuery = function(query) {
+Streamer.prototype.removeQuery = function (query) {
   this.queries = _.without(this.queries, query);
 };
 
 // Run all queries and emit the results
-Streamer.prototype.query = function() {
+Streamer.prototype.query = function () {
   let remaining = this.queries.length;
   if (!remaining) {
     this.status = 'idle';
@@ -46,9 +46,9 @@ Streamer.prototype.query = function() {
   var allEmpty = true;
   this.status = 'querying';
   var self = this;
-  this.queries.forEach(function(query) {
+  this.queries.forEach(function (query) {
     // Query database
-    query.run(function(err, results) {
+    query.run(function (err, results) {
       if (err) self.emit('error', err);
       if (results.total) {
         allEmpty = false;
@@ -73,7 +73,7 @@ Streamer.prototype.query = function() {
 };
 
 // Resume query if receiving new data
-Streamer.prototype.resumeQuery = function() {
+Streamer.prototype.resumeQuery = function () {
   const wasIdle = this.status === 'idle';
   // Override current status to make sure queries get re-run
   this.status = 'pending';
@@ -81,23 +81,23 @@ Streamer.prototype.resumeQuery = function() {
   if (wasIdle) this.throttledQuery();
 };
 
-Streamer.prototype._addGroupListeners = function(emitter) {
+Streamer.prototype._addGroupListeners = function (emitter) {
   let self = this;
 
   // Listens to new groups being written to the database
-  emitter.on('group:save', function(group) {
+  emitter.on('group:save', function (group) {
     self.resumeQuery();
   });
 };
 
-Streamer.prototype._addReportListeners = function(emitter) {
+Streamer.prototype._addReportListeners = function (emitter) {
   let self = this;
 
   // Clean-up old listeners
   emitter.removeAllListeners('report:new');
 
   // Listens to new reports being written to the database
-  emitter.on('report:new', function(report) {
+  emitter.on('report:new', function (report) {
     self.resumeQuery();
   });
 };

@@ -4,7 +4,7 @@
 var Report = require('../../models/report');
 var batch = require('../../models/batch');
 var ReportQuery = require('../../models/query/report-query');
-var _ = require('underscore');
+var _ = require('lodash');
 var writelog = require('../../writeLog');
 var tags = require('../../shared/tags');
 const Group = require("../../models/group");
@@ -42,13 +42,13 @@ exports.report_reports = (req, res) => {
   }
 }
 
-  // Load batch
+// Load batch
 exports.report_batch = (req, res) => {
   batch.load(req.user._id, (err, reports) => {
     if (err) res.status(err.status).send(err.message);
     else {
       writelog.writeBatch(req, 'loadBatch', reports);
-      res.status(200).send({results: reports, total: reports.length});
+      res.status(200).send({ results: reports, total: reports.length });
     }
   });
 }
@@ -65,7 +65,7 @@ exports.report_batch_new = (req, res) => {
   });
 }
 
-  // Cancel batch
+// Cancel batch
 exports.report_batch_cancel = (req, res) => {
   batch.cancel(req.user._id, (err) => {
     if (err) res.status(err.status).send(err.message);
@@ -76,7 +76,7 @@ exports.report_batch_cancel = (req, res) => {
   });
 }
 
-  // Get Report by id
+// Get Report by id
 exports.report_details = (req, res) => {
   Report.findById(req.params._id, (err, report) => {
     if (err) res.status(err.status).send(err.message);
@@ -88,7 +88,7 @@ exports.report_details = (req, res) => {
   });
 }
 
-  // Get Report Comments by id
+// Get Report Comments by id
 exports.report_comments = (req, res) => {
   const page = req.query.page;
   const queryData = { commentTo: req.params._id };
@@ -109,7 +109,7 @@ exports.report_update = (req, res) => {
     if (err) return res.status(err.status).send(err.message);
     if (!report) return res.sendStatus(404);
     // Update the actual value
-    _.each(_.pick(req.body, ['_group', 'read', 'smtcTags', 'notes', 'escalated', 'veracity']), (val, key) => {
+    _.forEach(_.pick(req.body, ['_group', 'read', 'smtcTags', 'notes', 'escalated', 'veracity']), (val, key) => {
       report[key] = val;
     });
     if (!report.read) {
@@ -136,7 +136,7 @@ router.delete('/api/report/_all', User.can('edit data'), (req, res) => {
   });
 }); */
 
-  // Edit veracity selected reports
+// Edit veracity selected reports
 exports.reports_veracity_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
@@ -158,7 +158,7 @@ exports.reports_veracity_update = (req, res) => {
   });
 }
 
-  // Mark selected reports as read
+// Mark selected reports as read
 exports.reports_read_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
@@ -180,7 +180,7 @@ exports.reports_read_update = (req, res) => {
   });
 }
 
-  // Escalate selected reports
+// Escalate selected reports
 exports.reports_escalated_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
@@ -202,10 +202,10 @@ exports.reports_escalated_update = (req, res) => {
   });
 }
 
-  // Link selected reports to one group
+// Link selected reports to one group
 exports.reports_group_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
-  Report.find({_id: { $in: req.body.ids }}, (err, reports) => {
+  Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
     if (err) return res.status(err.status).send(err.message);
     if (reports.length === 0) return res.sendStatus(200);
     let remaining = reports.length;
@@ -217,7 +217,7 @@ exports.reports_group_update = (req, res) => {
           if (!res.headersSent) return res.status(err.status).send(err.message)
           return;
         }
-        Group.findById(req.body.group._id, (err, group)=> {
+        Group.findById(req.body.group._id, (err, group) => {
           if (err) {
             if (!res.headersSent) {
               return res.status(err.status).send(err.message);
@@ -239,7 +239,7 @@ exports.reports_group_update = (req, res) => {
   });
 }
 
-  // Update Notes
+// Update Notes
 exports.reports_notes_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {

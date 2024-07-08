@@ -1,7 +1,7 @@
 // Creates new processes and sets up interprocess communication between them.
 
 var path = require('path');
-var _ = require('underscore');
+var _ = require('lodash');
 // We only need `fork()` to create new processes
 var fork = require('child_process').fork;
 
@@ -49,13 +49,13 @@ ProcessManager.prototype.fork = function (relativePath) {
 
 // Get child process from module name
 ProcessManager.prototype.getChild = function (moduleName) {
-  return _.findWhere(this.children, { moduleName: moduleName });
+  return _.find(this.children, { moduleName: moduleName });
 };
 
 // Remove child process from process list
 ProcessManager.prototype.removeChild = function (moduleName) {
   var self = this;
-  _.each(this.children, function (child, index) {
+  _.forEach(this.children, function (child, index) {
     if (typeof child === 'object' && child.moduleName === moduleName) {
       delete self.children[index]
     }
@@ -85,7 +85,7 @@ ProcessManager.prototype.registerRoute = function (options, child) {
   options.events.forEach(function (event) {
     var route = _.extend(_.omit(options, 'events'), { registeredEvent: event });
     // Avoid duplicate routes
-    if (!_.findWhere(self.routes, route)) {
+    if (!_.find(self.routes, route)) {
       self.routes.push(route);
       // Forward route information to outgoing emitter
       if (emitter && route.event === 'register') emitter.send(route);
@@ -96,7 +96,7 @@ ProcessManager.prototype.registerRoute = function (options, child) {
 // Forward message from a child process to another child process
 ProcessManager.prototype.forwardMessage = function (data, emitterChild) {
   var self = this;
-  var routes = _.where(this.routes, { emitterModule: emitterChild.moduleName, registeredEvent: data.event });
+  var routes = _.filter(this.routes, { emitterModule: emitterChild.moduleName, registeredEvent: data.event });
   routes.forEach(function (route) {
     var listeningChild = self.getChild(route.listenerModule);
     // When forwarding a 'pong' response, send 'ping' to the recipient to get

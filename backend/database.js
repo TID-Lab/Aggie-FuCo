@@ -1,14 +1,14 @@
 // Connects to database
 var mongoose = require('mongoose');
 var async = require('async');
-var _ = require('underscore');
+var _ = require('lodash');
 require('dotenv').config();
 
 // Find database records using pagination.
 // Note: This should be the same as `perPage` in config.js.
 var PAGE_LIMIT = 50;
 
-mongoose.Model.findPage = function(filters, page, options, callback) {
+mongoose.Model.findPage = function (filters, page, options, callback) {
   var model = mongoose.models[this.modelName];
   var populate;
   var countFunction
@@ -47,12 +47,12 @@ mongoose.Model.findPage = function(filters, page, options, callback) {
   // execute count and find in parallel fashion to avoid waiting for each other
   async.parallel([
     countFunction,
-    function(callback) {
+    function (callback) {
       var query = model.find(filters, null, options);
       if (populate) query = query.populate(populate);
       query.exec(callback);
     }
-  ], function(err, results) {
+  ], function (err, results) {
     if (err) return callback(err);
     var result = { total: results[0] };
     result.results = results[1];
@@ -60,7 +60,7 @@ mongoose.Model.findPage = function(filters, page, options, callback) {
   });
 };
 
-var Database = function() {
+var Database = function () {
   this.mongoose = mongoose;
   if (!process.env.DATABASE_URL) {
     console.log("There does not seem to be a value for the database connection string in DATABASE_URL");
@@ -78,12 +78,12 @@ var Database = function() {
   });
 
   mongoose.connection
-      .on('open', () => {
-        console.log('Mongoose connection open to database.');
-      })
-      .on('error', (err) => {
-        console.log(`Connection error: ${err.message}\n`);
-      });
+    .on('open', () => {
+      console.log('Mongoose connection open to database.');
+    })
+    .on('error', (err) => {
+      console.log(`Connection error: ${err.message}\n`);
+    });
 };
 
 module.exports = new Database();
