@@ -12,7 +12,6 @@ const validator = require('validator');
 const _ = require('underscore');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Report = require('./report');
-const logger = require('../logger');
 require('./tag');
 
 require('../error');
@@ -70,7 +69,7 @@ schema.post('remove', function () {
   // Unlink removed group from reports
   Report.find({ _group: this._id.toString() }, function (err, reports) {
     if (err) {
-      logger.error(err);
+      console.error(err);
     }
     reports.forEach(function (report) {
       report._group = null;
@@ -132,7 +131,7 @@ schema.methods.clearSMTCTags = function (callback) {
       const tagId = tag.toString();
       this.removeSMTCTag(tagId, (err) => {
         if (err) {
-          logger.error(err);
+          console.error(err);
         }
         if (--remaining === 0) {
           cb();
@@ -151,7 +150,7 @@ var Group = mongoose.model('Group', schema);
 SMTCTag.schema.on('tag:removed', function(id) {
   Group.find({smtcTags: id}, function(err, reports) {
     if (err) {
-      logger.error(err);
+      console.error(err);
     }
     reports.forEach(function(report) {
       report.removeSMTCTag(id, () => {

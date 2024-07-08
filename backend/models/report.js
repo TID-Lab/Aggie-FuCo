@@ -5,20 +5,19 @@ const mongoose = database.mongoose;
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 const Schema = mongoose.Schema;
 const SchemaTypes = mongoose.SchemaTypes;
-const logger = require('../logger');
 const SMTCTag = require('./tag');
 const { addPost, removePost } = require('../comments');
 
 let schema = new Schema({
-  authoredAt: {type: Date, index: true},
-  fetchedAt: {type: Date, index: true},
+  authoredAt: { type: Date, index: true },
+  fetchedAt: { type: Date, index: true },
   storedAt: { type: Date, index: true },
   content: { type: String, index: true },
   author: { type: String, index: true },
-  veracity: { type: String, default: 'Unconfirmed', enum: ['Unconfirmed', 'Confirmed True','Confirmed False']},
+  veracity: { type: String, default: 'Unconfirmed', enum: ['Unconfirmed', 'Confirmed True', 'Confirmed False'] },
   url: String,
   metadata: Schema.Types.Mixed,
-  smtcTags: {type: [{type: SchemaTypes.ObjectId, ref: 'SMTCTag'}], default: []},
+  smtcTags: { type: [{ type: SchemaTypes.ObjectId, ref: 'SMTCTag' }], default: [] },
   hasSMTCTags: { type: Boolean, default: false, required: true, index: true },
   closed: { type: Boolean, default: false, required: true },
   read: { type: Boolean, default: false, required: true, index: true },
@@ -30,26 +29,26 @@ let schema = new Schema({
   checkedOutAt: { type: Date, index: true },
   commentTo: { type: Schema.ObjectId, ref: 'Report', index: true },
   originalPost: { type: String },
-  notes: {type: String},
+  notes: { type: String },
   escalated: { type: Boolean, default: false, required: true, index: true },
-  content_lang: {type: String}
+  content_lang: { type: String }
 });
 
-schema.index({'metadata.ct_tag': 1}, {background: true});
+schema.index({ 'metadata.ct_tag': 1 }, { background: true });
 // Add fulltext index to the `content` and `author` field.
 //schema.index({ content: 'text', author: 'text' });
-schema.path('_group').set(function(_group) {
+schema.path('_group').set(function (_group) {
   this._prevGroup = this._group;
   return _group;
 });
 
 // sets the indexed hasSMTCTags boolean
-schema.pre('save', function(next) {
+schema.pre('save', function (next) {
   this.hasSMTCTags = this.smtcTags.length > 0;
   next()
 });
 
-schema.pre('save', function(next) {
+schema.pre('save', function (next) {
   if (this.isNew) {
     this._wasNew = true;
     // Set default storedAt.
@@ -66,7 +65,7 @@ schema.pre('save', function(next) {
 });
 
 // Emit information about updates after saving report
-schema.post('save', function() {
+schema.post('save', function () {
   if (this._wasNew) schema.emit('report:new', { _id: this._id.toString() });
   if (!this._wasNew) schema.emit('report:updated', this);
   if (this._groupWasModified) {
@@ -76,35 +75,35 @@ schema.post('save', function() {
 
 
 
-schema.methods.setReadStatus = function(readStatus) {
+schema.methods.setReadStatus = function (readStatus) {
   this.read = readStatus;
 };
 
-schema.methods.setVeracity = function(veracity) {
+schema.methods.setVeracity = function (veracity) {
   this.veracity = veracity;
 };
 
-schema.methods.setEscalated = function(escalated) {
+schema.methods.setEscalated = function (escalated) {
   this.escalated = escalated;
 };
 
-schema.methods.addSMTCTag = function(smtcTagId, callback) {
+schema.methods.addSMTCTag = function (smtcTagId, callback) {
   // TODO: Use Functional Programming
   // ML This finds the smtcTag to add (if it doesn't exists) then add it.
   let isRepeat = false;
-  this.smtcTags.forEach(function(tag) {
-    if(smtcTagId === tag.toString()) {
+  this.smtcTags.forEach(function (tag) {
+    if (smtcTagId === tag.toString()) {
       isRepeat = true;
     }
   });
   if (isRepeat === false) {
-    this.smtcTags.push({_id: smtcTagId});
+    this.smtcTags.push({ _id: smtcTagId });
     this.read = true;
     // Only send a post to the acquisition API if it is a) not a comment b) a FB post and c) not a group post
     if (!this.commentTo && this._media[0] === 'facebook' && !this.url.match(/permalink/)) {
       SMTCTag.findById(smtcTagId, (err, tag) => {
         if (err) {
-          logger.error(err);
+          console.error(err);
         }
         if (tag.isCommentTag) {
           addPost(this.url, callback)
@@ -118,12 +117,12 @@ schema.methods.addSMTCTag = function(smtcTagId, callback) {
   callback();
 }
 
-schema.methods.removeSMTCTag = function(smtcTagId, callback) {
+schema.methods.removeSMTCTag = function (smtcTagId, callback) {
   // TODO: Use Functional Programming
   // ML This finds the smtcTag to remove (if it exists) then remove it.
   if (this.smtcTags) {
     let fndIndex = -1;
-    this.smtcTags.forEach(function(tag, index) {
+    this.smtcTags.forEach(function (tag, index) {
       let string = tag.toString();
       if (smtcTagId === tag.toString()) {
         fndIndex = index;
@@ -135,7 +134,7 @@ schema.methods.removeSMTCTag = function(smtcTagId, callback) {
       if (!this.commentTo && this._media[0] === 'facebook') {
         SMTCTag.findById(smtcTagId, (err, tag) => {
           if (err) {
-            logger.error(err);
+            console.error(err);
           }
           if (tag.isCommentTag) {
             removePost(this.url, callback)
@@ -150,7 +149,7 @@ schema.methods.removeSMTCTag = function(smtcTagId, callback) {
   callback();
 }
 
-schema.methods.clearSMTCTags = function(callback) {
+schema.methods.clearSMTCTags = function (callback) {
 
   const cb = () => {
     this.smtcTags = [];
@@ -163,7 +162,7 @@ schema.methods.clearSMTCTags = function(callback) {
       const tagId = tag.toString();
       this.removeSMTCTag(tagId, (err) => {
         if (err) {
-          logger.error(err);
+          console.error(err);
         }
         if (--remaining === 0) {
           cb();
@@ -177,12 +176,12 @@ schema.methods.clearSMTCTags = function(callback) {
 schema.plugin(AutoIncrement, { inc_field: 'reportId' });
 const Report = mongoose.model('Report', schema);
 
-SMTCTag.schema.on('tag:removed', function(id) {
-  Report.find({smtcTags: id}, function(err, reports) {
+SMTCTag.schema.on('tag:removed', function (id) {
+  Report.find({ smtcTags: id }, function (err, reports) {
     if (err) {
-      logger.error(err);
+      console.error(err);
     }
-    reports.forEach(function(report) {
+    reports.forEach(function (report) {
       report.removeSMTCTag(id, () => {
         report.save();
       })
@@ -192,7 +191,7 @@ SMTCTag.schema.on('tag:removed', function(id) {
 
 
 // queryReports reports based on passed query data
-Report.queryReports = function(query, page, callback) {
+Report.queryReports = function (query, page, callback) {
   if (typeof query === 'function') return Report.findPage(query);
   if (typeof page === 'function') {
     callback = page;
@@ -216,8 +215,8 @@ Report.queryReports = function(query, page, callback) {
 
 
 
-Report.findSortedPage = function(filter, page, callback) {
-  Report.findPage(filter, page, { sort: '-storedAt' }, function(err, reports) {
+Report.findSortedPage = function (filter, page, callback) {
+  Report.findPage(filter, page, { sort: '-storedAt' }, function (err, reports) {
     if (err) return callback(err);
     callback(null, reports);
   });

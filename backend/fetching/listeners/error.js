@@ -1,11 +1,10 @@
-const logger = require('../../logger');
 const { getSourceID, fetchSourceByID } = require('../sourceToChannel');
 
 /**
  * Listens to the Downstream `error` event
  */
 module.exports = async function (err, channelID) {
-    logger.error(err);
+    console.error(err);
 
     // If `channelID` is defined then the error came from a Channel 
     if (channelID) {

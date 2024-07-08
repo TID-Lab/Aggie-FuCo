@@ -1,4 +1,5 @@
 'use strict';
+/// deprecated
 
 const config = require('./config/secrets');
 const logger = require('./logger');
@@ -8,7 +9,9 @@ var logFlag = config.get().logger.api.log_user_activity;
 
 const writer = {};
 
-writer.writeGroup = function(req, group, action) {
+writer.writeGroup = function (req, group, action) {
+  return;
+
   if (!logFlag) return;
   var logDetails = {
     userID: req.user._id,
@@ -32,12 +35,14 @@ writer.writeGroup = function(req, group, action) {
       tags: group.tags
     };
   }
-  userLogger.writeToCollection(logDetails, function(err) {
+  userLogger.writeToCollection(logDetails, function (err) {
     if (err) logger.error(err);
   });
 };
 
-writer.writeSource = function(req, source, action) {
+writer.writeSource = function (req, source, action) {
+  return;
+
   if (!logFlag) return;
   var logDetails = {
     userID: req.user._id,
@@ -55,12 +60,16 @@ writer.writeSource = function(req, source, action) {
       enabled: source.enabled
     };
   }
-  userLogger.writeToCollection(logDetails, function(err) {
+  userLogger.writeToCollection(logDetails, function (err) {
     if (err) logger.error(err);
   });
 };
 
-writer.writeReport = function(req, report, action, query) {
+writer.writeReport = function (req, report, action, query) {
+
+  return;
+
+
   if (!logFlag) return;
   var logDetails = {
     userID: req.user._id,
@@ -87,12 +96,15 @@ writer.writeReport = function(req, report, action, query) {
   if (query) {
     logDetails.actionRef = query;
   }
-  userLogger.writeToCollection(logDetails, function(err) {
+  userLogger.writeToCollection(logDetails, function (err) {
     if (err) logger.error(err);
   });
 };
 
-writer.writeBatch = function(req, action, reports) {
+writer.writeBatch = function (req, action, reports) {
+  return;
+
+
   if (!logFlag) return;
   var logDetails = {
     userID: req.user._id,
@@ -102,7 +114,7 @@ writer.writeBatch = function(req, action, reports) {
   };
   if (reports) {
     var reportContents = [];
-    reports.forEach(function(report) {
+    reports.forEach(function (report) {
       reportContents.push({
         id: report._id,
         media: report._media,
@@ -111,12 +123,15 @@ writer.writeBatch = function(req, action, reports) {
     });
     logDetails.actionRef.reports = reportContents;
   }
-  userLogger.writeToCollection(logDetails, function(err) {
+  userLogger.writeToCollection(logDetails, function (err) {
     if (err) logger.error(err);
   });
 };
 
-writer.writeTrend = function(req, action) {
+writer.writeTrend = function (req, action) {
+  return;
+
+
   if (!logFlag) return;
   var logDetails = {
     userID: req.user._id,
@@ -124,7 +139,7 @@ writer.writeTrend = function(req, action) {
     action: action,
     actionRef: {}
   };
-  userLogger.writeToCollection(logDetails, function(err) {
+  userLogger.writeToCollection(logDetails, function (err) {
     if (err) logger.error(err);
   });
 };

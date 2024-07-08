@@ -1,25 +1,22 @@
 process.title = 'aggie';
 const processManager = require('./backend/process-manager');
-const initLogger = require('./backend/master-logger').init;
-const log = require('./backend/master-logger').log;
+
 require('dotenv').config();
 
 // fork child at specific module path
 function _fork(modulePath) {
   const child = processManager.fork(modulePath);
-  initLogger(child.moduleName);
-  log(child.moduleName, 'debug', 'Aggie started');
+
+  console.debug('Aggie started')
 }
 
-// initialize master logger
-const masterLoggerName = 'master';
-initLogger(masterLoggerName);
-log(masterLoggerName, 'debug', 'Aggie started');
+
 
 // handle uncaught exceptions
-process.on('uncaughtException', function(err) {
-  log(masterLoggerName, 'error', err.message);
-  log(masterLoggerName, 'debug', err.stack);
+process.on('uncaughtException', function (err) {
+  console.error(err.message)
+  console.debug(err.stack)
+
 });
 
 // Begins the three main backend processes API, fetching, and analytics.

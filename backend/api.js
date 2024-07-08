@@ -5,7 +5,6 @@ process.title = 'aggie-api';
 var childProcess = require('./child-process');
 var path = require('path');
 var fs = require('fs');
-var logger = require('./logger');
 var morgan = require('morgan');
 var config = require('./config/secrets');
 var exec = require('child_process').exec;
@@ -16,7 +15,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const authRoutes = require('./api/routes/authRoutes');
 const User = require('./models/user');
-//var mailer = require('./mailer.js');
 var _ = require('underscore');
 var readLineSync = require('readline-sync');
 var { version: packageVersion } = require('../package.json');
@@ -116,10 +114,10 @@ function handleRequestTimeouts(req, res, next) {
 
   var timeoutId = setTimeout(function () {
     // timeout has happened, something bad has happened, send 500 back
-    logger.error('Timeout has occurred, request cannot be processed', {
-      url: req.url,
-    });
 
+    console.error('Timeout has occurred, request cannot be processed', {
+      url: req.url,
+    })
     res.sendStatus(500);
   }, requestTimeout);
 
@@ -255,19 +253,20 @@ setTimeout(function () {
 var version;
 exec('git rev-parse --short HEAD', function (err, stdout, stderr) {
   if (err) {
-    logger.warning(err);
+
+    console.warn(err);
   }
   version = `v${packageVersion}-${stdout.trim()}`;
-  logger.info('✔ Aggie version: ' + version);
+  console.info('✔ Aggie version: ' + version);
 });
 
 // handle all errors and log them
 process.on('uncaughtException', function (err) {
-  logger.error(err);
+  console.error(err);
 });
 app.use(function (err, req, res, next) {
   if (err) {
-    logger.error(err);
+    console.error(err);
   } else {
     next();
   }
@@ -277,8 +276,8 @@ app.use(function (err, req, res, next) {
 app.set('port', process.env.PORT || 3000);
 
 server.listen(app.get('port'), function () {
-  logger.info('✔ Aggie is listening on port ' + app.get('port'));
-  logger.info('✔ Aggie is listening to protocol ' + protocol);
+  console.info('✔ Aggie is listening on port ' + app.get('port'));
+  console.info('✔ Aggie is listening to protocol ' + protocol);
 });
 
 require('./api/sockets/frontend-create-rooms')(server);

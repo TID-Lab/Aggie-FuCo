@@ -2,7 +2,6 @@
 
 var database = require('../database');
 var mongoose = database.mongoose;
-var logger = require('../logger');
 var _ = require('underscore');
 
 var lengthValidator = function (str) {
@@ -35,7 +34,7 @@ tagSchema.pre('save', function (next) {
       return next(
         new Error.Validation(
           tag.name +
-            ' is not a unique tag name. Please use a unique name for new tags.'
+          ' is not a unique tag name. Please use a unique name for new tags.'
         )
       );
     else next();
@@ -62,7 +61,7 @@ SMTCTag.checkNewUnique = function (tag, callback) {
   var query = { $and: [{ _id: { $ne: tag._id } }, { name: tag.name }] };
   SMTCTag.countDocuments(query, function (err, count) {
     if (err) {
-      logger.warning(err);
+      console.warn(err);
     }
     if (count) callback(false, tag.name + '_not_unique');
     else callback(true);

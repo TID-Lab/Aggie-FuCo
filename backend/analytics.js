@@ -7,7 +7,6 @@ process.title = 'aggie-analytics';
 // between this and other modules.
 
 const childProcess = require('./child-process');
-const logger = require('./logger');
 
 // Extend global error class
 require('./error');
@@ -32,8 +31,8 @@ statsMaster.addListeners('socket', childProcess.setupEventProxy({
 }));
 
 // handle uncaught exceptions
-process.on('uncaughtException', function(err) {
-  logger.error(err);
+process.on('uncaughtException', function (err) {
+  console.error(err)
 });
 
 // Export analytics module itself as a child process
