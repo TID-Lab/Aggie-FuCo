@@ -2,8 +2,6 @@
 /// deprecated
 
 const config = require('./config/secrets');
-const logger = require('./logger');
-const userLogger = require('./userLogger');
 
 var logFlag = config.get().logger.api.log_user_activity;
 

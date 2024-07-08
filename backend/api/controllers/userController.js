@@ -1,30 +1,30 @@
 // Handles CRUD requests for users.
 var User = require('../../models/user');
-var mailer = require('../../mailer');
+// mailer = require('../../mailer');
 const passport = require('passport');
 const validator = require('validator');
 
-const sendEmail = (user, req, callback) => {
-  // Only send email if not in test mode.
-  if (process.env.NODE_ENV == 'test') callback(null);
-  else {
-    const token = password.encodeToken(user);
-    mailer.sendFromTemplate(
-      {
-        template: 'newUser',
-        user: user,
-        token: token,
-        host: req.headers.host,
-        protocol: req.protocol,
-        acceptLanguage: req.headers['accept-language'],
-      },
-      (err) => {
-        if (err) callback(err);
-        else callback(null);
-      }
-    );
-  }
-};
+// const sendEmail = (user, req, callback) => {
+//   // Only send email if not in test mode.
+//   if (process.env.NODE_ENV == 'test') callback(null);
+//   else {
+//     const token = password.encodeToken(user);
+//     mailer.sendFromTemplate(
+//       {
+//         template: 'newUser',
+//         user: user,
+//         token: token,
+//         host: req.headers.host,
+//         protocol: req.protocol,
+//         acceptLanguage: req.headers['accept-language'],
+//       },
+//       (err) => {
+//         if (err) callback(err);
+//         else callback(null);
+//       }
+//     );
+//   }
+// };
 
 exports.user_users = (req, res) => {
   User.find({}, function (err, users) {
@@ -46,10 +46,10 @@ exports.user_detail = (req, res) => {
 exports.user_create = (req, res) => {
   console.log(
     'Attempting to register user with username: ' +
-      req.body.username +
-      ' and email: ' +
-      req.body.email +
-      '.'
+    req.body.username +
+    ' and email: ' +
+    req.body.email +
+    '.'
   );
 
   if (!validator.isEmail(req.body.email)) {
@@ -139,4 +139,4 @@ exports.user_logout = (req, res, next) => {
 };
 
 // Return the currently logged-in user object
-exports.user_session = (req, res) => {};
+exports.user_session = (req, res) => { };
