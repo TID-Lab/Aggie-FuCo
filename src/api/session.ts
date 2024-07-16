@@ -8,6 +8,7 @@ export const logIn = async (loginData: LoginData) => {
     data: loginData,
   }
   );
+
   return data;
 }
 

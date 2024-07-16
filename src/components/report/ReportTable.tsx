@@ -177,7 +177,7 @@ export function ReportRow(props: ReportRowIProps) {
   const allGroupsQuery = useQuery<Group[] | undefined, AxiosError>("all-groups", ()=> {return getAllGroups();}, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
-        navigate('/login');
+        //navigate('/login');
       }
     },
     refetchOnWindowFocus: false,

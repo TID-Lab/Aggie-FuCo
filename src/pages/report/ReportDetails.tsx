@@ -84,7 +84,7 @@ const ReportDetails = () => {
     },
     onError: (error: AxiosError) => {
       if (error.response && error.response.status === 401) {
-        navigate('/login');
+        //navigate('/login');
       } else if (error && error.response && error.response.status && error.response.data) {
         setShowAlert(false);
         setAlertMessage({
@@ -195,7 +195,7 @@ const ReportDetails = () => {
     enabled: (reportQuery.isSuccess && reportQuery.data && reportQuery.data._group != ""),
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
-        navigate('/login');
+        //navigate('/login');
       }
     },
   })

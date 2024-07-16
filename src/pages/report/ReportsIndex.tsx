@@ -182,7 +182,7 @@ const ReportsIndex = (props: IProps) => {
       },
       onError: (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
-          navigate("/login");
+          //navigate("/login");
         }
       },
     }
@@ -195,13 +195,13 @@ const ReportsIndex = (props: IProps) => {
       onError: (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
           sessionFetching = false;
-          navigate("/login");
+          //navigate("/login");
         }
       },
       onSuccess: (data) => {
         sessionFetching = true;
         if (location.pathname === "/login") {
-          navigate("/reports");
+          //navigate("/reports");
         }
       },
       retry: sessionFetching,
@@ -219,7 +219,7 @@ const ReportsIndex = (props: IProps) => {
     {
       onError: (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
-          navigate("/login");
+          //navigate("/login");
         }
       },
       keepPreviousData: true,
@@ -231,7 +231,7 @@ const ReportsIndex = (props: IProps) => {
     {
       onError: (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
-          navigate("/login");
+          //navigate("/login");
         }
       },
     }
@@ -250,7 +250,7 @@ const ReportsIndex = (props: IProps) => {
   const tagsQuery = useQuery("tags", getTags, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
-        navigate("/login");
+        //navigate("/login");
       }
     },
     onSuccess: (data: Tag[]) => {
@@ -294,7 +294,7 @@ const ReportsIndex = (props: IProps) => {
         console.log(`connect_error due to ${err.message}`);
       });
     }
-  });
+  }, []);
 
   return (
     <Container fluid className={"pt-4"}>

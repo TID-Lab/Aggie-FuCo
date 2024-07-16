@@ -82,7 +82,7 @@ export default function EditGroupModal(props: IProps) {
   const groupsQuery = useQuery<Groups | undefined, AxiosError>(["groups", queryState], ()=>{return getGroups(queryState)}, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
-        navigate('/login');
+        //navigate('/login');
       }
     },
   });
@@ -90,14 +90,14 @@ export default function EditGroupModal(props: IProps) {
   const sourcesQuery = useQuery<Source[] | undefined, AxiosError>("sources", getSources, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
-        navigate('/login');
+        //navigate('/login');
       }
     },
   });
   const tagsQuery = useQuery("tags", getTags, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
-        navigate('/login');
+        //navigate('/login');
       }
     },
   });

@@ -126,7 +126,7 @@ const GroupsIndex = (props: IProps) => {
     {
       onError: (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
-          navigate("/login");
+          //navigate("/login");
         }
       },
     }
@@ -139,7 +139,7 @@ const GroupsIndex = (props: IProps) => {
     {
       onError: (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
-          navigate("/login");
+          //navigate("/login");
         }
       },
     }
@@ -147,7 +147,7 @@ const GroupsIndex = (props: IProps) => {
   const tagsQuery = useQuery<Tag[] | undefined, AxiosError>("tags", getTags, {
     onError: (err: AxiosError) => {
       if (err.response && err.response.status === 401) {
-        navigate("/login");
+        //navigate("/login");
       }
     },
   });
@@ -157,7 +157,7 @@ const GroupsIndex = (props: IProps) => {
     {
       onError: (err: AxiosError) => {
         if (err.response && err.response.status === 401) {
-          navigate("/login");
+          //navigate("/login");
         }
       },
     }
