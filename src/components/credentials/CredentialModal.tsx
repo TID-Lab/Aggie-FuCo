@@ -33,13 +33,18 @@ const telegramCredentialsFormSchema = Yup.object().shape({
   credentialBotAPIToken: Yup.string().required('API Token required'),
 });
 
-const credentialTypes = ['crowdtangle', 'twitter', 'telegram'];
+const junkipediaCredentialsFormSchema = Yup.object().shape({
+  credentialName: Yup.string().required('Credentials name required'),
+  credentialJunkipediaAPIKey: Yup.string().required('API Token required'),
+});
+
+const credentialTypes = ['crowdtangle', 'twitter', 'telegram', 'junkipedia'];
 
 export default function CredentialModal(props: IProps) {
   const [modalShow, setModalShow] = useState(false);
   const handleModalClose = () => setModalShow(false);
   const handleModalShow = () => setModalShow(true);
-  const [credentialType, setCredentialType] = useState('twitter');
+  const [credentialType, setCredentialType] = useState('junkipedia');
   const newCredentialMutation = useMutation(
     (credentialData: any) => {
       return newCredential(credentialData);
@@ -95,6 +100,16 @@ export default function CredentialModal(props: IProps) {
           type: credentialType,
           secrets: {
             botAPIToken: values.credentialBotAPIToken,
+          },
+        };
+        break;
+      case 'junkipedia':
+        return {
+          credentials: {},
+          name: values.credentialName,
+          type: credentialType,
+          secrets: {
+            junkipediaAPIKey: values.credentialJunkipediaAPIKey,
           },
         };
         break;
@@ -264,7 +279,7 @@ export default function CredentialModal(props: IProps) {
       </Formik>
     </>
   );
-
+  
   const crowdTangleFormJSX = (
     <>
       <Formik
@@ -475,6 +490,112 @@ export default function CredentialModal(props: IProps) {
     </>
   );
 
+  // I'm sure there's a more programatic way about this...
+  const junkipediaFormJSX = (
+    <>
+    <Formik
+      initialValues={{
+        credentialName: '',
+        credentialJunkipediaAPIKey: '',
+      }}
+      validationSchema={junkipediaCredentialsFormSchema}
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
+        newCredentialMutation.mutate(formValuesToCredential(values));
+      }}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleSubmit,
+        handleBlur,
+        isSubmitting,
+      }) => (
+        <Form noValidate onSubmit={handleSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>New credential</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Container>
+              <Form.Group controlId='credentialType' className={'mb-3'}>
+                <Form.Label>Credential type</Form.Label>
+                <Form.Select
+                  value={credentialType}
+                  onChange={(e) => {
+                    /*
+                          TODO: Getting a ts error because value is not always part of the EventTarget type.
+                          In order to fix we need a eventTarget type that has a value field.
+                           */
+                    //@ts-ignore
+                    setCredentialType(e.target.value);
+                  }}
+                >
+                  {credentialTypes.map((credentialType) => {
+                    return (
+                      <option key={credentialType} value={credentialType}>
+                        {capitalizeFirstLetter(credentialType)}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group controlId='credentialName' className={'mb-3'}>
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  required
+                  type='text'
+                  name='credentialName'
+                  placeholder='Enter credential name'
+                  value={values.credentialName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isInvalid={
+                    touched.credentialName && !!errors.credentialName
+                  }
+                />
+                <Form.Control.Feedback type='invalid'>
+                  {errors.credentialName}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group
+                controlId='credentialJunkipediaAPIKey'
+                className={'mb-3'}
+              >
+                <Form.Label>Junkipedia API key</Form.Label>
+                <Form.Control
+                  required
+                  type='text'
+                  name='credentialJunkipediaAPIKey'
+                  placeholder='Junkipedia API Key'
+                  value={values.credentialJunkipediaAPIKey}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isInvalid={
+                    touched.credentialJunkipediaAPIKey &&
+                    !!errors.credentialJunkipediaAPIKey
+                  }
+                />
+                <Form.Control.Feedback type='invalid'>
+                  {errors.credentialJunkipediaAPIKey}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Container>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='secondary' onClick={handleModalClose}>
+              Cancel
+            </Button>
+            <Button variant='primary' type='submit' disabled={isSubmitting}>
+              Submit
+            </Button>
+          </Modal.Footer>
+        </Form>
+      )}
+    </Formik>
+  </>
+  )
+
   return (
     <>
       <Button variant={'primary'} onClick={handleModalShow}>
@@ -490,6 +611,7 @@ export default function CredentialModal(props: IProps) {
         {credentialType === 'twitter' && <>{twitterFormJSX}</>}
         {credentialType === 'crowdtangle' && <>{crowdTangleFormJSX}</>}
         {credentialType === 'telegram' && <>{telegramFormJSX}</>}
+        {credentialType === 'junkipedia' && <>{junkipediaFormJSX}</>}
       </Modal>
     </>
   );
