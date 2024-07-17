@@ -44,6 +44,13 @@ const CrowdTangleFormSchema = Yup.object().shape({
   ),
 });
 
+const JunkipediaFormSchema = Yup.object().shape({
+  sourceNickname: Yup.string().required("Source name is a required field"),
+  sourceCredentials: Yup.string().required(
+    "A credential is required to create a source"
+  ),
+});
+
 const TelegramFormSchema = Yup.object().shape({
   sourceNickname: Yup.string().required("Source name is a required field"),
   sourceCredentials: Yup.string().required(
@@ -61,18 +68,20 @@ const sourceFormSchema = Yup.object().shape({
 
 const mediaTypes = [
   "twitter",
-  "instagram",
-  "RSS",
-  "elmo",
-  "SMS GH",
+  // 'instagram',
+  // 'RSS',
+  // 'elmo',
+  // 'SMS GH',
   "facebook",
   "telegram",
+  "junkipedia",
 ];
 const mediaUrls = {
   twitter: "https://twitter.com/",
   facebook: "https://www.facebook.com/",
   instagram: "https://www.instagram.com/",
   telegram: "https://www.telegram.com/",
+  junkipedia: "https://www.junkipedia.com/",
 };
 
 export default function SourceModal(props: IProps) {
@@ -128,6 +137,14 @@ export default function SourceModal(props: IProps) {
           nickname: values.sourceNickname,
           url: mediaUrls["telegram"],
         };
+      case "junkipedia":
+        return {
+          credentials: values.sourceCredentials,
+          keywords: values.sourceKeywords,
+          media: sourceMediaType,
+          nickname: values.sourceNickname,
+          url: mediaUrls["junkipedia"],
+        };
       default:
         return {};
     }
@@ -145,6 +162,10 @@ export default function SourceModal(props: IProps) {
   );
   const telegramCredentials = props.credentials.filter(
     (cred) => cred.type === "telegram"
+  );
+
+  const junkipediaCredentials = props.credentials.filter(
+    (cred) => cred.type === "junkipedia"
   );
 
   const twitterFormJSX = (
@@ -312,7 +333,171 @@ export default function SourceModal(props: IProps) {
       )}
     </Formik>
   );
+  const junkipediaFormJSX = (
+    <Formik
+      initialValues={{
+        sourceNickname: props.source?.nickname || "",
+        sourceMedia: props.source?.media || "",
+        sourceKeywords: props.source?.keywords || "",
+        sourceTags: props.source?.tags || "",
+        sourceCredentials:
+          props.source?.credentials._id || defaultCredential?._id,
+        sourceURL: props.source?.url || "",
+      }}
+      validationSchema={JunkipediaFormSchema}
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
+        if (props.source) {
+          editSourceMutation.mutate(formValuesToSource(values));
+        } else {
+          newSourceMutation.mutate(formValuesToSource(values));
+        }
+      }}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleSubmit,
+        handleBlur,
+        isSubmitting,
+        /* and other goodies */
+      }) => (
+        <Form noValidate onSubmit={handleSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>Create source</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Container>
+              <FormGroup controlId='sourceMedia' className='mb-3'>
+                <FormLabel>Media</FormLabel>
+                <FormSelect
+                  value={sourceMediaType}
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                    setSourceMediaType(e.target.value);
+                    handleChange(e);
+                  }}
+                  onBlur={handleBlur}
+                >
+                  {mediaTypes.map((mediaType) => {
+                    return (
+                      <option key={mediaType} value={mediaType}>
+                        {capitalizeFirstLetter(mediaType)}
+                      </option>
+                    );
+                  })}
+                </FormSelect>
+              </FormGroup>
+              <Form.Group controlId='sourceNickname' className={"mb-3"}>
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  required
+                  type='text'
+                  placeholder='Enter name'
+                  name='sourceNickname'
+                  value={values.sourceNickname}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isInvalid={touched.sourceNickname && !!errors.sourceNickname}
+                />
 
+                <Form.Control.Feedback type='invalid'>
+                  {errors.sourceNickname}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId='sourceKeywords' className={"mb-3"}>
+                <Form.Label>Keywords</Form.Label>
+
+                <Form.Control
+                  required
+                  type='text'
+                  placeholder='Enter keywords'
+                  name='sourceKeywords'
+                  value={values.sourceKeywords}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isInvalid={touched.sourceKeywords && !!errors.sourceKeywords}
+                />
+                <Form.Control.Feedback type='invalid'>
+                  {errors.sourceKeywords}
+                </Form.Control.Feedback>
+                <FormText muted>
+                  Separated by commas, e.g. <i>banana, apple, mango</i>. Click{" "}
+                  <a
+                    href={
+                      "https://dev.twitter.com/streaming/overview/request-parameters#track"
+                    }
+                  >
+                    here
+                  </a>{" "}
+                  for details on how this is used to find tweets.
+                </FormText>
+              </Form.Group>
+
+              <Form.Group controlId='sourceCredentials' className='mb-3'>
+                <Form.Label>Credentials</Form.Label>
+                <Field
+                  as='select'
+                  name='sourceCredentials'
+                  id='sourceCredentials'
+                  className={
+                    errors.sourceCredentials
+                      ? "form-control is-invalid"
+                      : "form-control"
+                  }
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  disabled={!junkipediaCredentials.length}
+                  isInvalid={
+                    touched.sourceCredentials && errors.sourceCredentials
+                  }
+                >
+                  <option value='none'> Select credential </option>
+                  {props.credentials.map((cred: Credential) => {
+                    if (cred.type === "junkipedia") {
+                      return (
+                        <option key={cred._id} value={cred._id}>
+                          {cred.name}
+                        </option>
+                      );
+                    }
+                  })}
+                </Field>
+                <Form.Control.Feedback type='invalid'>
+                  {errors.sourceCredentials}
+                </Form.Control.Feedback>
+                {/* {errors.sourceCredentials && (
+                  <div
+                    className='invalid-feedback'
+                    style={{ display: 'block' }}
+                  >
+                    {errors.sourceCredentials}
+                  </div>
+                )} */}
+
+                <FormText muted>
+                  Select which credentials will be used for API calls.
+                </FormText>
+                {!junkipediaCredentials.length && (
+                  <Alert key='danger' variant='danger' className='mt-2'>
+                    No credentials found. Please create credentials first.
+                  </Alert>
+                )}
+              </Form.Group>
+            </Container>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant='secondary' onClick={() => setModalShow(false)}>
+              Cancel
+            </Button>
+            <Button variant='primary' type='submit' disabled={isSubmitting}>
+              Submit
+            </Button>
+          </Modal.Footer>
+        </Form>
+      )}
+    </Formik>
+  );
   const TelegramFormJSX = (
     <Formik
       initialValues={{
@@ -621,6 +806,7 @@ export default function SourceModal(props: IProps) {
         {(sourceMediaType === "facebook" ||
           sourceMediaType === "instagram") && <>{crowdtangleFormJSX}</>}
         {sourceMediaType === "telegram" && <>{TelegramFormJSX}</>}
+        {sourceMediaType === "junkipedia" && <>{junkipediaFormJSX}</>}
       </Modal>
     </>
   );

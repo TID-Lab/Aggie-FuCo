@@ -13,7 +13,8 @@ const validator = require('validator');
 const credentialsTypes = [
   'twitter',
   'crowdtangle',
-  'telegram'
+  'telegram',
+  'junkipedia'
 ];
 
 // validates secrete based on their type

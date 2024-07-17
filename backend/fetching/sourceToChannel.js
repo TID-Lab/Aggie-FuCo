@@ -11,7 +11,7 @@ const downstream = require('./downstream');
 
 const AggieCrowdTangleChannel = require('./channels/crowdtangle');
 const TelegramChannel = require('./channels/telegram');
-const { TwitterPageChannel } = builtin;
+const { TwitterPageChannel, JunkipediaChannel } = builtin;
 
 
 // Key: Source ID; Value: Channel ID
@@ -97,6 +97,7 @@ function createChannel(source) {
         }
     };
 
+    console.log(source)
     switch(media) {
         case 'facebook':
         case 'instagram':
@@ -121,6 +122,8 @@ function createChannel(source) {
                     query: keywords // TODO rename to something better
                 },
             }
+            console.log("twitter options")
+            console.log(options)
             channel = new TwitterPageChannel(options);
             break;
         case 'telegram':
@@ -129,6 +132,20 @@ function createChannel(source) {
                 botAPIToken: credentials.secrets.botAPIToken,
             };
             channel = new TelegramChannel(options);
+            break;
+        case 'junkipedia':
+            options = {
+                ...options,
+                apiKey: credentials.secrets.junkipediaAPIKey,
+                // Reference - https://www.junkipedia.org/apidocs#tag/Posts/paths/~1api~1v1~1posts/get
+                // TODO: Add list or channel specification
+                queryParams: {
+                    keyword: keywords,
+                }
+            }
+            console.log(credentials)
+            console.log(options)
+            channel = new JunkipediaChannel(options);
             break;
         default:
     }
@@ -167,6 +184,8 @@ async function initChannels() {
         .populate({ path: 'credentials' })
         .exec();
 
+    
+    console.log(sources)
     // create & start all enabled Channels
     sources.forEach((source) => createChannel(source));
 
