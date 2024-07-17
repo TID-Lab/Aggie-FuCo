@@ -1,25 +1,25 @@
-import { Button, Container, Modal, Form, Alert } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown } from 'react-bootstrap';
-import axios, { AxiosError } from 'axios';
-import { Formik, FormikValues } from 'formik';
-import * as Yup from 'yup';
-import { Session, Tag, TagEditableData } from '../../objectTypes';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { editTag, newTag } from '../../api/tags';
-import { getSession } from '../../api/session';
+import { Button, Container, Modal, Form, Alert } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusCircle, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { Dropdown } from "react-bootstrap";
+import axios, { AxiosError } from "axios";
+import { Formik, FormikValues } from "formik";
+import * as Yup from "yup";
+import { Session, Tag, TagEditableData } from "../../objectTypes";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { editTag, newTag } from "../../api/tags";
+import { getSession } from "../../api/session";
 
 interface IProps {
   tag?: Tag;
 }
 
 const tagEditSchema = Yup.object().shape({
-  tagName: Yup.string().required('Tag name required'),
+  tagName: Yup.string().required("Tag name required"),
   tagDescription: Yup.string(),
   tagIsCommentTag: Yup.boolean(),
-  tagColor: Yup.string().required('Required'),
+  tagColor: Yup.string().required("Required"),
 });
 
 export default function TagModal(props: IProps) {
@@ -31,12 +31,12 @@ export default function TagModal(props: IProps) {
     {
       onSuccess: () => {
         handleModalClose();
-        queryClient.invalidateQueries('tags');
+        queryClient.invalidateQueries(["tags"]);
       },
       onError: (err: AxiosError) => {
         if (err.response && err.response.status === 422) {
           setAlertMessage({
-            header: 'Non-unique name',
+            header: "Non-unique name",
             body: err.response.data,
           });
         }
@@ -50,12 +50,12 @@ export default function TagModal(props: IProps) {
     {
       onSuccess: () => {
         handleModalClose();
-        queryClient.invalidateQueries('tags');
+        queryClient.invalidateQueries(["tags"]);
       },
       onError: (err: AxiosError) => {
         if (err.response) {
           setAlertMessage({
-            header: 'Non-unique name',
+            header: "Non-unique name",
             body: err.response.data,
           });
         }
@@ -82,14 +82,14 @@ export default function TagModal(props: IProps) {
   };
 
   const sessionQuery = useQuery<Session | undefined, AxiosError>(
-    'session',
+    ["session"],
     getSession
   );
 
   /* Modal state handling */
   const [modalShow, setModalShow] = useState(false);
   const handleModalClose = () => {
-    console.log('Handle Modal Show');
+    console.log("Handle Modal Show");
     if (props.tag) {
       // editTagMutation.mutate({
       //   ...props.tag,
@@ -106,7 +106,7 @@ export default function TagModal(props: IProps) {
     setModalShow(false);
   };
   const handleModalShow = () => {
-    console.log('Handle Modal Show');
+    console.log("Handle Modal Show");
     if (props.tag) {
       // editTagMutation.mutate({
       //   ...props.tag,
@@ -125,7 +125,7 @@ export default function TagModal(props: IProps) {
 
   /* Alert state handling */
   const [alertShow, setAlertShow] = useState(true);
-  const [alertMessage, setAlertMessage] = useState({ header: '', body: '' });
+  const [alertMessage, setAlertMessage] = useState({ header: "", body: "" });
 
   // This is the edit tag modal.
   if (props.tag) {
@@ -174,7 +174,7 @@ export default function TagModal(props: IProps) {
                       <Alert.Heading>{alertMessage.header}</Alert.Heading>
                       <p>{alertMessage.body}</p>
                     </Alert>
-                    <Form.Group controlId='tagName' className={'mb-3'}>
+                    <Form.Group controlId='tagName' className={"mb-3"}>
                       <Form.Label>Tag name</Form.Label>
                       <Form.Control
                         required
@@ -190,19 +190,19 @@ export default function TagModal(props: IProps) {
                         {errors.tagName}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group controlId='tagIsCommentTag' className={'mb-3'}>
+                    <Form.Group controlId='tagIsCommentTag' className={"mb-3"}>
                       <Form.Check
                         label='Is this a comment tag?'
                         type='switch'
                         name='tagIsCommentTag'
                         checked={values.tagIsCommentTag}
                         onChange={(e) =>
-                          setFieldValue('tagIsCommentTag', e.target.checked)
+                          setFieldValue("tagIsCommentTag", e.target.checked)
                         }
                         isInvalid={!!errors.tagIsCommentTag}
                       />
                     </Form.Group>
-                    <Form.Group controlId='tagDescription' className={'mb-3'}>
+                    <Form.Group controlId='tagDescription' className={"mb-3"}>
                       <Form.Label>Tag description</Form.Label>
                       <Form.Control
                         as='textarea'
@@ -232,7 +232,7 @@ export default function TagModal(props: IProps) {
                   </Button>
                   <Button
                     variant='primary'
-                    type={'submit'}
+                    type={"submit"}
                     disabled={isSubmitting}
                   >
                     Submit
@@ -248,8 +248,8 @@ export default function TagModal(props: IProps) {
     // This is create modal for tags.
     return (
       <>
-        <Button variant={'primary'} onClick={handleModalShow}>
-          <FontAwesomeIcon icon={faPlusCircle} className={'me-2'} />
+        <Button variant={"primary"} onClick={handleModalShow}>
+          <FontAwesomeIcon icon={faPlusCircle} className={"me-2"} />
           Create tag
         </Button>
         <Modal
@@ -260,10 +260,10 @@ export default function TagModal(props: IProps) {
         >
           <Formik
             initialValues={{
-              tagName: '',
-              tagDescription: '',
+              tagName: "",
+              tagDescription: "",
               tagIsCommentTag: false,
-              tagColor: '#ffffff',
+              tagColor: "#ffffff",
             }}
             validationSchema={tagEditSchema}
             onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -290,7 +290,7 @@ export default function TagModal(props: IProps) {
                       <Alert.Heading>{alertMessage.header}</Alert.Heading>
                       <p>{alertMessage.body}</p>
                     </Alert>
-                    <Form.Group controlId='tagName' className={'mb-3'}>
+                    <Form.Group controlId='tagName' className={"mb-3"}>
                       <Form.Label>Tag name</Form.Label>
                       <Form.Control
                         required
@@ -306,19 +306,19 @@ export default function TagModal(props: IProps) {
                         {errors.tagName}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group controlId='tagIsCommentTag' className={'mb-3'}>
+                    <Form.Group controlId='tagIsCommentTag' className={"mb-3"}>
                       <Form.Check
                         label='Is this a comment tag?'
                         type='switch'
                         name='tagIsCommentTag'
                         checked={values.tagIsCommentTag}
                         onChange={(e) =>
-                          setFieldValue('tagIsCommentTag', e.target.checked)
+                          setFieldValue("tagIsCommentTag", e.target.checked)
                         }
                         isInvalid={!!errors.tagIsCommentTag}
                       />
                     </Form.Group>
-                    <Form.Group controlId='tagDescription' className={'mb-3'}>
+                    <Form.Group controlId='tagDescription' className={"mb-3"}>
                       <Form.Label>Tag description</Form.Label>
                       <Form.Control
                         as='textarea'

@@ -26,7 +26,7 @@ import Login from "./pages/Login";
 import Analysis from "./pages/Analysis";
 import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getSession } from "./api/session";
 import { Axios, AxiosError } from "axios";
 import { Session } from "./objectTypes";

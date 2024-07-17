@@ -1,6 +1,6 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Linkify from 'linkify-react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Linkify from "linkify-react";
 import {
   Card,
   Pagination,
@@ -14,19 +14,19 @@ import {
   Button,
   Placeholder,
   InputGroup,
-} from 'react-bootstrap';
-import ConfirmModal from '../ConfirmModal';
-import EllipsisToggle from '../EllipsisToggle';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+} from "react-bootstrap";
+import ConfirmModal from "../ConfirmModal";
+import EllipsisToggle from "../EllipsisToggle";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
   faEllipsisV,
   faFilter,
   faPlusCircle,
   faTimesCircle,
-} from '@fortawesome/free-solid-svg-icons';
-import GroupModal from './GroupModal';
-import { stringToDate, tagById, tagsById } from '../../helpers';
+} from "@fortawesome/free-solid-svg-icons";
+import GroupModal from "./GroupModal";
+import { stringToDate, tagById, tagsById } from "../../helpers";
 import {
   AssignedToUser,
   Group,
@@ -35,15 +35,15 @@ import {
   Source,
   Tag,
   User,
-} from '../../objectTypes';
-import TagsTypeahead from '../tag/TagsTypeahead';
-import { useMutation, useQuery } from 'react-query';
-import { editGroup, getGroups } from '../../api/groups';
-import styles from './GroupTable.module.css';
-import VeracityIndication from '../VeracityIndication';
-import EscalatedIndication from '../EscalatedIndication';
-import { AxiosError } from 'axios';
-import { LoadingPagination } from '../AggiePagination';
+} from "../../objectTypes";
+import TagsTypeahead from "../tag/TagsTypeahead";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { editGroup, getGroups } from "../../api/groups";
+import styles from "./GroupTable.module.css";
+import VeracityIndication from "../VeracityIndication";
+import EscalatedIndication from "../EscalatedIndication";
+import { AxiosError } from "axios";
+import { LoadingPagination } from "../AggiePagination";
 
 interface IProps {
   visibleGroups: Group[] | [];
@@ -66,14 +66,14 @@ export default function GroupTable(props: IProps) {
     setSelectedGroups(newSelectedGroups);
   };
   return (
-    <Table bordered hover size='sm' className={'m-0'}>
+    <Table bordered hover size='sm' className={"m-0"}>
       <thead>
         <tr>
           <th>
             <Form>
               <Form.Check
                 type='checkbox'
-                id={'select-all'}
+                id={"select-all"}
                 onChange={handleAllSelectChange}
                 checked={selectedGroups.size > 0}
               />
@@ -95,7 +95,7 @@ export default function GroupTable(props: IProps) {
               <GroupRow
                 group={group}
                 sources={props.sources}
-                variant={'table'}
+                variant={"table"}
                 tags={props.tags}
                 users={props.users}
                 key={group._id}
@@ -126,7 +126,7 @@ interface GroupRowIProps {
   tags: Tag[];
   users: User[] | undefined;
   sources: Source[] | [];
-  variant: 'modal' | 'table';
+  variant: "modal" | "table";
   setSelectedGroups?: Dispatch<SetStateAction<Set<string>>>;
   selectedGroups?: Set<string>;
   onClick?: React.MouseEventHandler<HTMLTableRowElement>;
@@ -177,7 +177,7 @@ export function GroupRow(props: GroupRowIProps) {
 
   if (props.group) {
     switch (props.variant) {
-      case 'table':
+      case "table":
         return (
           <tr key={props.group._id} className={props.className}>
             <td>
@@ -194,30 +194,30 @@ export function GroupRow(props: GroupRowIProps) {
               <VeracityIndication
                 veracity={props.group.veracity}
                 id={props.group._id}
-                variant={'table'}
+                variant={"table"}
               />
               <EscalatedIndication
                 escalated={props.group.escalated}
                 id={props.group._id}
-                variant={'table'}
+                variant={"table"}
               />
               <Link
-                to={'/group/' + props.group._id}
-                className={styles.group__name + ' me-1'}
+                to={"/group/" + props.group._id}
+                className={styles.group__name + " me-1"}
               >
                 {props.group.title}
               </Link>
               <br />
               <span>
                 {props.group._reports.length === 1
-                  ? props.group._reports.length + ' report'
-                  : props.group._reports.length + ' reports'}
+                  ? props.group._reports.length + " report"
+                  : props.group._reports.length + " reports"}
               </span>
               <br />
               <span>ID: {props.group.idnum}</span>
             </td>
-            <td className={styles.td__location + ' text-break'}>
-              <Linkify options={{ target: '_blank' }}>
+            <td className={styles.td__location + " text-break"}>
+              <Linkify options={{ target: "_blank" }}>
                 {props.group.locationName}
               </Linkify>
             </td>
@@ -225,7 +225,7 @@ export function GroupRow(props: GroupRowIProps) {
               <span className={styles.creationInfo__user}>
                 {props.group.creator
                   ? props.group.creator.username
-                  : 'Deleted user'}
+                  : "Deleted user"}
               </span>
               <br />
               <span>
@@ -255,10 +255,10 @@ export function GroupRow(props: GroupRowIProps) {
                 {assignedTo.map((user) => (
                   <Link
                     key={user._id}
-                    to={'/user/' + user._id}
-                    style={{ marginRight: '0.25em' }}
+                    to={"/user/" + user._id}
+                    style={{ marginRight: "0.25em" }}
                   >
-                    {user.username ? user.username : 'Deleted user'}
+                    {user.username ? user.username : "Deleted user"}
                   </Link>
                 ))}
               </td>
@@ -273,18 +273,18 @@ export function GroupRow(props: GroupRowIProps) {
                   selected={queryTags}
                   onChange={setQueryTags}
                   onBlur={handleTagsBlur}
-                  variant={'table'}
+                  variant={"table"}
                 />
               )}
             </td>
             <td style={{ width: 32 }}>
-              <Dropdown className={'float-end'}>
+              <Dropdown className={"float-end"}>
                 <Dropdown.Toggle as={EllipsisToggle} />
-                <Dropdown.Menu variant={'dark'}>
+                <Dropdown.Menu variant={"dark"}>
                   <GroupModal group={props.group} />
                   <Dropdown.Divider />
                   <ConfirmModal
-                    type={'delete'}
+                    type={"delete"}
                     variant='dropdown'
                     group={props.group}
                   />
@@ -294,14 +294,14 @@ export function GroupRow(props: GroupRowIProps) {
           </tr>
         );
         break;
-      case 'modal':
+      case "modal":
         return (
           <tr
             key={props.group._id}
-            className={'group__select ' + props.className}
+            className={"group__select " + props.className}
             onClick={props.onClick}
           >
-            <td className={'align-middle'}>
+            <td className={"align-middle"}>
               <div className='d-flex justify-content-center'>
                 {props.selected && (
                   <Form.Check
@@ -316,42 +316,42 @@ export function GroupRow(props: GroupRowIProps) {
                 )}
               </div>
             </td>
-            <td className={'td__groupInfo'}>
+            <td className={"td__groupInfo"}>
               <VeracityIndication
                 veracity={props.group.veracity}
                 id={props.group._id}
-                variant={'table'}
+                variant={"table"}
               />
               <EscalatedIndication
                 escalated={props.group.escalated}
                 id={props.group._id}
-                variant={'table'}
+                variant={"table"}
               />
               <Link
-                to={'/group/' + props.group._id}
-                className={'me-1 title__link'}
+                to={"/group/" + props.group._id}
+                className={"me-1 title__link"}
               >
                 {props.group.title}
               </Link>
               <br />
               <span>
                 {props.group._reports.length === 1
-                  ? props.group._reports.length + ' report'
-                  : props.group._reports.length + ' reports'}
+                  ? props.group._reports.length + " report"
+                  : props.group._reports.length + " reports"}
               </span>
               <br />
               <span>ID: {props.group.idnum}</span>
             </td>
             <td className='text-break td__location'>
-              <Linkify options={{ target: '_blank' }}>
+              <Linkify options={{ target: "_blank" }}>
                 {props.group.locationName}
               </Linkify>
             </td>
-            <td className={'td__creationInfo'}>
-              <span className={'creationInfo__user'}>
+            <td className={"td__creationInfo"}>
+              <span className={"creationInfo__user"}>
                 {props.group.creator
                   ? props.group.creator.username
-                  : 'Deleted user'}
+                  : "Deleted user"}
               </span>
               <br />
               <span>
@@ -363,7 +363,7 @@ export function GroupRow(props: GroupRowIProps) {
               </span>
             </td>
             {props.group.notes ? (
-              <td className={'td__notes'}>
+              <td className={"td__notes"}>
                 <Form.Control
                   as='textarea'
                   rows={4}
@@ -378,9 +378,9 @@ export function GroupRow(props: GroupRowIProps) {
               <td>
                 {assignedTo
                   .map((user) =>
-                    user.username ? user.username : 'Deleted user'
+                    user.username ? user.username : "Deleted user"
                   )
-                  .join(', ')}
+                  .join(", ")}
               </td>
             ) : (
               <td></td>
@@ -392,7 +392,7 @@ export function GroupRow(props: GroupRowIProps) {
     }
   } else {
     return (
-      <tr key={'noGroups'}>
+      <tr key={"noGroups"}>
         <td>No groups found.</td>
         <td></td>
         <td></td>
@@ -415,7 +415,7 @@ export const LoadingGroupTable = () => {
         <tr>
           <th>
             <Form>
-              <Form.Check type='checkbox' id={'select-all'} />
+              <Form.Check type='checkbox' id={"select-all"} />
             </Form>
           </th>
           <th>Group Info</th>
@@ -443,7 +443,7 @@ export const LoadingGroupTable = () => {
                   <small>
                     <Placeholder animation='glow'>
                       <Placeholder xs={3}></Placeholder>
-                    </Placeholder>{' '}
+                    </Placeholder>{" "}
                     reports
                   </small>
                 </Placeholder>
@@ -453,7 +453,7 @@ export const LoadingGroupTable = () => {
                   <Placeholder xs={12}></Placeholder>
                 </Placeholder>
               </td>
-              <td className={styles.td__creationInfo + ' text-break'}>
+              <td className={styles.td__creationInfo + " text-break"}>
                 <Placeholder animation='glow'>
                   <Placeholder xs={12}></Placeholder>
                 </Placeholder>

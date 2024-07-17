@@ -28,7 +28,7 @@ import { AlertContent } from "../../components/AlertService";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   cancelBatch,
   getBatch,
@@ -170,7 +170,7 @@ const ReportsIndex = (props: IProps) => {
   // This is the batch query, it normally remains disabled until the batch mode is activated.
 
   const batchQuery = useQuery<Reports | undefined, AxiosError>(
-    "batch",
+    ["batch"],
     () => getBatch(),
     {
       enabled: batchMode,
@@ -180,16 +180,11 @@ const ReportsIndex = (props: IProps) => {
           newBatchMutation.mutate();
         }
       },
-      onError: (err: AxiosError) => {
-        if (err.response && err.response.status === 401) {
-          //navigate("/login");
-        }
-      },
     }
   );
   let sessionFetching = true;
   const sessionQuery = useQuery<Session | undefined, AxiosError>(
-    "session",
+    ["session"],
     getSession,
     {
       onError: (err: AxiosError) => {
@@ -217,42 +212,20 @@ const ReportsIndex = (props: IProps) => {
     ],
     () => getReports(queryState, filterTags),
     {
-      onError: (err: AxiosError) => {
-        if (err.response && err.response.status === 401) {
-          //navigate("/login");
-        }
-      },
       keepPreviousData: true,
     }
   );
   const sourcesQuery = useQuery<Source[] | undefined, AxiosError>(
-    "sources",
+    ["sources"],
     getSources,
-    {
-      onError: (err: AxiosError) => {
-        if (err.response && err.response.status === 401) {
-          //navigate("/login");
-        }
-      },
-    }
+    {}
   );
   const ctListsQuery = useQuery<CTList | undefined, AxiosError>(
-    "ctLists",
+    ["ctLists"],
     getCTLists,
-    {
-      onError: (err: AxiosError) => {
-        if (err.response && err.response.status === 401) {
-          navigate("/login");
-        }
-      },
-    }
+    {}
   );
-  const tagsQuery = useQuery("tags", getTags, {
-    onError: (err: AxiosError) => {
-      if (err.response && err.response.status === 401) {
-        //navigate("/login");
-      }
-    },
+  const tagsQuery = useQuery(["tags"], getTags, {
     onSuccess: (data: Tag[]) => {
       let tagsString = searchParams.get("tags");
       let tagsArray: string[] = [];

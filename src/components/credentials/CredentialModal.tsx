@@ -1,45 +1,45 @@
-import { Button, Container, Form, Modal } from 'react-bootstrap';
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import { capitalizeFirstLetter } from '../../helpers';
-import * as Yup from 'yup';
-import { Formik, FormikValues } from 'formik';
-import { Credential } from '../../objectTypes';
-import { useMutation } from 'react-query';
-import { newCredential } from '../../api/credentials';
+import { Button, Container, Form, Modal } from "react-bootstrap";
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { capitalizeFirstLetter } from "../../helpers";
+import * as Yup from "yup";
+import { Formik, FormikValues } from "formik";
+import { Credential } from "../../objectTypes";
+import { useMutation } from "@tanstack/react-query";
+import { newCredential } from "../../api/credentials";
 
 interface IProps {
   credential?: Credential;
 }
 
 const twitterCredentialsFormSchema = Yup.object().shape({
-  credentialName: Yup.string().required('Credentials name required'),
-  credentialConsumerKey: Yup.string().required('Consumer key required.'),
-  credentialConsumerSecret: Yup.string().required('Consumer secret required.'),
-  credentialAccessToken: Yup.string().required('Access Token required.'),
+  credentialName: Yup.string().required("Credentials name required"),
+  credentialConsumerKey: Yup.string().required("Consumer key required."),
+  credentialConsumerSecret: Yup.string().required("Consumer secret required."),
+  credentialAccessToken: Yup.string().required("Access Token required."),
   credentialAccessTokenSecret: Yup.string().required(
-    'Access Token secret required.'
+    "Access Token secret required."
   ),
 });
 
 const crowdTangleCredentialsFormSchema = Yup.object().shape({
-  credentialName: Yup.string().required('Credentials name required'),
-  credentialDashboardAPIToken: Yup.string().required('API Token required'),
+  credentialName: Yup.string().required("Credentials name required"),
+  credentialDashboardAPIToken: Yup.string().required("API Token required"),
 });
 
 const telegramCredentialsFormSchema = Yup.object().shape({
-  credentialName: Yup.string().required('Credentials name required'),
-  credentialBotAPIToken: Yup.string().required('API Token required'),
+  credentialName: Yup.string().required("Credentials name required"),
+  credentialBotAPIToken: Yup.string().required("API Token required"),
 });
 
-const credentialTypes = ['crowdtangle', 'twitter', 'telegram'];
+const credentialTypes = ["crowdtangle", "twitter", "telegram"];
 
 export default function CredentialModal(props: IProps) {
   const [modalShow, setModalShow] = useState(false);
   const handleModalClose = () => setModalShow(false);
   const handleModalShow = () => setModalShow(true);
-  const [credentialType, setCredentialType] = useState('twitter');
+  const [credentialType, setCredentialType] = useState("twitter");
   const newCredentialMutation = useMutation(
     (credentialData: any) => {
       return newCredential(credentialData);
@@ -57,7 +57,7 @@ export default function CredentialModal(props: IProps) {
   /* Server state handling */
   const [serverState, setServerState] = useState({
     ok: false,
-    msg: '',
+    msg: "",
     res: null,
   });
   const handleServerResponse = (ok: boolean, msg: string, res: any) => {
@@ -66,7 +66,7 @@ export default function CredentialModal(props: IProps) {
   };
   const formValuesToCredential = (values: FormikValues) => {
     switch (credentialType) {
-      case 'crowdtangle':
+      case "crowdtangle":
         return {
           credentials: {},
           name: values.credentialName,
@@ -76,7 +76,7 @@ export default function CredentialModal(props: IProps) {
           },
         };
         break;
-      case 'twitter':
+      case "twitter":
         return {
           credentials: {},
           name: values.credentialName,
@@ -88,7 +88,7 @@ export default function CredentialModal(props: IProps) {
             accessTokenSecret: values.credentialAccessTokenSecret,
           },
         };
-      case 'telegram':
+      case "telegram":
         return {
           credentials: {},
           name: values.credentialName,
@@ -99,7 +99,7 @@ export default function CredentialModal(props: IProps) {
         };
         break;
       default:
-        console.error('No credential type was selected.');
+        console.error("No credential type was selected.");
         return null;
     }
   };
@@ -107,11 +107,11 @@ export default function CredentialModal(props: IProps) {
     <>
       <Formik
         initialValues={{
-          credentialName: '',
-          credentialConsumerKey: '',
-          credentialConsumerSecret: '',
-          credentialAccessToken: '',
-          credentialAccessTokenSecret: '',
+          credentialName: "",
+          credentialConsumerKey: "",
+          credentialConsumerSecret: "",
+          credentialAccessToken: "",
+          credentialAccessTokenSecret: "",
         }}
         validationSchema={twitterCredentialsFormSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -133,7 +133,7 @@ export default function CredentialModal(props: IProps) {
             </Modal.Header>
             <Modal.Body>
               <Container>
-                <Form.Group controlId='credentialType' className={'mb-3'}>
+                <Form.Group controlId='credentialType' className={"mb-3"}>
                   <Form.Label>Credential type</Form.Label>
                   <Form.Select
                     value={credentialType}
@@ -155,7 +155,7 @@ export default function CredentialModal(props: IProps) {
                     })}
                   </Form.Select>
                 </Form.Group>
-                <Form.Group controlId='credentialName' className={'mb-3'}>
+                <Form.Group controlId='credentialName' className={"mb-3"}>
                   <Form.Label>Name</Form.Label>
                   <Form.Control
                     required
@@ -173,7 +173,7 @@ export default function CredentialModal(props: IProps) {
                     {errors.credentialName}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId='credentialAPIToken' className={'mb-3'}>
+                <Form.Group controlId='credentialAPIToken' className={"mb-3"}>
                   <Form.Label>Consumer key</Form.Label>
                   <Form.Control
                     required
@@ -192,7 +192,7 @@ export default function CredentialModal(props: IProps) {
                     {errors.credentialConsumerKey}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId='credentialAPIToken' className={'mb-3'}>
+                <Form.Group controlId='credentialAPIToken' className={"mb-3"}>
                   <Form.Label>Consumer secret</Form.Label>
                   <Form.Control
                     required
@@ -211,7 +211,7 @@ export default function CredentialModal(props: IProps) {
                     {errors.credentialConsumerSecret}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId='credentialAPIToken' className={'mb-3'}>
+                <Form.Group controlId='credentialAPIToken' className={"mb-3"}>
                   <Form.Label>Access token</Form.Label>
                   <Form.Control
                     required
@@ -230,7 +230,7 @@ export default function CredentialModal(props: IProps) {
                     {errors.credentialAccessToken}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId='credentialAPIToken' className={'mb-3'}>
+                <Form.Group controlId='credentialAPIToken' className={"mb-3"}>
                   <Form.Label>Access token secret</Form.Label>
                   <Form.Control
                     required
@@ -269,8 +269,8 @@ export default function CredentialModal(props: IProps) {
     <>
       <Formik
         initialValues={{
-          credentialName: '',
-          credentialDashboardAPIToken: '',
+          credentialName: "",
+          credentialDashboardAPIToken: "",
         }}
         validationSchema={crowdTangleCredentialsFormSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -292,7 +292,7 @@ export default function CredentialModal(props: IProps) {
             </Modal.Header>
             <Modal.Body>
               <Container>
-                <Form.Group controlId='credentialType' className={'mb-3'}>
+                <Form.Group controlId='credentialType' className={"mb-3"}>
                   <Form.Label>Credential type</Form.Label>
                   <Form.Select
                     value={credentialType}
@@ -314,7 +314,7 @@ export default function CredentialModal(props: IProps) {
                     })}
                   </Form.Select>
                 </Form.Group>
-                <Form.Group controlId='credentialName' className={'mb-3'}>
+                <Form.Group controlId='credentialName' className={"mb-3"}>
                   <Form.Label>Name</Form.Label>
                   <Form.Control
                     required
@@ -334,7 +334,7 @@ export default function CredentialModal(props: IProps) {
                 </Form.Group>
                 <Form.Group
                   controlId='credentialDashboardAPIToken'
-                  className={'mb-3'}
+                  className={"mb-3"}
                 >
                   <Form.Label>Dashboard API token</Form.Label>
                   <Form.Control
@@ -374,8 +374,8 @@ export default function CredentialModal(props: IProps) {
     <>
       <Formik
         initialValues={{
-          credentialName: '',
-          credentialBotAPIToken: '',
+          credentialName: "",
+          credentialBotAPIToken: "",
         }}
         validationSchema={telegramCredentialsFormSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -397,7 +397,7 @@ export default function CredentialModal(props: IProps) {
             </Modal.Header>
             <Modal.Body>
               <Container>
-                <Form.Group controlId='credentialType' className={'mb-3'}>
+                <Form.Group controlId='credentialType' className={"mb-3"}>
                   <Form.Label>Credential type</Form.Label>
                   <Form.Select
                     value={credentialType}
@@ -419,7 +419,7 @@ export default function CredentialModal(props: IProps) {
                     })}
                   </Form.Select>
                 </Form.Group>
-                <Form.Group controlId='credentialName' className={'mb-3'}>
+                <Form.Group controlId='credentialName' className={"mb-3"}>
                   <Form.Label>Name</Form.Label>
                   <Form.Control
                     required
@@ -439,7 +439,7 @@ export default function CredentialModal(props: IProps) {
                 </Form.Group>
                 <Form.Group
                   controlId='credentialBotAPIToken'
-                  className={'mb-3'}
+                  className={"mb-3"}
                 >
                   <Form.Label>Bot API Token</Form.Label>
                   <Form.Control
@@ -477,7 +477,7 @@ export default function CredentialModal(props: IProps) {
 
   return (
     <>
-      <Button variant={'primary'} onClick={handleModalShow}>
+      <Button variant={"primary"} onClick={handleModalShow}>
         <FontAwesomeIcon icon={faPlusCircle} className='me-2'></FontAwesomeIcon>
         Create credentials
       </Button>
@@ -487,9 +487,9 @@ export default function CredentialModal(props: IProps) {
         backdrop='static'
         keyboard={false}
       >
-        {credentialType === 'twitter' && <>{twitterFormJSX}</>}
-        {credentialType === 'crowdtangle' && <>{crowdTangleFormJSX}</>}
-        {credentialType === 'telegram' && <>{telegramFormJSX}</>}
+        {credentialType === "twitter" && <>{twitterFormJSX}</>}
+        {credentialType === "crowdtangle" && <>{crowdTangleFormJSX}</>}
+        {credentialType === "telegram" && <>{telegramFormJSX}</>}
       </Modal>
     </>
   );

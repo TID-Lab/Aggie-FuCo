@@ -1,7 +1,11 @@
 import { Container, Col, Row, Card } from "react-bootstrap";
 import StatsBar from "../../components/StatsBar";
 import UserProfileTable from "../../components/user/UserProfileTable";
-import { useQuery, useQueryClient, UseQueryResult } from "react-query";
+import {
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from "@tanstack/react-query";
 import { getUser } from "../../api/users";
 import { useNavigate, useParams } from "react-router-dom";
 import { Groups, Session, Source, Tag } from "../../objectTypes";
@@ -38,11 +42,6 @@ const UserProfile = (props: IProps) => {
     },
     {
       enabled: usersQuery.isSuccess,
-      onError: (err: AxiosError) => {
-        if (err.response && err.response.status === 401) {
-          //navigate('/login');
-        }
-      },
     }
   );
 
@@ -60,33 +59,20 @@ const UserProfile = (props: IProps) => {
     },
     {
       enabled: usersQuery.isSuccess,
-      onError: (err: AxiosError) => {
-        if (err.response && err.response.status === 401) {
-          //navigate('/login');
-        }
-      },
     }
   );
 
   const sourcesQuery = useQuery<Source[] | undefined, AxiosError>(
-    "sources",
+    ["sources"],
     getSources,
-    {
-      onError: (err: AxiosError) => {
-        if (err.response && err.response.status === 401) {
-          //navigate('/login');
-        }
-      },
-    }
+    {}
   );
 
-  const tagsQuery = useQuery<Tag[] | undefined, AxiosError>("tags", getTags, {
-    onError: (err: AxiosError) => {
-      if (err.response && err.response.status === 401) {
-        //navigate('/login');
-      }
-    },
-  });
+  const tagsQuery = useQuery<Tag[] | undefined, AxiosError>(
+    ["tags"],
+    getTags,
+    {}
+  );
   return (
     <div className={"mt-4"}>
       <Container fluid>

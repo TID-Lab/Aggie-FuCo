@@ -1,45 +1,45 @@
-import { Button, Container, Dropdown, Form, Modal } from 'react-bootstrap';
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
-import * as Yup from 'yup';
-import { Formik, FormikValues } from 'formik';
-import { User, UserCreationData } from '../../objectTypes';
-import { useMutation, useQueryClient } from 'react-query';
-import { editUser, newUser } from '../../api/users';
-import { UserEditableData } from '../../objectTypes';
+import { Button, Container, Dropdown, Form, Modal } from "react-bootstrap";
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusCircle, faEdit } from "@fortawesome/free-solid-svg-icons";
+import * as Yup from "yup";
+import { Formik, FormikValues } from "formik";
+import { User, UserCreationData } from "../../objectTypes";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { editUser, newUser } from "../../api/users";
+import { UserEditableData } from "../../objectTypes";
 
 interface IProps {
   user?: User;
-  variant: 'button' | 'dropdown';
-  size?: 'sm' | 'lg';
+  variant: "button" | "dropdown";
+  size?: "sm" | "lg";
 }
 
-const userRoles = ['viewer', 'monitor', 'admin'];
+const userRoles = ["viewer", "monitor", "admin"];
 
 const userEditFormSchema = Yup.object().shape({
   userUsername: Yup.string()
-    .required('Username is required')
-    .min(8, 'Username should be atleast 8 characters long.'),
+    .required("Username is required")
+    .min(8, "Username should be atleast 8 characters long."),
   userRole: Yup.string()
-    .required('User Role is required')
-    .oneOf(userRoles, 'Invalid user role.'),
+    .required("User Role is required")
+    .oneOf(userRoles, "Invalid user role."),
   userEmail: Yup.string()
-    .email('Please provide valid email address.')
-    .required('Email address is required.'),
+    .email("Please provide valid email address.")
+    .required("Email address is required."),
 });
 
 const userCreateFormSchema = Yup.object().shape({
   userUsername: Yup.string()
-    .required('Username is required')
-    .min(8, 'Username should be atleast 8 characters long.'),
+    .required("Username is required")
+    .min(8, "Username should be atleast 8 characters long."),
   userRole: Yup.string()
-    .required('User Role is required')
-    .oneOf(userRoles, 'Invalid user role.'),
+    .required("User Role is required")
+    .oneOf(userRoles, "Invalid user role."),
   userEmail: Yup.string()
-    .email('Please provide valid email address.')
-    .required('Email address is required.'),
-  userPassword: Yup.string().required('Password is required.').min(4),
+    .email("Please provide valid email address.")
+    .required("Email address is required."),
+  userPassword: Yup.string().required("Password is required.").min(4),
 });
 
 export default function UserModal(props: IProps) {
@@ -67,7 +67,7 @@ export default function UserModal(props: IProps) {
     {
       onSuccess: () => {
         handleModalClose();
-        queryClient.invalidateQueries('users');
+        queryClient.invalidateQueries(["users"]);
       },
     }
   );
@@ -78,7 +78,7 @@ export default function UserModal(props: IProps) {
     {
       onSuccess: () => {
         handleModalClose();
-        queryClient.invalidateQueries('users');
+        queryClient.invalidateQueries(["users"]);
       },
     }
   );
@@ -93,7 +93,7 @@ export default function UserModal(props: IProps) {
   /* Server state handling */
   const [serverState, setServerState] = useState({
     ok: false,
-    msg: '',
+    msg: "",
     res: null,
   });
   const handleServerResponse = (ok: boolean, msg: string, res: any) => {
@@ -104,7 +104,7 @@ export default function UserModal(props: IProps) {
   if (props.user) {
     return (
       <>
-        {props.variant === 'button' && (
+        {props.variant === "button" && (
           <Button
             size={props.size ? props.size : undefined}
             onClick={handleModalShow}
@@ -112,7 +112,7 @@ export default function UserModal(props: IProps) {
             <FontAwesomeIcon icon={faEdit} /> Edit
           </Button>
         )}
-        {props.variant === 'dropdown' && (
+        {props.variant === "dropdown" && (
           <Dropdown.Item onClick={handleModalShow}>
             <FontAwesomeIcon icon={faEdit} /> Edit
           </Dropdown.Item>
@@ -149,7 +149,7 @@ export default function UserModal(props: IProps) {
                 </Modal.Header>
                 <Modal.Body>
                   <Container>
-                    <Form.Group controlId='userUsername' className={'mb-3'}>
+                    <Form.Group controlId='userUsername' className={"mb-3"}>
                       <Form.Label>Username</Form.Label>
                       <Form.Control
                         type='username'
@@ -166,7 +166,7 @@ export default function UserModal(props: IProps) {
                         {errors.userUsername}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group controlId='userEmail' className={'mb-3'}>
+                    <Form.Group controlId='userEmail' className={"mb-3"}>
                       <Form.Label>Email address</Form.Label>
                       <Form.Control
                         required
@@ -225,7 +225,7 @@ export default function UserModal(props: IProps) {
   } else {
     return (
       <>
-        <Button variant={'primary'} onClick={handleModalShow}>
+        <Button variant={"primary"} onClick={handleModalShow}>
           <FontAwesomeIcon
             icon={faPlusCircle}
             className='me-2'
@@ -240,14 +240,14 @@ export default function UserModal(props: IProps) {
         >
           <Formik
             initialValues={{
-              userUsername: '',
-              userEmail: '',
-              userRole: 'viewer',
-              userPassword: '',
+              userUsername: "",
+              userEmail: "",
+              userRole: "viewer",
+              userPassword: "",
             }}
             validationSchema={userCreateFormSchema}
             onSubmit={async (values, { setSubmitting, resetForm }) => {
-              console.log('Submitting', values);
+              console.log("Submitting", values);
               newUserMutation.mutate(formValuesToCreateUser(values));
             }}
           >
@@ -268,7 +268,7 @@ export default function UserModal(props: IProps) {
                   </Modal.Header>
                   <Modal.Body>
                     <Container>
-                      <Form.Group controlId='userUsername' className={'mb-3'}>
+                      <Form.Group controlId='userUsername' className={"mb-3"}>
                         <Form.Label>Username</Form.Label>
                         <Form.Control
                           required
@@ -286,7 +286,7 @@ export default function UserModal(props: IProps) {
                           {errors.userUsername}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group controlId='userEmail' className={'mb-3'}>
+                      <Form.Group controlId='userEmail' className={"mb-3"}>
                         <Form.Label>Email address</Form.Label>
                         <Form.Control
                           required
@@ -306,7 +306,7 @@ export default function UserModal(props: IProps) {
                           {errors.userEmail}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group controlId='userPassword' className={'mb-3'}>
+                      <Form.Group controlId='userPassword' className={"mb-3"}>
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                           required
