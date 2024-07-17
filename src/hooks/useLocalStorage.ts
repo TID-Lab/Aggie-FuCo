@@ -1,3 +1,5 @@
+// not used anywhre atm
+
 export type TUseLocalStorage<T> = [
     () => T | undefined,
     (value: T) => void,

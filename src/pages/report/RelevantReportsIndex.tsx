@@ -162,11 +162,11 @@ const RelevantReportsIndex = (props: IProps) => {
     getSources,
     {}
   );
-  const ctListsQuery = useQuery<CTList | undefined, AxiosError>(
-    ["ctLists"],
-    getCTLists,
-    {}
-  );
+  // const ctListsQuery = useQuery<CTList | undefined, AxiosError>(
+  //   ["ctLists"],
+  //   getCTLists,
+  //   {}
+  // );
   const groupsQuery = useQuery<Groups | undefined, AxiosError>(
     ["groups", "all"],
     () => {
@@ -313,7 +313,7 @@ const RelevantReportsIndex = (props: IProps) => {
                         </Col>
                       </Row>
                       <Row>
-                        <Col md>
+                        {/* <Col md>
                           <FormGroup className='mt-2 mb-2'>
                             <FormLabel>CT List</FormLabel>
                             <Field
@@ -329,7 +329,7 @@ const RelevantReportsIndex = (props: IProps) => {
                                 ctListToOptions(ctListsQuery.data)}
                             </Field>
                           </FormGroup>
-                        </Col>
+                        </Col> */}
                         <Col md>
                           <FormGroup className='mt-2 mb-2'>
                             <FormLabel>Authored after</FormLabel>
