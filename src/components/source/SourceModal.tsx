@@ -9,84 +9,84 @@ import {
   FormLabel,
   FormSelect,
   Alert,
-} from 'react-bootstrap';
-import React, { ChangeEvent, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { capitalizeFirstLetter } from '../../helpers';
-import * as Yup from 'yup';
-import { Formik, FormikValues } from 'formik';
-import { Field } from 'formik';
-import { Credential, MediaType, Source } from '../../objectTypes';
-import { useMutation, useQueryClient } from 'react-query';
-import { newSource, editSource } from '../../api/sources';
+} from "react-bootstrap";
+import React, { ChangeEvent, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusCircle, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { capitalizeFirstLetter } from "../../helpers";
+import * as Yup from "yup";
+import { Formik, FormikValues } from "formik";
+import { Field } from "formik";
+import { Credential, MediaType, Source } from "../../objectTypes";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { newSource, editSource } from "../../api/sources";
 
 interface IProps {
   source?: Source;
-  variant: 'button' | 'dropdown';
+  variant: "button" | "dropdown";
   credentials: Credential[];
 }
 
 const twitterFormSchema = Yup.object().shape({
-  sourceNickname: Yup.string().required('Source name is a required field'),
+  sourceNickname: Yup.string().required("Source name is a required field"),
   sourceKeywords: Yup.string().required(
-    'Keywords are required to create a Twitter source'
+    "Keywords are required to create a Twitter source"
   ),
   sourceCredentials: Yup.string().required(
-    'A credential is required to create a source'
+    "A credential is required to create a source"
   ),
 });
 
 const CrowdTangleFormSchema = Yup.object().shape({
-  sourceNickname: Yup.string().required('Source name is a required field'),
+  sourceNickname: Yup.string().required("Source name is a required field"),
   sourceCredentials: Yup.string().required(
-    'A credential is required to create a source'
+    "A credential is required to create a source"
   ),
 });
 
 const JunkipediaFormSchema = Yup.object().shape({
-  sourceNickname: Yup.string().required('Source name is a required field'),
+  sourceNickname: Yup.string().required("Source name is a required field"),
   sourceCredentials: Yup.string().required(
-    'A credential is required to create a source'
+    "A credential is required to create a source"
   ),
 });
 
 const TelegramFormSchema = Yup.object().shape({
-  sourceNickname: Yup.string().required('Source name is a required field'),
+  sourceNickname: Yup.string().required("Source name is a required field"),
   sourceCredentials: Yup.string().required(
-    'A credential is required to create a source'
+    "A credential is required to create a source"
   ),
 });
 
 const sourceFormSchema = Yup.object().shape({
-  sourceNickname: Yup.string().required('Source nickname required'),
+  sourceNickname: Yup.string().required("Source nickname required"),
   sourceKeywords: Yup.string(),
   sourceTags: Yup.string(),
-  sourceCredentials: Yup.string().required('Credentials required'),
+  sourceCredentials: Yup.string().required("Credentials required"),
   sourceURL: Yup.string(),
 });
 
 const mediaTypes = [
-  'twitter',
+  "twitter",
   // 'instagram',
   // 'RSS',
   // 'elmo',
   // 'SMS GH',
-  'facebook',
-  'telegram',
-  'junkipedia'
+  "facebook",
+  "telegram",
+  "junkipedia",
 ];
 const mediaUrls = {
-  twitter: 'https://twitter.com/',
-  facebook: 'https://www.facebook.com/',
-  instagram: 'https://www.instagram.com/',
-  telegram: 'https://www.telegram.com/',
-  junkipedia: 'https://www.junkipedia.com/'
+  twitter: "https://twitter.com/",
+  facebook: "https://www.facebook.com/",
+  instagram: "https://www.instagram.com/",
+  telegram: "https://www.telegram.com/",
+  junkipedia: "https://www.junkipedia.com/",
 };
 
 export default function SourceModal(props: IProps) {
   const [sourceMediaType, setSourceMediaType] = useState<MediaType | string>(
-    'twitter'
+    "twitter"
   ); // Default state of media type
   const [modalShow, setModalShow] = useState(false);
   const queryClient = useQueryClient();
@@ -97,7 +97,7 @@ export default function SourceModal(props: IProps) {
     {
       onSuccess: () => {
         setModalShow(false);
-        queryClient.invalidateQueries('sources');
+        queryClient.invalidateQueries(["sources"]);
       },
     }
   );
@@ -108,43 +108,43 @@ export default function SourceModal(props: IProps) {
     {
       onSuccess: () => {
         setModalShow(false);
-        queryClient.invalidateQueries('sources');
+        queryClient.invalidateQueries(["sources"]);
       },
     }
   );
   const formValuesToSource = (values: FormikValues) => {
     switch (sourceMediaType) {
-      case 'twitter':
+      case "twitter":
         return {
           credentials: values.sourceCredentials,
           keywords: values.sourceKeywords,
           media: sourceMediaType,
           nickname: values.sourceNickname,
-          url: mediaUrls['twitter'],
+          url: mediaUrls["twitter"],
         };
         break;
-      case 'facebook':
+      case "facebook":
         return {
           credentials: values.sourceCredentials,
           media: sourceMediaType,
           nickname: values.sourceNickname,
-          url: mediaUrls['facebook'],
+          url: mediaUrls["facebook"],
         };
-      case 'telegram':
+      case "telegram":
         return {
           credentials: values.sourceCredentials,
           media: sourceMediaType,
           nickname: values.sourceNickname,
-          url: mediaUrls['telegram'],
+          url: mediaUrls["telegram"],
         };
-      case 'junkipedia':
+      case "junkipedia":
         return {
           credentials: values.sourceCredentials,
           keywords: values.sourceKeywords,
           media: sourceMediaType,
           nickname: values.sourceNickname,
-          url: mediaUrls['junkipedia'],
-        }
+          url: mediaUrls["junkipedia"],
+        };
       default:
         return {};
     }
@@ -155,30 +155,29 @@ export default function SourceModal(props: IProps) {
     ) || null;
 
   const twitterCredentials = props.credentials.filter(
-    (cred) => cred.type === 'twitter'
+    (cred) => cred.type === "twitter"
   );
   const crowdtangleCredentials = props.credentials.filter(
-    (cred) => cred.type === 'crowdtangle'
+    (cred) => cred.type === "crowdtangle"
   );
   const telegramCredentials = props.credentials.filter(
-    (cred) => cred.type === 'telegram'
+    (cred) => cred.type === "telegram"
   );
 
   const junkipediaCredentials = props.credentials.filter(
-    (cred) => cred.type === 'junkipedia'
+    (cred) => cred.type === "junkipedia"
   );
-
 
   const twitterFormJSX = (
     <Formik
       initialValues={{
-        sourceNickname: props.source?.nickname || '',
-        sourceMedia: props.source?.media || '',
-        sourceKeywords: props.source?.keywords || '',
-        sourceTags: props.source?.tags || '',
+        sourceNickname: props.source?.nickname || "",
+        sourceMedia: props.source?.media || "",
+        sourceKeywords: props.source?.keywords || "",
+        sourceTags: props.source?.tags || "",
         sourceCredentials:
           props.source?.credentials._id || defaultCredential?._id,
-        sourceURL: props.source?.url || '',
+        sourceURL: props.source?.url || "",
       }}
       validationSchema={twitterFormSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -224,7 +223,7 @@ export default function SourceModal(props: IProps) {
                   })}
                 </FormSelect>
               </FormGroup>
-              <Form.Group controlId='sourceNickname' className={'mb-3'}>
+              <Form.Group controlId='sourceNickname' className={"mb-3"}>
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                   required
@@ -241,7 +240,7 @@ export default function SourceModal(props: IProps) {
                   {errors.sourceNickname}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group controlId='sourceKeywords' className={'mb-3'}>
+              <Form.Group controlId='sourceKeywords' className={"mb-3"}>
                 <Form.Label>Keywords</Form.Label>
 
                 <Form.Control
@@ -258,14 +257,14 @@ export default function SourceModal(props: IProps) {
                   {errors.sourceKeywords}
                 </Form.Control.Feedback>
                 <FormText muted>
-                  Separated by commas, e.g. <i>banana, apple, mango</i>. Click{' '}
+                  Separated by commas, e.g. <i>banana, apple, mango</i>. Click{" "}
                   <a
                     href={
-                      'https://dev.twitter.com/streaming/overview/request-parameters#track'
+                      "https://dev.twitter.com/streaming/overview/request-parameters#track"
                     }
                   >
                     here
-                  </a>{' '}
+                  </a>{" "}
                   for details on how this is used to find tweets.
                 </FormText>
               </Form.Group>
@@ -278,8 +277,8 @@ export default function SourceModal(props: IProps) {
                   id='sourceCredentials'
                   className={
                     errors.sourceCredentials
-                      ? 'form-control is-invalid'
-                      : 'form-control'
+                      ? "form-control is-invalid"
+                      : "form-control"
                   }
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -290,7 +289,7 @@ export default function SourceModal(props: IProps) {
                 >
                   <option value='none'> Select credential </option>
                   {props.credentials.map((cred: Credential) => {
-                    if (cred.type === 'twitter') {
+                    if (cred.type === "twitter") {
                       return (
                         <option key={cred._id} value={cred._id}>
                           {cred.name}
@@ -334,18 +333,16 @@ export default function SourceModal(props: IProps) {
       )}
     </Formik>
   );
-
-
   const junkipediaFormJSX = (
     <Formik
       initialValues={{
-        sourceNickname: props.source?.nickname || '',
-        sourceMedia: props.source?.media || '',
-        sourceKeywords: props.source?.keywords || '',
-        sourceTags: props.source?.tags || '',
+        sourceNickname: props.source?.nickname || "",
+        sourceMedia: props.source?.media || "",
+        sourceKeywords: props.source?.keywords || "",
+        sourceTags: props.source?.tags || "",
         sourceCredentials:
           props.source?.credentials._id || defaultCredential?._id,
-        sourceURL: props.source?.url || '',
+        sourceURL: props.source?.url || "",
       }}
       validationSchema={JunkipediaFormSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -391,7 +388,7 @@ export default function SourceModal(props: IProps) {
                   })}
                 </FormSelect>
               </FormGroup>
-              <Form.Group controlId='sourceNickname' className={'mb-3'}>
+              <Form.Group controlId='sourceNickname' className={"mb-3"}>
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                   required
@@ -408,7 +405,7 @@ export default function SourceModal(props: IProps) {
                   {errors.sourceNickname}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group controlId='sourceKeywords' className={'mb-3'}>
+              <Form.Group controlId='sourceKeywords' className={"mb-3"}>
                 <Form.Label>Keywords</Form.Label>
 
                 <Form.Control
@@ -425,14 +422,14 @@ export default function SourceModal(props: IProps) {
                   {errors.sourceKeywords}
                 </Form.Control.Feedback>
                 <FormText muted>
-                  Separated by commas, e.g. <i>banana, apple, mango</i>. Click{' '}
+                  Separated by commas, e.g. <i>banana, apple, mango</i>. Click{" "}
                   <a
                     href={
-                      'https://dev.twitter.com/streaming/overview/request-parameters#track'
+                      "https://dev.twitter.com/streaming/overview/request-parameters#track"
                     }
                   >
                     here
-                  </a>{' '}
+                  </a>{" "}
                   for details on how this is used to find tweets.
                 </FormText>
               </Form.Group>
@@ -445,8 +442,8 @@ export default function SourceModal(props: IProps) {
                   id='sourceCredentials'
                   className={
                     errors.sourceCredentials
-                      ? 'form-control is-invalid'
-                      : 'form-control'
+                      ? "form-control is-invalid"
+                      : "form-control"
                   }
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -457,7 +454,7 @@ export default function SourceModal(props: IProps) {
                 >
                   <option value='none'> Select credential </option>
                   {props.credentials.map((cred: Credential) => {
-                    if (cred.type === 'junkipedia') {
+                    if (cred.type === "junkipedia") {
                       return (
                         <option key={cred._id} value={cred._id}>
                           {cred.name}
@@ -501,12 +498,10 @@ export default function SourceModal(props: IProps) {
       )}
     </Formik>
   );
-  
-  
   const TelegramFormJSX = (
     <Formik
       initialValues={{
-        sourceNickname: props.source?.nickname || '',
+        sourceNickname: props.source?.nickname || "",
         sourceCredentials:
           props.source?.credentials._id || defaultCredential?._id,
       }}
@@ -554,15 +549,15 @@ export default function SourceModal(props: IProps) {
                   })}
                 </FormSelect>
               </FormGroup>
-              <FormGroup controlId='sourceNickname' className={'mb-3'}>
+              <FormGroup controlId='sourceNickname' className={"mb-3"}>
                 <FormLabel>Name</FormLabel>
                 <Field
-                  name={'sourceNickname'}
+                  name={"sourceNickname"}
                   type='text'
                   className={
                     errors.sourceNickname
-                      ? 'form-control is-invalid'
-                      : 'form-control'
+                      ? "form-control is-invalid"
+                      : "form-control"
                   }
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -570,7 +565,7 @@ export default function SourceModal(props: IProps) {
                 {errors.sourceNickname && (
                   <div
                     className='invalid-feedback'
-                    style={{ display: 'block' }}
+                    style={{ display: "block" }}
                   >
                     {errors.sourceNickname}
                   </div>
@@ -586,8 +581,8 @@ export default function SourceModal(props: IProps) {
                   name='sourceCredentials'
                   className={
                     errors.sourceCredentials
-                      ? 'form-control is-invalid'
-                      : 'form-control'
+                      ? "form-control is-invalid"
+                      : "form-control"
                   }
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -595,7 +590,7 @@ export default function SourceModal(props: IProps) {
                 >
                   <option value='none'> Select credential </option>
                   {props.credentials.map((cred: Credential) => {
-                    if (cred.type === 'telegram') {
+                    if (cred.type === "telegram") {
                       return (
                         <option key={cred._id} value={cred._id}>
                           {cred.name}
@@ -607,7 +602,7 @@ export default function SourceModal(props: IProps) {
                 {errors.sourceCredentials && (
                   <div
                     className='invalid-feedback'
-                    style={{ display: 'block' }}
+                    style={{ display: "block" }}
                   >
                     {errors.sourceCredentials}
                   </div>
@@ -615,7 +610,7 @@ export default function SourceModal(props: IProps) {
 
                 <FormText muted>
                   Select which API credentials will be used for API calls. Find
-                  more info on the Crowdtangle API{' '}
+                  more info on the Crowdtangle API{" "}
                   <a href='https://help.crowdtangle.com/en/articles/1189612-crowdtangle-api'>
                     here
                   </a>
@@ -644,7 +639,7 @@ export default function SourceModal(props: IProps) {
   const crowdtangleFormJSX = (
     <Formik
       initialValues={{
-        sourceNickname: props.source?.nickname || '',
+        sourceNickname: props.source?.nickname || "",
         sourceCredentials:
           props.source?.credentials._id || defaultCredential?._id,
       }}
@@ -692,15 +687,15 @@ export default function SourceModal(props: IProps) {
                   })}
                 </FormSelect>
               </FormGroup>
-              <FormGroup controlId='sourceNickname' className={'mb-3'}>
+              <FormGroup controlId='sourceNickname' className={"mb-3"}>
                 <FormLabel>Name</FormLabel>
                 <Field
-                  name={'sourceNickname'}
+                  name={"sourceNickname"}
                   type='text'
                   className={
                     errors.sourceNickname
-                      ? 'form-control is-invalid'
-                      : 'form-control'
+                      ? "form-control is-invalid"
+                      : "form-control"
                   }
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -708,7 +703,7 @@ export default function SourceModal(props: IProps) {
                 {errors.sourceNickname && (
                   <div
                     className='invalid-feedback'
-                    style={{ display: 'block' }}
+                    style={{ display: "block" }}
                   >
                     {errors.sourceNickname}
                   </div>
@@ -724,8 +719,8 @@ export default function SourceModal(props: IProps) {
                   name='sourceCredentials'
                   className={
                     errors.sourceCredentials
-                      ? 'form-control is-invalid'
-                      : 'form-control'
+                      ? "form-control is-invalid"
+                      : "form-control"
                   }
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -733,7 +728,7 @@ export default function SourceModal(props: IProps) {
                 >
                   <option value='none'> Select credential </option>
                   {props.credentials.map((cred: Credential) => {
-                    if (cred.type === 'crowdtangle') {
+                    if (cred.type === "crowdtangle") {
                       return (
                         <option key={cred._id} value={cred._id}>
                           {cred.name}
@@ -745,7 +740,7 @@ export default function SourceModal(props: IProps) {
                 {errors.sourceCredentials && (
                   <div
                     className='invalid-feedback'
-                    style={{ display: 'block' }}
+                    style={{ display: "block" }}
                   >
                     {errors.sourceCredentials}
                   </div>
@@ -753,7 +748,7 @@ export default function SourceModal(props: IProps) {
 
                 <FormText muted>
                   Select which API credentials will be used for API calls. Find
-                  more info on the Crowdtangle API{' '}
+                  more info on the Crowdtangle API{" "}
                   <a href='https://help.crowdtangle.com/en/articles/1189612-crowdtangle-api'>
                     here
                   </a>
@@ -782,18 +777,18 @@ export default function SourceModal(props: IProps) {
 
   return (
     <>
-      {props.source && props.variant === 'dropdown' && (
+      {props.source && props.variant === "dropdown" && (
         <Dropdown.Item onClick={() => setModalShow(true)}>
           <FontAwesomeIcon icon={faEdit} /> Edit
         </Dropdown.Item>
       )}
-      {props.source && props.variant === 'button' && (
+      {props.source && props.variant === "button" && (
         <Button variant='secondary' onClick={() => setModalShow(true)}>
           <FontAwesomeIcon icon={faEdit} /> Edit
         </Button>
       )}
       {!props.source && (
-        <Button variant={'primary'} onClick={() => setModalShow(true)}>
+        <Button variant={"primary"} onClick={() => setModalShow(true)}>
           <FontAwesomeIcon
             icon={faPlusCircle}
             className='me-2'
@@ -807,11 +802,11 @@ export default function SourceModal(props: IProps) {
         backdrop='static'
         keyboard={false}
       >
-        {sourceMediaType === 'twitter' && <>{twitterFormJSX}</>}
-        {(sourceMediaType === 'facebook' ||
-          sourceMediaType === 'instagram') && <>{crowdtangleFormJSX}</>}
-          {sourceMediaType === 'telegram' && <>{TelegramFormJSX}</>}
-          {sourceMediaType === 'junkipedia' && <>{junkipediaFormJSX}</>}
+        {sourceMediaType === "twitter" && <>{twitterFormJSX}</>}
+        {(sourceMediaType === "facebook" ||
+          sourceMediaType === "instagram") && <>{crowdtangleFormJSX}</>}
+        {sourceMediaType === "telegram" && <>{TelegramFormJSX}</>}
+        {sourceMediaType === "junkipedia" && <>{junkipediaFormJSX}</>}
       </Modal>
     </>
   );

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Col, Row, Card, ButtonToolbar } from "react-bootstrap";
 import StatsBar from "../../components/StatsBar";
 import TagTable from "../../components/tag/TagTable";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getTags } from "../../api/tags";
 import { Tag } from "../../objectTypes";
 import { AxiosError } from "axios";
@@ -17,7 +17,7 @@ const SocketURL =
 
 const TagsIndex = (props: IProps) => {
   const queryClient = useQueryClient();
-  const tagsQuery = useQuery<Tag[] | undefined, AxiosError>("tags", getTags);
+  const tagsQuery = useQuery<Tag[] | undefined, AxiosError>(["tags"], getTags);
   // const [tags, setTags] = useState([] as Tag[]);
 
   useEffect(() => {

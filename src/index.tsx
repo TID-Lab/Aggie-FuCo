@@ -4,11 +4,23 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import reportWebVitals from "./reportWebVitals";
+import { AxiosError } from "axios";
 
 //https://dev-listener.medium.com/react-routes-nodejs-routes-2875f148065b
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      onError: (err) => {
+        const error = err as AxiosError;
+        if (error.response && error.response.status === 401) {
+          window.location.reload();
+        }
+      },
+    },
+  },
+});
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>

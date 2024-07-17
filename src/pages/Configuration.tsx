@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, Col, Container, Row, Form } from "react-bootstrap";
 import ExportCSVModal from "../components/configuration/ExportCSVModal";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   getEmailSettings,
   getFetchStatus,
@@ -13,12 +13,12 @@ interface IProps {}
 const Configuration = () => {
   const [fetchStatus, setFetchStatus] = useState<boolean>(false);
   const [appEmail, setAppEmail] = useState("");
-  const emailSettingsQuery = useQuery("emailSettings", getEmailSettings, {
+  const emailSettingsQuery = useQuery(["emailSettings"], getEmailSettings, {
     onSuccess: (data) => {
       console.log(data);
     },
   });
-  const fetchStatusQuery = useQuery("fetchStatus", getFetchStatus, {
+  const fetchStatusQuery = useQuery(["fetchStatus"], getFetchStatus, {
     onSuccess: (data) => {
       if (data.fetching) {
         setFetchStatus(data.fetching);

@@ -6,52 +6,52 @@ import {
   Form,
   Modal,
   Nav,
-} from 'react-bootstrap';
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Group, Source, Tag, User, Credential } from '../objectTypes';
-import { useMutation, useQueryClient } from 'react-query';
-import { deleteUser } from '../api/users';
-import { deleteTag } from '../api/tags';
-import { deleteGroup } from '../api/groups';
-import { deleteSource } from '../api/sources';
-import { deleteCredential } from '../api/credentials';
-import { logOut } from '../api/session';
-import { useNavigate } from 'react-router-dom';
-import { AxiosError } from 'axios';
+} from "react-bootstrap";
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignOutAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Group, Source, Tag, User, Credential } from "../objectTypes";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteUser } from "../api/users";
+import { deleteTag } from "../api/tags";
+import { deleteGroup } from "../api/groups";
+import { deleteSource } from "../api/sources";
+import { deleteCredential } from "../api/credentials";
+import { logOut } from "../api/session";
+import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 // Should have more obsticles to deleting credentials and sources.
 interface IProps {
-  type: 'cancel' | 'delete' | 'logout';
+  type: "cancel" | "delete" | "logout";
   //TODO: I want to make variant into "as" as bootstrap react uses. This is more transparent.
-  variant: 'button' | 'dropdown' | 'icon';
+  variant: "button" | "dropdown" | "icon";
   tag?: Tag;
   group?: Group;
   user?: User;
   source?: Source;
   credential?: Credential;
-  size?: 'sm' | 'lg';
+  size?: "sm" | "lg";
 }
 
 export default function ConfirmModal(props: IProps) {
   const [modalShow, setModalShow] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
-    header: '',
-    body: '',
+    header: "",
+    body: "",
   });
   const [alertShow, setAlertShow] = useState(false);
   const queryClient = useQueryClient();
   let navigate = useNavigate();
   const deleteTagMutation = useMutation(
-    'tags',
+    ["tags"],
     (tag: Tag) => {
       return deleteTag(tag);
     },
     {
       onSuccess: () => {
         setModalShow(false);
-        queryClient.invalidateQueries('tags');
+        queryClient.invalidateQueries(["tags"]);
       },
       onError: (err: AxiosError) => {
         if (err.response) {
@@ -71,7 +71,7 @@ export default function ConfirmModal(props: IProps) {
     {
       onSuccess: () => {
         setModalShow(false);
-        queryClient.invalidateQueries('groups');
+        queryClient.invalidateQueries(["groups"]);
       },
       onError: (err: AxiosError) => {
         if (err.response) {
@@ -91,7 +91,7 @@ export default function ConfirmModal(props: IProps) {
     {
       onSuccess: () => {
         setModalShow(false);
-        queryClient.invalidateQueries('users');
+        queryClient.invalidateQueries(["users"]);
       },
       onError: (err: AxiosError) => {
         if (err.response) {
@@ -111,7 +111,7 @@ export default function ConfirmModal(props: IProps) {
     {
       onSuccess: () => {
         setModalShow(false);
-        queryClient.invalidateQueries('sources');
+        queryClient.invalidateQueries(["sources"]);
       },
       onError: (err: AxiosError) => {
         if (err.response) {
@@ -131,7 +131,7 @@ export default function ConfirmModal(props: IProps) {
     {
       onSuccess: () => {
         setModalShow(false);
-        queryClient.invalidateQueries('credentials');
+        queryClient.invalidateQueries(["credentials"]);
       },
       onError: (err: AxiosError) => {
         if (err.response) {
@@ -147,9 +147,9 @@ export default function ConfirmModal(props: IProps) {
   const logOutMutation = useMutation(logOut, {
     onSuccess: (data) => {
       setModalShow(false);
-      console.log('hello');
-      queryClient.invalidateQueries('session');
-      navigate('/login');
+      console.log("hello");
+      queryClient.invalidateQueries(["session"]);
+      navigate("/login");
     },
     onError: (err: AxiosError) => {
       if (err.response) {
@@ -164,7 +164,7 @@ export default function ConfirmModal(props: IProps) {
 
   const handleSubmit = () => {
     // Pick which api endpoint to use
-    if (props.type === 'delete') {
+    if (props.type === "delete") {
       if (props.tag) {
         deleteTagMutation.mutate(props.tag);
       }
@@ -180,32 +180,32 @@ export default function ConfirmModal(props: IProps) {
       if (props.credential) {
         deleteCredentialMutation.mutate(props.credential);
       }
-    } else if (props.type === 'logout') {
+    } else if (props.type === "logout") {
       logOutMutation.mutate();
     } else {
     }
   };
 
-  if (props.type === 'delete') {
+  if (props.type === "delete") {
     return (
       <>
-        {props.variant === 'dropdown' && (
+        {props.variant === "dropdown" && (
           <Dropdown.Item onClick={() => setModalShow(true)}>
             <FontAwesomeIcon icon={faTrash} className='me-2' />
             Delete
           </Dropdown.Item>
         )}
-        {props.variant === 'button' && (
+        {props.variant === "button" && (
           <Button
-            type={'button'}
-            variant={'danger'}
+            type={"button"}
+            variant={"danger"}
             onClick={() => setModalShow(true)}
             size={props.size ? props.size : undefined}
           >
             <FontAwesomeIcon icon={faTrash} className='me-2' /> Delete
           </Button>
         )}
-        {props.variant === 'icon' && (
+        {props.variant === "icon" && (
           <Button
             variant='light'
             onClick={() => setModalShow(true)}
@@ -228,7 +228,7 @@ export default function ConfirmModal(props: IProps) {
             {props.source && <Modal.Title>Delete source</Modal.Title>}
           </Modal.Header>
           <Modal.Body>
-            <Alert variant={'danger'} show={alertShow}>
+            <Alert variant={"danger"} show={alertShow}>
               <Alert.Heading>{alertMessage.header}</Alert.Heading>
               <p></p>
             </Alert>
@@ -241,7 +241,7 @@ export default function ConfirmModal(props: IProps) {
             {props.group && props.group.title && (
               <>
                 <p>
-                  Are you sure you want to delete the group:{' '}
+                  Are you sure you want to delete the group:{" "}
                   <b>{props.group.title}</b>?
                 </p>
                 <p>
@@ -251,19 +251,19 @@ export default function ConfirmModal(props: IProps) {
             )}
             {props.user && props.user.username && (
               <p>
-                Are you sure you want to delete the user:{' '}
+                Are you sure you want to delete the user:{" "}
                 <b>{props.user.username}</b>?
               </p>
             )}
             {props.credential && props.credential.name && (
               <p>
-                Are you sure you want to delete the credential:{' '}
+                Are you sure you want to delete the credential:{" "}
                 <b>{props.credential.name}</b>?
               </p>
             )}
             {props.source && props.source.nickname && (
               <p>
-                Are you sure you want to delete the source:{' '}
+                Are you sure you want to delete the source:{" "}
                 <b>{props.source.nickname}</b>?
               </p>
             )}
@@ -285,7 +285,7 @@ export default function ConfirmModal(props: IProps) {
         </Modal>
       </>
     );
-  } else if (props.type === 'logout') {
+  } else if (props.type === "logout") {
     return (
       <>
         <Nav.Link
@@ -308,7 +308,7 @@ export default function ConfirmModal(props: IProps) {
           <Modal.Body>
             <Container fluid>
               <p>Are you sure you want to log out?</p>
-              <small className={'text-muted'}>
+              <small className={"text-muted"}>
                 You will have to log in again to use Aggie.
               </small>
             </Container>

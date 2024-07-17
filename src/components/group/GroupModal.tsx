@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Button,
   Container,
@@ -10,29 +10,29 @@ import {
   FormGroup,
   FormCheck,
   Form,
-} from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faEdit } from '@fortawesome/free-solid-svg-icons';
+} from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusCircle, faEdit } from "@fortawesome/free-solid-svg-icons";
 import {
   AssignedToUser,
   Group,
   GroupEditableData,
   User,
-} from '../../objectTypes';
-import { Formik, FormikValues, Field } from 'formik';
-import * as Yup from 'yup';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { editGroup, newGroup } from '../../api/groups';
-import { AxiosError } from 'axios';
-import { getUsers } from '../../api/users';
-import { VERACITY_OPTIONS } from '../../helpers';
+} from "../../objectTypes";
+import { Formik, FormikValues, Field } from "formik";
+import * as Yup from "yup";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { editGroup, newGroup } from "../../api/groups";
+import { AxiosError } from "axios";
+import { getUsers } from "../../api/users";
+import { VERACITY_OPTIONS } from "../../helpers";
 
 interface IProps {
   group?: Group;
 }
 
 const groupEditSchema = Yup.object().shape({
-  groupName: Yup.string().required('Group name required'),
+  groupName: Yup.string().required("Group name required"),
   groupLocation: Yup.string(),
   groupEscalated: Yup.boolean(),
   groupClosed: Yup.boolean(),
@@ -41,13 +41,13 @@ const groupEditSchema = Yup.object().shape({
   groupNotes: Yup.string(),
 });
 
-const veracityOptions = ['Confirmed True', 'Confirmed False', 'Unconfirmed'];
+const veracityOptions = ["Confirmed True", "Confirmed False", "Unconfirmed"];
 
 export default function GroupModal(props: IProps) {
   const [modalShow, setModalShow] = useState(false);
   const queryClient = useQueryClient();
   const usersQuery = useQuery<User[] | undefined, AxiosError>(
-    'users',
+    ["users"],
     getUsers
   );
   const editGroupMutation = useMutation(
@@ -57,7 +57,7 @@ export default function GroupModal(props: IProps) {
     {
       onSuccess: () => {
         setModalShow(false);
-        queryClient.invalidateQueries('groups');
+        queryClient.invalidateQueries(["groups"]);
       },
     }
   );
@@ -68,14 +68,14 @@ export default function GroupModal(props: IProps) {
     {
       onSuccess: () => {
         setModalShow(false);
-        queryClient.invalidateQueries('groups');
+        queryClient.invalidateQueries(["groups"]);
       },
     }
   );
   const formValuesToGroup = (values: FormikValues) => {
     // This is because we can't use a null value as a select value.
     let assignedTo = values.groupAssignedTo;
-    if (values.groupAssignedTo === '') {
+    if (values.groupAssignedTo === "") {
       assignedTo = null;
     }
     if (props.group) {
@@ -118,7 +118,7 @@ export default function GroupModal(props: IProps) {
     <>
       {props.group && (
         <Dropdown.Item onClick={() => setModalShow(true)}>
-          {' '}
+          {" "}
           <FontAwesomeIcon icon={faEdit} /> Edit
         </Dropdown.Item>
       )}
@@ -126,7 +126,7 @@ export default function GroupModal(props: IProps) {
         <Button variant='primary' onClick={() => setModalShow(true)} size='sm'>
           <FontAwesomeIcon
             icon={faPlusCircle}
-            className={'me-1'}
+            className={"me-1"}
           ></FontAwesomeIcon>
           <span> Create group </span>
         </Button>
@@ -139,17 +139,17 @@ export default function GroupModal(props: IProps) {
       >
         <Formik
           initialValues={{
-            groupName: props.group ? props.group.title : '',
+            groupName: props.group ? props.group.title : "",
             groupVeracity: props.group
               ? props.group.veracity
               : VERACITY_OPTIONS[0],
             groupClosed: props.group ? props.group.closed : false,
             groupEscalated: props.group ? props.group.escalated : false,
-            groupLocation: props.group ? props.group.locationName : '',
+            groupLocation: props.group ? props.group.locationName : "",
             groupAssignedTo: props.group
               ? assignedTo.map((user) => user._id)
-              : [''],
-            groupNotes: props.group ? props.group.notes : '',
+              : [""],
+            groupNotes: props.group ? props.group.notes : "",
           }}
           validationSchema={groupEditSchema}
           onSubmit={(values, { setSubmitting, resetForm }) => {
@@ -172,12 +172,12 @@ export default function GroupModal(props: IProps) {
             <Form noValidate onSubmit={handleSubmit}>
               <Modal.Header closeButton>
                 <Modal.Title>
-                  {props.group ? 'Edit Group' : 'New Group'}
+                  {props.group ? "Edit Group" : "New Group"}
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <Container>
-                  <FormGroup controlId='formUsername' className={'mb-3'}>
+                  <FormGroup controlId='formUsername' className={"mb-3"}>
                     <FormLabel>Name</FormLabel>
                     <Form.Control
                       type='text'
@@ -192,7 +192,7 @@ export default function GroupModal(props: IProps) {
                       {errors.groupName}
                     </Form.Control.Feedback>
                   </FormGroup>
-                  <FormGroup controlId='formUserEmail' className={'mb-3'}>
+                  <FormGroup controlId='formUserEmail' className={"mb-3"}>
                     <FormLabel>Location</FormLabel>
                     <Form.Control
                       type='text'
@@ -213,7 +213,7 @@ export default function GroupModal(props: IProps) {
                     <Col md>
                       <FormGroup
                         controlId='formGroupEscalated'
-                        className={'mb-3'}
+                        className={"mb-3"}
                       >
                         <FormCheck
                           checked={values.groupEscalated}
@@ -225,7 +225,7 @@ export default function GroupModal(props: IProps) {
                       </FormGroup>
                     </Col>
                     <Col md>
-                      <FormGroup controlId='formGroupClosed' className={'mb-3'}>
+                      <FormGroup controlId='formGroupClosed' className={"mb-3"}>
                         <FormCheck
                           checked={values.groupClosed}
                           type='switch'
@@ -236,10 +236,10 @@ export default function GroupModal(props: IProps) {
                       </FormGroup>
                     </Col>
                   </Row>
-                  <FormGroup controlId='formUserRole' className={'mb-3'}>
+                  <FormGroup controlId='formUserRole' className={"mb-3"}>
                     <FormLabel>Veracity</FormLabel>
                     <Form.Control
-                      as={'select'}
+                      as={"select"}
                       name='groupVeracity'
                       className='form-select'
                       value={values.groupVeracity}
@@ -254,10 +254,10 @@ export default function GroupModal(props: IProps) {
                       })}
                     </Form.Control>
                   </FormGroup>
-                  <FormGroup controlId='formUserRole' className={'mb-3'}>
+                  <FormGroup controlId='formUserRole' className={"mb-3"}>
                     <FormLabel>Assigned to</FormLabel>
                     <Form.Control
-                      as={'select'}
+                      as={"select"}
                       name='groupAssignedTo'
                       className='form-select'
                       value={values.groupAssignedTo}
@@ -282,12 +282,12 @@ export default function GroupModal(props: IProps) {
                         })}
                     </Form.Control>
                   </FormGroup>
-                  <FormGroup controlId='formGroupNotes' className={'mb-3'}>
+                  <FormGroup controlId='formGroupNotes' className={"mb-3"}>
                     <FormLabel>Notes</FormLabel>
                     <Form.Control
-                      as={'textarea'}
-                      placeholder={'Write notes here.'}
-                      style={{ height: '100px' }}
+                      as={"textarea"}
+                      placeholder={"Write notes here."}
+                      style={{ height: "100px" }}
                       name='groupNotes'
                       className='form-control'
                       value={values.groupNotes}

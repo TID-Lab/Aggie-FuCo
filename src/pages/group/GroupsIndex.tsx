@@ -32,7 +32,7 @@ import {
   faPlusCircle,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getSources } from "../../api/sources";
 import { getGroups } from "../../api/groups";
 import { getTags } from "../../api/tags";
@@ -121,46 +121,26 @@ const GroupsIndex = (props: IProps) => {
 
   const [showFilterParams, setShowFilterParams] = useState(false);
   const sourcesQuery = useQuery<Source[] | undefined, AxiosError>(
-    "sources",
+    ["sources"],
     getSources,
-    {
-      onError: (err: AxiosError) => {
-        if (err.response && err.response.status === 401) {
-          navigate("/login");
-        }
-      },
-    }
+    {}
   );
   const groupsQuery = useQuery<Groups | undefined, AxiosError>(
     ["groups", queryState],
     () => {
       return getGroups(queryState);
     },
-    {
-      onError: (err: AxiosError) => {
-        if (err.response && err.response.status === 401) {
-          navigate("/login");
-        }
-      },
-    }
+    {}
   );
-  const tagsQuery = useQuery<Tag[] | undefined, AxiosError>("tags", getTags, {
-    onError: (err: AxiosError) => {
-      if (err.response && err.response.status === 401) {
-        navigate("/login");
-      }
-    },
-  });
+  const tagsQuery = useQuery<Tag[] | undefined, AxiosError>(
+    ["tags"],
+    getTags,
+    {}
+  );
   const usersQuery = useQuery<User[] | undefined, AxiosError>(
-    "users",
+    ["users"],
     getUsers,
-    {
-      onError: (err: AxiosError) => {
-        if (err.response && err.response.status === 401) {
-          navigate("/login");
-        }
-      },
-    }
+    {}
   );
 
   const goToPage = (pageNum: number) => {
