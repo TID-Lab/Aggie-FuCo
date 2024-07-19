@@ -1,14 +1,16 @@
 // Or known on the backend as groups.
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   Group,
   GroupEditableData,
+  Groups,
   GroupSearchState,
   hasId,
   VeracityOptions
 } from "../objectTypes";
 
-export const getGroups = async (searchState: GroupSearchState = {
+
+const defaultGroupSearchState: GroupSearchState = {
   title: null,
   creator: null,
   page: null,
@@ -21,12 +23,14 @@ export const getGroups = async (searchState: GroupSearchState = {
   locationName: null,
   veracity: null,
   escalated: null
-}, tagIds: hasId[] = []) => {
+}
+
+export const getGroups = async (searchState = defaultGroupSearchState, tagIds: hasId[] = []) => {
   if (generateGroupsSearchURL(searchState, tagIds) != "") {
-    const { data } = await axios.get('/api/group?' + generateGroupsSearchURL(searchState, tagIds));
+    const { data } = await axios.get<Groups | undefined>('/api/group?' + generateGroupsSearchURL(searchState, tagIds));
     return data;
   } else {
-    const { data } = await axios.get('/api/group');
+    const { data } = await axios.get<Groups | undefined>('/api/group');
     return data;
   }
 }
