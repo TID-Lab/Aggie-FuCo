@@ -142,6 +142,7 @@ export default function EditGroupModal(props: IProps) {
           setShowAlert(false);
           setAlertMessage({
             header: "Failed to update group status " + error.response.status,
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);

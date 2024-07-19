@@ -57,6 +57,7 @@ export default function ConfirmModal(props: IProps) {
         if (err.response) {
           setAlertMessage({
             header: String(err.response.status),
+            //@ts-ignore
             body: err.response.data,
           });
         }
@@ -77,6 +78,7 @@ export default function ConfirmModal(props: IProps) {
         if (err.response) {
           setAlertMessage({
             header: String(err.response.status),
+            //@ts-ignore
             body: err.response.data,
           });
         }
@@ -97,6 +99,7 @@ export default function ConfirmModal(props: IProps) {
         if (err.response) {
           setAlertMessage({
             header: String(err.response.status),
+            //@ts-ignore
             body: err.response.data,
           });
         }
@@ -117,6 +120,7 @@ export default function ConfirmModal(props: IProps) {
         if (err.response) {
           setAlertMessage({
             header: String(err.response.status),
+            //@ts-ignore
             body: err.response.data,
           });
         }
@@ -137,6 +141,7 @@ export default function ConfirmModal(props: IProps) {
         if (err.response) {
           setAlertMessage({
             header: String(err.response.status),
+            //@ts-ignore
             body: err.response.data,
           });
         }
@@ -155,6 +160,8 @@ export default function ConfirmModal(props: IProps) {
       if (err.response) {
         setAlertMessage({
           header: String(err.response.status),
+          //@ts-ignore
+
           body: err.response.data,
         });
       }

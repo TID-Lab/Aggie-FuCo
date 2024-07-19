@@ -470,6 +470,7 @@ const RelevantReportsIndex = (props: IProps) => {
                 reportsQuery.error.response.data && (
                   <ErrorCard
                     errorStatus={reportsQuery.error.response.status}
+                    //@ts-ignore
                     errorData={reportsQuery.error.response.data}
                   />
                 )}

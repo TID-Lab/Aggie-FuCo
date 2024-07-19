@@ -710,6 +710,7 @@ const ReportsIndex = (props: IProps) => {
                 batchQuery.error.response.data && (
                   <ErrorCard
                     errorStatus={batchQuery.error.response.status}
+                    //@ts-ignore
                     errorData={batchQuery.error.response.data}
                   />
                 )}
@@ -720,6 +721,7 @@ const ReportsIndex = (props: IProps) => {
                 reportsQuery.error.response.data && (
                   <ErrorCard
                     errorStatus={reportsQuery.error.response.status}
+                    //@ts-ignore
                     errorData={reportsQuery.error.response.data}
                   />
                 )}
