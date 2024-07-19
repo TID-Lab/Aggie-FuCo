@@ -122,6 +122,7 @@ const ReportDetails = () => {
           setAlertMessage({
             header:
               "Failed to update read status (" + error.response.status + ")",
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);
@@ -155,6 +156,7 @@ const ReportDetails = () => {
           setAlertMessage({
             header:
               "Failed to update escalated status " + error.response.status,
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);
@@ -189,6 +191,7 @@ const ReportDetails = () => {
               "Failed to update veracity status (" +
               error.response.status +
               ")",
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);
@@ -220,6 +223,7 @@ const ReportDetails = () => {
           setShowAlert(false);
           setAlertMessage({
             header: "Failed to update notes (" + error.response.status + ")",
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);
@@ -248,6 +252,7 @@ const ReportDetails = () => {
           setShowAlert(false);
           setAlertMessage({
             header: "Failed to update tags (" + error.response.status + ")",
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);
@@ -637,6 +642,7 @@ const ReportDetails = () => {
               reportQuery.error.response.data &&
               reportQuery.error.response.status && (
                 <ErrorCard
+                  //@ts-ignore
                   errorData={reportQuery.error.response.data}
                   errorStatus={reportQuery.error.response.status}
                 />

@@ -140,6 +140,7 @@ const GroupDetails = () => {
           setAlertMessage({
             header:
               "Failed to update escalated status " + error.response.status,
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);
@@ -174,6 +175,7 @@ const GroupDetails = () => {
               "Failed to update veracity status (" +
               error.response.status +
               ")",
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);
@@ -205,6 +207,7 @@ const GroupDetails = () => {
           setShowAlert(false);
           setAlertMessage({
             header: "Failed to update location (" + error.response.status + ")",
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);
@@ -233,6 +236,7 @@ const GroupDetails = () => {
           setShowAlert(false);
           setAlertMessage({
             header: "Failed to update notes (" + error.response.status + ")",
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);
@@ -261,6 +265,7 @@ const GroupDetails = () => {
           setShowAlert(false);
           setAlertMessage({
             header: "Failed to update title (" + error.response.status + ")",
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);
@@ -292,6 +297,7 @@ const GroupDetails = () => {
           setShowAlert(false);
           setAlertMessage({
             header: "Failed to update closed status " + error.response.status,
+            //@ts-ignore
             body: error.response.data,
           });
           setShowAlert(true);

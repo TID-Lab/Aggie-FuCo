@@ -37,6 +37,7 @@ export default function TagModal(props: IProps) {
         if (err.response && err.response.status === 422) {
           setAlertMessage({
             header: "Non-unique name",
+            //@ts-ignore
             body: err.response.data,
           });
         }
@@ -56,6 +57,7 @@ export default function TagModal(props: IProps) {
         if (err.response) {
           setAlertMessage({
             header: "Non-unique name",
+            //@ts-ignore
             body: err.response.data,
           });
         }

@@ -496,6 +496,7 @@ const GroupsIndex = (props: IProps) => {
                   groupsQuery.error.response.data && (
                     <ErrorCard
                       errorStatus={groupsQuery.error.response.status}
+                      //@ts-ignore
                       errorData={groupsQuery.error.response.data}
                     />
                   )}
