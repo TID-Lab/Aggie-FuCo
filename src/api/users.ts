@@ -3,12 +3,12 @@ import {User} from "../objectTypes";
 import {UserEditableData} from "../objectTypes";
 
 export const getUsers = async () => {
-  const { data } = await axios.get('/api/user');
+  const { data } = await axios.get<User[] | undefined>('/api/user');
   return data;
 }
 
 export const getUser = async (id: string) => {
-  const { data } = await axios.get('/api/user/' + id);
+  const { data } = await axios.get<User | undefined>('/api/user/' + id);
   return data
 }
 

@@ -307,8 +307,8 @@ const GroupDetails = () => {
       },
     }
   );
-  const sourcesQuery = useQuery<Source[], undefined>(["sources"], getSources);
-  const tagsQuery = useQuery<Tag[], undefined>(["tags"], getTags);
+  const sourcesQuery = useQuery(["sources"], getSources);
+  const tagsQuery = useQuery(["tags"], getTags);
   //@ts-ignore
   const groupQuery = useQuery<Group, undefined>(
     ["group", id],

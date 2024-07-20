@@ -51,7 +51,7 @@ const ITEMS_PER_PAGE = 50;
 
 interface IProps {
   reports: Report[];
-  tags: Tag[] | null;
+  tags: Tag[] | undefined;
   sources: Source[] | [];
   groupId?: string;
   variant: "inline" | "selection";
@@ -109,12 +109,8 @@ export default function EditGroupModal(props: IProps) {
     {}
   );
 
-  const sourcesQuery = useQuery<Source[] | undefined, AxiosError>(
-    ["sources"],
-    getSources,
-    {}
-  );
-  const tagsQuery = useQuery(["tags"], getTags, {});
+  const sourcesQuery = useQuery(["sources"], getSources, {});
+  const tagsQuery = useQuery(["tags"], getTags);
 
   const [reports, setReports] = useState<Report[]>(props.reports);
   const [tempSelectedGroup, setTempSelectedGroup] = useState<Group | null>(

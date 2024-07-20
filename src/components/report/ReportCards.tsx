@@ -53,7 +53,7 @@ import EscalatedIndication from "../EscalatedIndication";
 interface IProps {
   visibleReports: Report[];
   sources: Source[] | [];
-  tags: Tag[] | [];
+  tags: Tag[] | undefined;
   batchMode?: boolean;
   setBatchMode?: (batchMode: boolean) => void;
   variant: "default" | "relevant" | "batch";
@@ -145,7 +145,7 @@ export default function ReportCards(props: IProps) {
 
 interface ReportCardBodyIProps {
   report: Report | null;
-  tags: Tag[] | null;
+  tags: Tag[] | undefined;
   sources: Source[] | [];
   variant: "default" | "relevant" | "batch";
   setSelectedReports?: Dispatch<SetStateAction<Set<Report>>>;

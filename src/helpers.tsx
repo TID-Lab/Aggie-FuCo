@@ -12,7 +12,7 @@ import {
 import { useLocation } from "react-router-dom";
 import { FormikValues } from "formik";
 
-export function tagById(tagId: string, tags: Tag[] | null) {
+export function tagById(tagId: string, tags: Tag[] | undefined) {
   // Written for speed, not for best functional programming practices
   if (tags) {
     if (tags.length === 0) return null; // No tags, no return
@@ -109,7 +109,8 @@ export function groupById(groupId: string, groups: Group[]) {
   return null;
 }
 
-export function capitalizeFirstLetter(s: string) {
+export function capitalizeFirstLetter(s: string | undefined) {
+  if (!s) return "";
   return s && s[0].toUpperCase() + s.slice(1);
 }
 
@@ -249,11 +250,11 @@ export const ctListToOptions = (ctList: CTList) => {
         if (ctListTypesArr) {
           //@ts-ignore
           Object.values(ctListTypes["crowdtangle_list_account_pairs"]).forEach(
-            (value: any) => ctListSet.add(value[0] )
+            (value: any) => ctListSet.add(value[0])
           );
           //@ts-ignore
           Object.values(ctListTypes["crowdtangle_saved_searches"]).forEach(
-            (value:any) => ctListSet.add(value[0])
+            (value: any) => ctListSet.add(value[0])
           );
           //@ts-ignore
           let optionJSX = [];
@@ -278,7 +279,11 @@ export const ctListToOptions = (ctList: CTList) => {
   return <></>;
 };
 
-export const compareIds = (objectOne: hasId, objectTwo: hasId) => {
+export const compareIds = (
+  objectOne: hasId | undefined,
+  objectTwo: hasId | undefined
+) => {
+  if (!objectOne || !objectTwo) return false;
   return objectOne._id === objectTwo._id;
 };
 

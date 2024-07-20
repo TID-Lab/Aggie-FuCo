@@ -48,7 +48,7 @@ import { LoadingPagination } from "../AggiePagination";
 interface IProps {
   visibleGroups: Group[] | [];
   sources: Source[] | [];
-  users: User[] | [];
+  users: User[] | undefined;
   tags: Tag[] | [];
 }
 
@@ -123,7 +123,7 @@ export default function GroupTable(props: IProps) {
 
 interface GroupRowIProps {
   group: Group | null;
-  tags: Tag[];
+  tags: Tag[] | undefined;
   users: User[] | undefined;
   sources: Source[] | [];
   variant: "modal" | "table";

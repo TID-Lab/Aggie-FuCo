@@ -30,7 +30,7 @@ const SourceDetails = () => {
   const sourceMutation = useMutation((sourceData: any) => {
     return editSource(sourceData);
   });
-  const handleChange = (source: Source | null) => {
+  const handleChange = (source: Source | undefined) => {
     if (source) {
       source.enabled = !source.enabled;
       sourceMutation.mutate(source);
@@ -76,38 +76,40 @@ const SourceDetails = () => {
                       <tbody>
                         <tr>
                           <th>Name</th>
-                          <td>{sourceQuery.data.nickname}</td>
+                          <td>{sourceQuery.data?.nickname}</td>
                         </tr>
                         <tr>
                           <th>Media source</th>
                           <td>
                             <Image
-                              src={"/images/" + sourceQuery.data.media + ".png"}
+                              src={
+                                "/images/" + sourceQuery.data?.media + ".png"
+                              }
                               rounded
                               className={"me-2"}
                             />
-                            {capitalizeFirstLetter(sourceQuery.data.media)}
+                            {capitalizeFirstLetter(sourceQuery.data?.media)}
                           </td>
                         </tr>
                         <tr>
                           <th>Tags</th>
-                          <td>{sourceQuery.data.tags}</td>
+                          <td>{sourceQuery.data?.tags}</td>
                         </tr>
                         <tr>
                           <th>Created by</th>
-                          <td>{sourceQuery.data.user.username}</td>
+                          <td>{sourceQuery.data?.user.username}</td>
                         </tr>
                         <tr>
                           <th>Credentials</th>
-                          <td>{sourceQuery.data.credentials.name}</td>
+                          <td>{sourceQuery.data?.credentials.name}</td>
                         </tr>
                         <tr>
                           <th>Enabled</th>
                           <td>
                             <Form>
                               <Form.Switch
-                                id={sourceQuery.data._id}
-                                defaultChecked={sourceQuery.data.enabled}
+                                id={sourceQuery.data?._id}
+                                defaultChecked={sourceQuery.data?.enabled}
                                 onChange={(e) => handleChange(sourceQuery.data)}
                               />
                             </Form>
@@ -126,9 +128,9 @@ const SourceDetails = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {sourceQuery.data.events &&
-                          sourceQuery.data.events.length > 0 &&
-                          sourceQuery.data.events.map((event: SourceEvent) => {
+                        {sourceQuery.data?.events &&
+                          sourceQuery.data?.events.length > 0 &&
+                          sourceQuery.data?.events.map((event: SourceEvent) => {
                             return (
                               <tr>
                                 <td>{event.datetime}</td>
@@ -137,8 +139,8 @@ const SourceDetails = () => {
                               </tr>
                             );
                           })}
-                        {sourceQuery.data.events &&
-                          sourceQuery.data.events.length === 0 && (
+                        {sourceQuery.data?.events &&
+                          sourceQuery.data?.events.length === 0 && (
                             <tr>
                               <td>No recent events found</td>
                               <td></td>
