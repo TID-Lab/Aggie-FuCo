@@ -93,13 +93,13 @@ interface Group extends hasId {
   id?: number;
   smtcTags: string[];
   status: string;
-  veracity: Veracity;
+  veracity: VeracityOptions;
   escalated: boolean;
   closed: boolean;
   public: boolean;
   _reports: string[];
   title: string;
-  assignedTo?: AssignedToUser | AssignedToUser[];
+  assignedTo?: AssignedToUser[]; // AssignedToUser | AssignedToUser[] <- i dont think its ever not an array
   creator: {
     _id: string;
     username: string;
