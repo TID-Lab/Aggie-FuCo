@@ -33,6 +33,7 @@ var sourceSchema = new mongoose.Schema({
   resource_id: String,
   url: { type: String, validate: urlValidator },
   keywords: String,
+  lists: String,
   enabled: { type: Boolean, default: true },
   events: { type: Array, default: [] },
   unreadErrorCount: { type: Number, default: 0 },
