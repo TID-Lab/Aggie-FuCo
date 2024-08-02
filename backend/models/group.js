@@ -190,6 +190,7 @@ Group.queryGroups = function (query, page, options, callback) {
     filter.storedAt.$gte = query.since;
   }
 
+
   if (query.veracity === 'confirmed true') filter.veracity = 'Confirmed True';
   if (query.veracity === 'confirmed false') filter.veracity = 'Confirmed False';
   if (query.veracity === 'unconfirmed') filter.veracity = 'Unconfirmed';

@@ -98,7 +98,7 @@ const GroupsIndex = (props: IProps) => {
       creator: null,
       after: null,
       before: null,
-      page: null,
+      page: undefined,
     });
   };
 

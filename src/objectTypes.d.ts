@@ -130,17 +130,17 @@ export interface GroupEditableData {
 
 interface GroupSearchState {
   veracity?: string | null;
-  escalated?: boolean | null;
-  closed?: boolean | null;
+  escalated?: string | boolean | null;
+  closed?: string | boolean | null;
   title?: string | null;
-  totalReports?: number | null;
+  totalReports?: string | number | null;
   assignedTo?: string | null;
   creator?: string | null;
   after?: string | null;
-  before?: string | null;
-  idnum?: number | null;
+  before?: string |null ;
+  idnum?: string | number | null;
   locationName?: string | null;
-  page?: number | null;
+  page?: string | number;
 }
 
 interface Groups {

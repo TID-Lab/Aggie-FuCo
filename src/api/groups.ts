@@ -11,18 +11,7 @@ import {
 
 
 const defaultGroupSearchState: GroupSearchState = {
-  title: null,
-  creator: null,
-  page: null,
-  totalReports: null,
-  closed: null,
-  before: null,
-  after: null,
-  idnum: null,
-  assignedTo: null,
-  locationName: null,
-  veracity: null,
-  escalated: null
+
 }
 
 export const getGroups = async (searchState = defaultGroupSearchState, tagIds: hasId[] = []) => {
@@ -99,6 +88,7 @@ export const setSelectedLocationName = async (groupIds: string[], locationName: 
   return data;
 }
 
+//TODO: refactor with URLSearchParam Object
 const generateGroupsSearchURL = (searchState: GroupSearchState, tagIds: hasId[]) => {
   let url = "";
   if (tagIds.length > 0) { url += "tags=" + tagIds; }
