@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Group } from "../../objectTypes";
 import { useQuery } from "@tanstack/react-query";
 import { getTags } from "../../api/tags";
-import { VeracityOptions } from "../../objectTypes";
+import { VeracityOptions } from "../../api/enums";
 import React from "react";
 
 const VeracityColor: {

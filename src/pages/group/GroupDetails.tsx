@@ -27,16 +27,10 @@ import {
 } from "../../api/groups";
 import { getSources } from "../../api/sources";
 import { getTags } from "../../api/tags";
-import {
-  Group,
-  hasId,
-  Report,
-  Reports,
-  Source,
-  Tag,
-  VeracityOptions,
-} from "../../objectTypes";
-import { stringToDate, tagById, VERACITY_OPTIONS } from "../../helpers";
+import { Group, hasId, Report, Reports, Source, Tag } from "../../objectTypes";
+
+import { stringToDate, tagById } from "../../helpers";
+import { VERACITY_OPTIONS, type VeracityOptions } from "../../api/enums";
 import ReportTable from "../../components/report/ReportTable";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import { setSelectedEscalated } from "../../api/groups";

@@ -10,9 +10,11 @@ import { Formik, Form, Field } from "formik";
 import { GroupSearchState } from "../../objectTypes";
 import _ from "lodash";
 import { useQueryParams } from "../../hooks/useQueryParams";
-import ComboBox from "../../components/ComboBox";
+import FilterComboBox from "../../components/filters/FilterComboBox";
 import { useEffect } from "react";
-
+import FilterListbox from "../../components/filters/FilterListBox";
+import { ESCALATED_OPTIONS, VERACITY_OPTIONS } from "../../api/enums";
+import FilterRadioGroup from "../../components/filters/FilterRadioGroup";
 const initialQueryValues: GroupSearchState = {
   creator: "",
   idnum: "",
@@ -30,8 +32,8 @@ const Incidents = () => {
     useQueryParams<GroupSearchState>();
   const sourcesQuery = useQuery(["sources"], getSources);
   const usersQuery = useQuery(["users"], getUsers);
-  function usersToComboBox(query: typeof usersQuery) {
-    if (!query.isSuccess || !query.data) return [];
+  function usersComboBox(query: typeof usersQuery) {
+    if (!query.data) return [];
     const array = query.data.map((user) => ({
       key: user._id,
       value: user.username,
@@ -58,18 +60,38 @@ const Incidents = () => {
       </Formik>
       <nav className='flex justify-between mb-2 text-sm'>
         <div className='flex gap-2'>
-          <p>All</p>
-          <p>Unconfirmed</p>
-          <p>Confirmed</p>
+          <FilterRadioGroup
+            options={[...VERACITY_OPTIONS]}
+            defaultOption='All'
+            value={getParam("veracity")}
+            onChange={(e) => setParams({ veracity: e === "All" ? "" : e })}
+          />
         </div>
         <div className='flex items-center gap-1'>
-          <ComboBox
+          <FilterListbox
+            label='Escalated'
+            options={[...ESCALATED_OPTIONS]}
+            value={getParam("escalated")}
+            onChange={(e) => setParams({ escalated: e })}
+          />
+
+          <FilterComboBox
+            label='Creator'
+            list={usersComboBox(usersQuery)}
+            onChange={(e) => {
+              setParams({ creator: e.key });
+            }}
+            selectedItem={usersComboBox(usersQuery).find(
+              (i) => i.key === getParam("creator")
+            )}
+          />
+          <FilterComboBox
             label='Assignee'
-            list={usersToComboBox(usersQuery)}
+            list={usersComboBox(usersQuery)}
             onChange={(e) => {
               setParams({ assignedTo: e.key });
             }}
-            selectedItem={usersToComboBox(usersQuery).find(
+            selectedItem={usersComboBox(usersQuery).find(
               (i) => i.key === getParam("assignedTo")
             )}
           />

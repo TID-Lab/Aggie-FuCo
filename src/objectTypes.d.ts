@@ -1,4 +1,5 @@
-import { Option } from 'react-bootstrap-typeahead';
+import { Option } from "react-bootstrap-typeahead";
+import { VeracityOptions } from "./api/enums";
 
 interface hasId {
   _id: string;
@@ -116,10 +117,10 @@ export interface GroupCreateData extends GroupEditableData {
   user: User;
 }
 
-export interface GroupEditableData {
+export interface GroupEditableData extends hasId {
   title: string;
   notes: string;
-  veracity: 'Confirmed true' | 'Confirmed false' | 'Unconfirmed';
+  veracity: "Confirmed true" | "Confirmed false" | "Unconfirmed";
   closed: boolean;
   assignedTo: string[];
   locationName: string;
@@ -137,7 +138,7 @@ interface GroupSearchState {
   assignedTo?: string | null;
   creator?: string | null;
   after?: string | null;
-  before?: string |null ;
+  before?: string | null;
   idnum?: string | number | null;
   locationName?: string | null;
   page?: string | number;
@@ -164,7 +165,7 @@ export interface UserCreationData extends UserEditableData {
 export interface UserEditableData {
   username: string;
   email: string;
-  role: 'viewer' | 'monitor' | 'admin';
+  role: "viewer" | "monitor" | "admin";
   _id?: string;
 }
 
@@ -267,15 +268,15 @@ interface VisualizationAuthor {
 }
 
 type VisualizationMediaTypes =
-  | 'link'
-  | 'live_video_complete'
-  | 'status'
-  | 'live_video'
-  | 'video'
-  | 'youtube'
-  | 'live_video_scheduled'
-  | 'photo'
-  | 'native_video';
+  | "link"
+  | "live_video_complete"
+  | "status"
+  | "live_video"
+  | "video"
+  | "youtube"
+  | "live_video_scheduled"
+  | "photo"
+  | "native_video";
 interface VisualizationMedia {
   count: number;
   name: VisualizationMediaTypes;
@@ -343,14 +344,11 @@ interface VisualizationTimes {
   avgReadTimeCount: number;
 }
 type MediaType =
-  | 'twitter'
-  | 'instagram'
-  | 'RSS'
-  | 'elmo'
-  | 'SMS GH'
-  | 'whatsapp'
-  | 'facebook'
-  | 'comments';
-type VeracityOptions = 'Confirmed True' | 'Confirmed False' | 'Unconfirmed';
-type EscalatedOptions = 'true' | 'false';
-type ClosedOptions = 'true' | 'false';
+  | "twitter"
+  | "instagram"
+  | "RSS"
+  | "elmo"
+  | "SMS GH"
+  | "whatsapp"
+  | "facebook"
+  | "comments";

@@ -1,14 +1,4 @@
-import {
-  ClosedOptions,
-  CTList,
-  EscalatedOptions,
-  Group,
-  hasId,
-  Report,
-  Source,
-  Tag,
-  VeracityOptions,
-} from "./objectTypes";
+import { CTList, Group, hasId, Report, Source, Tag } from "./objectTypes";
 import { useLocation } from "react-router-dom";
 import { FormikValues } from "formik";
 
@@ -315,11 +305,3 @@ function removeEmptyStrings(obj: FormikValues) {
 export const searchParamsToObj = (searchParams: URLSearchParams) => {
   return Object.fromEntries(searchParams.entries());
 };
-
-export const VERACITY_OPTIONS: VeracityOptions[] = [
-  "Unconfirmed",
-  "Confirmed False",
-  "Confirmed True",
-];
-export const ESCALATED_OPTIONS: EscalatedOptions[] = ["true", "false"];
-export const CLOSED_OPTIONS: ClosedOptions[] = ["true", "false"];

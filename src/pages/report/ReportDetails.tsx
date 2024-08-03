@@ -19,8 +19,8 @@ import {
   stringToDate,
   facebookUrlToEmbedUrl,
   sourcesNamesById,
-  VERACITY_OPTIONS,
 } from "../../helpers";
+import { VERACITY_OPTIONS, type VeracityOptions } from "../../api/enums";
 import {
   faCopy,
   faEnvelope,
@@ -45,15 +45,7 @@ import styles from "./ReportDetails.module.css";
 // @ts-ignore
 import { FacebookProvider, Like } from "react-facebook";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-import {
-  Group,
-  Groups,
-  hasId,
-  Report,
-  Source,
-  Tag,
-  VeracityOptions,
-} from "../../objectTypes";
+import { Group, Groups, hasId, Report, Source, Tag } from "../../objectTypes";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import ErrorCard from "../../components/ErrorCard";
 import VeracityIndication from "../../components/VeracityIndication";

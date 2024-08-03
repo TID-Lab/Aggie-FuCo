@@ -1,13 +1,4 @@
-import {
-  ClosedOptions,
-  EscalatedOptions,
-  Groups,
-  GroupSearchState,
-  Source,
-  Tag,
-  User,
-  VeracityOptions,
-} from "../../objectTypes";
+import { Groups, GroupSearchState, Source, Tag, User } from "../../objectTypes";
 import React, { useEffect, useState } from "react";
 import {
   Container,
@@ -44,12 +35,13 @@ import AggiePagination, {
   LoadingPagination,
 } from "../../components/AggiePagination";
 import { Field, Formik, Form } from "formik";
+import { parseFilterFields } from "../../helpers";
 import {
   CLOSED_OPTIONS,
   ESCALATED_OPTIONS,
-  parseFilterFields,
   VERACITY_OPTIONS,
-} from "../../helpers";
+} from "../../api/enums";
+
 import DatePickerField from "../../components/DatePickerField";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import { io, Socket } from "socket.io-client";
