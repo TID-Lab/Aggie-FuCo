@@ -13,7 +13,7 @@ require('../error');
 var EVENTS_TO_RETURN = 50;
 
 var lengthValidator = function (str) {
-  return validator.isLength(str, { min: 0, max: 20 })
+  return validator.isLength(str, { min: 0, max: 80 })
 }
 
 var urlValidator = function (url) {
