@@ -19,7 +19,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   editGroup,
   getGroup,
+  getGroup_untyped,
   getGroupReports,
+  getGroupReports_untyped,
   getGroups,
   setSelectedClosed,
   setSelectedLocationName,
@@ -27,16 +29,10 @@ import {
 } from "../../api/groups";
 import { getSources } from "../../api/sources";
 import { getTags } from "../../api/tags";
-import {
-  Group,
-  hasId,
-  Report,
-  Reports,
-  Source,
-  Tag,
-  VeracityOptions,
-} from "../../objectTypes";
-import { stringToDate, tagById, VERACITY_OPTIONS } from "../../helpers";
+import { Group, hasId, Report, Reports, Source, Tag } from "../../objectTypes";
+
+import { stringToDate, tagById } from "../../helpers";
+import { VERACITY_OPTIONS, type VeracityOptions } from "../../api/enums";
 import ReportTable from "../../components/report/ReportTable";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import { setSelectedEscalated } from "../../api/groups";
@@ -307,12 +303,12 @@ const GroupDetails = () => {
       },
     }
   );
-  const sourcesQuery = useQuery<Source[], undefined>(["sources"], getSources);
-  const tagsQuery = useQuery<Tag[], undefined>(["tags"], getTags);
+  const sourcesQuery = useQuery(["sources"], getSources);
+  const tagsQuery = useQuery(["tags"], getTags);
   //@ts-ignore
   const groupQuery = useQuery<Group, undefined>(
     ["group", id],
-    () => getGroup(id),
+    () => getGroup_untyped(id),
     {
       enabled: tagsQuery.isSuccess,
       onSuccess: (data) => {
@@ -335,7 +331,7 @@ const GroupDetails = () => {
   );
   const groupReportsQuery = useQuery<Reports, undefined>(
     ["reports", { groupId: id }],
-    () => getGroupReports(id, pageNumber)
+    () => getGroupReports_untyped(id, pageNumber)
   );
   const [queryTags, setQueryTags] = useState<Tag[]>([]);
   const handleTagsBlur = () => {

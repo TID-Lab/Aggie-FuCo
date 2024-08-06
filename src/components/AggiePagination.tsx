@@ -1,6 +1,7 @@
 import { Pagination, Placeholder, Stack } from "react-bootstrap";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
+import { isNumber } from "lodash";
 
 interface IProps {
   goToPage: (pageNum: number) => void;
@@ -8,7 +9,7 @@ interface IProps {
   itemsPerPage: number;
   size?: "sm" | "lg";
   variant?: "modal" | "page";
-  page?: number | null;
+  page?: string | number | undefined;
 }
 
 const AggiePagination = (props: IProps) => {
@@ -17,7 +18,9 @@ const AggiePagination = (props: IProps) => {
     return number.toLocaleString();
   }
   if (props.variant === "modal") {
-    const pageNum = props.page || 0;
+    //hack to fix type errors
+    const validPage = props.page || 0;
+    const pageNum = !isNumber(validPage) ? parseInt(validPage) : validPage;
     return (
       <Stack direction={"horizontal"} gap={2} className={"justify-content-end"}>
         {props.itemsPerPage > props.total && (

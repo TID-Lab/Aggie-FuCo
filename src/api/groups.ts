@@ -1,103 +1,160 @@
 // Or known on the backend as groups.
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   Group,
   GroupEditableData,
+  Groups,
   GroupSearchState,
   hasId,
-  VeracityOptions
+  Reports,
 } from "../objectTypes";
+import { VeracityOptions } from "./enums";
 
-export const getGroups = async (searchState: GroupSearchState = {
-  title: null,
-  creator: null,
-  page: null,
-  totalReports: null,
-  closed: null,
-  before: null,
-  after: null,
-  idnum: null,
-  assignedTo: null,
-  locationName: null,
-  veracity: null,
-  escalated: null
-}, tagIds: hasId[] = []) => {
+const defaultGroupSearchState: GroupSearchState = {};
+
+export const getGroups = async (
+  searchState = defaultGroupSearchState,
+  tagIds: hasId[] = []
+) => {
   if (generateGroupsSearchURL(searchState, tagIds) != "") {
-    const { data } = await axios.get('/api/group?' + generateGroupsSearchURL(searchState, tagIds));
+    const { data } = await axios.get<Groups | undefined>(
+      "/api/group?" + generateGroupsSearchURL(searchState, tagIds)
+    );
     return data;
   } else {
-    const { data } = await axios.get('/api/group');
+    const { data } = await axios.get<Groups | undefined>("/api/group");
     return data;
   }
-}
+};
 
 export const getAllGroups = async () => {
-  const { data } = await axios.get('/api/group/all');
+  const { data } = await axios.get("/api/group/all");
   return data;
-}
+};
 
 export const getGroup = async (id: string | undefined) => {
   if (id) {
-    const { data } = await axios.get('/api/group/' + id);
+    const { data } = await axios.get<Group | undefined>("/api/group/" + id);
     return data;
   }
-}
+};
+// todo: remove when refactor
+export const getGroup_untyped = async (id: string | undefined) => {
+  if (id) {
+    const { data } = await axios.get("/api/group/" + id);
+    return data;
+  }
+};
 
 export const newGroup = async (groupData: GroupEditableData) => {
-  const { data } = await axios.post('/api/group', groupData);
+  const { data } = await axios.post("/api/group", groupData);
   return data;
-}
+};
 
 export const editGroup = async (group: Group | GroupEditableData) => {
   const { data } = await axios.put("/api/group/" + group._id, group);
   return data;
-}
+};
 
 export const deleteGroup = async (group: Group) => {
-  const { data } = await axios.delete('/api/group/' + group._id);
+  const { data } = await axios.delete("/api/group/" + group._id);
   return data;
-}
+};
 
-export const getGroupReports = async (groupId: string | undefined, page: number) => {
+export const getGroupReports = async (
+  groupId: string | undefined,
+  page: number
+) => {
   if (groupId) {
-    const { data } = await axios.get('/api/report?groupId=' + groupId + "&page=" + page);
+    const { data } = await axios.get<Reports | undefined>(
+      "/api/report?groupId=" + groupId + "&page=" + page
+    );
     return data;
   }
-}
+};
 
-export const setSelectedVeracity = async (groupIds: string[], veracity: VeracityOptions | string ) => {
-  const { data } = await axios.patch('/api/group/_veracity', {ids: groupIds, veracity: veracity});
-  return data;
-}
+// todo: remove when refactor
+export const getGroupReports_untyped = async (
+  groupId: string | undefined,
+  page: number
+) => {
+  if (groupId) {
+    const { data } = await axios.get(
+      "/api/report?groupId=" + groupId + "&page=" + page
+    );
+    return data;
+  }
+};
 
-export const setSelectedEscalated = async (groupIds: string[], escalated: boolean) => {
-  const { data } = await axios.patch('/api/group/_escalated', {ids: groupIds, escalated: escalated});
+export const setSelectedVeracity = async (
+  groupIds: string[],
+  veracity: VeracityOptions | string
+) => {
+  const { data } = await axios.patch("/api/group/_veracity", {
+    ids: groupIds,
+    veracity: veracity,
+  });
   return data;
-}
+};
 
-export const setSelectedClosed = async (groupIds: string[], closed: boolean) => {
-  const { data } = await axios.patch('/api/group/_closed', {ids: groupIds, closed: closed});
+export const setSelectedEscalated = async (
+  groupIds: string[],
+  escalated: boolean
+) => {
+  const { data } = await axios.patch("/api/group/_escalated", {
+    ids: groupIds,
+    escalated: escalated,
+  });
   return data;
-}
+};
+
+export const setSelectedClosed = async (
+  groupIds: string[],
+  closed: boolean
+) => {
+  const { data } = await axios.patch("/api/group/_closed", {
+    ids: groupIds,
+    closed: closed,
+  });
+  return data;
+};
 
 export const setSelectedTitle = async (groupIds: string[], title: string) => {
-  const { data } = await axios.patch('/api/group/_title', {ids: groupIds, title: title});
+  const { data } = await axios.patch("/api/group/_title", {
+    ids: groupIds,
+    title: title,
+  });
   return data;
-}
+};
 
 export const setSelectedNotes = async (groupIds: string[], notes: string) => {
-  const { data } = await axios.patch('/api/group/_notes', {ids: groupIds, notes: notes});
+  const { data } = await axios.patch("/api/group/_notes", {
+    ids: groupIds,
+    notes: notes,
+  });
   return data;
-}
+};
 
-export const setSelectedLocationName = async (groupIds: string[], locationName: string) => {
-  const { data } = await axios.patch('/api/group/_locationName', {ids: groupIds, locationName: locationName});
+export const setSelectedLocationName = async (
+  groupIds: string[],
+  locationName: string
+) => {
+  const { data } = await axios.patch("/api/group/_locationName", {
+    ids: groupIds,
+    locationName: locationName,
+  });
   return data;
-}
+};
 
-const generateGroupsSearchURL = (searchState: GroupSearchState, tagIds: hasId[]) => {
+//TODO: refactor with URLSearchParam Object
+const generateGroupsSearchURL = (
+  searchState: GroupSearchState,
+  tagIds: hasId[]
+) => {
   let url = "";
-  if (tagIds.length > 0) { url += "tags=" + tagIds; }
+  if (tagIds.length > 0) {
+    url += "tags=" + tagIds;
+  }
   if (searchState.title) {
     if (url === "") url += "title=" + searchState.title;
     else url += "&title=" + searchState.title;
@@ -150,4 +207,4 @@ const generateGroupsSearchURL = (searchState: GroupSearchState, tagIds: hasId[])
     else url += "&page=" + searchState.page;
   }
   return url;
-}
+};

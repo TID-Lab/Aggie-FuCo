@@ -26,18 +26,18 @@ const UserProfile = (props: IProps) => {
   const navigate = useNavigate();
   const usersQuery = useQuery(["user", params.id], () => {
     if (params.id) return getUser(params.id);
-    else return null;
+    else return undefined;
   });
-  const groupsCreatorQuery = useQuery<Groups | undefined, AxiosError>(
+  const groupsCreatorQuery = useQuery(
     [
       "group",
       {
-        creator: usersQuery.data ? usersQuery.data._id : null,
+        creator: usersQuery.data ? usersQuery.data._id : undefined,
       },
     ],
     () => {
       return getGroups({
-        creator: usersQuery.data ? usersQuery.data._id : null,
+        creator: usersQuery.data ? usersQuery.data._id : undefined,
       });
     },
     {
@@ -45,16 +45,16 @@ const UserProfile = (props: IProps) => {
     }
   );
 
-  const groupsAssignedQuery = useQuery<Groups | undefined, AxiosError>(
+  const groupsAssignedQuery = useQuery(
     [
       "group",
       {
-        assignedTo: usersQuery.data ? usersQuery.data._id : null,
+        assignedTo: usersQuery.data ? usersQuery.data._id : undefined,
       },
     ],
     () => {
       return getGroups({
-        assignedTo: usersQuery.data ? usersQuery.data._id : null,
+        assignedTo: usersQuery.data ? usersQuery.data._id : undefined,
       });
     },
     {
@@ -62,17 +62,9 @@ const UserProfile = (props: IProps) => {
     }
   );
 
-  const sourcesQuery = useQuery<Source[] | undefined, AxiosError>(
-    ["sources"],
-    getSources,
-    {}
-  );
+  const sourcesQuery = useQuery(["sources"], getSources);
 
-  const tagsQuery = useQuery<Tag[] | undefined, AxiosError>(
-    ["tags"],
-    getTags,
-    {}
-  );
+  const tagsQuery = useQuery(["tags"], getTags);
   return (
     <div className={"mt-4"}>
       <Container fluid>
@@ -104,7 +96,7 @@ const UserProfile = (props: IProps) => {
                       <GroupTable
                         visibleGroups={groupsCreatorQuery.data.results}
                         sources={sourcesQuery.data}
-                        users={usersQuery.data}
+                        users={usersQuery.data && [usersQuery.data]}
                         tags={tagsQuery.data}
                       />
                     </Card.Body>
@@ -126,7 +118,7 @@ const UserProfile = (props: IProps) => {
                       <GroupTable
                         visibleGroups={groupsAssignedQuery.data.results}
                         sources={sourcesQuery.data}
-                        users={usersQuery.data}
+                        users={usersQuery.data && [usersQuery.data]}
                         tags={tagsQuery.data}
                       />
                     </Card.Body>

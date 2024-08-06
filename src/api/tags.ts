@@ -2,7 +2,7 @@ import axios from "axios";
 import {Tag, TagEditableData} from "../objectTypes";
 
 export const getTags = async () => {
-  const { data } = await axios.get('/api/tag');
+  const { data } = await axios.get<Tag[] | undefined>('/api/tag');
   return data;
 }
 

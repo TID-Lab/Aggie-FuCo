@@ -143,7 +143,7 @@ export default function ReportTable(props: IProps) {
 
 interface ReportRowIProps {
   report: Report | null;
-  tags: Tag[] | null;
+  tags: Tag[] | undefined;
   sources: Source[] | [];
   variant: "modal" | "default" | "group-details" | "relevant" | "batch";
   setSelectedReportIds?: Dispatch<SetStateAction<Set<string>>>;

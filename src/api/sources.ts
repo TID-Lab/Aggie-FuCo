@@ -2,13 +2,13 @@ import axios from "axios";
 import {Source} from "../objectTypes";
 
 export const getSources = async () => {
-  const { data } = await axios.get('/api/source');
+  const { data } = await axios.get<Source[] | undefined>('/api/source');
   return data;
 }
 
 export const getSource = async (id: string | undefined) => {
   if (id) {
-    const { data } = await axios.get('/api/source/' + id);
+    const { data } = await axios.get<Source | undefined>('/api/source/' + id);
     return data;
   }
 }

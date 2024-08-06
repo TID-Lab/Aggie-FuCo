@@ -1,13 +1,4 @@
-import {
-  ClosedOptions,
-  EscalatedOptions,
-  Groups,
-  GroupSearchState,
-  Source,
-  Tag,
-  User,
-  VeracityOptions,
-} from "../../objectTypes";
+import { Groups, GroupSearchState, Source, Tag, User } from "../../objectTypes";
 import React, { useEffect, useState } from "react";
 import {
   Container,
@@ -40,20 +31,21 @@ import { getUsers } from "../../api/users";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import GroupModal from "../../components/group/GroupModal";
 import { AxiosError } from "axios";
-import ErrorCard from "../../components/ErrorCard";
 import AggiePagination, {
   LoadingPagination,
 } from "../../components/AggiePagination";
 import { Field, Formik, Form } from "formik";
+import { parseFilterFields } from "../../helpers";
 import {
   CLOSED_OPTIONS,
   ESCALATED_OPTIONS,
-  parseFilterFields,
   VERACITY_OPTIONS,
-} from "../../helpers";
+} from "../../api/enums";
+
 import DatePickerField from "../../components/DatePickerField";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";
 import { io, Socket } from "socket.io-client";
+import AxiosErrorCard from "../../components/AxiosErrorCard";
 
 const ITEMS_PER_PAGE = 50;
 
@@ -98,7 +90,7 @@ const GroupsIndex = (props: IProps) => {
       creator: null,
       after: null,
       before: null,
-      page: null,
+      page: undefined,
     });
   };
 
@@ -125,13 +117,9 @@ const GroupsIndex = (props: IProps) => {
     getSources,
     {}
   );
-  const groupsQuery = useQuery<Groups | undefined, AxiosError>(
-    ["groups", queryState],
-    () => {
-      return getGroups(queryState);
-    },
-    {}
-  );
+  const groupsQuery = useQuery(["groups", queryState], () => {
+    return getGroups(queryState);
+  });
   const tagsQuery = useQuery<Tag[] | undefined, AxiosError>(
     ["tags"],
     getTags,
@@ -490,17 +478,7 @@ const GroupsIndex = (props: IProps) => {
                 </Card>
               )}
             {groupsQuery.isError && (
-              <>
-                {groupsQuery.error.response &&
-                  groupsQuery.error.response.status &&
-                  groupsQuery.error.response.data && (
-                    <ErrorCard
-                      errorStatus={groupsQuery.error.response.status}
-                      //@ts-ignore
-                      errorData={groupsQuery.error.response.data}
-                    />
-                  )}
-              </>
+              <AxiosErrorCard error={groupsQuery.error} />
             )}
             {groupsQuery.isLoading && (
               <Card>

@@ -1,4 +1,5 @@
-import { Option } from 'react-bootstrap-typeahead';
+import { Option } from "react-bootstrap-typeahead";
+import { VeracityOptions } from "./api/enums";
 
 interface hasId {
   _id: string;
@@ -94,13 +95,13 @@ interface Group extends hasId {
   id?: number;
   smtcTags: string[];
   status: string;
-  veracity: Veracity;
+  veracity: VeracityOptions;
   escalated: boolean;
   closed: boolean;
   public: boolean;
   _reports: string[];
   title: string;
-  assignedTo?: AssignedToUser | AssignedToUser[];
+  assignedTo?: AssignedToUser[]; // AssignedToUser | AssignedToUser[] <- i dont think its ever not an array
   creator: {
     _id: string;
     username: string;
@@ -117,10 +118,10 @@ export interface GroupCreateData extends GroupEditableData {
   user: User;
 }
 
-export interface GroupEditableData {
+export interface GroupEditableData extends hasId {
   title: string;
   notes: string;
-  veracity: 'Confirmed true' | 'Confirmed false' | 'Unconfirmed';
+  veracity: "Confirmed true" | "Confirmed false" | "Unconfirmed";
   closed: boolean;
   assignedTo: string[];
   locationName: string;
@@ -131,17 +132,17 @@ export interface GroupEditableData {
 
 interface GroupSearchState {
   veracity?: string | null;
-  escalated?: boolean | null;
-  closed?: boolean | null;
+  escalated?: string | boolean | null;
+  closed?: string | boolean | null;
   title?: string | null;
-  totalReports?: number | null;
+  totalReports?: string | number | null;
   assignedTo?: string | null;
   creator?: string | null;
   after?: string | null;
   before?: string | null;
-  idnum?: number | null;
+  idnum?: string | number | null;
   locationName?: string | null;
-  page?: number | null;
+  page?: string | number;
 }
 
 interface Groups {
@@ -165,7 +166,7 @@ export interface UserCreationData extends UserEditableData {
 export interface UserEditableData {
   username: string;
   email: string;
-  role: 'viewer' | 'monitor' | 'admin';
+  role: "viewer" | "monitor" | "admin";
   _id?: string;
 }
 
@@ -268,15 +269,15 @@ interface VisualizationAuthor {
 }
 
 type VisualizationMediaTypes =
-  | 'link'
-  | 'live_video_complete'
-  | 'status'
-  | 'live_video'
-  | 'video'
-  | 'youtube'
-  | 'live_video_scheduled'
-  | 'photo'
-  | 'native_video';
+  | "link"
+  | "live_video_complete"
+  | "status"
+  | "live_video"
+  | "video"
+  | "youtube"
+  | "live_video_scheduled"
+  | "photo"
+  | "native_video";
 interface VisualizationMedia {
   count: number;
   name: VisualizationMediaTypes;
@@ -344,14 +345,11 @@ interface VisualizationTimes {
   avgReadTimeCount: number;
 }
 type MediaType =
-  | 'twitter'
-  | 'instagram'
-  | 'RSS'
-  | 'elmo'
-  | 'SMS GH'
-  | 'whatsapp'
-  | 'facebook'
-  | 'comments';
-type VeracityOptions = 'Confirmed True' | 'Confirmed False' | 'Unconfirmed';
-type EscalatedOptions = 'true' | 'false';
-type ClosedOptions = 'true' | 'false';
+  | "twitter"
+  | "instagram"
+  | "RSS"
+  | "elmo"
+  | "SMS GH"
+  | "whatsapp"
+  | "facebook"
+  | "comments";

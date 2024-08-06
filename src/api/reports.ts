@@ -1,75 +1,121 @@
 import axios from "axios";
-import {FormikValues} from "formik";
-import {hasId, Report, ReportQuery, ReportQueryState, Source, Tag, VeracityOptions} from "../objectTypes";
+import { FormikValues } from "formik";
+import {
+  hasId,
+  Report,
+  ReportQuery,
+  ReportQueryState,
+  Source,
+  Tag,
+} from "../objectTypes";
+import { VeracityOptions } from "./enums";
 
-export const getReports = async (searchState: ReportQueryState, tagIds: hasId[] | string[] = [], isRelevantReports = false) => {
+export const getReports = async (
+  searchState: ReportQueryState,
+  tagIds: hasId[] | string[] = [],
+  isRelevantReports = false
+) => {
   if (generateReportsSearchURL(searchState, tagIds, isRelevantReports) != "") {
-    const { data } = await axios.get('/api/report?' + generateReportsSearchURL(searchState, tagIds, isRelevantReports));
+    const { data } = await axios.get(
+      "/api/report?" +
+        generateReportsSearchURL(searchState, tagIds, isRelevantReports)
+    );
     return data;
   } else {
-    const { data } = await axios.get('/api/report');
+    const { data } = await axios.get("/api/report");
     return data;
   }
-}
+};
 
 export const getReport = async (id: string | undefined) => {
   if (id) {
-    const {data} = await axios.get('/api/report/' + id);
+    const { data } = await axios.get("/api/report/" + id);
     return data;
   }
-}
+};
 
 export const editReport = async (report: Report) => {
-  const { data } = await axios.put('/api/report/' + report._id, report);
+  const { data } = await axios.put("/api/report/" + report._id, report);
   return data;
-}
+};
 
 export const getBatch = async () => {
-  const { data } = await axios.get('/api/report/batch');
+  const { data } = await axios.get("/api/report/batch");
   return data;
-}
+};
 
 export const getNewBatch = async () => {
-  const { data } = await axios.patch('/api/report/batch');
+  const { data } = await axios.patch("/api/report/batch");
   return data;
-}
+};
 
 export const cancelBatch = async () => {
-  const { data } = await axios.put('/api/report/batch');
+  const { data } = await axios.put("/api/report/batch");
   return data;
-}
+};
 
 export const setSelectedRead = async (reportIds: string[], read = true) => {
-  const { data } = await axios.patch('/api/report/_read', {ids: reportIds, read: read});
+  const { data } = await axios.patch("/api/report/_read", {
+    ids: reportIds,
+    read: read,
+  });
   return data;
-}
+};
 
-export const setSelectedVeracity = async (reportIds: string[], veracity: VeracityOptions | string ) => {
-  const { data } = await axios.patch('/api/report/_veracity', {ids: reportIds, veracity: veracity});
+export const setSelectedVeracity = async (
+  reportIds: string[],
+  veracity: VeracityOptions | string
+) => {
+  const { data } = await axios.patch("/api/report/_veracity", {
+    ids: reportIds,
+    veracity: veracity,
+  });
   return data;
-}
+};
 
 export const setSelectedNotes = async (reportIds: string[], notes: string) => {
-  const { data } = await axios.patch('/api/report/_notes', {ids: reportIds, notes: notes});
+  const { data } = await axios.patch("/api/report/_notes", {
+    ids: reportIds,
+    notes: notes,
+  });
   return data;
-}
+};
 
-export const setSelectedEscalated = async (reportIds: string[], escalated: boolean) => {
-  const { data } = await axios.patch('/api/report/_escalated', {ids: reportIds, escalated: escalated});
+export const setSelectedEscalated = async (
+  reportIds: string[],
+  escalated: boolean
+) => {
+  const { data } = await axios.patch("/api/report/_escalated", {
+    ids: reportIds,
+    escalated: escalated,
+  });
   return data;
-}
+};
 
 export const setSelectedTags = async (reportIds: string[], tagIds: hasId[]) => {
-  const { data } = await axios.patch('/api/report/_tags', {ids: reportIds, tags: tagIds});
+  const { data } = await axios.patch("/api/report/_tags", {
+    ids: reportIds,
+    tags: tagIds,
+  });
   return data;
-}
+};
 
-export const setSelectedGroup = async (reportIds: string[], groupId: hasId | null) => {
-  const { data } = await axios.patch('/api/report/_group', {ids: reportIds, group: groupId});
+export const setSelectedGroup = async (
+  reportIds: string[],
+  groupId: hasId | null
+) => {
+  const { data } = await axios.patch("/api/report/_group", {
+    ids: reportIds,
+    group: groupId,
+  });
   return data;
-}
+};
 
-const generateReportsSearchURL = (searchState: ReportQueryState, tagIds: hasId[] | string[], isRelevantReports: boolean ) => {
+const generateReportsSearchURL = (
+  searchState: ReportQueryState,
+  tagIds: hasId[] | string[],
+  isRelevantReports: boolean
+) => {
   // Writing this method because the readability of the API call url is much less readable than the page URL.
   let url = "";
   if (isRelevantReports) {
@@ -77,11 +123,11 @@ const generateReportsSearchURL = (searchState: ReportQueryState, tagIds: hasId[]
   }
   if (tagIds.length > 0) {
     let tagsURL = "";
-    tagIds.forEach((tagId)=> {
-      if (typeof(tagId) === "string") {
-        tagsURL += (tagId + ",");
+    tagIds.forEach((tagId) => {
+      if (typeof tagId === "string") {
+        tagsURL += tagId + ",";
       } else {
-        tagsURL += (tagId._id + ",");
+        tagsURL += tagId._id + ",";
       }
     });
     tagsURL = tagsURL.slice(0, -1);
@@ -125,4 +171,4 @@ const generateReportsSearchURL = (searchState: ReportQueryState, tagIds: hasId[]
     else url += "&page=" + searchState.page;
   }
   return url;
-}
+};
