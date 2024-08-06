@@ -13,7 +13,7 @@ require('../error');
 var EVENTS_TO_RETURN = 50;
 
 var lengthValidator = function (str) {
-  return validator.isLength(str, { min: 0, max: 20 })
+  return validator.isLength(str, { min: 0, max: 80 })
 }
 
 var urlValidator = function (url) {
@@ -33,6 +33,7 @@ var sourceSchema = new mongoose.Schema({
   resource_id: String,
   url: { type: String, validate: urlValidator },
   keywords: String,
+  lists: String,
   enabled: { type: Boolean, default: true },
   events: { type: Array, default: [] },
   unreadErrorCount: { type: Number, default: 0 },

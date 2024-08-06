@@ -81,6 +81,7 @@ function createChannel(source) {
         _id,
         lastReportDate,
         keywords,
+        lists,
         credentials,
         media,
         tags,
@@ -140,6 +141,7 @@ function createChannel(source) {
                 // Reference - https://www.junkipedia.org/apidocs#tag/Posts/paths/~1api~1v1~1posts/get
                 // TODO: Add list or channel specification
                 queryParams: {
+                    lists: lists,
                     keyword: keywords,
                 }
             }

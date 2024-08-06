@@ -46,9 +46,16 @@ const CrowdTangleFormSchema = Yup.object().shape({
 
 const JunkipediaFormSchema = Yup.object().shape({
   sourceNickname: Yup.string().required("Source name is a required field"),
+  // sourceKeywords: Yup.string().required(
+  //   "Keywords are required to create a Junkipedia source"
+  // ),
+  // sourceLists: Yup.string().required(
+  //   "Lists are required to create a Junkipedia source"
+  // ),
   sourceCredentials: Yup.string().required(
     "A credential is required to create a source"
   ),
+
 });
 
 const TelegramFormSchema = Yup.object().shape({
@@ -141,6 +148,7 @@ export default function SourceModal(props: IProps) {
         return {
           credentials: values.sourceCredentials,
           keywords: values.sourceKeywords,
+          lists: values.sourceLists,
           media: sourceMediaType,
           nickname: values.sourceNickname,
           url: mediaUrls["junkipedia"],
@@ -339,6 +347,7 @@ export default function SourceModal(props: IProps) {
         sourceNickname: props.source?.nickname || "",
         sourceMedia: props.source?.media || "",
         sourceKeywords: props.source?.keywords || "",
+        sourceLists: props.source?.lists || "",
         sourceTags: props.source?.tags || "",
         sourceCredentials:
           props.source?.credentials._id || defaultCredential?._id,
@@ -432,6 +441,34 @@ export default function SourceModal(props: IProps) {
                   </a>{" "}
                   for details on how this is used to find tweets.
                 </FormText>
+              </Form.Group>
+              <Form.Group controlId='sourceLists' className={"mb-3"}>
+                <Form.Label>Lists</Form.Label>
+
+                <Form.Control
+                  required
+                  type='text'
+                  placeholder='Enter list IDs'
+                  name='sourceLists'
+                  value={values.sourceLists}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isInvalid={touched.sourceLists && !!errors.sourceLists}
+                />
+                <Form.Control.Feedback type='invalid'>
+                  {errors.sourceLists}
+                </Form.Control.Feedback>
+                {/* <FormText muted>
+                  Separated by commas, e.g. <i>banana, apple, mango</i>. Click{" "}
+                  <a
+                    href={
+                      "https://dev.twitter.com/streaming/overview/request-parameters#track"
+                    }
+                  >
+                    here
+                  </a>{" "}
+                  for details on how this is used to find tweets.
+                </FormText> */}
               </Form.Group>
 
               <Form.Group controlId='sourceCredentials' className='mb-3'>

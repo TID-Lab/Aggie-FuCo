@@ -80,6 +80,7 @@ interface Source extends hasId {
     username: string;
   };
   keywords?: string;
+  lists?: string;
   __v: number;
   lastReportDate?: string;
 }
