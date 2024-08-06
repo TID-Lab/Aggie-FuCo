@@ -19,7 +19,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   editGroup,
   getGroup,
+  getGroup_untyped,
   getGroupReports,
+  getGroupReports_untyped,
   getGroups,
   setSelectedClosed,
   setSelectedLocationName,
@@ -306,7 +308,7 @@ const GroupDetails = () => {
   //@ts-ignore
   const groupQuery = useQuery<Group, undefined>(
     ["group", id],
-    () => getGroup(id),
+    () => getGroup_untyped(id),
     {
       enabled: tagsQuery.isSuccess,
       onSuccess: (data) => {
@@ -329,7 +331,7 @@ const GroupDetails = () => {
   );
   const groupReportsQuery = useQuery<Reports, undefined>(
     ["reports", { groupId: id }],
-    () => getGroupReports(id, pageNumber)
+    () => getGroupReports_untyped(id, pageNumber)
   );
   const [queryTags, setQueryTags] = useState<Tag[]>([]);
   const handleTagsBlur = () => {

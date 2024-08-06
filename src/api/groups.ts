@@ -6,6 +6,7 @@ import {
   Groups,
   GroupSearchState,
   hasId,
+  Reports,
 } from "../objectTypes";
 import { VeracityOptions } from "./enums";
 
@@ -33,6 +34,13 @@ export const getAllGroups = async () => {
 
 export const getGroup = async (id: string | undefined) => {
   if (id) {
+    const { data } = await axios.get<Group | undefined>("/api/group/" + id);
+    return data;
+  }
+};
+// todo: remove when refactor
+export const getGroup_untyped = async (id: string | undefined) => {
+  if (id) {
     const { data } = await axios.get("/api/group/" + id);
     return data;
   }
@@ -54,6 +62,19 @@ export const deleteGroup = async (group: Group) => {
 };
 
 export const getGroupReports = async (
+  groupId: string | undefined,
+  page: number
+) => {
+  if (groupId) {
+    const { data } = await axios.get<Reports | undefined>(
+      "/api/report?groupId=" + groupId + "&page=" + page
+    );
+    return data;
+  }
+};
+
+// todo: remove when refactor
+export const getGroupReports_untyped = async (
   groupId: string | undefined,
   page: number
 ) => {

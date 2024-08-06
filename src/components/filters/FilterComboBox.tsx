@@ -75,7 +75,7 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
           {filteredList &&
             filteredList.map((item) => (
               <button
-                className={`px-2 py-1 flex justify-between hover:bg-slate-50 ${
+                className={`px-2 py-1 flex justify-between items-center hover:bg-slate-50 ${
                   selectedItem?.key === item.key ? "bg-slate-100" : ""
                 }`}
                 key={item.key}

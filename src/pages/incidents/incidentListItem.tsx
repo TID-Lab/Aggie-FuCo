@@ -1,17 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Group } from "../../objectTypes";
-import { useQuery } from "@tanstack/react-query";
-import { getTags } from "../../api/tags";
-import { VeracityOptions } from "../../api/enums";
-import React from "react";
 
-const VeracityColor: {
-  [key in VeracityOptions]: string;
-} = {
-  Unconfirmed: "text-gray-700 bg-slate-300",
-  "Confirmed True": "bg-lime-200 text-lime-700 ",
-  "Confirmed False": "bg-red-200 text-red-700 ",
-};
+import React from "react";
+import TagsList from "../../components/tag/TagsList";
+import VeracityToken from "../../components/VeracityToken";
 
 interface IProps {
   item: Group;
@@ -19,15 +11,6 @@ interface IProps {
 
 const IncidentListItem = ({ item }: IProps) => {
   const navigate = useNavigate();
-  const tagsQuery = useQuery(["tags"], getTags, { staleTime: 40000 });
-
-  /// lol i should refactor this
-  function renderTag(id: string) {
-    if (tagsQuery.isSuccess && tagsQuery.data) {
-      return tagsQuery.data.find((i) => i._id === id);
-    }
-    return undefined;
-  }
 
   function onUserClick(e: React.MouseEvent, id: string) {
     e.stopPropagation();
@@ -38,19 +21,8 @@ const IncidentListItem = ({ item }: IProps) => {
     <article className='grid grid-cols-4 lg:grid-cols-6 px-2 py-2 text-sm text-slate-500 group-hover:bg-slate-50 border-b border-slate-200'>
       <header className='col-span-3 flex flex-col'>
         <div className='flex gap-1 '>
-          <span className={`font-medium px-1 ${VeracityColor[item.veracity]}`}>
-            {item.veracity}
-          </span>
-          {tagsQuery.isSuccess &&
-            item.smtcTags &&
-            item.smtcTags.map((id) => (
-              <span
-                key={id}
-                className='bg-slate-200 font-medium px-2 text-slate-700 rounded-full'
-              >
-                {renderTag(id)?.name}
-              </span>
-            ))}
+          <VeracityToken value={item.veracity} />
+          <TagsList values={item.smtcTags} />
         </div>
         <h2 className='text-lg text-slate-700 group-hover:text-blue-600 group-hover:underline'>
           {item.title}
