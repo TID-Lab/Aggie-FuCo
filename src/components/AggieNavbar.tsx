@@ -88,6 +88,13 @@ const AggieNavbar = (props: IProps) => {
                   </Nav.Link>
                 </LinkContainer>
               </Nav.Item>
+              <Nav.Item>
+                <LinkContainer to={"/reports-old"}>
+                  <Nav.Link className={"ps-2 pe-2 aggie-nav-link"} eventKey='6'>
+                    reports:old
+                  </Nav.Link>
+                </LinkContainer>
+              </Nav.Item>
             </Nav>
             <Nav>
               <Navbar.Toggle aria-controls='offcanvasNavbar' />

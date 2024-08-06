@@ -41,8 +41,8 @@ interface ReportQuery {
   page: number | null;
   list: string | CTList | null;
 }
-
-interface ReportQueryState {
+//TODO: deprecate
+interface ReportQueryState_old {
   keywords: string | null;
   author: string | null;
   groupId: string | null;
@@ -54,7 +54,18 @@ interface ReportQueryState {
   tags: string[] | null;
   page: number | null;
 }
-
+interface ReportQueryState {
+  keywords?: string;
+  author?: string;
+  groupId?: string;
+  media?: string;
+  sourceId?: string;
+  list?: string;
+  before?: Date | string;
+  after?: Date | string;
+  tags?: string[];
+  page?: number;
+}
 interface Reports {
   total: number;
   results: Report[];

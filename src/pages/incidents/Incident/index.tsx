@@ -58,7 +58,7 @@ const Incident = () => {
       <aside className='overflow-y-auto h-full'>
         {groupReportsQuery.data &&
           groupReportsQuery.data.results.map((report) => (
-            <div>{report.content}</div>
+            <div key={report._id}>{report.content}</div>
           ))}
       </aside>
     </section>

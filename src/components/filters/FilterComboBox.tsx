@@ -25,13 +25,16 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
   }, [list]);
 
   function onSearch(query: string) {
-    if (!query.trim()) setFilteredList(list);
+    if (!query.trim()) {
+      setFilteredList(list);
+      return;
+    }
     const filtered = filteredList.filter((i) =>
       i.value.toLowerCase().includes(query.trim().toLowerCase())
     );
     setFilteredList(filtered);
   }
-  const doSearchInput = useCallback(debounce(onSearch, 300), []);
+  const doSearchInput = useCallback(debounce(onSearch, 300), [filteredList]);
 
   function clearSearch() {
     setRawSearch("");
@@ -52,7 +55,7 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
           <input
             type='text'
             placeholder='search...'
-            className='p-1  border border-slate-200 rounded'
+            className='p-1  border border-slate-200 rounded w-full'
             value={rawSearch}
             onChange={(event) => {
               doSearchInput(event.target.value);
@@ -75,7 +78,7 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
           {filteredList &&
             filteredList.map((item) => (
               <button
-                className={`px-2 py-1 flex justify-between items-center hover:bg-slate-50 ${
+                className={`px-2 py-1 flex justify-between items-center hover:bg-slate-50 text-nowrap gap-1 ${
                   selectedItem?.key === item.key ? "bg-slate-100" : ""
                 }`}
                 key={item.key}

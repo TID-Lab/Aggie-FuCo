@@ -34,6 +34,7 @@ import {
   getBatch,
   getNewBatch,
   getReports,
+  getReports_untyped,
   setSelectedRead,
 } from "../../api/reports";
 import { getSources } from "../../api/sources";
@@ -41,7 +42,7 @@ import { getTags } from "../../api/tags";
 import DatePickerField from "../../components/DatePickerField";
 import {
   CTList,
-  ReportQueryState,
+  ReportQueryState_old,
   Reports,
   Session,
   Source,
@@ -109,7 +110,7 @@ const ReportsIndex = (props: IProps) => {
   const [gridView, setGridView] = useState(false);
   const [filterTags, setFilterTags] = useState<Tag[] | []>([]);
   // This is the state of the Report Query
-  const [queryState, setQueryState] = useState<ReportQueryState>({
+  const [queryState, setQueryState] = useState<ReportQueryState_old>({
     keywords: searchParams.get("keywords"),
     author: searchParams.get("author"),
     groupId: searchParams.get("groupId"),
@@ -210,7 +211,7 @@ const ReportsIndex = (props: IProps) => {
         tags: filterTags,
       },
     ],
-    () => getReports(queryState, filterTags),
+    () => getReports_untyped(queryState, filterTags),
     {
       keepPreviousData: true,
     }

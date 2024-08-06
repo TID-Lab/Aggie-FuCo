@@ -34,6 +34,7 @@ import { getAllGroups } from "./api/groups";
 import { Button, Modal } from "react-bootstrap";
 import Incidents from "./pages/incidents";
 import Incident from "./pages/incidents/Incident";
+import Reports from "./pages/Reports";
 //TODO: BIG TODO is to correctly type all of react-query usage. Its not critical for function, but it is good for clarity in development.
 //TODO: Also BIG TODO is to ensure EVERY API call has a way of surfacing an error message. I want readble UI alerts but at least console.errors.
 const isSafari = () =>
@@ -62,8 +63,9 @@ const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
       {/* <Route path='*' element={<Navigate replace to='login' />} /> */}
 
       <Route index element={<Navigate to={"/reports"} />} />
+      <Route path='/reports' element={<Reports />} />
       <Route
-        path='/reports'
+        path='/reports-old'
         element={<ReportsIndex setGlobalAlert={setGlobalAlert} />}
       />
       <Route path='/report/:id' element={<ReportDetails />} />
@@ -71,6 +73,7 @@ const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
         path='/relevant-reports'
         element={<RelevantReportsIndex setGlobalAlert={setGlobalAlert} />}
       />
+      <Route path='/groups' element={<GroupsIndex />} />
       <Route path='/groups' element={<GroupsIndex />} />
       <Route path='/incidents' element={<Incidents />} />
       <Route path='/incidents/id/:id' element={<Incident />} />
