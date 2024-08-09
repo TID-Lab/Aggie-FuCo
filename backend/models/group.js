@@ -190,7 +190,9 @@ Group.queryGroups = function (query, page, options, callback) {
     filter.storedAt.$gte = query.since;
   }
 
-
+  // find empty assignedTo objects
+  if (query.assignedTo === 'none') filter.assignedTo = { "$size": 0 };
+  console.log(query.assignedTo, filter.assignedTo)
   if (query.veracity === 'confirmed true') filter.veracity = 'Confirmed True';
   if (query.veracity === 'confirmed false') filter.veracity = 'Confirmed False';
   if (query.veracity === 'unconfirmed') filter.veracity = 'Unconfirmed';

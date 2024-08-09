@@ -9,7 +9,7 @@
     "dev": "node install.js && cross-env DEBUG=socket.io:* nodemon app.js",
     "start": "ENVIRONMENT=production node app.js",
     "testrun": "MONGO_AGGIE_DB=aggie-test node app.js",
-    "build": "CI=false react-scripts build",
+    "build": "cross-env CI=false react-scripts build",
     "update-ct-lists": "node backend/scripts/ct-list-update.js",
     "dev:frontend": "cross-env PORT=8000 react-scripts start",
     "dev:backend": "cross-env ENVIRONMENT=development nodemon app.js",

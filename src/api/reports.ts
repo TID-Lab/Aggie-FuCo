@@ -43,11 +43,18 @@ export const getReports_untyped = async (
 };
 export const getReport = async (id: string | undefined) => {
   if (id) {
-    const { data } = await axios.get("/api/report/" + id);
+    const { data } = await axios.get<Report | undefined>("/api/report/" + id);
     return data;
   }
 };
 
+//TODO: deprecate
+export const getReport_untyped = async (id: string | undefined) => {
+  if (id) {
+    const { data } = await axios.get("/api/report/" + id);
+    return data;
+  }
+};
 export const editReport = async (report: Report) => {
   const { data } = await axios.put("/api/report/" + report._id, report);
   return data;

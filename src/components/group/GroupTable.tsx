@@ -202,7 +202,7 @@ export function GroupRow(props: GroupRowIProps) {
                 variant={"table"}
               />
               <Link
-                to={"/group/" + props.group._id}
+                to={"/group-old/" + props.group._id}
                 className={styles.group__name + " me-1"}
               >
                 {props.group.title}
@@ -328,7 +328,7 @@ export function GroupRow(props: GroupRowIProps) {
                 variant={"table"}
               />
               <Link
-                to={"/group/" + props.group._id}
+                to={"/group-old/" + props.group._id}
                 className={"me-1 title__link"}
               >
                 {props.group.title}

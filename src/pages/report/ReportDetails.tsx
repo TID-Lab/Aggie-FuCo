@@ -31,7 +31,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  getReport,
+  getReport_untyped,
   setSelectedEscalated,
   setSelectedNotes,
   setSelectedRead,
@@ -257,7 +257,7 @@ const ReportDetails = () => {
   const tagsQuery = useQuery<Tag[] | undefined, AxiosError>(["tags"], getTags);
   const reportQuery = useQuery<Report | undefined, AxiosError>(
     ["report", id],
-    () => getReport(id),
+    () => getReport_untyped(id),
     {
       onSuccess: (data) => {
         if (data) {

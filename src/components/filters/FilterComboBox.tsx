@@ -29,12 +29,12 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
       setFilteredList(list);
       return;
     }
-    const filtered = filteredList.filter((i) =>
+    const filtered = list.filter((i) =>
       i.value.toLowerCase().includes(query.trim().toLowerCase())
     );
     setFilteredList(filtered);
   }
-  const doSearchInput = useCallback(debounce(onSearch, 300), [filteredList]);
+  const doSearchInput = useCallback(debounce(onSearch, 150), [filteredList]);
 
   function clearSearch() {
     setRawSearch("");
@@ -55,7 +55,7 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
           <input
             type='text'
             placeholder='search...'
-            className='p-1  border border-slate-200 rounded w-full'
+            className='py-1 px-2 border border-slate-200 rounded w-full'
             value={rawSearch}
             onChange={(event) => {
               doSearchInput(event.target.value);

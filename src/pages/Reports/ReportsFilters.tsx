@@ -4,7 +4,7 @@ import { useQueryParams } from "../../hooks/useQueryParams";
 import { getUsers } from "../../api/users";
 import { getSources } from "../../api/sources";
 import { getTags } from "../../api/tags";
-import { VERACITY_OPTIONS, ESCALATED_OPTIONS } from "../../api/enums";
+import { MEDIA_OPTIONS, ESCALATED_OPTIONS } from "../../api/enums";
 import type { GroupSearchState, ReportQueryState } from "../../objectTypes";
 
 import FilterComboBox from "../../components/filters/FilterComboBox";
@@ -57,6 +57,12 @@ const ReportFilters = () => {
       <div className='flex justify-between mb-2 text-sm'>
         <div className='flex gap-2'></div>
         <div className='flex items-center gap-1'>
+          <FilterListbox
+            label='Platforms'
+            options={[...MEDIA_OPTIONS]}
+            value={getParam("media")}
+            onChange={(e) => setParams({ media: e })}
+          />
           <FilterComboBox
             label='Sources'
             list={sourcesRemapComboBox(sourcesQuery)}
