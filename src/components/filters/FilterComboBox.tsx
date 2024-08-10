@@ -75,7 +75,7 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
     >
       {({ close }) => (
         <div className=' flex flex-col divide-y divide-slate-200 max-h-[12em] overflow-y-auto bg-white'>
-          {filteredList &&
+          {filteredList && filteredList.length > 0 ? (
             filteredList.map((item) => (
               <button
                 className={`px-2 py-1 flex justify-between items-center hover:bg-slate-50 text-nowrap gap-1 ${
@@ -92,7 +92,10 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
                   <FontAwesomeIcon icon={faCheck} className='text-slate-600' />
                 )}
               </button>
-            ))}
+            ))
+          ) : (
+            <div className='px-2 py-1 font-medium'> No Results Found </div>
+          )}
         </div>
       )}
     </FilterDropdown>

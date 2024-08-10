@@ -28,32 +28,8 @@ const ReportFilters = () => {
     return [{ key: "", value: "All Sources" }, ...array];
   }
 
-  function onSearch() {}
   return (
     <>
-      <div className='flex justify-between mb-2 '>
-        <div className='flex gap-1'>
-          <Formik
-            initialValues={{ keywords: getParam("keywords") }}
-            onSubmit={(e) => setParams(e)}
-          >
-            <Form>
-              <Field
-                name='title'
-                className='px-2 py-1 border border-r-0 border-slate-300 bg-slate-50 rounded-l-lg min-w-[20rem]'
-                placeholder='search for title, something, and something'
-              />
-              <button
-                type='submit'
-                onClick={onSearch}
-                className='px-4 py-1 bg-slate-100 rounded-r-lg border border-l-0 border-slate-30'
-              >
-                <FontAwesomeIcon icon={faSearch} />
-              </button>
-            </Form>
-          </Formik>
-        </div>
-      </div>
       <div className='flex justify-between mb-2 text-sm'>
         <div className='flex gap-2'></div>
         <div className='flex items-center gap-1'>
