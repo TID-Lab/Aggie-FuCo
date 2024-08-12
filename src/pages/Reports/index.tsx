@@ -32,7 +32,7 @@ const Reports = () => {
   const navigate = useNavigate();
   const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()));
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [selectMode, setSelectMode] = useState(true);
+  const [selectMode, setSelectMode] = useState(false);
 
   function onSelectionChange(id: string) {
     if (selectedItems.includes(id)) {
