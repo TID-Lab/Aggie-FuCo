@@ -39,7 +39,7 @@ import {
   setSelectedVeracity,
 } from "../../api/reports";
 import { getSources } from "../../api/sources";
-import { getGroup, getGroups } from "../../api/groups";
+import { getGroup, getGroups_old } from "../../api/groups";
 import { getTags } from "../../api/tags";
 import styles from "./ReportDetails.module.css";
 // @ts-ignore
@@ -292,7 +292,7 @@ const ReportDetails = () => {
   const groupsQuery = useQuery<Groups | undefined, AxiosError>(
     ["groups"],
     () => {
-      return getGroups();
+      return getGroups_old();
     }
   );
 

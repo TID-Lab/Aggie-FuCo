@@ -38,7 +38,7 @@ import {
 } from "../../objectTypes";
 import TagsTypeahead from "../tag/TagsTypeahead";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { editGroup, getGroups } from "../../api/groups";
+import { editGroup } from "../../api/groups";
 import styles from "./GroupTable.module.css";
 import VeracityIndication from "../VeracityIndication";
 import EscalatedIndication from "../EscalatedIndication";

@@ -25,7 +25,7 @@ const IncidentsFilters = () => {
       key: user._id,
       value: user.username,
     }));
-    return [{ key: "", value: "All Users" }, ...array];
+    return array;
   }
 
   function onSearch() {}
@@ -77,9 +77,7 @@ const IncidentsFilters = () => {
             onChange={(e) => {
               setParams({ creator: e.key });
             }}
-            selectedItem={usersRemapComboBox(usersQuery).find(
-              (i) => i.key === getParam("creator")
-            )}
+            selectedKey={getParam("creator")}
           />
           <FilterComboBox
             label='Assignee'
@@ -87,9 +85,8 @@ const IncidentsFilters = () => {
             onChange={(e) => {
               setParams({ assignedTo: e.key });
             }}
-            selectedItem={usersRemapComboBox(usersQuery).find(
-              (i) => i.key === getParam("assignedTo")
-            )}
+            selectedKey={getParam("assignedTo")}
+            optionalItems={[{ key: "none", value: "Nobody" }]}
           />
         </div>
       </div>
