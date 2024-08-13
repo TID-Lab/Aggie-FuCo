@@ -32,7 +32,7 @@ const Report = () => {
       </article>
     );
   }
-  return <></>;
+  return <> bruh</>;
 };
 
 export default Report;

@@ -7,7 +7,7 @@ import type {
 } from "../../objectTypes";
 import { getReports } from "../../api/reports";
 import ReportsFilters from "./ReportsFilters";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, useOutlet, useNavigate } from "react-router-dom";
 import ReportListItem from "./ReportListItem";
 import AggiePagination from "../../components/AggiePagination";
 import {
@@ -27,9 +27,12 @@ import { Form } from "react-bootstrap";
 import AggieButton from "../../components/AggieButton";
 
 const Reports = () => {
+  const navigate = useNavigate();
+  const outlet = useOutlet();
+
   const { searchParams, getAllParams, setParams, getParam } =
     useQueryParams<ReportQueryState>();
-  const navigate = useNavigate();
+
   const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()));
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [selectMode, setSelectMode] = useState(false);
@@ -119,7 +122,7 @@ const Reports = () => {
             {selectMode && (
               <>
                 <div
-                  className='pointer-events-auto cursor-pointer group -m-2 hover:bg-blue-400/25 rounded p-2 '
+                  className='pointer-events-auto cursor-pointer group -m-2 hover:bg-blue-300/25 rounded-lg p-2 '
                   onClick={() => selectAll(reportsQuery.data)}
                 >
                   <div
@@ -196,7 +199,13 @@ const Reports = () => {
         )}
       </main>
       <aside className='col-span-1'>
-        <Outlet />
+        {!outlet || !outlet.type ? (
+          <p className='grid w-full h-full place-items-center font-medium '>
+            Select a report to view in this window
+          </p>
+        ) : (
+          outlet
+        )}
       </aside>
     </section>
   );
