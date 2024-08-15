@@ -23,6 +23,7 @@ import ConfirmModal from "./ConfirmModal";
 import "./AggieNavbar.css";
 import { Session } from "../objectTypes";
 import { useQueryClient } from "@tanstack/react-query";
+import FetchIndicator from "./FetchIndicator";
 
 interface IProps {
   isAuthenticated: boolean;

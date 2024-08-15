@@ -1,9 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Group } from "../../objectTypes";
+import { Group, GroupEditableData } from "../../objectTypes";
 
 import React from "react";
 import TagsList from "../../components/tag/TagsList";
 import VeracityToken from "../../components/VeracityToken";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEllipsis,
+  faListDots,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import AggieButton from "../../components/AggieButton";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { editGroup } from "../../api/groups";
+import { getSession } from "../../api/session";
 
 interface IProps {
   item: Group;
@@ -12,10 +22,39 @@ interface IProps {
 const IncidentListItem = ({ item }: IProps) => {
   const navigate = useNavigate();
 
+  const sessionQuery = useQuery(["session"], getSession);
+
+  const editGroupMutation = useMutation({
+    mutationFn: editGroup,
+    onSuccess: () => {},
+  });
+
   function onUserClick(e: React.MouseEvent, id: string) {
     e.stopPropagation();
     e.preventDefault();
     navigate(`/user/${id}`);
+  }
+  function onOptionsClick(e: React.MouseEvent) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  function onAssignClick(e: React.MouseEvent) {
+    e.stopPropagation();
+    e.preventDefault();
+    if (!sessionQuery.data) return;
+    //TODO: refactor by changing update function in backend
+    const edit: GroupEditableData = {
+      assignedTo: [sessionQuery.data._id],
+      title: item.title,
+      notes: item.notes || "",
+      veracity: item.veracity,
+      closed: item.closed,
+      locationName: item.locationName,
+      public: item.public,
+      escalated: item.escalated,
+      _id: item._id,
+    };
+    editGroupMutation.mutate(edit);
   }
   return (
     <article className='grid grid-cols-4 lg:grid-cols-6 px-2 py-2 text-sm text-slate-500 group-hover:bg-slate-50 border-b border-slate-200'>
@@ -39,23 +78,40 @@ const IncidentListItem = ({ item }: IProps) => {
           {item.notes && item.notes}
         </p>
       </div>
-      <footer className='col-span-1 text-end flex flex-col items-end'>
-        <p className=''>Assigned to:</p>
-        {item.assignedTo ? (
-          item.assignedTo.map((user) => (
-            <p
-              key={user._id}
-              onClick={(e) => onUserClick(e, user._id)}
-              className='text-blue-600 hover:underline w-fit'
+      <footer className='col-span-1 flex justify-end gap-1'>
+        <div className='text-end flex flex-col items-end'>
+          <p className=''>
+            {item.assignedTo && item.assignedTo.length > 0
+              ? "Assigned To:"
+              : "Not Assigned"}
+          </p>
+          {item.assignedTo && item.assignedTo.length > 0 ? (
+            item.assignedTo.map((user) => (
+              <p
+                key={user._id}
+                onClick={(e) => onUserClick(e, user._id)}
+                className='text-blue-600 hover:underline w-fit'
+              >
+                {user.username ? user.username : "Deleted user"}
+              </p>
+            ))
+          ) : (
+            <AggieButton
+              className='px-2 py-1 bg-slate-600 rounded text-slate-100 hover:bg-slate-500 mt-1'
+              disabled={!sessionQuery.data}
+              onClick={onAssignClick}
             >
-              {user.username ? user.username : "Deleted user"}
-            </p>
-          ))
-        ) : (
-          <button className='px-3 py-2 bg-slate-600 rounded text-slate-100'>
-            +Assign Myself
-          </button>
-        )}
+              <FontAwesomeIcon icon={faPlus} size='sm' />
+              Assign Myself
+            </AggieButton>
+          )}
+        </div>
+        <AggieButton
+          className='px-2 py-1 hover:bg-slate-200 rounded'
+          onClick={onOptionsClick}
+        >
+          <FontAwesomeIcon icon={faEllipsis} />
+        </AggieButton>
       </footer>
     </article>
   );

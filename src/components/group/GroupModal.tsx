@@ -156,6 +156,7 @@ export default function GroupModal(props: IProps) {
             if (props.group) {
               editGroupMutation.mutate(formValuesToGroup(values));
             } else {
+              console.log(formValuesToGroup(values));
               newGroupMutation.mutate(formValuesToGroup(values));
             }
           }}

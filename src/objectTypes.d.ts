@@ -132,7 +132,7 @@ export interface GroupCreateData extends GroupEditableData {
 export interface GroupEditableData extends hasId {
   title: string;
   notes: string;
-  veracity: "Confirmed true" | "Confirmed false" | "Unconfirmed";
+  veracity: VeracityOptions;
   closed: boolean;
   assignedTo: string[];
   locationName: string;

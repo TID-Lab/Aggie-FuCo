@@ -179,7 +179,11 @@ const Reports = () => {
         <div className='flex flex-col border border-slate-200 rounded-lg'>
           {reportsQuery.isSuccess &&
             reportsQuery.data?.results.map((report) => (
-              <div onClick={() => onReportItemClick(report._id)}>
+              <div
+                onClick={() => onReportItemClick(report._id)}
+                className='cursor-pointer'
+                key={report._id}
+              >
                 <ReportListItem
                   report={report}
                   isChecked={selectedItems.includes(report._id)}
@@ -200,7 +204,7 @@ const Reports = () => {
       </main>
       <aside className='col-span-1'>
         {!outlet || !outlet.type ? (
-          <p className='grid w-full h-full place-items-center font-medium '>
+          <p className='grid w-full py-24 place-items-center font-medium sticky top-2'>
             Select a report to view in this window
           </p>
         ) : (

@@ -51,7 +51,7 @@ const ReportListItem = ({
             <div className='flex gap-1 text-sm items-baseline'>
               <span className='px-2 bg-slate-200 font-medium '>Unread</span>
               <h1 className='text-sm font-medium text-black mx-1'>
-                {report.author} {isChecked ? "true" : "false"}
+                {report.author}
               </h1>
               <TagsList values={report.smtcTags} />
             </div>
@@ -64,7 +64,9 @@ const ReportListItem = ({
           </div>
         </header>
         <div>
-          <p className='max-w-lg text-black'>{report.content}</p>
+          <p className='max-w-lg text-black max-h-[10em] line-clamp-6'>
+            {report.content}
+          </p>
         </div>
       </div>
       <div>blah</div>

@@ -37,6 +37,7 @@ import Incident from "./pages/incidents/Incident";
 import Reports from "./pages/Reports";
 import Report from "./pages/Reports/Report";
 import NewIncident from "./pages/incidents/NewIncident";
+import FetchIndicator from "./components/FetchIndicator";
 
 //TODO: BIG TODO is to correctly type all of react-query usage. Its not critical for function, but it is good for clarity in development.
 //TODO: Also BIG TODO is to ensure EVERY API call has a way of surfacing an error message. I want readble UI alerts but at least console.errors.
@@ -134,6 +135,7 @@ const App = () => {
   const InitialApp = (
     <>
       <AggieNavbar isAuthenticated={isLoggedIn} session={userData} />
+      <FetchIndicator />
       <AlertService globalAlert={globalAlert} setGlobalAlert={setGlobalAlert} />
       {isLoggedIn ? (
         <PrivateRoutes sessionData={userData} setGlobalAlert={setGlobalAlert} />

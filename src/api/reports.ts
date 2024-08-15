@@ -121,6 +121,19 @@ export const setSelectedTags = async (reportIds: string[], tagIds: hasId[]) => {
   return data;
 };
 
+interface setReportsToGroupParams {
+  reportIds: string[];
+  groupId: hasId | null;
+}
+export const setReportsToGroup = async (params: setReportsToGroupParams) => {
+  const { data } = await axios.patch<null>("/api/report/_group", {
+    ids: params.reportIds,
+    group: params.groupId,
+  });
+  return data;
+};
+
+//TODO: deprecate. replaced by setReportsToGroup
 export const setSelectedGroup = async (
   reportIds: string[],
   groupId: hasId | null
