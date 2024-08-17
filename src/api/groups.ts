@@ -52,10 +52,14 @@ export const newGroup = async (groupData: GroupEditableData) => {
 };
 
 export const editGroup = async (group: Group | GroupEditableData) => {
+  const { data } = await axios.put<Group>("/api/group/" + group._id, group);
+  return data;
+};
+//TODO: deprecate
+export const editGroup_old = async (group: Group | GroupEditableData) => {
   const { data } = await axios.put("/api/group/" + group._id, group);
   return data;
 };
-
 export const deleteGroup = async (group: Group) => {
   const { data } = await axios.delete("/api/group/" + group._id);
   return data;

@@ -38,17 +38,14 @@ const AggieNavbar = (props: IProps) => {
     <Navbar className='bg-[#356C4E]' variant='dark' expand={false}>
       <Container fluid>
         {location.pathname === "/login" && (
-          <Navbar.Brand>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 62 62'
-            >
+          <Navbar.Brand className='flex gap-1'>
+            <svg fill='none' viewBox='0 0 62 62' className='w-8'>
               <path
                 d='M31 39a7 7 0 1 1-14 0 7 7 0 0 1 14 0Zm15-15a7 7 0 1 1-14 0 7 7 0 0 1 14 0Zm-4-14a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm0 29a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm13 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm-43 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm30 13a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm14-28a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-43 0a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm16 0a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z'
-                fill='currentColor'
+                fill='#fff'
               />
             </svg>
+            <h1 className='text-xl font-medium'>Aggie</h1>
           </Navbar.Brand>
         )}
         {location.pathname !== "/login" && (

@@ -48,8 +48,7 @@ let schema = new mongoose.Schema({
     type: [{ type: SchemaTypes.ObjectId, ref: 'Report' }],
     default: [],
   },
-  notes: String,
-  irrelevant: { type: Boolean, default: false, required: false }
+  notes: String
 });
 
 schema.pre('save', function (next) {

@@ -25,7 +25,7 @@ const Incidents = () => {
   }, [searchParams]);
 
   return (
-    <section className='max-w-screen-2xl mx-auto px-4 pb-10'>
+    <section className='max-w-screen-xl mx-auto px-4 pb-10'>
       <header className='my-4 flex justify-between items-center'>
         <h1 className='text-3xl'>Incidents</h1>
         <Link

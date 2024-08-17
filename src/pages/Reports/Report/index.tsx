@@ -20,7 +20,7 @@ const Report = () => {
   if (reportQuery.data) {
     console.log(reportQuery.data.metadata);
     return (
-      <article className='pt-4 sticky top-0'>
+      <article className='pt-4 sticky top-0 overflow-y-auto max-h-[93vh] pr-2'>
         <nav className='px-2 py-2 flex justify-between items-center text-sm border border-slate-300 mb-2 shadow-md'>
           <h2 className='text-sm font-medium'>Quick Actions</h2>
           <div className='flex gap-1'>

@@ -57,7 +57,7 @@ const Login = (props: IProps) => {
         height: "100%",
       }}
     >
-      <Container fluid className={"pt-5"}>
+      <Container fluid className={"pt-5 pb-24 h-[90vh]"}>
         <Row>
           <Col></Col>
           <Col lg={4} sm={6}>
@@ -136,10 +136,19 @@ const Login = (props: IProps) => {
                           </Button>
                         </InputGroup>
                       </Form.Group>
+                      {(errors.loginUsername || errors.loginPassword) && (
+                        <div className='border border-red-300 text-red-800 bg-red-100 rounded px-2 py-1 text-sm mb-1'>
+                          no username or password
+                        </div>
+                      )}
 
-                      <div className='d-flex justify-content-between'>
-                        <Button variant='link'>Forgot your username?</Button>
-                        <Button variant='primary' type='submit'>
+                      <div className='flex justify-end'>
+                        {/* <Button variant='link'>Forgot your username?</Button> */}
+                        <Button
+                          variant='primary'
+                          type='submit'
+                          disabled={loginQuery.isLoading}
+                        >
                           Sign in
                         </Button>
                       </div>

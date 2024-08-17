@@ -31,7 +31,8 @@ let schema = new Schema({
   originalPost: { type: String },
   notes: { type: String },
   escalated: { type: Boolean, default: false, required: true, index: true },
-  content_lang: { type: String }
+  content_lang: { type: String },
+  irrelevant: { type: Boolean, default: false, required: false }
 });
 
 schema.index({ 'metadata.ct_tag': 1 }, { background: true });
@@ -87,6 +88,9 @@ schema.methods.setEscalated = function (escalated) {
   this.escalated = escalated;
 };
 
+schema.methods.setIrrelevant = function (irrelevant) {
+  this.irrelevant = irrelevant;
+};
 schema.methods.addSMTCTag = function (smtcTagId, callback) {
   // TODO: Use Functional Programming
   // ML This finds the smtcTag to add (if it doesn't exists) then add it.

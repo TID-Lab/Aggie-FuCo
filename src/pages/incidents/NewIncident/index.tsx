@@ -51,7 +51,7 @@ const NewIncident = () => {
       navigate(-1);
     },
   });
-  const mutateAddReports = useMutation({
+  const addReportsMutation = useMutation({
     mutationFn: setReportsToGroup,
     onSuccess: () => {
       navigate(-1);

@@ -14,7 +14,7 @@ const FetchIndicator = () => {
     setFetchState("finished");
     setTimeout(() => {
       setFetchState("idle");
-    }, 1000);
+    }, 250);
   }
   const doOnFetchState = useCallback(debounce(onFetchState, 150), [fetchState]);
 
@@ -30,7 +30,7 @@ const FetchIndicator = () => {
     return state === "finished" ? 100 : width;
   }
   return (
-    <div className='w-full h-1 pointer-events-none sticky top-0 z-50 '>
+    <div className='w-full  pointer-events-none sticky top-0 z-50 '>
       <span
         className='h-1 absolute top-0 left-0 transition duration-800 bg-blue-600'
         style={{
