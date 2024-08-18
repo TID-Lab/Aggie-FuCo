@@ -75,7 +75,7 @@ const AggieNavbar = (props: IProps) => {
                   </Nav.Link>
                 </LinkContainer>
               </Nav.Item>
-              <Nav.Item>
+              {/* <Nav.Item>
                 <LinkContainer to={"/relevant-reports"}>
                   <Nav.Link
                     className={"ps-2 pe-2 aggie-nav-link"}
@@ -85,7 +85,7 @@ const AggieNavbar = (props: IProps) => {
                     Relevant Reports
                   </Nav.Link>
                 </LinkContainer>
-              </Nav.Item>
+              </Nav.Item> */}
               <Nav.Item>
                 <LinkContainer to={"/groups"}>
                   <Nav.Link className={"ps-2 pe-2 aggie-nav-link"} eventKey='4'>
@@ -93,13 +93,13 @@ const AggieNavbar = (props: IProps) => {
                   </Nav.Link>
                 </LinkContainer>
               </Nav.Item>
-              <Nav.Item>
+              {/* <Nav.Item>
                 <LinkContainer to={"/analysis"}>
                   <Nav.Link className={"ps-2 pe-2 aggie-nav-link"} eventKey='5'>
                     Analysis
                   </Nav.Link>
                 </LinkContainer>
-              </Nav.Item>
+              </Nav.Item> */}
 
               <Nav.Item>
                 <LinkContainer to={"/reports-old"}>

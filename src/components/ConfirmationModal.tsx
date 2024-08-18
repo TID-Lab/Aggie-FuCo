@@ -44,6 +44,13 @@ const ConfirmationModal = ({
           {children}
           <div className='flex gap-1 justify-between  px-3 py-2 border-t border-slate-200'>
             <AggieButton
+              className='px-2 py-1 bg-slate-100 rounded-lg border border-slate-200 hover:bg-slate-200'
+              onClick={onClose}
+              disabled={disabled}
+            >
+              Cancel
+            </AggieButton>
+            <AggieButton
               className={
                 confirmButton
                   ? ""
@@ -55,13 +62,6 @@ const ConfirmationModal = ({
               disabled={disabled}
             >
               {confirmButton ? confirmButton : "Confirm"}
-            </AggieButton>
-            <AggieButton
-              className='px-2 py-1 bg-slate-100 rounded-lg border border-slate-200 hover:bg-slate-200'
-              onClick={onClose}
-              disabled={disabled}
-            >
-              Cancel
             </AggieButton>
           </div>
         </Dialog.Panel>

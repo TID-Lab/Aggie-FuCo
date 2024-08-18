@@ -181,7 +181,7 @@ const Reports = () => {
             reportsQuery.data?.results.map((report) => (
               <div
                 onClick={() => onReportItemClick(report._id)}
-                className='cursor-pointer'
+                className='cursor-pointer group'
                 key={report._id}
               >
                 <ReportListItem

@@ -14,6 +14,7 @@ import {
   faPlus,
   faSpinner,
   faTrash,
+  faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import AggieButton from "../../components/AggieButton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -110,7 +111,8 @@ const IncidentListItem = ({ item }: IProps) => {
     e.preventDefault();
     if (!sessionQuery.data) return;
     //TODO: refactor by changing update function in backend
-    const edit: GroupEditableData = {
+
+    editGroupMutation.mutate({
       assignedTo: [sessionQuery.data._id],
       title: item.title,
       notes: item.notes || "",
@@ -120,8 +122,7 @@ const IncidentListItem = ({ item }: IProps) => {
       public: item.public,
       escalated: item.escalated,
       _id: item._id,
-    };
-    editGroupMutation.mutate(edit);
+    });
   }
 
   return (
@@ -131,8 +132,16 @@ const IncidentListItem = ({ item }: IProps) => {
           <VeracityToken value={item.veracity} />
           <TagsList values={item.smtcTags} />
         </div>
-        <h2 className='text-lg text-slate-700 group-hover:text-blue-600 group-hover:underline'>
-          {item.title}
+        <h2 className=' text-slate-700 flex gap-2 items-center'>
+          <span className='text-lg group-hover:text-blue-600 group-hover:underline'>
+            {item.title}
+          </span>{" "}
+          {item.escalated && (
+            <span className='px-1 bg-orange-700 text-white font-medium text-sm flex gap-1 items-center no-underline'>
+              <FontAwesomeIcon icon={faWarning} />
+              Escalated
+            </span>
+          )}
         </h2>
         <div className='grid grid-cols-4 flex-grow items-end'>
           <p>#{item.idnum}</p>

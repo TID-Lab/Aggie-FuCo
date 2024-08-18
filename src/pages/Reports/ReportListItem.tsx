@@ -4,6 +4,8 @@ import { stringToDate } from "../../helpers";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { formatHashtag } from "../../utils/format";
+import AggieButton from "../../components/AggieButton";
 
 interface IProps {
   report: Report;
@@ -26,6 +28,7 @@ const ReportListItem = ({
     e.stopPropagation();
     onCheckChange();
   }
+
   return (
     <article className='px-2 py-2 border-b border-slate-200 hover:bg-slate-50 text-sm text-slate-600 grid grid-cols-5 gap-2 relative'>
       <div className='col-span-4 pl-6'>
@@ -65,11 +68,18 @@ const ReportListItem = ({
         </header>
         <div>
           <p className='max-w-lg text-black max-h-[10em] line-clamp-6'>
-            {report.content}
+            {report.content.split(" ").map((word) => formatHashtag(word))}
           </p>
         </div>
       </div>
-      <div>blah</div>
+      <div className='flex flex-col'>
+        <div className='flex gap-1 opacity-0 group-hover:opacity-100'>
+          <AggieButton>test</AggieButton>
+        </div>
+        <div className='rounded-lg flex-grow bg-slate-50 border border-dashed border-slate-200 grid place-items-center h-full'>
+          No Incident Attached
+        </div>
+      </div>
     </article>
   );
 };
