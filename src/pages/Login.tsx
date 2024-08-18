@@ -39,6 +39,7 @@ const Login = (props: IProps) => {
         //reload website to check for session in root
         navigate(0);
       },
+      onError: (data) => {},
     }
   );
   const [passwordVisibility, setPasswordVisibility] = useState(false);

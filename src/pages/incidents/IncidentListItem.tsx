@@ -29,7 +29,7 @@ const IncidentListItem = ({ item }: IProps) => {
         </h2>
         <div className='grid grid-cols-4 flex-grow items-end'>
           <p>#{item.idnum}</p>
-          <p>{item._reports.length} reports</p>
+          <p>{item._reports?.length} reports</p>
           <p>{item.locationName}</p>
           <p>{item.creator?.username}</p>
         </div>

@@ -1,17 +1,32 @@
 import axios from "axios";
-import { FormikValues } from "formik";
 import {
   hasId,
   Report,
-  ReportQuery,
   ReportQueryState,
-  Source,
-  Tag,
+  ReportQueryState_old,
+  Reports,
 } from "../objectTypes";
 import { VeracityOptions } from "./enums";
 
 export const getReports = async (
   searchState: ReportQueryState,
+  tagIds: hasId[] | string[] = [],
+  isRelevantReports = false
+) => {
+  if (generateReportsSearchURL(searchState, tagIds, isRelevantReports) != "") {
+    const { data } = await axios.get<Reports | undefined>(
+      "/api/report?" +
+        generateReportsSearchURL(searchState, tagIds, isRelevantReports)
+    );
+    return data;
+  } else {
+    const { data } = await axios.get<Reports | undefined>("/api/report");
+    return data;
+  }
+};
+//TODO: deprecate
+export const getReports_untyped = async (
+  searchState: ReportQueryState | ReportQueryState_old,
   tagIds: hasId[] | string[] = [],
   isRelevantReports = false
 ) => {
@@ -26,14 +41,20 @@ export const getReports = async (
     return data;
   }
 };
-
 export const getReport = async (id: string | undefined) => {
+  if (id) {
+    const { data } = await axios.get<Report | undefined>("/api/report/" + id);
+    return data;
+  }
+};
+
+//TODO: deprecate
+export const getReport_untyped = async (id: string | undefined) => {
   if (id) {
     const { data } = await axios.get("/api/report/" + id);
     return data;
   }
 };
-
 export const editReport = async (report: Report) => {
   const { data } = await axios.put("/api/report/" + report._id, report);
   return data;
@@ -111,8 +132,9 @@ export const setSelectedGroup = async (
   return data;
 };
 
+//TODO: refactor
 const generateReportsSearchURL = (
-  searchState: ReportQueryState,
+  searchState: ReportQueryState | ReportQueryState_old,
   tagIds: hasId[] | string[],
   isRelevantReports: boolean
 ) => {

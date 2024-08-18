@@ -4,16 +4,18 @@ import { useQueryParams } from "../../hooks/useQueryParams";
 import _ from "lodash";
 
 import { getGroups } from "../../api/groups";
-import type { GroupSearchState } from "../../objectTypes";
+import type { GroupQueryState } from "../../objectTypes";
 
 import { Link } from "react-router-dom";
 import IncidentsFilters from "./IncidentsFilters";
 import IncidentListItem from "./IncidentListItem";
 import AggiePagination from "../../components/AggiePagination";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const Incidents = () => {
   const { searchParams, getAllParams, setParams } =
-    useQueryParams<GroupSearchState>();
+    useQueryParams<GroupQueryState>();
 
   const groupsQuery = useQuery(["groups"], () => getGroups(getAllParams()));
 
@@ -23,9 +25,12 @@ const Incidents = () => {
   }, [searchParams]);
 
   return (
-    <section className='max-w-screen-xl mx-auto px-2'>
-      <header className='my-4'>
+    <section className='max-w-screen-2xl mx-auto px-4 pb-10'>
+      <header className='my-4 flex justify-between items-center'>
         <h1 className='text-3xl'>Incidents</h1>
+        <button className='px-3 py-2 flex gap-2 items-center text-sm bg-green-800  text-slate-100 rounded-lg font-medium'>
+          <FontAwesomeIcon icon={faPlus} /> Create New Incident
+        </button>
       </header>
 
       {groupsQuery.data && groupsQuery.data.total && (

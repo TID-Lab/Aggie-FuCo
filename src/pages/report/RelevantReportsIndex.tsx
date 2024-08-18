@@ -41,16 +41,17 @@ import {
   getBatch,
   getNewBatch,
   getReports,
+  getReports_untyped,
   setSelectedRead,
 } from "../../api/reports";
 import { getSources } from "../../api/sources";
-import { getGroups } from "../../api/groups";
+import { getGroups_old } from "../../api/groups";
 import { getTags } from "../../api/tags";
 import DatePickerField from "../../components/DatePickerField";
 import {
   CTList,
   Groups,
-  ReportQueryState,
+  ReportQueryState_old,
   Reports,
   Source,
   Tag,
@@ -107,7 +108,7 @@ const RelevantReportsIndex = (props: IProps) => {
   const [cardView, setCardView] = useState(false);
 
   // This is the state of the Report Query
-  const [queryState, setQueryState] = useState<ReportQueryState>({
+  const [queryState, setQueryState] = useState<ReportQueryState_old>({
     keywords: searchParams.get("keywords"),
     author: searchParams.get("author"),
     groupId: searchParams.get("groupId"),
@@ -152,7 +153,7 @@ const RelevantReportsIndex = (props: IProps) => {
 
   const reportsQuery = useQuery<Reports | undefined, AxiosError>(
     ["reports", queryState],
-    () => getReports(queryState, [], true),
+    () => getReports_untyped(queryState, [], true),
     {
       keepPreviousData: true,
     }
@@ -170,7 +171,7 @@ const RelevantReportsIndex = (props: IProps) => {
   const groupsQuery = useQuery<Groups | undefined, AxiosError>(
     ["groups", "all"],
     () => {
-      return getGroups();
+      return getGroups_old();
     },
     {}
   );

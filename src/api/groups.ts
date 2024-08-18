@@ -5,15 +5,31 @@ import {
   GroupEditableData,
   Groups,
   GroupSearchState,
+  GroupQueryState,
   hasId,
   Reports,
 } from "../objectTypes";
 import { VeracityOptions } from "./enums";
 
-const defaultGroupSearchState: GroupSearchState = {};
-
 export const getGroups = async (
-  searchState = defaultGroupSearchState,
+  searchState: GroupQueryState = {},
+  tagIds: hasId[] = []
+) => {
+  const queryState = urlFromQuery(searchState, tagIds);
+  if (queryState != "") {
+    const { data } = await axios.get<Groups | undefined>(
+      "/api/group?" + queryState
+    );
+    return data;
+  } else {
+    const { data } = await axios.get<Groups | undefined>("/api/group");
+    return data;
+  }
+};
+
+// todo: depreacate
+export const getGroups_old = async (
+  searchState: GroupSearchState = {},
   tagIds: hasId[] = []
 ) => {
   if (generateGroupsSearchURL(searchState, tagIds) != "") {
@@ -145,6 +161,29 @@ export const setSelectedLocationName = async (
   });
   return data;
 };
+
+/**
+ * todo: get rid of tagId? i dont see why this needs to be separated
+ * @param queryState
+ * @param tagIds
+ */
+function urlFromQuery(queryState: GroupQueryState, tagIds: hasId[]) {
+  const url = new URLSearchParams();
+  // i think ideally GroupQueryState should convert to record<string,string>
+  Object.entries(queryState).forEach(([key, value]) => {
+    //overrides:
+    if (key === "locationName") {
+      url.set("location", value);
+    } else {
+      url.set(key, value);
+    }
+  });
+  if (tagIds && tagIds.length > 0) {
+    url.set("tags", tagIds.toString());
+  }
+  console.log(url.toString());
+  return url.toString();
+}
 
 //TODO: refactor with URLSearchParam Object
 const generateGroupsSearchURL = (

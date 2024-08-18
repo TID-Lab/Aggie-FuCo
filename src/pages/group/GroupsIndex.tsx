@@ -25,7 +25,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getSources } from "../../api/sources";
-import { getGroups } from "../../api/groups";
+import { getGroups_old } from "../../api/groups";
 import { getTags } from "../../api/tags";
 import { getUsers } from "../../api/users";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -118,7 +118,7 @@ const GroupsIndex = (props: IProps) => {
     {}
   );
   const groupsQuery = useQuery(["groups", queryState], () => {
-    return getGroups(queryState);
+    return getGroups_old(queryState);
   });
   const tagsQuery = useQuery<Tag[] | undefined, AxiosError>(
     ["tags"],

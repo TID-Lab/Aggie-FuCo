@@ -6,7 +6,7 @@ import TagsList from "../../../components/tag/TagsList";
 import VeracityToken from "../../../components/VeracityToken";
 
 const Incident = () => {
-  let { id } = useParams<{ id: string }>();
+  let { id } = useParams();
   const groupQuery = useQuery(["group", id], () => getGroup(id));
   const groupReportsQuery = useQuery(["reports", { groupId: id }], () =>
     getGroupReports(id, 0)
@@ -58,7 +58,7 @@ const Incident = () => {
       <aside className='overflow-y-auto h-full'>
         {groupReportsQuery.data &&
           groupReportsQuery.data.results.map((report) => (
-            <div>{report.content}</div>
+            <div key={report._id}>{report.content}</div>
           ))}
       </aside>
     </section>

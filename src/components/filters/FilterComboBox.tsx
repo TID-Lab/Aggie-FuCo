@@ -11,11 +11,18 @@ interface Item {
 interface IProps {
   label: string;
   list: Item[];
+  optionalItems?: Item[];
   onChange: (selectedItem: Item) => void;
-  selectedItem?: Item;
+  selectedKey?: string;
 }
 
-const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
+const FilterComboBox = ({
+  label,
+  list,
+  onChange,
+  selectedKey,
+  optionalItems = [],
+}: IProps) => {
   const [filteredList, setFilteredList] = useState(list);
   const [rawSearch, setRawSearch] = useState("");
 
@@ -25,13 +32,16 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
   }, [list]);
 
   function onSearch(query: string) {
-    if (!query.trim()) setFilteredList(list);
-    const filtered = filteredList.filter((i) =>
+    if (!query.trim()) {
+      setFilteredList(list);
+      return;
+    }
+    const filtered = list.filter((i) =>
       i.value.toLowerCase().includes(query.trim().toLowerCase())
     );
     setFilteredList(filtered);
   }
-  const doSearchInput = useCallback(debounce(onSearch, 300), []);
+  const doSearchInput = useCallback(debounce(onSearch, 150), [filteredList]);
 
   function clearSearch() {
     setRawSearch("");
@@ -42,17 +52,24 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
     onChange(item);
     clearSearch();
   }
+  function valueFromLists(key: string) {
+    if (list.some((i) => i.key === key))
+      return list.find((i) => i.key === key)?.value;
+    else if (optionalItems.some((i) => i.key === key))
+      return optionalItems.find((i) => i.key === key)?.value;
+    return undefined;
+  }
   return (
     <FilterDropdown
       label={label}
-      value={selectedItem && selectedItem.key ? selectedItem.value : undefined}
+      value={selectedKey && valueFromLists(selectedKey)}
       onReset={() => onSelectItem({ key: "", value: "" })}
       headerChild={
         <>
           <input
             type='text'
             placeholder='search...'
-            className='p-1  border border-slate-200 rounded'
+            className='py-1 px-2 border border-slate-200 rounded w-full'
             value={rawSearch}
             onChange={(event) => {
               doSearchInput(event.target.value);
@@ -71,12 +88,38 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
       }
     >
       {({ close }) => (
-        <div className=' flex flex-col divide-y divide-slate-200 max-h-[12em] overflow-y-auto bg-white'>
-          {filteredList &&
+        <div className=' flex flex-col divide-y divide-slate-200 max-h-[15em] overflow-y-auto bg-white'>
+          {!rawSearch && optionalItems.length > 0 && (
+            <>
+              {optionalItems.map((item) => (
+                <button
+                  className={`px-2 py-1 flex justify-between items-center hover:bg-slate-50 text-nowrap gap-1 ${
+                    selectedKey === item.key ? "bg-slate-100" : ""
+                  }`}
+                  key={item.key}
+                  onClick={() => {
+                    onSelectItem(item);
+                    close();
+                  }}
+                >
+                  <span>{item.value}</span>
+                  {selectedKey === item.key && (
+                    <FontAwesomeIcon
+                      icon={faCheck}
+                      className='text-slate-600'
+                    />
+                  )}
+                </button>
+              ))}
+              <div className='w-full h-1 bg-slate-100'></div>
+            </>
+          )}
+
+          {filteredList && filteredList.length > 0 ? (
             filteredList.map((item) => (
               <button
-                className={`px-2 py-1 flex justify-between items-center hover:bg-slate-50 ${
-                  selectedItem?.key === item.key ? "bg-slate-100" : ""
+                className={`px-2 py-1 flex justify-between items-center hover:bg-slate-50 text-nowrap gap-1 ${
+                  selectedKey === item.key ? "bg-slate-100" : ""
                 }`}
                 key={item.key}
                 onClick={() => {
@@ -85,11 +128,14 @@ const FilterComboBox = ({ label, list, onChange, selectedItem }: IProps) => {
                 }}
               >
                 <span>{item.value}</span>
-                {selectedItem?.key === item.key && (
+                {selectedKey === item.key && (
                   <FontAwesomeIcon icon={faCheck} className='text-slate-600' />
                 )}
               </button>
-            ))}
+            ))
+          ) : (
+            <div className='px-2 py-1 font-medium'> No Results Found </div>
+          )}
         </div>
       )}
     </FilterDropdown>
