@@ -36,7 +36,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { GroupRow } from "./GroupTable";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllGroups, getGroups } from "../../api/groups";
+import { getAllGroups, getGroups_old } from "../../api/groups";
 import { getUsers } from "../../api/users";
 import { setSelectedEscalated, setSelectedGroup } from "../../api/reports";
 import { getSources } from "../../api/sources";
@@ -104,7 +104,7 @@ export default function EditGroupModal(props: IProps) {
   const groupsQuery = useQuery<Groups | undefined, AxiosError>(
     ["groups", queryState],
     () => {
-      return getGroups(queryState);
+      return getGroups_old(queryState);
     },
     {}
   );

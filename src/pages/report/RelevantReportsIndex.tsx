@@ -45,7 +45,7 @@ import {
   setSelectedRead,
 } from "../../api/reports";
 import { getSources } from "../../api/sources";
-import { getGroups } from "../../api/groups";
+import { getGroups_old } from "../../api/groups";
 import { getTags } from "../../api/tags";
 import DatePickerField from "../../components/DatePickerField";
 import {
@@ -171,7 +171,7 @@ const RelevantReportsIndex = (props: IProps) => {
   const groupsQuery = useQuery<Groups | undefined, AxiosError>(
     ["groups", "all"],
     () => {
-      return getGroups();
+      return getGroups_old();
     },
     {}
   );

@@ -16,10 +16,7 @@ import {
   faEnvelopeOpen,
   faMinus,
   faSearch,
-  faX,
   faXmark,
-  faXmarkCircle,
-  faXmarkSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Formik, Field } from "formik";

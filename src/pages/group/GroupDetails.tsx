@@ -22,7 +22,7 @@ import {
   getGroup_untyped,
   getGroupReports,
   getGroupReports_untyped,
-  getGroups,
+  getGroups_old,
   setSelectedClosed,
   setSelectedLocationName,
   setSelectedTitle,

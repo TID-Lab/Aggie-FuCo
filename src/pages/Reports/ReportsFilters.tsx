@@ -45,9 +45,7 @@ const ReportFilters = () => {
             onChange={(e) => {
               setParams({ sourceId: e.key });
             }}
-            selectedItem={sourcesRemapComboBox(sourcesQuery).find(
-              (i) => i.key === getParam("sourceId")
-            )}
+            selectedKey={getParam("sourceId")}
           />
         </div>
       </div>

@@ -141,6 +141,24 @@ export interface GroupEditableData extends hasId {
   _id?: string;
 }
 
+interface GroupQueryState {
+  veracity?: string;
+  escalated?: string | boolean;
+  closed?: string | boolean;
+  title?: string;
+  totalReports?: string | number;
+  assignedTo?: string;
+  creator?: string;
+  after?: string;
+  before?: string;
+  idnum?: string | number;
+  locationName?: string;
+  page?: string | number;
+}
+
+/**
+ * todo: deprecate, replace with GroupQueryState
+ */
 interface GroupSearchState {
   veracity?: string | null;
   escalated?: string | boolean | null;

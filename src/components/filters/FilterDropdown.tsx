@@ -43,15 +43,17 @@ const FilterDropdown = ({
               <div className='flex justify-between mb-1 ml-1 items-center'>
                 <h3 className='text-sm font-medium '>{label}</h3>
 
-                <button
-                  className='px-1 -mr-1 rounded hover:bg-slate-200 absolute right-2 text-slate-600  underline '
-                  onClick={() => {
-                    onReset();
-                    close();
-                  }}
-                >
-                  reset
-                </button>
+                {value && (
+                  <button
+                    className='px-1 -mr-1 rounded hover:bg-slate-200 absolute right-2 text-slate-600  underline '
+                    onClick={() => {
+                      onReset();
+                      close();
+                    }}
+                  >
+                    clear
+                  </button>
+                )}
               </div>
               {headerChild && headerChild}
             </header>

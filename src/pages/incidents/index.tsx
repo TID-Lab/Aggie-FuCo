@@ -4,7 +4,7 @@ import { useQueryParams } from "../../hooks/useQueryParams";
 import _ from "lodash";
 
 import { getGroups } from "../../api/groups";
-import type { GroupSearchState } from "../../objectTypes";
+import type { GroupQueryState } from "../../objectTypes";
 
 import { Link } from "react-router-dom";
 import IncidentsFilters from "./IncidentsFilters";
@@ -15,7 +15,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const Incidents = () => {
   const { searchParams, getAllParams, setParams } =
-    useQueryParams<GroupSearchState>();
+    useQueryParams<GroupQueryState>();
 
   const groupsQuery = useQuery(["groups"], () => getGroups(getAllParams()));
 
