@@ -201,6 +201,27 @@ exports.reports_escalated_update = (req, res) => {
     });
   });
 }
+// mark selected reports as irrelevent
+exports.reports_irrelevant_update = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (reports.length === 0) return res.sendStatus(200);
+    let remaining = reports.length;
+    reports.forEach((report) => {
+      // Mark each report as escalated to catch it in model
+      report.setIrrelevant(req.body.irrelevant);
+      report.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message)
+          return;
+        }
+        writelog.writeReport(req, report, 'escalatedReport');
+        if (--remaining === 0) return res.sendStatus(200);
+      });
+    });
+  });
+}
 
 // Link selected reports to one group
 exports.reports_group_update = (req, res) => {

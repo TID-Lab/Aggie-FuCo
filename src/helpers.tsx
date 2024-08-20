@@ -182,6 +182,7 @@ export const reportImageUrl = (report: Report) => {
   return null;
 };
 /**
+ * todo: move this to where they make sense
  * This function returns the full text content of a social media post.
  * @param report to return the full text of
  * @returns fullText of the social media post
@@ -204,6 +205,7 @@ export const reportFullContent = (report: Report) => {
   }
   return null;
 };
+// todo: move this to where they make sense
 
 export const reportAuthorUrl = (report: Report) => {
   if (report.metadata.accountUrl) {
@@ -214,6 +216,7 @@ export const reportAuthorUrl = (report: Report) => {
   }
 };
 
+//TODO: deprecate (replaced in utils/format.tsx)
 export const reportAuthor = (report: Report) => {
   if (report._media[0] === "twitter") {
     return "@" + report.author;

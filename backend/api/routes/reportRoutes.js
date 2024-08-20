@@ -35,6 +35,9 @@ router.patch('/_read', User.can('edit data'), reportController.reports_read_upda
 // Update reports escalation
 router.patch('/_escalated', User.can('edit data'), reportController.reports_escalated_update);
 
+// Update reports escalation
+router.patch('/_irrelevant', User.can('edit data'), reportController.reports_irrelevant_update);
+
 // Add reports group
 router.patch('/_group', User.can('edit data'), reportController.reports_group_update);
 

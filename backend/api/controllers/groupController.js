@@ -87,7 +87,7 @@ exports.group_update = (req, res, next) => {
       } else {
         writelog.writeGroup(req, group, 'editGroup');
         eventRouter.publish('groups:update', group).then(() => {
-          res.sendStatus(200);
+          res.status(200).send(group);
         });
       }
     });

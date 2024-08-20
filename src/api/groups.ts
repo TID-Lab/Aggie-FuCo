@@ -63,15 +63,19 @@ export const getGroup_untyped = async (id: string | undefined) => {
 };
 
 export const newGroup = async (groupData: GroupEditableData) => {
-  const { data } = await axios.post("/api/group", groupData);
+  const { data } = await axios.post<Group>("/api/group", groupData);
   return data;
 };
 
 export const editGroup = async (group: Group | GroupEditableData) => {
+  const { data } = await axios.put<Group>("/api/group/" + group._id, group);
+  return data;
+};
+//TODO: deprecate
+export const editGroup_old = async (group: Group | GroupEditableData) => {
   const { data } = await axios.put("/api/group/" + group._id, group);
   return data;
 };
-
 export const deleteGroup = async (group: Group) => {
   const { data } = await axios.delete("/api/group/" + group._id);
   return data;
@@ -177,11 +181,11 @@ function urlFromQuery(queryState: GroupQueryState, tagIds: hasId[]) {
     } else {
       url.set(key, value);
     }
+    console.log(key, value);
   });
   if (tagIds && tagIds.length > 0) {
     url.set("tags", tagIds.toString());
   }
-  console.log(url.toString());
   return url.toString();
 }
 

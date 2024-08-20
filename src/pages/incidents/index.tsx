@@ -25,12 +25,15 @@ const Incidents = () => {
   }, [searchParams]);
 
   return (
-    <section className='max-w-screen-2xl mx-auto px-4 pb-10'>
+    <section className='max-w-screen-xl mx-auto px-4 pb-10'>
       <header className='my-4 flex justify-between items-center'>
         <h1 className='text-3xl'>Incidents</h1>
-        <button className='px-3 py-2 flex gap-2 items-center text-sm bg-green-800  text-slate-100 rounded-lg font-medium'>
+        <Link
+          to='new'
+          className='px-3 py-2 flex gap-2 items-center text-sm bg-green-800 hover:text-slate-100 hover:bg-green-700 text-slate-100 rounded-lg font-medium'
+        >
           <FontAwesomeIcon icon={faPlus} /> Create New Incident
-        </button>
+        </Link>
       </header>
 
       {groupsQuery.data && groupsQuery.data.total && (
@@ -46,7 +49,7 @@ const Incidents = () => {
         {groupsQuery.isSuccess &&
           groupsQuery.data?.results.map((groupItem) => (
             <Link
-              to={"/incidents/id/" + groupItem._id}
+              to={"/incidents/" + groupItem._id}
               className={"group no-underline"}
               key={groupItem._id}
             >
