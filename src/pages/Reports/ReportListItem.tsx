@@ -6,7 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { formatHashtag } from "../../utils/format";
 import AggieButton from "../../components/AggieButton";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getGroup } from "../../api/groups";
+import { useNavigate } from "react-router-dom";
 
 //TODO: refactor and clean up tech debt
 interface IProps {
@@ -23,6 +25,13 @@ const ReportListItem = ({
   onCheckChange,
 }: IProps) => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const { data: incident } = useQuery(
+    ["group", report._group],
+    () => getGroup(report._group),
+    { enabled: !!report._group }
+  );
   function prettyDate(datestring: string) {
     // TODO: pretty dastes like "1 day ago" and "3 minutes ago"
   }
@@ -38,6 +47,15 @@ const ReportListItem = ({
     else if (report.read) return "bg-slate-50 hover:bg-slate-100 ";
     return "hover:bg-slate-100 ";
   }
+
+  function onAttachedReportClick(
+    e: React.MouseEvent<HTMLDivElement>,
+    id: string
+  ) {
+    e.stopPropagation();
+    navigate("/incidents/" + id);
+  }
+
   return (
     <article
       className={`px-2 py-2 pb-4 border-b ${bgState()} border-slate-200 text-sm text-slate-600 grid grid-cols-5 gap-2 relative`}
@@ -102,9 +120,21 @@ const ReportListItem = ({
         <div className='flex gap-1 opacity-0 group-hover:opacity-100'>
           <AggieButton>test</AggieButton>
         </div>
-        <div className='rounded-lg flex-grow bg-slate-50 border border-dashed border-slate-200 grid place-items-center h-full'>
-          No Incident Attached
-        </div>
+        {!!report._group && !!incident ? (
+          <div
+            className='rounded-lg bg-slate-100 px-2 py-1 flex-grow border border-slate-200 hover:cursor-pointer hover:bg-white'
+            onClick={(e) => onAttachedReportClick(e, incident._id)}
+          >
+            <p className='font-medium flex justify-between'>
+              {incident?.title} <span>#{incident?.idnum}</span>
+            </p>
+            <p>({incident._reports.length}) total Reports</p>
+          </div>
+        ) : (
+          <div className='rounded-lg flex-grow bg-slate-50 border border-dashed border-slate-200 grid place-items-center h-full'>
+            No Incident Attached
+          </div>
+        )}
       </div>
     </article>
   );

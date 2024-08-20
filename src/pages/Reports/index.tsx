@@ -31,6 +31,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
 import { updateOneInList } from "../../utils/immutable";
 import { Menu } from "@headlessui/react";
+import AddReportsToIncidents from "./AddReportsToIncident";
 
 const Reports = () => {
   const navigate = useNavigate();
@@ -116,8 +117,21 @@ const Reports = () => {
 
     navigate("/incidents/new?" + params.toString());
   }
+
+  const [addReportModal, setAddReportModal] = useState(false);
+  function addReportsToIncidents() {
+    setAddReportModal(true);
+  }
+
   return (
     <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-3 gap-3'>
+      <AddReportsToIncidents
+        reports={reportsQuery.data?.results.filter((i) =>
+          selectedItems.includes(i._id)
+        )}
+        isOpen={addReportModal}
+        onClose={() => setAddReportModal(false)}
+      />
       <main className='col-span-2 '>
         <header className='my-4 col-span-3'>
           <h1 className='text-3xl font-medium'>
@@ -206,8 +220,8 @@ const Reports = () => {
                 <div className='flex font-medium'>
                   <AggieButton
                     className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-200 hover:bg-slate-200'
-                    onClick={onNewIncidentFromReports}
-                    disabled={true}
+                    onClick={addReportsToIncidents}
+                    disabled={setSelectedItems.length === 0}
                   >
                     <FontAwesomeIcon icon={faPlus} />
                     Attach Incident
