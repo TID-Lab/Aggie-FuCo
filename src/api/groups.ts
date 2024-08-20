@@ -181,11 +181,11 @@ function urlFromQuery(queryState: GroupQueryState, tagIds: hasId[]) {
     } else {
       url.set(key, value);
     }
+    console.log(key, value);
   });
   if (tagIds && tagIds.length > 0) {
     url.set("tags", tagIds.toString());
   }
-  console.log(url.toString());
   return url.toString();
 }
 

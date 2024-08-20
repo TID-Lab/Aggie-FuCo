@@ -21,6 +21,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteGroup, editGroup } from "../../api/groups";
 import { getSession } from "../../api/session";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
 
 interface IProps {
   item: Group;
@@ -33,52 +34,27 @@ const IncidentListItem = ({ item }: IProps) => {
   const sessionQuery = useQuery(["session"], getSession);
   const queryClient = useQueryClient();
 
-  const editGroupMutation = useMutation({
+  const editGroupMutation = useOptimisticMutation({
+    queryKey: ["groups"],
     mutationFn: editGroup,
-    // onSuccess: (data) => {
-    //   const oldData = queryClient.getQueryData<Groups>(["groups"]);
-    //   if (!oldData) return;
-    //   queryClient.setQueryData(["groups"], {
-    //     ...oldData,
-    //     results: oldData.results.map((i) => (i._id === data._id ? data : i)),
-    //   });
-    //   console.log(data);
-    // },
-    onMutate: async (newData) => {
-      // Cancel any outgoing refetches
-      // (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({ queryKey: ["groups"] });
-
-      // Snapshot the previous value
-      const previousData = queryClient.getQueryData<Groups>(["groups"]);
-      if (previousData) {
-        // Optimistically update to the new value
-
-        queryClient.setQueryData(["groups"], {
-          ...previousData,
-          results: previousData.results.map((i) =>
-            i._id === newData._id
-              ? {
-                  ...newData,
-                  assignedTo: sessionQuery.data,
-                  creator: sessionQuery.data,
-                }
-              : i
-          ),
-        });
-      }
-      // Return a context with the previous and new todo
-      return { previousData, newData };
-    },
-    // If the mutation fails, use the context we returned above
-    onError: (err, newTodo, context) => {
-      if (!context) return;
-      // @ts-ignore
-      queryClient.setQueryData(["groups"], context.previousData);
-    },
-    // Always refetch after error or success:
-    onSettled: (newTodo) => {
-      queryClient.invalidateQueries({ queryKey: ["groups"] });
+    setQueryData: (previousData: Groups) => {
+      if (!sessionQuery.data) return previousData;
+      const user = {
+        username: sessionQuery.data.username,
+        _id: sessionQuery.data._id,
+      };
+      return {
+        ...previousData,
+        results: previousData.results.map((i) =>
+          i._id === item._id
+            ? {
+                ...item,
+                assignedTo: [user],
+                creator: user,
+              }
+            : i
+        ),
+      };
     },
   });
 
@@ -162,6 +138,7 @@ const IncidentListItem = ({ item }: IProps) => {
               ? "Assigned To:"
               : "Not Assigned"}
           </p>
+          {console.log(item.assignedTo)}
           {item.assignedTo && item.assignedTo.length > 0 ? (
             item.assignedTo.map((user) => (
               <p

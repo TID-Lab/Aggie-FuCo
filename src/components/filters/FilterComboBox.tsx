@@ -69,6 +69,7 @@ const FilterComboBox = ({
           <input
             type='text'
             placeholder='search...'
+            autoFocus={true}
             className='py-1 px-2 border border-slate-200 rounded w-full'
             value={rawSearch}
             onChange={(event) => {

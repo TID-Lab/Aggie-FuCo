@@ -7,14 +7,15 @@ type IState = "loading" | "finished" | "idle";
 const FetchIndicator = () => {
   const [fetchState, setFetchState] = useState<IState>("idle");
   const isFetching = useIsFetching();
-  const isMutating = useIsMutating();
+  //const isMutating = useIsMutating();
+  const isMutating = 0; // dont track mutation
 
   function onFetchState() {
     if (fetchState === "finished") return;
     setFetchState("finished");
     setTimeout(() => {
       setFetchState("idle");
-    }, 250);
+    }, 150);
   }
   const doOnFetchState = useCallback(debounce(onFetchState, 150), [fetchState]);
 
@@ -32,7 +33,7 @@ const FetchIndicator = () => {
   return (
     <div className='w-full  pointer-events-none sticky top-0 z-50 '>
       <span
-        className='h-1 absolute top-0 left-0 transition duration-800 bg-blue-600'
+        className='h-1 absolute top-0 left-0 transition duration-800 bg-blue-400'
         style={{
           width: `${setWidth(isFetching + isMutating, fetchState)}%`,
         }}

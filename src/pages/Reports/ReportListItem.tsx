@@ -1,12 +1,14 @@
 import TagsList from "../../components/tag/TagsList";
-import { Report } from "../../objectTypes";
+import { Report, Reports } from "../../objectTypes";
 import { stringToDate } from "../../helpers";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { formatHashtag } from "../../utils/format";
 import AggieButton from "../../components/AggieButton";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+//TODO: refactor and clean up tech debt
 interface IProps {
   report: Report;
   isChecked: boolean;
@@ -20,6 +22,7 @@ const ReportListItem = ({
   isSelectMode,
   onCheckChange,
 }: IProps) => {
+  const queryClient = useQueryClient();
   function prettyDate(datestring: string) {
     // TODO: pretty dastes like "1 day ago" and "3 minutes ago"
   }
@@ -28,10 +31,20 @@ const ReportListItem = ({
     e.stopPropagation();
     onCheckChange();
   }
-
+  function bgState() {
+    if (isChecked && !isSelectMode) return "bg-blue-100";
+    else if (report.read) return "bg-slate-50 hover:bg-slate-100 ";
+    return "hover:bg-slate-100 ";
+  }
   return (
-    <article className='px-2 py-2 border-b border-slate-200 hover:bg-slate-50 text-sm text-slate-600 grid grid-cols-5 gap-2 relative'>
-      <div className='col-span-4 pl-6'>
+    <article
+      className={`px-2 py-2 border-b ${bgState()} border-slate-200 text-sm text-slate-600 grid grid-cols-5 gap-2 relative`}
+    >
+      <div
+        className={`col-span-4 pl-6 ${
+          report.read ? "" : " border-l-4 border-blue-600 "
+        }`}
+      >
         {isSelectMode && (
           <div
             className='flex items-center absolute inset-0 pointer-events-none'
@@ -52,8 +65,15 @@ const ReportListItem = ({
         <header className='flex justify-between mb-2 '>
           <div>
             <div className='flex gap-1 text-sm items-baseline'>
-              <span className='px-2 bg-slate-200 font-medium '>Unread</span>
-              <h1 className='text-sm font-medium text-black mx-1'>
+              {/* {!report.read && (
+                <span className='px-2 bg-slate-200 font-medium '>Unread</span>
+              )} */}
+
+              <h1
+                className={`text-sm text-black mx-1 ${
+                  report.read ? "" : "font-medium"
+                }`}
+              >
                 {report.author}
               </h1>
               <TagsList values={report.smtcTags} />
@@ -68,7 +88,11 @@ const ReportListItem = ({
         </header>
         <div>
           <p className='max-w-lg text-black max-h-[10em] line-clamp-6'>
-            {report.content.split(" ").map((word) => formatHashtag(word))}
+            {report.content
+              .split(" ")
+              .map((word, index) =>
+                formatHashtag(word, "text-slate-500", index)
+              )}
           </p>
         </div>
       </div>

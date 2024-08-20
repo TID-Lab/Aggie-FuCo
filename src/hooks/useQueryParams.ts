@@ -28,6 +28,9 @@ export function useQueryParams<T extends object>() {
 
     setSearchParams(searchParams);
   };
+  const clearAllParams = () => {
+    setSearchParams(new URLSearchParams());
+  };
 
-  return { searchParams, getAllParams, setParams, getParam };
+  return { searchParams, getAllParams, setParams, getParam, clearAllParams };
 }

@@ -12,10 +12,12 @@ import FilterListbox from "../../components/filters/FilterListBox";
 import FilterRadioGroup from "../../components/filters/FilterRadioGroup";
 import { Field, Form, Formik } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
+import AggieButton from "../../components/AggieButton";
 
 const IncidentsFilters = () => {
-  const { getParam, setParams } = useQueryParams<GroupSearchState>();
+  const { searchParams, getParam, setParams, clearAllParams } =
+    useQueryParams<GroupSearchState>();
 
   const usersQuery = useQuery(["users"], getUsers);
 
@@ -52,18 +54,39 @@ const IncidentsFilters = () => {
               </button>
             </Form>
           </Formik>
+          {searchParams.size > 0 && (
+            <AggieButton
+              className='hover:underline hover:bg-slate-100 px-2 py-1 text-sm rounded'
+              onClick={clearAllParams}
+            >
+              <FontAwesomeIcon icon={faXmarkSquare} />
+              Clear All Parameters
+            </AggieButton>
+          )}
         </div>
       </div>
       <div className='flex justify-between mb-2 text-sm'>
         <div className='flex gap-2'>
           <FilterRadioGroup
-            options={[...VERACITY_OPTIONS]}
+            options={["Open", "Closed"]}
             defaultOption='All'
-            value={getParam("veracity")}
-            onChange={(e) => setParams({ veracity: e === "All" ? "" : e })}
+            value={
+              getParam("closed") === undefined
+                ? ""
+                : getParam("closed")
+                ? "Closed"
+                : "Open"
+            }
+            onChange={(e) => setParams({ closed: e === "Closed" })}
           />
         </div>
         <div className='flex items-center gap-1'>
+          <FilterListbox
+            label='Veracity'
+            options={[...VERACITY_OPTIONS]}
+            value={getParam("veracity")}
+            onChange={(e) => setParams({ veracity: e })}
+          />
           <FilterListbox
             label='Escalated'
             options={[...ESCALATED_OPTIONS]}
@@ -86,7 +109,7 @@ const IncidentsFilters = () => {
               setParams({ assignedTo: e.key });
             }}
             selectedKey={getParam("assignedTo")}
-            optionalItems={[{ key: "none", value: "Nobody" }]}
+            optionalItems={[{ key: "none", value: "Not Assigned" }]}
           />
         </div>
       </div>

@@ -181,6 +181,8 @@ Group.queryGroups = function (query, page, options, callback) {
 
   // Create filter object
   Group.filterAttributes.forEach(function (attr) {
+    //todo: fix this bs
+    if (attr === "assignedTo" && query[attr] === "none") return;
     if (!_.isUndefined(query[attr])) filter[attr] = query[attr];
   });
 
@@ -191,7 +193,7 @@ Group.queryGroups = function (query, page, options, callback) {
   }
 
   // find empty assignedTo objects
-  if (query.assignedTo === 'none') filter.assignedTo = { "$size": 0 };
+  if (query.assignedTo === 'none') filter.$or = [{ assignedTo: { $eq: null } }, { assignedTo: { $size: 0 } }]
 
 
   if (query.veracity === 'confirmed true') filter.veracity = 'Confirmed True';
@@ -201,7 +203,7 @@ Group.queryGroups = function (query, page, options, callback) {
   if (query.status === 'open') filter.closed = false;
   if (query.status === 'closed') filter.closed = true;
   delete filter.status;
-  if (_.isBoolean(query.closed)) filter.closed = query.closed;
+
 
   if (query.escalated === 'escalated') filter.escalated = true;
   if (query.escalated === 'unescalated') filter.escalated = false;
