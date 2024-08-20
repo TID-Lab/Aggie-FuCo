@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import TagsList from "../../components/tag/TagsList";
 import VeracityToken from "../../components/VeracityToken";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Menu } from "@headlessui/react";
+import { Dialog, Menu } from "@headlessui/react";
 
 import {
   faClose,
@@ -22,6 +22,8 @@ import { deleteGroup, editGroup } from "../../api/groups";
 import { getSession } from "../../api/session";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
+import IncidentForm from "./IncidentForm";
+import { updateOneInList } from "../../utils/immutable";
 
 interface IProps {
   item: Group;
@@ -30,11 +32,12 @@ interface IProps {
 const IncidentListItem = ({ item }: IProps) => {
   const navigate = useNavigate();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const sessionQuery = useQuery(["session"], getSession);
   const queryClient = useQueryClient();
 
-  const editGroupMutation = useOptimisticMutation({
+  const editAssignMutation = useOptimisticMutation({
     queryKey: ["groups"],
     mutationFn: editGroup,
     setQueryData: (previousData: Groups) => {
@@ -45,16 +48,32 @@ const IncidentListItem = ({ item }: IProps) => {
       };
       return {
         ...previousData,
-        results: previousData.results.map((i) =>
-          i._id === item._id
-            ? {
-                ...item,
-                assignedTo: [user],
-                creator: user,
-              }
-            : i
-        ),
+        results: updateOneInList(previousData.results, {
+          _id: item._id,
+          assignedTo: [user],
+          creator: user,
+        }),
       };
+    },
+  });
+
+  const editGroupMutation = useMutation({
+    mutationFn: editGroup,
+    onSuccess: (data, variables) => {
+      const previousData = queryClient.getQueryData<Groups>(["groups"]);
+      if (!previousData) return;
+      queryClient.setQueryData(["groups"], {
+        ...previousData,
+        results: updateOneInList(previousData.results, {
+          _id: item.id,
+          ...variables,
+        }),
+      });
+      setIsEditOpen(false);
+    },
+    // Always refetch after error or success:
+    onSettled: (newTodo) => {
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
     },
   });
 
@@ -88,7 +107,7 @@ const IncidentListItem = ({ item }: IProps) => {
     if (!sessionQuery.data) return;
     //TODO: refactor by changing update function in backend
 
-    editGroupMutation.mutate({
+    editAssignMutation.mutate({
       assignedTo: [sessionQuery.data._id],
       title: item.title,
       notes: item.notes || "",
@@ -99,6 +118,18 @@ const IncidentListItem = ({ item }: IProps) => {
       escalated: item.escalated,
       _id: item._id,
     });
+  }
+  function setEditData(data: Group) {
+    const assignId = data.assignedTo ? data.assignedTo.map((i) => i._id) : [];
+    return {
+      groupName: data.title,
+      groupVeracity: data.veracity,
+      groupClosed: data.closed,
+      groupEscalated: data.escalated,
+      groupLocation: data.locationName,
+      groupAssignedTo: assignId,
+      groupNotes: data.notes || "",
+    };
   }
 
   return (
@@ -138,7 +169,6 @@ const IncidentListItem = ({ item }: IProps) => {
               ? "Assigned To:"
               : "Not Assigned"}
           </p>
-          {console.log(item.assignedTo)}
           {item.assignedTo && item.assignedTo.length > 0 ? (
             item.assignedTo.map((user) => (
               <p
@@ -184,7 +214,10 @@ const IncidentListItem = ({ item }: IProps) => {
           >
             <div className='p-1 pr-2 flex flex-col'>
               <Menu.Item>
-                <p className='px-2 py-1 hover:bg-slate-200 rounded font-medium flex gap-1 text-nowrap items-center flex-grow'>
+                <p
+                  className='px-2 py-1 hover:bg-slate-200 rounded font-medium flex gap-1 text-nowrap items-center flex-grow'
+                  onClick={() => setIsEditOpen(true)}
+                >
                   <FontAwesomeIcon icon={faEdit} />
                   Edit Incident
                 </p>
@@ -241,6 +274,27 @@ const IncidentListItem = ({ item }: IProps) => {
           </div>
         </ConfirmationModal>
       </footer>
+      <Dialog
+        open={isEditOpen}
+        onClose={() => console.log()}
+        className='relative z-50'
+      >
+        <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
+        <div className='fixed inset-0 w-screen overflow-y-auto'>
+          <div className='flex min-h-full items-center justify-center p-4'>
+            <Dialog.Panel className='bg-white rounded-xl border border-slate-200 shadow-xl min-w-[30rem] min-h-12 p-4 flex flex-col gap-2'>
+              <IncidentForm
+                initialValues={setEditData(item)}
+                onCancel={() => setIsEditOpen(false)}
+                onSubmit={(values) =>
+                  editGroupMutation.mutate({ ...values, _id: item._id })
+                }
+                isLoading={editGroupMutation.isLoading}
+              />
+            </Dialog.Panel>
+          </div>
+        </div>
+      </Dialog>
     </article>
   );
 };

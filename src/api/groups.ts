@@ -63,7 +63,7 @@ export const getGroup_untyped = async (id: string | undefined) => {
 };
 
 export const newGroup = async (groupData: GroupEditableData) => {
-  const { data } = await axios.post("/api/group", groupData);
+  const { data } = await axios.post<Group>("/api/group", groupData);
   return data;
 };
 

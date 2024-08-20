@@ -107,7 +107,7 @@ const Reports = () => {
   }
 
   return (
-    <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-3 gap-4'>
+    <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-3 gap-3'>
       <main className='col-span-2 '>
         <header className='my-4 col-span-3'>
           <h1 className='text-3xl font-medium'>
