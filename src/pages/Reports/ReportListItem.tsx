@@ -52,10 +52,10 @@ const ReportListItem = ({
             className='flex items-center absolute inset-0 pointer-events-none'
             onClick={onChange}
           >
-            <div className='w-full h-full pointer-events-auto cursor-pointer group hover:bg-blue-300/25 rounded p-2 '>
+            <div className='w-full h-full pointer-events-auto cursor-pointer group hover:bg-blue-300/25 rounded p-2 pl-3 '>
               <div
-                className={`w-4 h-4  border border-slate-500 group-hover:border-slate-600 grid place-items-center rounded ${
-                  isChecked ? "bg-blue-500 text-slate-50" : ""
+                className={`w-4 h-4  border border-slate-500  group-hover:border-slate-600 grid place-items-center rounded ${
+                  isChecked ? "bg-blue-500 text-slate-50" : "bg-white"
                 }`}
               >
                 {isChecked && <FontAwesomeIcon icon={faCheck} size='xs' />}

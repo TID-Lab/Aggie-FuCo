@@ -4,20 +4,22 @@ import { VERACITY_OPTIONS, type VeracityOptions } from "../../../api/enums";
 import { useQueryParams } from "../../../hooks/useQueryParams";
 
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { newGroup } from "../../../api/groups";
 import { getUsers } from "../../../api/users";
 import AggieButton from "../../../components/AggieButton";
 import { setReportsToGroup } from "../../../api/reports";
 import IncidentForm from "../IncidentForm";
 import { Dialog } from "@headlessui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
   faSpinner,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
+import { Group, Groups, Report, Reports } from "../../../objectTypes";
+import ReportListItemSmall from "../../Reports/ReportListItemSmall";
 
 interface NewIncidentQueryState {
   reports?: string;
@@ -25,6 +27,8 @@ interface NewIncidentQueryState {
 
 const NewIncident = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [reportsData, setReportsData] = useState<Report[]>([]);
   const [showDialog, setShowDialog] = useState(false);
 
   const { searchParams, getParam } = useQueryParams<NewIncidentQueryState>();
@@ -43,6 +47,14 @@ const NewIncident = () => {
         });
     },
   });
+  useEffect(() => {
+    const data = queryClient.getQueryData<Reports>(["reports"]);
+    if (!data) return;
+    const ids = paramToArray(getParam("reports"));
+    const selectedReports = data.results.filter((i) => ids.includes(i._id));
+    setReportsData(selectedReports);
+  }, [searchParams]);
+
   const addReportsMutation = useMutation({
     mutationFn: setReportsToGroup,
     onSuccess: () => {
@@ -81,8 +93,8 @@ const NewIncident = () => {
 
   return (
     <section className='max-w-screen-xl mx-auto px-4 pb-10 grid grid-cols-2 gap-4'>
-      <header className='my-4 flex justify-between items-center col-span-2'>
-        <h1 className='text-3xl'>Create New Incident</h1>
+      <header className='mt-2 flex justify-between items-center col-span-2'>
+        <h1 className='text-3xl font-medium'>Create New Incident</h1>
       </header>
       <div>
         <IncidentForm
@@ -92,9 +104,14 @@ const NewIncident = () => {
         />
       </div>
       {getParam("reports") && (
-        <div>
-          <h2>Reports to Attach</h2>
-          {paramToArray(getParam("reports"))}
+        <div className='flex flex-col gap-2'>
+          <h2 className='font-medium text-lg'>
+            ({reportsData.length}) Reports to Attach:
+          </h2>
+          <div className='max-h-[75vh] overflow-y-scroll flex flex-col gap-1'>
+            {reportsData &&
+              reportsData.map((item) => <ReportListItemSmall report={item} />)}
+          </div>
         </div>
       )}
       <Dialog

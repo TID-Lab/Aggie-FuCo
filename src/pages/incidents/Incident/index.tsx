@@ -4,11 +4,12 @@ import { getGroup, getGroupReports } from "../../../api/groups";
 import AxiosErrorCard from "../../../components/AxiosErrorCard";
 import TagsList from "../../../components/tag/TagsList";
 import VeracityToken from "../../../components/VeracityToken";
+import ReportListItemSmall from "../../Reports/ReportListItemSmall";
 
 const Incident = () => {
   let { id } = useParams();
   const groupQuery = useQuery(["group", id], () => getGroup(id));
-  const groupReportsQuery = useQuery(["reports", { groupId: id }], () =>
+  const { data: groupReports } = useQuery(["reports", { groupId: id }], () =>
     getGroupReports(id, 0)
   );
 
@@ -55,11 +56,14 @@ const Incident = () => {
           )}
         </article>
       </main>
-      <aside className='overflow-y-auto h-full'>
-        {groupReportsQuery.data &&
-          groupReportsQuery.data.results.map((report) => (
-            <div key={report._id}>{report.content}</div>
-          ))}
+      <aside className='overflow-y-auto h-full max-h-[80vh]'>
+        <div className='flex flex-col gap-1'>
+          {" "}
+          {groupReports &&
+            groupReports.results.map((report) => (
+              <ReportListItemSmall report={report} />
+            ))}
+        </div>
       </aside>
     </section>
   );

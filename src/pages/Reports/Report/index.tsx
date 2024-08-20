@@ -203,6 +203,7 @@ const Report = () => {
               <AggieButton
                 className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-200 hover:bg-slate-200'
                 onClick={newIncidentFromReport}
+                disabled={true}
               >
                 <FontAwesomeIcon icon={faPlus} />
                 Attach Incident
@@ -259,7 +260,8 @@ const Report = () => {
           <div className='grid grid-cols-3'>
             <p className='font-medium text-sm py-1 px-2 '>Tags</p>
             <p className='col-span-2'>
-              {tagsQuery.data && reportQuery.data._id && (
+              Tags don't work right now
+              {/* {tagsQuery.data && reportQuery.data._id && (
                 <TagsTypeahead
                   id={reportQuery.data._id}
                   options={tagsQuery.data}
@@ -273,7 +275,7 @@ const Report = () => {
                   }}
                   variant={"table"}
                 />
-              )}
+              )} */}
             </p>
           </div>
         </div>

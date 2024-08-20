@@ -17,16 +17,20 @@ import { Form } from "react-bootstrap";
 import AggieButton from "../../components/AggieButton";
 import AggiePagination from "../../components/AggiePagination";
 import {
+  faCaretDown,
   faCheck,
   faEnvelope,
   faEnvelopeOpen,
+  faFile,
   faMinus,
+  faPlus,
   faSearch,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
 import { updateOneInList } from "../../utils/immutable";
+import { Menu } from "@headlessui/react";
 
 const Reports = () => {
   const navigate = useNavigate();
@@ -105,7 +109,13 @@ const Reports = () => {
     setSelectedItems([id]);
     if (!isRead) setSingleReadMutation.mutate({ reportId: id, read: true });
   }
+  function onNewIncidentFromReports() {
+    const params = new URLSearchParams({
+      reports: selectedItems.join(":"),
+    });
 
+    navigate("/incidents/new?" + params.toString());
+  }
   return (
     <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-3 gap-3'>
       <main className='col-span-2 '>
@@ -188,11 +198,45 @@ const Reports = () => {
                 </div>
                 <AggieButton
                   className='bg-rose-200 text-rose-800 border border-rose-500 border-none  px-2 py-1 rounded-lg hover:bg-rose-300'
-                  disabled={selectedItems.length === 0}
+                  disabled={true}
                 >
                   <FontAwesomeIcon icon={faXmark} />
                   Not Relevant
                 </AggieButton>
+                <div className='flex font-medium'>
+                  <AggieButton
+                    className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-200 hover:bg-slate-200'
+                    onClick={onNewIncidentFromReports}
+                    disabled={true}
+                  >
+                    <FontAwesomeIcon icon={faPlus} />
+                    Attach Incident
+                  </AggieButton>
+                  <Menu as='div' className='relative'>
+                    <Menu.Button
+                      className='px-2 py-1 rounded-r-lg bg-slate-100 border-y border-r border-slate-200 hover:bg-slate-200 ui-open:bg-slate-300 disabled:opacity-70 disabled:pointer-events-none'
+                      disabled={selectedItems.length === 0}
+                    >
+                      <FontAwesomeIcon
+                        icon={faCaretDown}
+                        className='ui-open:rotate-180'
+                      />
+                    </Menu.Button>
+                    <Menu.Items className='absolute top-full right-0 mt-1 shadow-md rounded-lg bg-white border border-slate-200'>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <AggieButton
+                            className='px-3 py-2   hover:bg-slate-200'
+                            onClick={onNewIncidentFromReports}
+                          >
+                            <FontAwesomeIcon icon={faFile} />
+                            Create New Incident with Report
+                          </AggieButton>
+                        )}
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Menu>
+                </div>
               </>
             )}
           </div>
