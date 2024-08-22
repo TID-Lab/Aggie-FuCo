@@ -4,7 +4,7 @@ import { stringToDate } from "../../helpers";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { formatHashtag } from "../../utils/format";
+import { formatText } from "../../utils/format";
 import AggieButton from "../../components/AggieButton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getGroup } from "../../api/groups";
@@ -45,7 +45,7 @@ const ReportListItem = ({
       return "border-2 border-slate-300 bg-slate-50 rounded-lg";
     else if (isChecked && isSelectMode) return "bg-blue-100 ";
     else if (report.read) return "bg-slate-50 hover:bg-slate-100 ";
-    return "hover:bg-slate-100 ";
+    return "hover:bg-slate-100 bg-white";
   }
 
   function onAttachedReportClick(
@@ -108,18 +108,14 @@ const ReportListItem = ({
         </header>
         <div>
           <p className=' text-black max-h-[10em] line-clamp-5'>
-            {report.content
-              .split(" ")
-              .map((word, index) =>
-                formatHashtag(word, "text-slate-500", index)
-              )}
+            {formatText(report.content)}
           </p>
         </div>
       </div>
       <div className='flex flex-col'>
-        <div className='flex gap-1 opacity-0 group-hover:opacity-100'>
+        {/* <div className='flex gap-1 opacity-0 group-hover:opacity-100'>
           <AggieButton>test</AggieButton>
-        </div>
+        </div> */}
         {!!report._group && !!incident ? (
           <div
             className='rounded-lg bg-slate-100 px-2 py-1 flex-grow border border-slate-200 hover:cursor-pointer hover:bg-white'

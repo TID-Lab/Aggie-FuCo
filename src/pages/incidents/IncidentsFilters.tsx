@@ -14,8 +14,12 @@ import { Field, Form, Formik } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
 import AggieButton from "../../components/AggieButton";
+import AggiePagination from "../../components/AggiePagination";
 
-const IncidentsFilters = () => {
+interface IIncidentFilters {
+  reportCount?: number;
+}
+const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
   const { searchParams, getParam, setParams, clearAllParams } =
     useQueryParams<GroupSearchState>();
 
@@ -64,6 +68,14 @@ const IncidentsFilters = () => {
             </AggieButton>
           )}
         </div>
+        {reportCount && (
+          <AggiePagination
+            size='sm'
+            itemsPerPage={50}
+            total={reportCount}
+            goToPage={(num) => setParams({ page: num })}
+          />
+        )}
       </div>
       <div className='flex justify-between mb-2 text-sm'>
         <div className='flex gap-2'>

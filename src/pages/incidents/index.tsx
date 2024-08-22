@@ -27,7 +27,7 @@ const Incidents = () => {
   return (
     <section className='max-w-screen-xl mx-auto px-4 pb-10'>
       <header className='my-4 flex justify-between items-center'>
-        <h1 className='text-3xl'>Incidents</h1>
+        <h1 className='text-3xl font-medium'>Incidents</h1>
         <Link
           to='new'
           className='px-3 py-2 flex gap-2 items-center text-sm bg-green-800 hover:text-slate-100 hover:bg-green-700 text-slate-100 rounded-lg font-medium'
@@ -36,16 +36,10 @@ const Incidents = () => {
         </Link>
       </header>
 
-      {groupsQuery.data && groupsQuery.data.total && (
-        <AggiePagination
-          size='sm'
-          itemsPerPage={50}
-          total={groupsQuery.data.total}
-          goToPage={(num) => setParams({ page: num })}
-        />
-      )}
-      <IncidentsFilters />
-      <div className='divide-y divide-slate-200 border border-slate-200 rounded-lg'>
+      <IncidentsFilters
+        reportCount={groupsQuery.data && groupsQuery.data.total}
+      />
+      <div className='divide-y divide-slate-200 border border-slate-200 rounded-lg bg-white'>
         {groupsQuery.isSuccess &&
           groupsQuery.data?.results.map((groupItem) => (
             <Link

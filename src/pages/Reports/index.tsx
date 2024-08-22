@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { useQueryParams } from "../../hooks/useQueryParams";
 import type {
+  Report,
   ReportQueryState,
   Reports as ReportsType,
 } from "../../objectTypes";
@@ -94,19 +95,30 @@ const Reports = () => {
       setSelectedRead([params.reportId], params.read),
     onSuccess: (newData, variables) => {
       const previousData = queryClient.getQueryData<ReportsType>(["reports"]);
-      if (!previousData) return;
-      queryClient.setQueryData(["reports"], {
-        ...previousData,
-        results: updateOneInList(previousData.results, {
-          _id: variables.reportId,
+      if (previousData) {
+        queryClient.setQueryData(["reports"], {
+          ...previousData,
+          results: updateOneInList(previousData.results, {
+            _id: variables.reportId,
+            read: variables.read,
+          }),
+        });
+      }
+      const singleReport = queryClient.getQueryData<Report>([
+        "report",
+        variables.reportId,
+      ]);
+      if (singleReport) {
+        queryClient.setQueryData(["report", variables.reportId], {
+          ...singleReport,
           read: variables.read,
-        }),
-      });
+        });
+      }
     },
   });
 
   function onReportItemClick(id: string, isRead: boolean) {
-    navigate(id);
+    navigate(id + "?" + searchParams.toString());
     setSelectedItems([id]);
     if (!isRead) setSingleReadMutation.mutate({ reportId: id, read: true });
   }
@@ -139,7 +151,7 @@ const Reports = () => {
           </h1>
         </header>
 
-        <div className='px-1 py-2 bg-white/75 backdrop-blur-sm sticky top-0 z-10 '>
+        <div className='px-1 py-2 bg-gray-50/75 backdrop-blur-sm sticky top-0 z-10 '>
           <ReportsFilters
             reportCount={reportsQuery.data && reportsQuery.data.total}
             headerElement={
@@ -256,7 +268,7 @@ const Reports = () => {
           </div>
         </div>
 
-        <div className='flex flex-col border border-slate-200 rounded-lg'>
+        <div className='flex flex-col border border-slate-200 rounded-lg overflow-hidden'>
           {reportsQuery.isSuccess &&
             reportsQuery.data?.results.map((report) => (
               <div

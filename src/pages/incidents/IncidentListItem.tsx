@@ -11,6 +11,7 @@ import {
   faClose,
   faEdit,
   faEllipsis,
+  faMinusCircle,
   faPlus,
   faSpinner,
   faTrash,
@@ -133,16 +134,22 @@ const IncidentListItem = ({ item }: IProps) => {
   }
 
   return (
-    <article className='grid grid-cols-4 lg:grid-cols-6 px-2 py-2 text-sm text-slate-500 group-hover:bg-slate-50 border-b border-slate-200'>
+    <article className='grid grid-cols-4 lg:grid-cols-6 px-2 py-2 text-sm text-slate-500  group-hover:bg-slate-50 border-b border-slate-200'>
       <header className='col-span-3 flex flex-col'>
         <div className='flex gap-1 '>
           <VeracityToken value={item.veracity} />
+          {item.closed && (
+            <span className='px-1 bg-purple-200 text-purple-700 font-medium flex gap-1 items-center'>
+              <FontAwesomeIcon icon={faMinusCircle} />
+              Closed
+            </span>
+          )}
           <TagsList values={item.smtcTags} />
         </div>
-        <h2 className=' text-slate-700 flex gap-2 items-center'>
+        <h2 className=' text-slate-700 flex gap-2 items-center font-medium'>
           <span className='text-lg group-hover:text-blue-600 group-hover:underline'>
             {item.title}
-          </span>{" "}
+          </span>
           {item.escalated && (
             <span className='px-1 bg-orange-700 text-white font-medium text-sm flex gap-1 items-center no-underline'>
               <FontAwesomeIcon icon={faWarning} />
@@ -150,7 +157,7 @@ const IncidentListItem = ({ item }: IProps) => {
             </span>
           )}
         </h2>
-        <div className='grid grid-cols-4 flex-grow items-end'>
+        <div className='grid grid-cols-4 flex-grow items-end font-medium'>
           <p>#{item.idnum}</p>
           <p>{item._reports?.length} reports</p>
           <p>{item.locationName}</p>
@@ -174,7 +181,7 @@ const IncidentListItem = ({ item }: IProps) => {
               <p
                 key={user._id}
                 onClick={(e) => onUserClick(e, user._id)}
-                className='text-blue-600 hover:underline w-fit'
+                className='text-blue-600 hover:underline w-fit font-medium'
               >
                 {user.username ? user.username : "Deleted user"}
               </p>

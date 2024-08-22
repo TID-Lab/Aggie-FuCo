@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Linkify from "linkify-react";
 import TagsList from "../../components/tag/TagsList";
 import { Report } from "../../objectTypes";
-import { formatAuthor, formatHashtag } from "../../utils/format";
+import { formatAuthor, formatText } from "../../utils/format";
 
 interface IReportListItemSmall {
   report: Report;
@@ -40,11 +40,7 @@ const ReportListItemSmall = ({ report }: IReportListItemSmall) => {
               className: "underline text-blue-600 hover:bg-slate-100 ",
             }}
           >
-            {report.content
-              .split(" ")
-              .map((word: unknown, index) =>
-                formatHashtag(word, "text-slate-600", index)
-              )}
+            {formatText(report.content)}
           </Linkify>
         </p>
       </div>
