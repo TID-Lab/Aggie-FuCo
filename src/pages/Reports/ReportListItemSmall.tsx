@@ -1,4 +1,4 @@
-import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
+import { faExternalLink, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Linkify from "linkify-react";
 import TagsList from "../../components/tag/TagsList";
@@ -8,8 +8,22 @@ import { formatAuthor, formatText } from "../../utils/format";
 interface IReportListItemSmall {
   report: Report;
 }
-
+interface Istatistics {
+  like_count?: number;
+  view_count?: number;
+  reply_count?: number;
+  retweet_count?: number;
+}
 const ReportListItemSmall = ({ report }: IReportListItemSmall) => {
+  function statistics(actualStatistics: Istatistics) {
+    return Object.entries(actualStatistics).map(([key, value]) => {
+      return (
+        <span className='flex gap-1 items-center'>
+          <FontAwesomeIcon icon={faHeart} /> {value}
+        </span>
+      );
+    });
+  }
   return (
     <div className='pt-1 pb-2  bg-white rounded-xl border border-slate-200 text-base'>
       <div className='px-3 pt-2'>
@@ -43,6 +57,9 @@ const ReportListItemSmall = ({ report }: IReportListItemSmall) => {
             {formatText(report.content)}
           </Linkify>
         </p>
+        <div className='flex gap-3'>
+          {statistics(report.metadata.actualStatistics)}
+        </div>
       </div>
     </div>
   );

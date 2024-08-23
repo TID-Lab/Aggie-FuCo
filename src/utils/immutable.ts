@@ -15,7 +15,6 @@ export function updateOneInList<
   if (!newObject._id) throw "no ._id defined";
   return list.map((i) => {
     if (i._id === newObject._id) {
-      console.log({ ...i, ...newObject });
       return { ...i, ...newObject };
     } else {
       return i;

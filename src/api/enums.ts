@@ -13,6 +13,7 @@ export type ClosedOptions = (typeof CLOSED_OPTIONS)[number];
 
 export const MEDIA_OPTIONS = [
   "twitter",
+  "tiktok",
   "instagram",
   "RSS",
   "elmo",

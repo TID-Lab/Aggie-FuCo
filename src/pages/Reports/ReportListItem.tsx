@@ -42,10 +42,10 @@ const ReportListItem = ({
   }
   function bgState() {
     if (isChecked && !isSelectMode)
-      return "border-2 border-slate-300 bg-slate-50 rounded-lg";
+      return "border-2 border-slate-300 bg-slate-50 rounded-lg ";
     else if (isChecked && isSelectMode) return "bg-blue-100 ";
     else if (report.read) return "bg-slate-50 hover:bg-slate-100 ";
-    return "hover:bg-slate-100 bg-white";
+    return "bg-white hover:bg-slate-50";
   }
 
   function onAttachedReportClick(
@@ -90,8 +90,8 @@ const ReportListItem = ({
               )} */}
 
               <h1
-                className={`text-sm text-black mx-1 ${
-                  report.read ? "" : "font-medium"
+                className={`text-sm text-black mx-1 font-medium ${
+                  report.read ? "" : ""
                 }`}
               >
                 {report.author}

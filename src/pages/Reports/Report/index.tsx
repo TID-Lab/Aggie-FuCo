@@ -35,6 +35,8 @@ import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { updateOneInList } from "../../../utils/immutable";
 import AddReportsToIncidents from "../AddReportsToIncident";
+import ReportListItem from "../ReportListItem";
+import ReportListItemSmall from "../ReportListItemSmall";
 const Report = () => {
   let { id } = useParams();
   const { setParams } = useQueryParams<ReportQueryState>();
@@ -296,46 +298,7 @@ const Report = () => {
           </div>
         </div>
 
-        <div className='pt-1 pb-2  bg-white rounded-xl border border-slate-200 text-base'>
-          <div className='px-3 pt-2'>
-            <div className='flex justify-between mb-2'>
-              <div className=' font-medium  '>
-                <h1>
-                  {formatAuthor(
-                    reportQuery.data.author,
-                    reportQuery.data._media
-                  )}
-                </h1>
-                <p className='text-slate-600 text-xs font-normal mt-1'>
-                  {new Date(reportQuery.data.authoredAt).toLocaleString(
-                    "en-us"
-                  )}
-                </p>
-              </div>
-              <p className='flex flex-col items-end gap-1'>
-                <a
-                  target='_blank'
-                  href={reportQuery.data.url}
-                  className='ml-1 px-2 py-1 rounded-full border border-slate-200 font-medium text-xs inline-flex gap-1 items-center bg-slate-100 hover:bg-white'
-                >
-                  <p>Original Post</p>
-                  <FontAwesomeIcon icon={faExternalLink} />
-                </a>
-              </p>
-            </div>
-
-            <p className=''>
-              <Linkify
-                options={{
-                  target: "_blank",
-                  className: "underline text-blue-600 hover:bg-slate-100 ",
-                }}
-              >
-                {formatText(reportFullContent(reportQuery.data))}
-              </Linkify>
-            </p>
-          </div>
-        </div>
+        <ReportListItemSmall report={reportQuery.data} />
       </article>
     );
   }

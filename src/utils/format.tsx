@@ -24,6 +24,7 @@ const formatters = [
  * @returns
  */
 export function formatText(text: string, options: IFormatOptions = {}) {
+  if (!text || !isString(text)) return text;
   const words = text.split(" ");
   let wordsToFormat = new Map();
   //match and mark words to be formatted

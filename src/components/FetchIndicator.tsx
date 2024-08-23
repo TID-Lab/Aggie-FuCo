@@ -31,7 +31,7 @@ const FetchIndicator = () => {
     return state === "finished" ? 100 : width;
   }
   return (
-    <div className='w-full  pointer-events-none sticky top-0 z-50 '>
+    <div className='w-full  pointer-events-none sticky top-0 z-20 '>
       <span
         className='h-1 absolute top-0 left-0 transition duration-800 bg-blue-400'
         style={{
