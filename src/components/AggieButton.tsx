@@ -3,7 +3,7 @@ const defaultCSS =
 
 const variantCSS = {
   primary:
-    "bg-green-800 text-slate-100 hover:bg-green-700 rounded-lg px-2 py-1",
+    "bg-green-800 text-slate-100 hover:bg-green-700 rounded-lg px-2 py-1 font-medium",
   secondary:
     "bg-slate-100 px-2 py-1 hover:bg-slate-200 border border-slate-200 rounded-lg",
   outline: "",

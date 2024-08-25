@@ -1,14 +1,25 @@
-export interface Metadata {
+interface RawApiResponse {
+  id: string;
+  type: string;
+  attributes: unknown;
+}
+
+export interface BaseMetadata {
   imageText: any;
   junkipediaId: number;
   channelId: number;
   accountHandle: string;
   accountUrl: any;
   mediaUrl: string;
-  actualStatistics: FacebookStatistics | TiktokStatistics | TwitterStatistics;
-  rawAPIResponse: RawApiresponse;
+  actualStatistics: Statistics;
+  rawAPIResponse: RawApiResponse;
   testingFlagForPotentialDeletion: boolean;
 }
+export interface Statistics
+  extends TwitterStatistics,
+    TiktokStatistics,
+    FacebookStatistics,
+    YoutubeStatistics {}
 
 export interface FacebookStatistics {
   sadCount: number;
@@ -39,13 +50,15 @@ export interface TiktokStatistics {
 
 export interface TwitterStatistics {
   like_count: number;
-  view_count: string;
+  view_count: string | number;
   reply_count: number;
   retweet_count: number;
 }
 
-export interface RawApiresponse {
-  id: string;
-  type: string;
-  attributes: unknown;
+export interface YoutubeStatistics {
+  like_count: number;
+  view_count: number | string;
+  comment_count: number;
+  dislike_count: number | null;
+  favorite_count: number;
 }

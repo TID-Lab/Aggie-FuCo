@@ -38,10 +38,8 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
 
   if (!isAuthenticated) return <></>;
 
-  function linkStyle(to: string) {
-    if (location.pathname.includes(to)) return " border-b-2 border-[#416B34]";
-    else return "hover:bg-gray-300 text-[#416B34] hover:text-[#416B34]";
-  }
+  const isActive = (to: string) => location.pathname.includes(to);
+
   return (
     <nav className='w-full bg-white flex justify-between items-center px-4 border-b border-gray-200  py-2'>
       <div className='flex gap-2 items-center '>
@@ -57,14 +55,24 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
             />
           </svg>
         </div>
-        <div className='flex rounded-lg font-medium gap-4 mx-2 '>
+        <div className='flex rounded-lg font-medium gap-1 mx-2 '>
           {Object.entries(mainLinks).map(([name, path]) => (
             <Link
               key={name}
               to={path}
-              className={`py-1 px-2 -mx-2 ${linkStyle(path)}`}
+              className={`py-1 px-3 rounded-lg ${
+                isActive(path)
+                  ? "pointer-events-none"
+                  : "hover:bg-gray-200 rounded-lg text-[#416B34] hover:text-[#416B34]"
+              }`}
             >
-              <div>{name}</div>
+              <p
+                className={`py-1 border-b-2  ${
+                  isActive(path) ? " border-[#416B34]" : "border-transparent"
+                }`}
+              >
+                <span>{name}</span>
+              </p>
             </Link>
           ))}
         </div>
