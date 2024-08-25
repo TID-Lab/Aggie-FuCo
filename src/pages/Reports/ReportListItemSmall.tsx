@@ -37,6 +37,7 @@ const ReportListItemSmall = ({ report }: IReportListItemSmall) => {
       </span>
     );
   }
+  /// erm.... yeah i wanna redo this somehow
   function statistics() {
     if (!report._media) return <></>;
 
@@ -135,8 +136,9 @@ const ReportListItemSmall = ({ report }: IReportListItemSmall) => {
           <div className='flex gap-3 text-sm text-slate-600 font-medium mt-1'>
             {statistics()}
           </div>
-          <p className='text-xs font-medium text-slate-600'>
-            last fetched: {new Date(report.fetchedAt).toLocaleString("en-us")}
+          <p className='text-xs text-slate-600 text-right'>
+            last fetched: <br />
+            {new Date(report.fetchedAt).toLocaleString("en-us")}
           </p>
         </div>
       </div>

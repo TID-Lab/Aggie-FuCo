@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
 import AggieButton from "../../components/AggieButton";
 import AggiePagination from "../../components/AggiePagination";
+import Pagination from "../../components/Pagination";
 
 //TODO: refactor onSelectMode
 interface IReportFilters {
@@ -72,14 +73,13 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
             </AggieButton>
           )}
         </div>
-        {reportCount && (
-          <AggiePagination
-            size='sm'
-            itemsPerPage={50}
-            total={reportCount}
-            goToPage={(num) => setParams({ page: num })}
-          />
-        )}
+
+        <Pagination
+          currentPage={Number(getParam("page")) || 0}
+          totalCount={reportCount || 0}
+          onPageChange={(num) => setParams({ page: num })}
+          size={1}
+        />
       </div>
       <div className='flex justify-between mb-2 text-sm'>
         <div className='flex gap-2'>{headerElement}</div>

@@ -25,7 +25,6 @@ import {
   faFile,
   faMinus,
   faPlus,
-  faSearch,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,6 +32,8 @@ import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
 import { updateOneInList } from "../../utils/immutable";
 import { Menu } from "@headlessui/react";
 import AddReportsToIncidents from "./AddReportsToIncident";
+import Pagination from "../../components/Pagination";
+import { formatNumber } from "../../utils/format";
 
 const Reports = () => {
   const navigate = useNavigate();
@@ -90,6 +91,22 @@ const Reports = () => {
     },
   });
 
+  function showReportCount(
+    page: number,
+    pageSize: number,
+    total: number | undefined
+  ) {
+    const totalCount = total !== undefined ? formatNumber(total) : "---";
+
+    const pageCount = page * pageSize;
+
+    const toCount = pageCount + 51 > (total || 0) ? total || 0 : pageCount + 51;
+
+    return `${formatNumber(pageCount + 1)} — ${formatNumber(
+      toCount
+    )} of ${totalCount}`;
+  }
+
   const setSingleReadMutation = useMutation({
     mutationFn: (params: { reportId: string; read: boolean }) =>
       setSelectedRead([params.reportId], params.read),
@@ -145,10 +162,17 @@ const Reports = () => {
         onClose={() => setAddReportModal(false)}
       />
       <main className='col-span-2 '>
-        <header className='my-4 col-span-3'>
-          <h1 className='text-3xl font-medium'>
+        <header className='my-4 col-span-3 flex justify-between'>
+          <h1 className='text-3xl font-medium '>
             All Reports <span className='text-slate-400'>Batch Mode</span>
           </h1>
+          <p className='font-medium text-sm'>
+            {showReportCount(
+              Number(getParam("page")) || 0,
+              50,
+              reportsQuery.data?.total
+            )}
+          </p>
         </header>
 
         <div className='px-1 py-2 bg-gray-50/75 backdrop-blur-sm sticky top-0 z-10 '>
@@ -159,7 +183,7 @@ const Reports = () => {
                 className='text-xs font-medium  bg-slate-100 border border-slate-200 rounded-lg px-2 py-1 hover:bg-slate-200'
                 onClick={onSelectModeChange}
               >
-                {selectMode ? "Cancel Selection" : "Select Mode"}
+                {selectMode ? "Cancel Selection" : "Select Multiple"}
               </AggieButton>
             }
           />
@@ -285,14 +309,24 @@ const Reports = () => {
               </div>
             ))}
         </div>
-        {reportsQuery.data && reportsQuery.data.total && (
-          <AggiePagination
-            size='sm'
-            itemsPerPage={50}
-            total={reportsQuery.data.total}
-            goToPage={(num) => setParams({ page: num })}
-          />
-        )}
+        <div className='flex flex-col items-center justify-center mt-1 mb-40 w-full'>
+          <small className={"text-center font-medium w-full mb-1"}>
+            {showReportCount(
+              Number(getParam("page")) || 0,
+              50,
+              reportsQuery.data?.total
+            )}
+          </small>
+
+          <div className='w-fit'>
+            <Pagination
+              currentPage={Number(getParam("page")) || 0}
+              totalCount={reportsQuery.data?.total || 0}
+              onPageChange={(num) => setParams({ page: num })}
+              size={3}
+            />
+          </div>
+        </div>
       </main>
       <aside className='col-span-1'>
         {!outlet || !outlet.type ? (

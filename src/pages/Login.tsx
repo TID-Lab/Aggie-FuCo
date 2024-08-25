@@ -1,22 +1,16 @@
 import React, { useState } from "react";
-import {
-  Container,
-  Col,
-  Row,
-  Card,
-  Form,
-  Button,
-  Image,
-  Alert,
-  InputGroup,
-} from "react-bootstrap";
+import { Form, Alert, InputGroup } from "react-bootstrap";
 import { Formik, FormikValues } from "formik";
 import * as Yup from "yup";
 import { LoginData } from "../objectTypes";
 import { logIn } from "../api/session";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faEyeSlash,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import AggieButton from "../components/AggieButton";
 
@@ -56,7 +50,7 @@ const Login = (props: IProps) => {
         background: "linear-gradient(to bottom right, #2D9242, #0d6efd)",
       }}
     >
-      <section className='rounded-lg bg-white shadow-xl mb-24 p-4'>
+      <section className='rounded-lg bg-white shadow-xl mb-24 p-4 w-full max-w-lg'>
         <div className='flex justify-center text-[#416B34]'>
           <div>
             <svg
@@ -126,15 +120,14 @@ const Login = (props: IProps) => {
                     autoCapitalize={"off"}
                     autoComplete={"loginPassword"}
                   />
-                  <Button
+                  <AggieButton
+                    className='rounded-r-lg w-12 bg-slate-100 border-y border-r border-slate-300 justify-center hover:bg-slate-200'
                     onClick={() => setPasswordVisibility(!passwordVisibility)}
                   >
-                    {passwordVisibility ? (
-                      <FontAwesomeIcon icon={faEyeSlash} />
-                    ) : (
-                      <FontAwesomeIcon icon={faEye} />
-                    )}
-                  </Button>
+                    <FontAwesomeIcon
+                      icon={passwordVisibility ? faEyeSlash : faEye}
+                    />
+                  </AggieButton>
                 </InputGroup>
               </Form.Group>
               {/* {(errors.loginUsername || errors.loginPassword) && (
@@ -147,9 +140,16 @@ const Login = (props: IProps) => {
                 {/* <Button variant='link'>Forgot your username?</Button> */}
                 <AggieButton
                   variant='primary'
+                  className='w-full justify-center text-lg'
                   type='submit'
                   disabled={loginQuery.isLoading}
                 >
+                  {loginQuery.isLoading && (
+                    <FontAwesomeIcon
+                      icon={faSpinner}
+                      className='animate-spin'
+                    />
+                  )}
                   Sign in
                 </AggieButton>
               </div>

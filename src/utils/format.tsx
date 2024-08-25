@@ -1,5 +1,5 @@
 import { isString } from "lodash";
-
+import { Fragment } from "react";
 interface IFormatOptions {}
 const formatters = [
   {
@@ -45,11 +45,9 @@ export function formatText(text: string, options: IFormatOptions = {}) {
           (i) => i.key === wordsToFormat.get(index)
         )?.defaultStyle;
         return (
-          <>
-            <span key={index} className={style}>
-              {word}
-            </span>{" "}
-          </>
+          <Fragment key={index}>
+            <span className={style}>{word}</span>{" "}
+          </Fragment>
         );
       })}
     </>
@@ -60,3 +58,12 @@ export const formatAuthor = (author: string, media: string[]) => {
   if (media[0] === "twitter") return "@" + author;
   return author;
 };
+
+/**
+ * convert number to pretty text
+ * @param number
+ * @returns
+ */
+export function formatNumber(number: number): string {
+  return number.toLocaleString();
+}
