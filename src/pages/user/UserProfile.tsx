@@ -126,9 +126,6 @@ const UserProfile = (props: IProps) => {
                 </Container>
               )}
           </Col>
-          <Col>
-            <div className='d-none d-xl-block'>{/*<StatsBar/>*/}</div>
-          </Col>
         </Row>
       </Container>
     </div>

@@ -133,6 +133,7 @@ const Login = (props: IProps) => {
                   autoComplete={"loginPassword"}
                 />
                 <AggieButton
+                  type='button'
                   className='rounded-r-lg w-12 bg-slate-100 border-y border-r border-slate-300 justify-center hover:bg-slate-200'
                   onClick={() => setPasswordVisibility(!passwordVisibility)}
                 >
