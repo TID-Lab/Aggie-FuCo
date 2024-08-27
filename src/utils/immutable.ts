@@ -22,3 +22,23 @@ export function updateOneInList<
     }
   });
 }
+/**
+ * update multiple objects with same information
+ * @param keys list of _ids
+ * @param list array of objects to search
+ * @param newObject new data to put into objects
+ * @returns
+ */
+export function updateByIds<
+  T extends hasId,
+  A extends { [key in keyof T]?: T[keyof T] }
+>(keys: string[], list: T[], newObject: A) {
+  if (!newObject) throw "undefined object, unable to update list by id";
+  return list.map((i) => {
+    if (keys.includes(i._id)) {
+      return { ...i, ...newObject };
+    } else {
+      return i;
+    }
+  });
+}

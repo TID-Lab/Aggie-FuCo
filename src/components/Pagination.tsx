@@ -49,7 +49,7 @@ const Pagination = ({
     return <></>;
   };
   return (
-    <div className='flex font-medium bg-white rounded border divide-x border-slate-300 divide-slate-300 h-fit'>
+    <div className='flex font-medium bg-white rounded-lg border divide-x border-slate-300 divide-slate-300 h-fit'>
       <NumberButton direction='prev' toPage={currentPage - 1}>
         <FontAwesomeIcon icon={faChevronLeft} />
       </NumberButton>
@@ -57,6 +57,7 @@ const Pagination = ({
         .fill(0)
         .map((value, index) => (
           <NumberButton
+            key={index}
             direction='prev'
             toPage={currentPage - (size - index)}
           />
@@ -118,7 +119,11 @@ const Pagination = ({
       {Array(size)
         .fill(0)
         .map((value, index) => (
-          <NumberButton direction='next' toPage={currentPage + index + 1} />
+          <NumberButton
+            key={index}
+            direction='next'
+            toPage={currentPage + index + 1}
+          />
         ))}
 
       <NumberButton direction='next' toPage={currentPage + 1}>

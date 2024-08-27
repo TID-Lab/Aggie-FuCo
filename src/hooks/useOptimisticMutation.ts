@@ -2,7 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface IUseOptimisticMutation<TMutation, TQuery> {
   mutationFn: (params: TMutation) => Promise<unknown>;
-  setQueryData: (previousData: TQuery, newData: TMutation) => TQuery;
+  setQueryData: (
+    previousData: TQuery,
+    newData: TMutation
+  ) => { [key in keyof TQuery]?: TQuery[keyof TQuery] };
   queryKey: string[];
   /** refetch query after mutation response? */
   refetch?: boolean;
@@ -37,7 +40,10 @@ export function useOptimisticMutation<TMutation, TQuery>({
       if (previousData) {
         // Optimistically update to the new value
 
-        queryClient.setQueryData(queryKey, setQueryData(previousData, newData));
+        queryClient.setQueryData(queryKey, {
+          ...previousData,
+          ...setQueryData(previousData, newData),
+        });
       }
       // Return a context with the previous and new todo
       return { previousData, newData };

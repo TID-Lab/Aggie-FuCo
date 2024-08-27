@@ -6,7 +6,7 @@ import {
   ReportQueryState_old,
   Reports,
 } from "../objectTypes";
-import { VeracityOptions } from "./enums";
+import { IrrelevanceOptions, VeracityOptions } from "./enums";
 
 export const getReports = async (
   searchState: ReportQueryState,
@@ -90,6 +90,17 @@ export const setSelectedVeracity = async (
   const { data } = await axios.patch("/api/report/_veracity", {
     ids: reportIds,
     veracity: veracity,
+  });
+  return data;
+};
+
+export const setSelectedIrrelevance = async (
+  reportIds: string[],
+  irrelevance: IrrelevanceOptions | string
+) => {
+  const { data } = await axios.patch("/api/report/_irrelevance", {
+    ids: reportIds,
+    irrelevance: irrelevance,
   });
   return data;
 };

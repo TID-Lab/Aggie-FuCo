@@ -67,3 +67,28 @@ export const formatAuthor = (author: string, media: string[]) => {
 export function formatNumber(number: number): string {
   return number.toLocaleString();
 }
+
+/**
+ * formatted pretty string of page count
+ * @param page current page
+ * @param pageSize number of items per page
+ * @param total total item count
+ * @returns
+ */
+export function formatPageCount(
+  page: number | undefined,
+  pageSize: number,
+  total: number | undefined
+) {
+  if (page === undefined) return "0";
+
+  const totalCount = total !== undefined ? formatNumber(total) : "---";
+
+  const pageCount = page * pageSize;
+
+  const toCount = pageCount + 51 > (total || 0) ? total || 0 : pageCount + 51;
+
+  return `${formatNumber(pageCount + 1)} — ${formatNumber(toCount)} ${
+    totalCount && "of " + totalCount
+  }`;
+}

@@ -1,8 +1,12 @@
 import type { hasId } from "./common";
-import type { VeracityOptions, MediaOptions } from "../api/enums";
+import type {
+  VeracityOptions,
+  MediaOptions,
+  IrrelevanceOptions,
+} from "../api/enums";
 import type { BaseMetadata } from "./metadata";
 
-interface BaseReport extends hasId {
+export interface Report extends hasId {
   veracity: VeracityOptions;
   tags: string[];
   smtcTags: string[];
@@ -23,10 +27,9 @@ interface BaseReport extends hasId {
   commentTo: string;
   notes: string;
   originalPost: string;
+  irrelevant?: IrrelevanceOptions;
   __v: number;
 }
-
-export type Report = BaseReport;
 
 export interface Reports {
   total: number;

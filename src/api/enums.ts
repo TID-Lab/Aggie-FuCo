@@ -5,12 +5,6 @@ export const VERACITY_OPTIONS = [
 ] as const;
 export type VeracityOptions = (typeof VERACITY_OPTIONS)[number];
 
-export const ESCALATED_OPTIONS = ["true", "false"] as const;
-export type EscalatedOptions = (typeof ESCALATED_OPTIONS)[number];
-
-export const CLOSED_OPTIONS = ["true", "false"] as const;
-export type ClosedOptions = (typeof CLOSED_OPTIONS)[number];
-
 export const MEDIA_OPTIONS = [
   "twitter",
   "tiktok",
@@ -21,3 +15,12 @@ export const MEDIA_OPTIONS = [
   "facebook",
 ];
 export type MediaOptions = (typeof MEDIA_OPTIONS)[number];
+
+export const ESCALATED_OPTIONS = ["true", "false"] as const;
+export type EscalatedOptions = (typeof ESCALATED_OPTIONS)[number];
+
+export const CLOSED_OPTIONS = ["true", "false"] as const;
+export type ClosedOptions = (typeof CLOSED_OPTIONS)[number];
+
+export const IRRELEVANCE_OPTIONS = ["true", "maybe", "false"] as const;
+export type IrrelevanceOptions = (typeof IRRELEVANCE_OPTIONS)[number];

@@ -32,7 +32,7 @@ let schema = new Schema({
   notes: { type: String },
   escalated: { type: Boolean, default: false, required: true, index: true },
   content_lang: { type: String },
-  irrelevant: { type: Boolean, default: false, required: false }
+  irrelevant: { type: String, default: 'false', required: false, enum: ['false', 'true', 'maybe'] }
 });
 
 schema.index({ 'metadata.ct_tag': 1 }, { background: true });

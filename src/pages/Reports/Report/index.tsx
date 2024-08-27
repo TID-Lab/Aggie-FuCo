@@ -168,7 +168,7 @@ const Report = () => {
   useEffect(() => {
     if (!reportQuery.data) return;
     if (!tagsQuery.data) return;
-    console.log(reportQuery.data.smtcTags);
+    console.log(reportQuery.data);
     setTags(
       reportQuery.data.smtcTags.map(
         (id) => tagsQuery.data?.find((tag) => tag._id === id) || emptyTag

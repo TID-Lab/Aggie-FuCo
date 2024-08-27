@@ -1,25 +1,23 @@
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import { Link, useOutlet, useNavigate } from "react-router-dom";
+import { Link, useOutlet, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { useQueryParams } from "../../hooks/useQueryParams";
-import type {
-  Report,
-  ReportQueryState,
-  Reports as ReportsType,
-} from "../../objectTypes";
-import { getReports, setSelectedRead } from "../../api/reports";
-
+import type { ReportQueryState } from "../../objectTypes";
+import {
+  getReports,
+  setSelectedIrrelevance,
+  setSelectedRead,
+} from "../../api/reports";
+import { Report, Reports as ReportsType } from "../../types/reports";
 import ReportsFilters from "./ReportsFilters";
 import ReportListItem from "./ReportListItem";
-import { Formik, Field } from "formik";
 
-import { Form } from "react-bootstrap";
 import AggieButton from "../../components/AggieButton";
-import AggiePagination from "../../components/AggiePagination";
 import {
   faCaretDown,
   faCheck,
+  faCircle,
   faEnvelope,
   faEnvelopeOpen,
   faFile,
@@ -29,17 +27,22 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
-import { updateOneInList } from "../../utils/immutable";
+import { updateByIds, updateOneInList } from "../../utils/immutable";
 import { Menu } from "@headlessui/react";
 import AddReportsToIncidents from "./AddReportsToIncident";
 import Pagination from "../../components/Pagination";
-import { formatNumber } from "../../utils/format";
+import { formatNumber, formatPageCount } from "../../utils/format";
 import { useMultiSelect } from "../../hooks/useMultiSelect";
+import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
+import { IrrelevanceOptions } from "../../api/enums";
+import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
 
 const Reports = () => {
+  let { id: openPageId } = useParams();
+
   const navigate = useNavigate();
   const outlet = useOutlet();
-  const queryClient = useQueryClient();
+  const queryData = useUpdateQueryData();
   const { searchParams, getAllParams, setParams, getParam } =
     useQueryParams<ReportQueryState>();
 
@@ -59,66 +62,76 @@ const Reports = () => {
     queryKey: ["reports"],
     mutationFn: (params: { reportIds: string[]; read: boolean }) =>
       setSelectedRead(params.reportIds, params.read),
-    setQueryData: (previousData: ReportsType, newData) => {
+    setQueryData: (previousData: ReportsType, variables) => {
+      const updateData = updateByIds(
+        variables.reportIds,
+        previousData.results,
+        { read: variables.read }
+      );
       return {
-        ...previousData,
-        results: previousData.results.map((i) => {
-          if (newData.reportIds.includes(i._id)) {
-            return { ...i, read: newData.read };
-          }
-          return i;
-        }),
+        results: updateData,
       };
     },
   });
 
-  function showReportCount(
-    page: number,
-    pageSize: number,
-    total: number | undefined
-  ) {
-    const totalCount = total !== undefined ? formatNumber(total) : "---";
-
-    const pageCount = page * pageSize;
-
-    const toCount = pageCount + 51 > (total || 0) ? total || 0 : pageCount + 51;
-
-    return `${formatNumber(pageCount + 1)} — ${formatNumber(
-      toCount
-    )} of ${totalCount}`;
-  }
-
   const setSingleReadMutation = useMutation({
-    mutationFn: (params: { reportId: string; read: boolean }) =>
-      setSelectedRead([params.reportId], params.read),
-    onSuccess: (newData, variables) => {
-      const previousData = queryClient.getQueryData<ReportsType>(["reports"]);
-      if (previousData) {
-        queryClient.setQueryData(["reports"], {
-          ...previousData,
-          results: updateOneInList(previousData.results, {
-            _id: variables.reportId,
-            read: variables.read,
-          }),
-        });
-      }
-      const singleReport = queryClient.getQueryData<Report>([
-        "report",
-        variables.reportId,
-      ]);
-      if (singleReport) {
-        queryClient.setQueryData(["report", variables.reportId], {
-          ...singleReport,
+    mutationFn: (params: { _id: string; read: boolean }) =>
+      setSelectedRead([params._id], params.read),
+    onSuccess: (_, variables) => {
+      // update reports list
+      queryData.set<ReportsType>(["reports"], (previousData) => {
+        const updateData = updateByIds(
+          [variables._id],
+          previousData.results,
+          variables
+        );
+        return {
+          results: updateData,
+        };
+      });
+      // update single report
+      queryData.set<Report>(["report", variables._id], (previousData) => {
+        return {
           read: variables.read,
-        });
-      }
+        };
+      });
+    },
+  });
+
+  const setIrrelevance = useMutation({
+    mutationFn: (params: {
+      reportIds: string[];
+      irrelevant: IrrelevanceOptions;
+    }) => setSelectedIrrelevance(params.reportIds, params.irrelevant),
+    onSuccess: (_, variables) => {
+      // update reports list
+      queryData.set<ReportsType>(["reports"], (previousData) => {
+        const updateData = updateByIds(
+          variables.reportIds,
+          previousData.results,
+          { irrelevant: variables.irrelevant }
+        );
+
+        return {
+          results: updateData,
+        };
+      });
+      // // update single report
+      // if (openPageId) {
+      //   queryData.set<Report>(["report", openPageId], (previousData) => {
+      //     return {
+      //       irrelevant: variables.irrelevant,
+      //     };
+      //   });
+      //   navigate({ pathname: "/reports", search: searchParams.toString() });
+      // }
     },
   });
 
   function onReportItemClick(id: string, isRead: boolean) {
     navigate(id + "?" + searchParams.toString());
     multiSelect.set([id]);
-    if (!isRead) setSingleReadMutation.mutate({ reportId: id, read: true });
+    if (!isRead) setSingleReadMutation.mutate({ _id: id, read: true });
   }
   function onNewIncidentFromReports() {
     const params = new URLSearchParams({
@@ -148,8 +161,8 @@ const Reports = () => {
             All Reports <span className='text-slate-400'>Batch Mode</span>
           </h1>
           <p className='font-medium text-sm'>
-            {showReportCount(
-              Number(getParam("page")) || 0,
+            {formatPageCount(
+              Number(getParam("page")),
               50,
               reportsQuery.data?.total
             )}
@@ -224,10 +237,29 @@ const Reports = () => {
                 </div>
                 <AggieButton
                   className='bg-rose-200 text-rose-800 border border-rose-500 border-none  px-2 py-1 rounded-lg hover:bg-rose-300'
-                  disabled={true}
+                  disabled={!multiSelect.any()}
+                  onClick={() =>
+                    setIrrelevance.mutate({
+                      reportIds: multiSelect.selection,
+                      irrelevant: "true",
+                    })
+                  }
                 >
                   <FontAwesomeIcon icon={faXmark} />
                   Not Relevant
+                </AggieButton>
+                <AggieButton
+                  className='bg-green-100 text-green-800 border border-green-200 border-none  px-2 py-1 rounded-lg hover:bg-green-300'
+                  disabled={!multiSelect.any()}
+                  onClick={() =>
+                    setIrrelevance.mutate({
+                      reportIds: multiSelect.selection,
+                      irrelevant: "false",
+                    })
+                  }
+                >
+                  <FontAwesomeIcon icon={faDotCircle} />
+                  Relevant
                 </AggieButton>
                 <div className='flex font-medium'>
                   <AggieButton
@@ -240,7 +272,7 @@ const Reports = () => {
                   </AggieButton>
                   <Menu as='div' className='relative'>
                     <Menu.Button
-                      className='px-2 py-1 rounded-r-lg bg-slate-100 border-y border-r border-slate-200 hover:bg-slate-200 ui-open:bg-slate-300 disabled:opacity-70 disabled:pointer-events-none'
+                      className='focus-theme px-2 py-1 rounded-r-lg bg-slate-100 border-y border-r border-slate-200 hover:bg-slate-200 ui-open:bg-slate-300 disabled:opacity-70 disabled:pointer-events-none'
                       disabled={!multiSelect.any()}
                     >
                       <FontAwesomeIcon
@@ -295,8 +327,8 @@ const Reports = () => {
             />
           </div>
           <small className={"text-center font-medium w-full mt-2"}>
-            {showReportCount(
-              Number(getParam("page")) || 0,
+            {formatPageCount(
+              Number(getParam("page")),
               50,
               reportsQuery.data?.total
             )}
