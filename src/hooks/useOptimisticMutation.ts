@@ -4,12 +4,14 @@ interface IUseOptimisticMutation<TMutation, TQuery> {
   mutationFn: (params: TMutation) => Promise<unknown>;
   setQueryData: (previousData: TQuery, newData: TMutation) => TQuery;
   queryKey: string[];
+  /** refetch query after mutation response? */
   refetch?: boolean;
 }
 
 /**
- *  mutate and then optimistically update local list
- * mainly for reports and incidents lists
+ * wrapper for useQuery that mutate and then optimistically update local list in memory.
+ * mainly used for incidents and reports.
+ * implementation basically the one described in the tutorial: https://tanstack.com/query/v4/docs/framework/react/guides/optimistic-updates
  * */
 export function useOptimisticMutation<TMutation, TQuery>({
   mutationFn,

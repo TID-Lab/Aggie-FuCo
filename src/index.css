@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer defaults {
+  /* todo: switch to tailwind ring-* implementatino (conflicts with bootstrap rightno) */
+  .focus-theme {
+    @apply outline outline-offset-1 outline-0 focus:outline-2 outline-blue-500/75 transition-[outline] duration-75;
+  }
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",

@@ -1,20 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
-import { getUsers } from "../../api/users";
 import { getSources } from "../../api/sources";
-import { getTags } from "../../api/tags";
-import { MEDIA_OPTIONS, ESCALATED_OPTIONS } from "../../api/enums";
-import type { GroupSearchState, ReportQueryState } from "../../objectTypes";
+import { MEDIA_OPTIONS } from "../../api/enums";
+import type { ReportQueryState } from "../../objectTypes";
 
 import FilterComboBox from "../../components/filters/FilterComboBox";
 import FilterListbox from "../../components/filters/FilterListBox";
-import FilterRadioGroup from "../../components/filters/FilterRadioGroup";
 import { Field, Form, Formik } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
 import AggieButton from "../../components/AggieButton";
-import AggiePagination from "../../components/AggiePagination";
 import Pagination from "../../components/Pagination";
 
 //TODO: refactor onSelectMode
@@ -48,19 +44,21 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
             initialValues={{ keywords: getParam("keywords") }}
             onSubmit={(e) => setParams(e)}
           >
-            <Form>
+            <Form className='flex items-center'>
               <Field
-                name='title'
-                className='px-2 py-1 border border-r-0 border-slate-300 bg-slate-50 rounded-l-lg min-w-[20rem]'
-                placeholder='search for title, something, and something'
+                name='keywords'
+                className='focus-theme px-2 py-1 border-y border-l border-slate-300 bg-slate-50 rounded-l-lg min-w-[20rem]'
+                placeholder='Search Keywords'
               />
-              <button
+
+              <AggieButton
                 type='submit'
                 onClick={onSearch}
-                className='px-4 py-1 bg-slate-100 rounded-r-lg border border-l-0 border-slate-30'
+                className='px-4 py-1 h-full hover:bg-white bg-slate-100 rounded-r-lg border border-l-0 border-slate-30'
+                title='search'
               >
                 <FontAwesomeIcon icon={faSearch} />
-              </button>
+              </AggieButton>
             </Form>
           </Formik>
           {searchParams.size > 0 && (
@@ -78,7 +76,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
           currentPage={Number(getParam("page")) || 0}
           totalCount={reportCount || 0}
           onPageChange={(num) => setParams({ page: num })}
-          size={1}
+          size={0}
         />
       </div>
       <div className='flex justify-between mb-2 text-sm'>

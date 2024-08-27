@@ -1,5 +1,5 @@
 const defaultCSS =
-  "disabled:pointer-events-none disabled:opacity-50 flex gap-1 items-center text-nowrap ";
+  "disabled:pointer-events-none disabled:opacity-50 inline-flex gap-1 items-center text-nowrap focus-theme";
 
 const variantCSS = {
   primary:

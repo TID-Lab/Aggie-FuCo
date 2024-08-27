@@ -2,6 +2,7 @@
 
 import { hasId } from "../objectTypes";
 
+// todo: refactor to accept multiple ids. could be generic to accept any parameter...?
 /**
  * update a single object inside a list, immutable
  * @param list list to search
@@ -10,7 +11,7 @@ import { hasId } from "../objectTypes";
  */
 export function updateOneInList<
   T extends hasId,
-  A extends { [key in keyof T]?: unknown }
+  A extends { [key in keyof T]?: T[keyof T] }
 >(list: T[], newObject: A): T[] {
   if (!newObject._id) throw "no ._id defined";
   return list.map((i) => {

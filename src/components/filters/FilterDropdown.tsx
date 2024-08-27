@@ -25,7 +25,7 @@ const FilterDropdown = ({
   return (
     <Popover className='relative'>
       <Popover.Button
-        className={`py-1  hover:bg-slate-100 ui-open:bg-slate-100 rounded ${
+        className={`focus-theme py-1 hover:bg-slate-100 ui-open:bg-slate-100 rounded ${
           value ? "bg-slate-200 px-2" : "px-1"
         }`}
       >

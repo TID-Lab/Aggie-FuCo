@@ -49,7 +49,7 @@ const Pagination = ({
     return <></>;
   };
   return (
-    <div className='flex text-xs font-medium bg-white rounded border divide-x border-slate-300 divide-slate-300 h-fit'>
+    <div className='flex font-medium bg-white rounded border divide-x border-slate-300 divide-slate-300 h-fit'>
       <NumberButton direction='prev' toPage={currentPage - 1}>
         <FontAwesomeIcon icon={faChevronLeft} />
       </NumberButton>
@@ -63,7 +63,7 @@ const Pagination = ({
         ))}
 
       <Popover className='relative'>
-        <Popover.Button className='px-2 py-2 hover:bg-slate-200'>
+        <Popover.Button className='focus-theme px-2 py-2 hover:bg-slate-200'>
           Page {currentPage} {totalCount !== 0 && <span>of {totalPages}</span>}
         </Popover.Button>
 
@@ -73,22 +73,22 @@ const Pagination = ({
             onSubmit={(e) => e.page && onPageChange(e.page)}
           >
             <Form className=''>
-              <label>Jump to:</label>
+              <label className='mb-1'>Jump to:</label>
               <div className='flex'>
                 <Field
                   name='page'
                   type='number'
                   autoFocus
-                  className='px-2 py-2 border border-r-0 border-slate-300 bg-slate-50 rounded-l-lg w-24'
+                  className='focus-theme px-2 py-2 border border-r-0 border-slate-300 bg-slate-50 rounded-l-lg w-24'
                   placeholder='page #'
                   max={totalPages}
                 />
-                <button
+                <AggieButton
                   type='submit'
-                  className='px-2 py-1 bg-slate-50 hover:bg-white rounded-r-lg border border-l-0 border-slate-30'
+                  className='focus-theme px-2 py-1 bg-slate-50 hover:bg-white rounded-r-lg border-y border-r border-slate-30'
                 >
                   <FontAwesomeIcon icon={faArrowRight} />
-                </button>
+                </AggieButton>
               </div>
             </Form>
           </Formik>

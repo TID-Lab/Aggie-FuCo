@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Form, Alert, InputGroup } from "react-bootstrap";
-import { Formik, FormikValues } from "formik";
+import { Field, Formik, FormikValues, Form } from "formik";
 import * as Yup from "yup";
 import { LoginData } from "../objectTypes";
 import { logIn } from "../api/session";
@@ -69,13 +68,16 @@ const Login = (props: IProps) => {
             </h2>
           </div>
         </div>
-        <Alert show={loginQuery.isError} variant={"danger"}>
+        <div
+          className={`px-2 py-2 bg-red-100 border border-red-800 text-red-700 font-medium rounded-lg ${
+            loginQuery.isError ? " " : "hidden"
+          }`}
+        >
           <span>
-            {
-              "Your username and password combination was not correct, please try again."
-            }
+            Your username and password combination was not correct, please try
+            again.
           </span>
-        </Alert>
+        </div>
         <Formik
           initialValues={{ loginUsername: "", loginPassword: "" }}
           validationSchema={loginFormSchema}
@@ -94,47 +96,51 @@ const Login = (props: IProps) => {
             isSubmitting,
           }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              <Form.Group controlId='loginForm.formUsername' className={"mb-3"}>
-                <Form.Label>Username</Form.Label>
-                <Form.Control
+              <label
+                htmlFor='loginPassword'
+                className='font-medium text-sm text-slate-600'
+              >
+                Username
+              </label>
+              <Field
+                className='focus-theme px-3 py-2 border mb-2 border-slate-300 bg-slate-50 focus:bg-white rounded-lg w-full'
+                required
+                type='text'
+                placeholder='Username'
+                name='loginUsername'
+                onChange={handleChange}
+                value={values.loginUsername}
+              />
+
+              <label
+                htmlFor='loginPassword'
+                className='font-medium text-sm text-slate-600'
+              >
+                Password
+              </label>
+              <div className='flex mb-6'>
+                <Field
+                  className='focus-theme px-3 py-2 border-y border-l border-slate-300 bg-slate-50 focus:bg-white rounded-l-lg w-full'
                   required
-                  type='text'
-                  placeholder='Username'
-                  name='loginUsername'
+                  type={passwordVisibility ? "text" : "password"}
+                  placeholder='Password'
+                  name='loginPassword'
                   onChange={handleChange}
-                  value={values.loginUsername}
+                  value={values.loginPassword}
+                  spellCheck={false}
+                  autoCorrect={"off"}
+                  autoCapitalize={"off"}
+                  autoComplete={"loginPassword"}
                 />
-              </Form.Group>
-              <Form.Group controlId='loginForm.formPassword' className={"mb-3"}>
-                <Form.Label>Password</Form.Label>
-                <InputGroup>
-                  <Form.Control
-                    required
-                    type={passwordVisibility ? "text" : "password"}
-                    placeholder='Password'
-                    name='loginPassword'
-                    onChange={handleChange}
-                    value={values.loginPassword}
-                    spellCheck={false}
-                    autoCorrect={"off"}
-                    autoCapitalize={"off"}
-                    autoComplete={"loginPassword"}
+                <AggieButton
+                  className='rounded-r-lg w-12 bg-slate-100 border-y border-r border-slate-300 justify-center hover:bg-slate-200'
+                  onClick={() => setPasswordVisibility(!passwordVisibility)}
+                >
+                  <FontAwesomeIcon
+                    icon={passwordVisibility ? faEyeSlash : faEye}
                   />
-                  <AggieButton
-                    className='rounded-r-lg w-12 bg-slate-100 border-y border-r border-slate-300 justify-center hover:bg-slate-200'
-                    onClick={() => setPasswordVisibility(!passwordVisibility)}
-                  >
-                    <FontAwesomeIcon
-                      icon={passwordVisibility ? faEyeSlash : faEye}
-                    />
-                  </AggieButton>
-                </InputGroup>
-              </Form.Group>
-              {/* {(errors.loginUsername || errors.loginPassword) && (
-                <div className='border border-red-300 text-red-800 bg-red-100 rounded px-2 py-1 text-sm mb-1'>
-                  no username or password
-                </div>
-              )} */}
+                </AggieButton>
+              </div>
 
               <div className='flex justify-end'>
                 {/* <Button variant='link'>Forgot your username?</Button> */}
@@ -142,7 +148,11 @@ const Login = (props: IProps) => {
                   variant='primary'
                   className='w-full justify-center text-lg'
                   type='submit'
-                  disabled={loginQuery.isLoading}
+                  disabled={
+                    loginQuery.isLoading ||
+                    !!errors.loginPassword ||
+                    !!errors.loginUsername
+                  }
                 >
                   {loginQuery.isLoading && (
                     <FontAwesomeIcon

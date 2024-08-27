@@ -34,6 +34,7 @@ import { Menu } from "@headlessui/react";
 import AddReportsToIncidents from "./AddReportsToIncident";
 import Pagination from "../../components/Pagination";
 import { formatNumber } from "../../utils/format";
+import { useMultiSelect } from "../../hooks/useMultiSelect";
 
 const Reports = () => {
   const navigate = useNavigate();
@@ -43,31 +44,11 @@ const Reports = () => {
     useQueryParams<ReportQueryState>();
 
   const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()));
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [selectMode, setSelectMode] = useState(false);
 
-  function onSelectionChange(id: string) {
-    if (selectedItems.includes(id)) {
-      setSelectedItems(selectedItems.filter((i) => i !== id));
-    } else {
-      setSelectedItems([...selectedItems, id]);
-    }
-  }
-  function selectAll(data: ReportsType | undefined) {
-    if (!data || data.results.length === 0) return;
-
-    if (selectedItems.length === data.results.length) {
-      setSelectedItems([]);
-    } else {
-      setSelectedItems(data.results.map((report) => report._id));
-    }
-  }
-  function onSelectModeChange() {
-    if (selectMode) {
-      setSelectedItems([]);
-      setSelectMode(false);
-    } else setSelectMode(true);
-  }
+  const multiSelect = useMultiSelect({
+    allItems: reportsQuery.data?.results,
+    mapFn: (i) => i._id,
+  });
 
   useEffect(() => {
     // refetch on filter change
@@ -136,12 +117,12 @@ const Reports = () => {
 
   function onReportItemClick(id: string, isRead: boolean) {
     navigate(id + "?" + searchParams.toString());
-    setSelectedItems([id]);
+    multiSelect.set([id]);
     if (!isRead) setSingleReadMutation.mutate({ reportId: id, read: true });
   }
   function onNewIncidentFromReports() {
     const params = new URLSearchParams({
-      reports: selectedItems.join(":"),
+      reports: multiSelect.selection.join(":"),
     });
 
     navigate("/incidents/new?" + params.toString());
@@ -156,7 +137,7 @@ const Reports = () => {
     <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-3 gap-3'>
       <AddReportsToIncidents
         reports={reportsQuery.data?.results.filter((i) =>
-          selectedItems.includes(i._id)
+          multiSelect.exists(i._id)
         )}
         isOpen={addReportModal}
         onClose={() => setAddReportModal(false)}
@@ -181,50 +162,45 @@ const Reports = () => {
             headerElement={
               <AggieButton
                 className='text-xs font-medium  bg-slate-100 border border-slate-200 rounded-lg px-2 py-1 hover:bg-slate-200'
-                onClick={onSelectModeChange}
+                onClick={() => multiSelect.toggleActive()}
               >
-                {selectMode ? "Cancel Selection" : "Select Multiple"}
+                {multiSelect.isActive ? "Cancel Selection" : "Select Multiple"}
               </AggieButton>
             }
           />
           <div className='flex justify-between items-center'></div>
           <div className='px-1 flex gap-2 text-xs font-medium items-center'>
-            {selectMode && (
+            {multiSelect.isActive && (
               <>
                 <div
                   className='pointer-events-auto cursor-pointer group -m-2 hover:bg-blue-300/25 rounded-lg p-2 '
-                  onClick={() => selectAll(reportsQuery.data)}
+                  onClick={() =>
+                    multiSelect.addRemoveAll(reportsQuery.data?.results)
+                  }
                 >
                   <div
                     className={`w-4 h-4  border border-slate-400 group-hover:border-slate-600 grid place-items-center rounded ${
-                      selectedItems.length > 0
-                        ? "bg-blue-500 text-slate-50"
-                        : ""
+                      multiSelect.any() ? "bg-blue-500 text-slate-50" : ""
                     }`}
                   >
-                    {selectedItems.length > 0 && (
+                    {multiSelect.any() && (
                       <FontAwesomeIcon
-                        icon={
-                          selectedItems.length ===
-                          reportsQuery.data?.results.length
-                            ? faCheck
-                            : faMinus
-                        }
+                        icon={multiSelect.all() ? faCheck : faMinus}
                         size='xs'
                       />
                     )}
                   </div>
                 </div>
                 <p>
-                  Mark {selectedItems.length} report{"(s)"} as:
+                  Mark {multiSelect.selection.length} report{"(s)"} as:
                 </p>
                 <div className=' rounded-lg flex overflow-hidden min-w-fit'>
                   <AggieButton
                     className='py-1 px-2 hover:bg-lime-200 bg-lime-100 text-lime-800'
-                    disabled={selectedItems.length === 0}
+                    disabled={!multiSelect.any()}
                     onClick={() =>
                       setMultipleReadMutation.mutate({
-                        reportIds: selectedItems,
+                        reportIds: multiSelect.selection,
                         read: true,
                       })
                     }
@@ -234,10 +210,10 @@ const Reports = () => {
                   </AggieButton>
                   <AggieButton
                     className='py-1 px-2 hover:bg-amber-200 bg-amber-100 text-amber-800'
-                    disabled={selectedItems.length === 0}
+                    disabled={!multiSelect.any()}
                     onClick={() =>
                       setMultipleReadMutation.mutate({
-                        reportIds: selectedItems,
+                        reportIds: multiSelect.selection,
                         read: false,
                       })
                     }
@@ -257,7 +233,7 @@ const Reports = () => {
                   <AggieButton
                     className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-200 hover:bg-slate-200'
                     onClick={addReportsToIncidents}
-                    disabled={setSelectedItems.length === 0}
+                    disabled={!multiSelect.any()}
                   >
                     <FontAwesomeIcon icon={faPlus} />
                     Attach Incident
@@ -265,7 +241,7 @@ const Reports = () => {
                   <Menu as='div' className='relative'>
                     <Menu.Button
                       className='px-2 py-1 rounded-r-lg bg-slate-100 border-y border-r border-slate-200 hover:bg-slate-200 ui-open:bg-slate-300 disabled:opacity-70 disabled:pointer-events-none'
-                      disabled={selectedItems.length === 0}
+                      disabled={!multiSelect.any()}
                     >
                       <FontAwesomeIcon
                         icon={faCaretDown}
@@ -302,9 +278,9 @@ const Reports = () => {
               >
                 <ReportListItem
                   report={report}
-                  isChecked={selectedItems.includes(report._id)}
-                  isSelectMode={selectMode}
-                  onCheckChange={() => onSelectionChange(report._id)}
+                  isChecked={multiSelect.exists(report._id)}
+                  isSelectMode={multiSelect.isActive}
+                  onCheckChange={() => multiSelect.addRemove(report._id)}
                 />
               </div>
             ))}
@@ -323,7 +299,7 @@ const Reports = () => {
               currentPage={Number(getParam("page")) || 0}
               totalCount={reportsQuery.data?.total || 0}
               onPageChange={(num) => setParams({ page: num })}
-              size={3}
+              size={4}
             />
           </div>
         </div>
