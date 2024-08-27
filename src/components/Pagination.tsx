@@ -74,7 +74,7 @@ const Pagination = ({
           >
             <Form className=''>
               <label className='mb-1'>Jump to:</label>
-              <div className='flex'>
+              <div className='flex focus-within-theme rounded-lg'>
                 <Field
                   name='page'
                   type='number'
@@ -85,7 +85,7 @@ const Pagination = ({
                 />
                 <AggieButton
                   type='submit'
-                  className='focus-theme px-2 py-1 bg-slate-50 hover:bg-white rounded-r-lg border-y border-r border-slate-30'
+                  className='px-2 py-1 bg-slate-50 hover:bg-white rounded-r-lg border-y border-r border-slate-30'
                 >
                   <FontAwesomeIcon icon={faArrowRight} />
                 </AggieButton>

@@ -44,7 +44,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
             initialValues={{ keywords: getParam("keywords") }}
             onSubmit={(e) => setParams(e)}
           >
-            <Form className='flex items-center'>
+            <Form className='flex items-center focus-within-theme rounded-lg'>
               <Field
                 name='keywords'
                 className='focus-theme px-2 py-1 border-y border-l border-slate-300 bg-slate-50 rounded-l-lg min-w-[20rem]'
@@ -71,13 +71,14 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
             </AggieButton>
           )}
         </div>
-
-        <Pagination
-          currentPage={Number(getParam("page")) || 0}
-          totalCount={reportCount || 0}
-          onPageChange={(num) => setParams({ page: num })}
-          size={0}
-        />
+        <div className='text-xs'>
+          <Pagination
+            currentPage={Number(getParam("page")) || 0}
+            totalCount={reportCount || 0}
+            onPageChange={(num) => setParams({ page: num })}
+            size={0}
+          />
+        </div>
       </div>
       <div className='flex justify-between mb-2 text-sm'>
         <div className='flex gap-2'>{headerElement}</div>

@@ -9,7 +9,6 @@ import type { GroupQueryState } from "../../objectTypes";
 import { Link } from "react-router-dom";
 import IncidentsFilters from "./IncidentsFilters";
 import IncidentListItem from "./IncidentListItem";
-import AggiePagination from "../../components/AggiePagination";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 

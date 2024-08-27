@@ -285,16 +285,8 @@ const Reports = () => {
               </div>
             ))}
         </div>
-        <div className='flex flex-col items-center justify-center mt-1 mb-40 w-full'>
-          <small className={"text-center font-medium w-full mb-1"}>
-            {showReportCount(
-              Number(getParam("page")) || 0,
-              50,
-              reportsQuery.data?.total
-            )}
-          </small>
-
-          <div className='w-fit'>
+        <div className='flex flex-col items-center justify-center mt-3 mb-40 w-full'>
+          <div className='w-fit text-sm'>
             <Pagination
               currentPage={Number(getParam("page")) || 0}
               totalCount={reportsQuery.data?.total || 0}
@@ -302,6 +294,13 @@ const Reports = () => {
               size={4}
             />
           </div>
+          <small className={"text-center font-medium w-full mt-2"}>
+            {showReportCount(
+              Number(getParam("page")) || 0,
+              50,
+              reportsQuery.data?.total
+            )}
+          </small>
         </div>
       </main>
       <aside className='col-span-1'>
