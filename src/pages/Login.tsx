@@ -151,8 +151,8 @@ const Login = (props: IProps) => {
                   type='submit'
                   disabled={
                     loginQuery.isLoading ||
-                    !!errors.loginPassword ||
-                    !!errors.loginUsername
+                    !values.loginPassword ||
+                    !values.loginUsername
                   }
                 >
                   {loginQuery.isLoading && (
