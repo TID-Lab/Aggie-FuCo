@@ -35,3 +35,16 @@ export interface Reports {
   total: number;
   results: Report[];
 }
+
+export interface ReportQueryState {
+  keywords?: string;
+  author?: string;
+  groupId?: string;
+  media?: string;
+  sourceId?: string;
+  list?: string;
+  before?: Date | string;
+  after?: Date | string;
+  tags?: string[];
+  page?: number;
+}

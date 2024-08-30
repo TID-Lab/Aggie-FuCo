@@ -3,23 +3,28 @@ import { useQueryClient } from "@tanstack/react-query";
 export function useUpdateQueryData() {
   const queryClient = useQueryClient();
 
-  function set<T extends object>(
+  /**
+   * updates local query data
+   * @param queryKey tanstack-query querykey
+   * @param updateFn callback that returns the new data
+   * @returns pass reference to old and new data objects
+   */
+  function update<T extends object>(
     queryKey: string[],
     updateFn: (data: T) => { [key in keyof T]?: T[keyof T] }
   ) {
     const previousData = queryClient.getQueryData<T>(queryKey);
-    if (!previousData) return false;
-    console.log({
+    if (!previousData) return undefined;
+    const newData = {
       ...previousData,
       ...updateFn(previousData),
-    });
-    queryClient.setQueryData(["reports"], {
-      ...previousData,
-      ...updateFn(previousData),
-    });
+    };
+    queryClient.setQueryData(queryKey, newData);
 
-    return true;
+    return { previousData, newData };
   }
 
-  return { set };
+  return { queryClient, update };
 }
+
+export type IuseUpdateQueryData = typeof useUpdateQueryData;

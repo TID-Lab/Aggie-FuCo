@@ -47,7 +47,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
             <Form className='flex items-center focus-within-theme rounded-lg'>
               <Field
                 name='keywords'
-                className='focus-theme px-2 py-1 border-y border-l border-slate-300 bg-slate-50 rounded-l-lg min-w-[20rem]'
+                className='focus-theme px-2 py-1 border-y border-l border-slate-300 bg-white rounded-l-lg min-w-[20rem]'
                 placeholder='Search Keywords'
               />
 

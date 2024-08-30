@@ -1,3 +1,5 @@
+// this entire page needs refactoring
+// rename to like, social media post card or something
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import {
   faBookmark,
@@ -15,7 +17,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Linkify from "linkify-react";
-import TagsList from "../../components/tag/TagsList";
 import { Report } from "../../types/reports";
 import { formatAuthor, formatText } from "../../utils/format";
 
@@ -105,7 +106,18 @@ const ReportListItemSmall = ({ report }: IReportListItemSmall) => {
         <div className='flex justify-between mb-2'>
           {/* <TagsList values={report.smtcTags} /> */}
           <div className=' font-medium  '>
-            <h1>{formatAuthor(report.author, report._media)}</h1>
+            <a
+              target='_blank'
+              href={report.metadata.accountUrl}
+              className='hover:underline hover:bg-slate-100 group hover:text-blue-600'
+            >
+              <h1>
+                {formatAuthor(report.author, report._media)}{" "}
+                <span className='opacity-0 group-hover:opacity-100'>
+                  <FontAwesomeIcon icon={faExternalLink} size='xs' />
+                </span>
+              </h1>
+            </a>
             <p className='text-slate-600 text-xs font-normal mt-1'>
               {new Date(report.authoredAt).toLocaleString("en-us")}
             </p>

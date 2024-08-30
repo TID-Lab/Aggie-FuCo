@@ -61,3 +61,5 @@ export function useQueryParams<T extends object>(initialParams?: T) {
 
   return { searchParams, getAllParams, setParams, getParam, clearAllParams };
 }
+
+export type IuseQueryParams = typeof useQueryParams;

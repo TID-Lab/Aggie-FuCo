@@ -61,7 +61,7 @@ export const editReport = async (report: Report) => {
 };
 
 export const getBatch = async () => {
-  const { data } = await axios.get("/api/report/batch");
+  const { data } = await axios.get<Reports>("/api/report/batch");
   return data;
 };
 

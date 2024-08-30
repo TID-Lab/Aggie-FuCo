@@ -62,7 +62,9 @@ const AddReportsToIncidents = ({
           </div>
           <div className='overflow-y-scroll max-h-[80vh] flex flex-col gap-1'>
             {reports &&
-              reports.map((item) => <ReportListItemSmall report={item} />)}
+              reports.map((item) => (
+                <ReportListItemSmall key={item._id} report={item} />
+              ))}
           </div>
           <div className='overflow-y-scroll max-h-[80vh]'>
             <div className='flex flex-col gap-1 '>

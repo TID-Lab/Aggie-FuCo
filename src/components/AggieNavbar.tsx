@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faHamburger,
   faUsersCog,
   faTags,
   faKey,
@@ -14,14 +13,9 @@ import { Link, useLocation } from "react-router-dom";
 import { Session } from "../objectTypes";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 
-interface IProps {
-  isAuthenticated: boolean;
-  session: Session | undefined;
-}
-
 const mainLinks = {
-  Reports: "/reports",
-  Incidents: "/incidents",
+  Reports: { to: "/reports" },
+  Incidents: { to: "/incidents" },
 };
 
 const menuLinks = {
@@ -33,15 +27,17 @@ const menuLinks = {
   "Log Out": { to: "/404", icon: faRightFromBracket },
 };
 
+interface IProps {
+  isAuthenticated: boolean;
+  session: Session | undefined;
+}
 const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
   const location = useLocation();
-
-  if (!isAuthenticated) return <></>;
-
   const isActive = (to: string) => location.pathname.includes(to);
 
+  if (!isAuthenticated) return <></>;
   return (
-    <nav className='w-full bg-white flex justify-between items-center px-4 border-b border-gray-200  py-2'>
+    <nav className='w-full bg-white flex justify-between items-center px-4 border-b border-gray-200 py-2'>
       <div className='flex gap-2 items-center '>
         <div>
           <svg
@@ -59,16 +55,16 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
           {Object.entries(mainLinks).map(([name, path]) => (
             <Link
               key={name}
-              to={path}
-              className={`py-1 px-3 rounded-lg ${
-                isActive(path)
+              to={path.to}
+              className={`px-2 rounded-lg focus-theme ${
+                isActive(path.to)
                   ? "pointer-events-none"
-                  : "hover:bg-gray-200 rounded-lg text-[#416B34] hover:text-[#416B34]"
+                  : "hover:bg-gray-100 rounded-lg text-[#416B34] hover:text-[#416B34]"
               }`}
             >
               <p
                 className={`py-1 border-b-2  ${
-                  isActive(path) ? " border-[#416B34]" : "border-transparent"
+                  isActive(path.to) ? " border-[#416B34]" : "border-transparent"
                 }`}
               >
                 <span>{name}</span>
@@ -79,16 +75,19 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
       </div>
       <div className='flex gap-2 '>
         {session && (
-          <div className='px-3 flex gap-2 bg-white items-center border border-slate-200 rounded-full font-medium text-xs'>
-            <FontAwesomeIcon icon={faUser} />
-            <Link to={"/user/" + session._id} className='hover:underline'>
+          <Link
+            to={"/user/" + session._id}
+            className='focus-theme rounded-full hover:underline  hover:bg-slate-100'
+          >
+            <div className='px-3 flex gap-2 h-full  items-center border border-slate-200 rounded-full font-medium text-xs'>
+              <FontAwesomeIcon icon={faUser} />
               {session.username}
-            </Link>
-          </div>
+            </div>
+          </Link>
         )}
 
         <Menu as='div' className='relative'>
-          <Menu.Button className='px-3 py-1 rounded-lg bg-slate-100 border-y border border-slate-300 hover:bg-slate-200 ui-open:bg-slate-300 disabled:opacity-70 disabled:pointer-events-none'>
+          <Menu.Button className='focus-theme px-3 py-1 rounded-lg bg-slate-100 border-y border border-slate-300 hover:bg-slate-200 ui-open:bg-slate-300 disabled:opacity-70 disabled:pointer-events-none'>
             <FontAwesomeIcon icon={faBars} className='' />
           </Menu.Button>
           <Menu.Items className='absolute top-full right-0 mt-1 shadow-md rounded-lg bg-white border border-slate-200 z-30 text-sm font-medium'>

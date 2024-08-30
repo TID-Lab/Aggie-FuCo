@@ -91,3 +91,5 @@ export function useMultiSelect<T>({ allItems, mapFn, initial }: IOptions<T>) {
     set: setSelection,
   };
 }
+
+export type IuseMultiSelect = typeof useMultiSelect;

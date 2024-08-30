@@ -2,6 +2,7 @@ interface RawApiResponse {
   id: string;
   type: string;
   attributes: unknown;
+  [key: string]: any;
 }
 
 export interface BaseMetadata {
