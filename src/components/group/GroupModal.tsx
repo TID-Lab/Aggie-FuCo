@@ -25,7 +25,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { editGroup, newGroup } from "../../api/groups";
 import { AxiosError } from "axios";
 import { getUsers } from "../../api/users";
-import { VERACITY_OPTIONS } from "../../api/enums";
+import { VERACITY_OPTIONS } from "../../api/common";
 
 interface IProps {
   group?: Group;

@@ -20,7 +20,7 @@ import {
   facebookUrlToEmbedUrl,
   sourcesNamesById,
 } from "../../helpers";
-import { VERACITY_OPTIONS, type VeracityOptions } from "../../api/enums";
+import { VERACITY_OPTIONS, type VeracityOptions } from "../../api/common";
 import {
   faCopy,
   faEnvelope,

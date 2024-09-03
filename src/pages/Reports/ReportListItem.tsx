@@ -1,5 +1,5 @@
 import TagsList from "../../components/tag/TagsList";
-import { Report, Reports } from "../../objectTypes";
+import { Report, Reports } from "../../api/reports/types";
 import { stringToDate } from "../../helpers";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -97,6 +97,11 @@ const ReportListItem = ({
                 {report.author}
               </h1>
               <TagsList values={report.smtcTags} />
+              {report.irrelevant && report.irrelevant === "true" && (
+                <span className='px-2 text-sm font-medium bg-red-200 text-red-800'>
+                  Irrelevant
+                </span>
+              )}
             </div>
           </div>
           <div className='text-sm flex gap-2'>

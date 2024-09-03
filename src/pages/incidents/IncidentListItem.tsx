@@ -24,7 +24,8 @@ import { getSession } from "../../api/session";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
 import IncidentForm from "./IncidentForm";
-import { updateOneInList } from "../../utils/immutable";
+import { updateByIds } from "../../utils/immutable";
+import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
 
 interface IProps {
   item: Group;
@@ -37,6 +38,7 @@ const IncidentListItem = ({ item }: IProps) => {
 
   const sessionQuery = useQuery(["session"], getSession);
   const queryClient = useQueryClient();
+  const queryData = useUpdateQueryData();
 
   const editAssignMutation = useOptimisticMutation({
     queryKey: ["groups"],
@@ -49,8 +51,7 @@ const IncidentListItem = ({ item }: IProps) => {
       };
       return {
         ...previousData,
-        results: updateOneInList(previousData.results, {
-          _id: item._id,
+        results: updateByIds([item._id], previousData.results, {
           assignedTo: [user],
           creator: user,
         }),
@@ -60,19 +61,17 @@ const IncidentListItem = ({ item }: IProps) => {
 
   const editGroupMutation = useMutation({
     mutationFn: editGroup,
-    onSuccess: (data, variables) => {
-      const previousData = queryClient.getQueryData<Groups>(["groups"]);
-      if (!previousData) return;
-      queryClient.setQueryData(["groups"], {
-        ...previousData,
-        results: updateOneInList(previousData.results, {
-          _id: item.id,
-          ...variables,
-        }),
+    onSuccess: (_, variables) => {
+      queryData.update<Groups>(["groups"], (data) => {
+        return {
+          results: updateByIds([item._id], data.results, {
+            ...variables,
+          }),
+        };
       });
+
       setIsEditOpen(false);
     },
-    // Always refetch after error or success:
     onSettled: (newTodo) => {
       queryClient.invalidateQueries({ queryKey: ["groups"] });
     },
@@ -80,15 +79,13 @@ const IncidentListItem = ({ item }: IProps) => {
 
   const deleteGroupMutation = useMutation({
     mutationFn: deleteGroup,
-    onSuccess: (data) => {
-      const oldData = queryClient.getQueryData<Groups>(["groups"]);
-      if (!oldData) return;
-      queryClient.setQueryData(["groups"], {
-        ...oldData,
-        results: oldData.results.filter((i) => i._id !== item._id),
+    onSuccess: (_) => {
+      queryData.update<Groups>(["groups"], (data) => {
+        return {
+          results: data.results.filter((i) => i._id !== item._id),
+        };
       });
     },
-    // Always refetch after error or success:
     onSettled: (newTodo) => {
       queryClient.invalidateQueries({ queryKey: ["groups"] });
     },
@@ -102,11 +99,12 @@ const IncidentListItem = ({ item }: IProps) => {
   function onOptionsClick(e: React.MouseEvent) {
     e.stopPropagation();
   }
+
+  //TODO: refactor
   function onAssignClick(e: React.MouseEvent) {
     e.stopPropagation();
     e.preventDefault();
     if (!sessionQuery.data) return;
-    //TODO: refactor by changing update function in backend
 
     editAssignMutation.mutate({
       assignedTo: [sessionQuery.data._id],

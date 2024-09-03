@@ -1,7 +1,7 @@
 import { type IconDefinition } from "@fortawesome/fontawesome-common-types";
 import { faCheck, faMinus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type VeracityOptions } from "../api/enums";
+import { type VeracityOptions } from "../api/common";
 
 type VeracityKeyMap<T> = {
   [key in VeracityOptions]: T;

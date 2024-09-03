@@ -1,9 +1,55 @@
-interface RawApiResponse {
-  id: string;
-  type: string;
-  attributes: unknown;
+import type {
+  hasId,
+  VeracityOptions,
+  MediaOptions,
+  IrrelevanceOptions,
+} from "../common";
+
+export interface Report extends hasId {
+  veracity: VeracityOptions;
+  tags: string[];
+  smtcTags: string[];
+  hasSMTCTags: boolean;
+  read: boolean;
+  _sources: string[];
+  _media: MediaOptions[];
+  _sourceNicknames: string[];
+  escalated: boolean;
+  _group?: string;
+  authoredAt: string;
+  fetchedAt: string;
+  content: string;
+  author: string;
+  metadata: BaseMetadata;
+  url: string;
+  storedAt: string;
+  commentTo: string;
+  notes: string;
+  originalPost: string;
+  irrelevant?: IrrelevanceOptions;
+  __v: number;
 }
 
+export interface Reports {
+  total: number;
+  results: Report[];
+}
+
+export interface ReportQueryState {
+  keywords?: string;
+  author?: string;
+  groupId?: string;
+  media?: string;
+  sourceId?: string;
+  list?: string;
+  before?: Date | string;
+  after?: Date | string;
+  tags?: string[];
+  page?: number;
+  batch?: boolean;
+}
+
+// metadata typed
 export interface BaseMetadata {
   imageText: any;
   junkipediaId: number;
@@ -15,6 +61,14 @@ export interface BaseMetadata {
   rawAPIResponse: RawApiResponse;
   testingFlagForPotentialDeletion: boolean;
 }
+
+interface RawApiResponse {
+  id: string;
+  type: string;
+  attributes: unknown;
+  [key: string]: any;
+}
+// i need to redo this...
 export interface Statistics
   extends TwitterStatistics,
     TiktokStatistics,

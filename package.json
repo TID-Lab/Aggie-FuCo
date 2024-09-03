@@ -101,6 +101,7 @@
     "react-scripts": "^5.0.1",
     "react-tagcloud": "^2.2.0",
     "react-twitter-widgets": "^1.10.0",
+    "react-youtube": "^10.1.0",
     "readline-sync": "^1.4.10",
     "recharts": "^2.1.9",
     "reparse": "^0.1.2",

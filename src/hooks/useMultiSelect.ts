@@ -37,7 +37,8 @@ export function useMultiSelect<T>({ allItems, mapFn, initial }: IOptions<T>) {
   /**  if id exists, remove. otherwise add to list */
   function addRemove(id: string) {
     if (selection.includes(id)) {
-      setSelection(selection.filter((i) => i !== id));
+      const newSelection = selection.filter((i) => i !== id);
+      setSelection(newSelection || []);
     } else {
       setSelection([...selection, id]);
     }
@@ -90,3 +91,5 @@ export function useMultiSelect<T>({ allItems, mapFn, initial }: IOptions<T>) {
     set: setSelection,
   };
 }
+
+export type IuseMultiSelect = typeof useMultiSelect;

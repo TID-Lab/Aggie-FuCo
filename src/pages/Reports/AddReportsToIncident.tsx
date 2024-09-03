@@ -1,15 +1,15 @@
 import { Dialog } from "@headlessui/react";
 import React, { useState } from "react";
-import type { Group, Report, Reports } from "../../objectTypes";
+import type { Group } from "../../objectTypes";
+import type { Report } from "../../api/reports/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getGroups } from "../../api/groups";
 import { getReports, setReportsToGroup } from "../../api/reports";
-import ReportListItemSmall from "./ReportListItemSmall";
 import AggieButton from "../../components/AggieButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import TagsList from "../../components/tag/TagsList";
 import IncidentListItem from "../incidents/IncidentListItem";
+import SocialMediaPost from "../../components/SocialMediaPost";
 interface IAddReportsToIncidents {
   isOpen: boolean;
   reports?: Report[];
@@ -52,17 +52,17 @@ const AddReportsToIncidents = ({
             <AggieButton
               variant='primary'
               onClick={onAddIncident}
+              loading={addReportsMutation.isLoading}
               disabled={addReportsMutation.isLoading}
             >
-              {addReportsMutation.isLoading && (
-                <FontAwesomeIcon icon={faSpinner} className='animate-spin' />
-              )}
               Attach to incident
             </AggieButton>
           </div>
           <div className='overflow-y-scroll max-h-[80vh] flex flex-col gap-1'>
             {reports &&
-              reports.map((item) => <ReportListItemSmall report={item} />)}
+              reports.map((item) => (
+                <SocialMediaPost key={item._id} report={item} />
+              ))}
           </div>
           <div className='overflow-y-scroll max-h-[80vh]'>
             <div className='flex flex-col gap-1 '>

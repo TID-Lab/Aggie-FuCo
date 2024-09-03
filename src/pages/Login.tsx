@@ -5,11 +5,7 @@ import { LoginData } from "../objectTypes";
 import { logIn } from "../api/session";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faEyeSlash,
-  faSpinner,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import AggieButton from "../components/AggieButton";
 
@@ -149,18 +145,13 @@ const Login = (props: IProps) => {
                   variant='primary'
                   className='w-full justify-center text-lg'
                   type='submit'
+                  loading={loginQuery.isLoading}
                   disabled={
                     loginQuery.isLoading ||
                     !values.loginPassword ||
                     !values.loginUsername
                   }
                 >
-                  {loginQuery.isLoading && (
-                    <FontAwesomeIcon
-                      icon={faSpinner}
-                      className='animate-spin'
-                    />
-                  )}
                   Sign in
                 </AggieButton>
               </div>

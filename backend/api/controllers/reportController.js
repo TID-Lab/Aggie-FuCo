@@ -210,13 +210,13 @@ exports.reports_irrelevant_update = (req, res) => {
     let remaining = reports.length;
     reports.forEach((report) => {
       // Mark each report as escalated to catch it in model
-      report.setIrrelevant(req.body.irrelevant);
+      report.setIrrelevant(req.body.irrelevance);
       report.save((err) => {
         if (err) {
           if (!res.headersSent) res.status(err.status).send(err.message)
           return;
         }
-        writelog.writeReport(req, report, 'escalatedReport');
+        writelog.writeReport(req, report, 'irreleventReport');
         if (--remaining === 0) return res.sendStatus(200);
       });
     });

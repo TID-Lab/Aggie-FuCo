@@ -30,7 +30,7 @@ import {
   capitalizeFirstLetter,
 } from "../../helpers";
 import { Group, Report, Source, Tag } from "../../objectTypes";
-import { editReport } from "../../api/reports";
+import { editReport_old } from "../../api/reports";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import TagsTypeahead from "../tag/TagsTypeahead";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
@@ -154,7 +154,7 @@ interface ReportRowIProps {
 export function ReportRow(props: ReportRowIProps) {
   const reportMutation = useMutation(
     (report: Report) => {
-      return editReport(report);
+      return editReport_old(report);
     },
     {
       onSuccess: () => {

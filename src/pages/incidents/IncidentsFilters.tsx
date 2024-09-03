@@ -4,7 +4,7 @@ import { useQueryParams } from "../../hooks/useQueryParams";
 import { getUsers } from "../../api/users";
 import { getSources } from "../../api/sources";
 import { getTags } from "../../api/tags";
-import { VERACITY_OPTIONS, ESCALATED_OPTIONS } from "../../api/enums";
+import { VERACITY_OPTIONS, ESCALATED_OPTIONS } from "../../api/common";
 import type { GroupSearchState } from "../../objectTypes";
 
 import FilterComboBox from "../../components/filters/FilterComboBox";

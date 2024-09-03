@@ -1,12 +1,10 @@
 import axios from "axios";
-import {
-  hasId,
-  Report,
-  ReportQueryState,
+import type { Report, ReportQueryState, Reports } from "./types";
+import type {
   ReportQueryState_old,
-  Reports,
-} from "../objectTypes";
-import { VeracityOptions } from "./enums";
+  Report as Report_old,
+} from "../../objectTypes";
+import type { hasId, IrrelevanceOptions, VeracityOptions } from "../common";
 
 export const getReports = async (
   searchState: ReportQueryState,
@@ -60,8 +58,14 @@ export const editReport = async (report: Report) => {
   return data;
 };
 
+//TODO: deprecate, same thing using old types
+export const editReport_old = async (report: Report_old) => {
+  const { data } = await axios.put("/api/report/" + report._id, report);
+  return data;
+};
+
 export const getBatch = async () => {
-  const { data } = await axios.get("/api/report/batch");
+  const { data } = await axios.get<Reports>("/api/report/batch");
   return data;
 };
 
@@ -90,6 +94,17 @@ export const setSelectedVeracity = async (
   const { data } = await axios.patch("/api/report/_veracity", {
     ids: reportIds,
     veracity: veracity,
+  });
+  return data;
+};
+
+export const setSelectedIrrelevance = async (
+  reportIds: string[],
+  irrelevance: IrrelevanceOptions | string
+) => {
+  const { data } = await axios.patch("/api/report/_irrelevance", {
+    ids: reportIds,
+    irrelevance: irrelevance,
   });
   return data;
 };

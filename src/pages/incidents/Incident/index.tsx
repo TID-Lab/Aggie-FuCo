@@ -4,7 +4,7 @@ import { getGroup, getGroupReports } from "../../../api/groups";
 import AxiosErrorCard from "../../../components/AxiosErrorCard";
 import TagsList from "../../../components/tag/TagsList";
 import VeracityToken from "../../../components/VeracityToken";
-import ReportListItemSmall from "../../Reports/ReportListItemSmall";
+import SocialMediaPost from "../../../components/SocialMediaPost";
 
 const Incident = () => {
   let { id } = useParams();
@@ -61,7 +61,7 @@ const Incident = () => {
           {" "}
           {groupReports &&
             groupReports.results.map((report) => (
-              <ReportListItemSmall report={report} />
+              <SocialMediaPost report={report} />
             ))}
         </div>
       </aside>
