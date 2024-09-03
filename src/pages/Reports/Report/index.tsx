@@ -4,7 +4,7 @@ import {
   getReport,
   setSelectedRead,
   setSelectedTags,
-} from "../../../api/reports";
+} from "../../../api/reports/index";
 
 import AggieButton from "../../../components/AggieButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,11 +16,10 @@ import { getTags } from "../../../api/tags";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import AddReportsToIncidents from "../AddReportsToIncident";
-import ReportListItemSmall from "../ReportListItemSmall";
 import { useUpdateQueryData } from "../../../hooks/useUpdateQueryData";
 import { updateByIds } from "../../../utils/immutable";
 import DropdownMenu from "../../../components/DropdownMenu";
-
+import SocialMediaPost from "../../../components/SocialMediaPost";
 const Report = () => {
   let { id } = useParams();
   const { setParams } = useQueryParams<ReportQueryState>();
@@ -259,7 +258,7 @@ const Report = () => {
           </div>
         </div>
 
-        <ReportListItemSmall report={reportQuery.data} />
+        <SocialMediaPost report={reportQuery.data} />
       </article>
     );
   }

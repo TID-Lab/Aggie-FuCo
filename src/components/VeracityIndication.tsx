@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faCircle } from "@fortawesome/free-regular-svg-icons";
 import React from "react";
-import { VeracityOptions } from "../api/enums";
+import { VeracityOptions } from "../api/common";
 
 interface IProps {
   veracity: VeracityOptions;

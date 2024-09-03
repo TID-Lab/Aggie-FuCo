@@ -1,30 +1,31 @@
-import React, { useState } from "react";
-import { Card, Col, Container, Row, Form } from "react-bootstrap";
-import ExportCSVModal from "../components/configuration/ExportCSVModal";
+import React, { useEffect, useState } from "react";
+// import ExportCSVModal from "../components/configuration/ExportCSVModal";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   getEmailSettings,
   getFetchStatus,
   putFetchingStatus,
 } from "../api/configuration";
-
-interface IProps {}
+import { Switch } from "@headlessui/react";
 
 const Configuration = () => {
   const [fetchStatus, setFetchStatus] = useState<boolean>(false);
   const [appEmail, setAppEmail] = useState("");
-  const emailSettingsQuery = useQuery(["emailSettings"], getEmailSettings, {
-    onSuccess: (data) => {
-      console.log(data);
-    },
-  });
-  const fetchStatusQuery = useQuery(["fetchStatus"], getFetchStatus, {
-    onSuccess: (data) => {
-      if (data.fetching) {
-        setFetchStatus(data.fetching);
-      }
-    },
-  });
+  // const emailSettingsQuery = useQuery(["emailSettings"], getEmailSettings, {
+  //   onSuccess: (data) => {
+  //     console.log(data);
+  //   },
+  // });
+  const { data: fetchData, isSuccess: fetchSuccess } = useQuery(
+    ["fetchStatus"],
+    getFetchStatus
+  );
+  useEffect(() => {
+    if (fetchData?.fetching) {
+      setFetchStatus(fetchData.fetching);
+    }
+  }, [fetchData]);
+
   const fetchStatusMutation = useMutation(
     (fetching: boolean) => {
       return putFetchingStatus(fetching);
@@ -38,68 +39,34 @@ const Configuration = () => {
   );
 
   return (
-    <div>
-      <Container fluid className={"mt-4"}>
-        <Row>
-          <Col></Col>
-          <Col xs={9}>
-            <Container fluid>
-              <h3 className='mb-3'>Configuration</h3>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Turn fetching on/off</Card.Title>
-                  <Form className={"mb-3"}>
-                    {fetchStatusQuery.isSuccess && fetchStatusQuery.data && (
-                      <Form.Check
-                        type='switch'
-                        id='custom-switch'
-                        checked={fetchStatus}
-                        onChange={() => {
-                          fetchStatusMutation.mutate(!fetchStatus);
-                        }}
-                      />
-                    )}
-                  </Form>
-                  {/* <h5>Email Settings</h5>
-                    <Form>
-                      { emailSettingsQuery.isSuccess && emailSettingsQuery.data &&
-                      <Form.Group className={"mb-3"}>
-                        <Form.Label>App Email Address</Form.Label>
-                        <Form.Control
-                            required
-                            type="email"
-                            placeholder="example@domain.com"
-                            value={appEmail}
-                        />
-                        <Form.Text className="text-muted">
-                            This email will send account set-up emails and password reset emails.
-                        </Form.Text>
-                      </Form.Group>
-                      }
-                      <Form.Group className={"mb-3"}>
-                        <Form.Label>Email Transport Configuration</Form.Label>
-                        <Form.Control
-                            required
-                            type="email"
-                            placeholder="First name"
-                            readOnly
-                        />
-                      </Form.Group>
-                    </Form> */}
-                  {/* <Row>
-                      <Col>
-                        <h5>CSV Export</h5>
-                        <ExportCSVModal/>
-                      </Col>
-                    </Row> */}
-                </Card.Body>
-              </Card>
-            </Container>
-          </Col>
-          <Col></Col>
-        </Row>
-      </Container>
-    </div>
+    <section className='max-w-screen-md mx-auto'>
+      <h1 className='font-medium text-3xl my-3'> Configuration</h1>
+      <div
+        className={`px-4 py-3 bg-white border border-slate-300 rounded-lg flex justify-between items-center ${
+          fetchSuccess && !fetchStatusMutation.isLoading
+            ? ""
+            : "pointer-events-none opacity-50"
+        }`}
+      >
+        <h2 className='font-medium text-lg'>Enable Fetching</h2>
+        <Switch
+          checked={fetchStatus}
+          onChange={() => {
+            fetchStatusMutation.mutate(!fetchStatus);
+          }}
+          className={`${
+            fetchStatus ? "bg-blue-600" : "bg-gray-200"
+          } relative inline-flex h-6 w-11 items-center rounded-full border border-slate-300`}
+        >
+          <span className='sr-only'>Enable Fetching</span>
+          <span
+            className={`${
+              fetchStatus ? "translate-x-6" : "translate-x-1"
+            } inline-block h-4 w-4 transform rounded-full bg-white transition border border-slate-300`}
+          />
+        </Switch>
+      </div>
+    </section>
   );
 };
 

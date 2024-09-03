@@ -36,7 +36,7 @@ import {
   getReports,
   getReports_untyped,
   setSelectedRead,
-} from "../../api/reports";
+} from "../../api/reports/index";
 import { getSources } from "../../api/sources";
 import { getTags } from "../../api/tags";
 import DatePickerField from "../../components/DatePickerField";

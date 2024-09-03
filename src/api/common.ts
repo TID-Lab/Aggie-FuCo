@@ -1,3 +1,7 @@
+export interface hasId {
+  _id: string;
+}
+
 export const VERACITY_OPTIONS = [
   "Unconfirmed",
   "Confirmed False",

@@ -13,12 +13,12 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import DropdownMenu from "../../components/DropdownMenu";
 import { useNavigate, useParams } from "react-router-dom";
-import { cancelBatch, getBatch, getNewBatch } from "../../api/reports";
+import { cancelBatch, getBatch, getNewBatch } from "../../api/reports/index";
 import AggieButton from "../../components/AggieButton";
 import AggieCheck from "../../components/AggieCheck";
 import { useMultiSelect } from "../../hooks/useMultiSelect";
 import { useQueryParams } from "../../hooks/useQueryParams";
-import { Report, ReportQueryState } from "../../types/reports";
+import { Report, ReportQueryState } from "../../api/reports/types";
 import ReportListItem from "./ReportListItem";
 import { useReportMutations } from "./useReportMutations";
 

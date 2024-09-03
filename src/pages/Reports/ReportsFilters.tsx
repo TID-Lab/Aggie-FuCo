@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
 import { getSources } from "../../api/sources";
-import { MEDIA_OPTIONS } from "../../api/enums";
+import { MEDIA_OPTIONS } from "../../api/common";
 import type { ReportQueryState } from "../../objectTypes";
 
 import FilterComboBox from "../../components/filters/FilterComboBox";

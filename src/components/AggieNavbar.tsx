@@ -20,7 +20,7 @@ const mainLinks = {
 
 const menuLinks = {
   Config: { to: "/config", icon: faCog },
-  Credentials: { to: "/config", icon: faKey },
+  Credentials: { to: "/credentials", icon: faKey },
   "Manage Users": { to: "/users", icon: faUsersCog },
   "Manage Tags": { to: "/tags", icon: faTags },
   "Manage Sources": { to: "/sources", icon: faCloudArrowDown },

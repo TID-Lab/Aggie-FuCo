@@ -1,6 +1,6 @@
 import { Formik, FormikValues } from "formik";
 import { Form, FormGroup, FormLabel, FormCheck, Button } from "react-bootstrap";
-import { VERACITY_OPTIONS, type VeracityOptions } from "../../../api/enums";
+import { VERACITY_OPTIONS, type VeracityOptions } from "../../../api/common";
 import { useQueryParams } from "../../../hooks/useQueryParams";
 
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { newGroup } from "../../../api/groups";
 import { getUsers } from "../../../api/users";
 import AggieButton from "../../../components/AggieButton";
-import { setReportsToGroup } from "../../../api/reports";
+import { setReportsToGroup } from "../../../api/reports/index";
 import IncidentForm from "../IncidentForm";
 import { Dialog } from "@headlessui/react";
 import { useEffect, useState } from "react";
@@ -19,8 +19,7 @@ import {
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import { Group, Groups, Report, Reports } from "../../../objectTypes";
-import ReportListItemSmall from "../../Reports/ReportListItemSmall";
-
+import SocialMediaPost from "../../../components/SocialMediaPost";
 interface NewIncidentQueryState {
   reports?: string;
 }
@@ -110,7 +109,9 @@ const NewIncident = () => {
           </h2>
           <div className='max-h-[75vh] overflow-y-scroll flex flex-col gap-1'>
             {reportsData &&
-              reportsData.map((item) => <ReportListItemSmall report={item} />)}
+              reportsData.map((item) => (
+                <SocialMediaPost report={item} key={item._id} />
+              ))}
           </div>
         </div>
       )}

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Formik, type FormikValues } from "formik";
 import { Form, FormGroup, FormLabel, FormCheck } from "react-bootstrap";
-import { VERACITY_OPTIONS, type VeracityOptions } from "../../api/enums";
+import { VERACITY_OPTIONS, type VeracityOptions } from "../../api/common";
 import { getUsers } from "../../api/users";
 import AggieButton from "../../components/AggieButton";
 import { Group, GroupEditableData } from "../../objectTypes";

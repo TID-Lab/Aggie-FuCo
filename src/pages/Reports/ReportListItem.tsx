@@ -1,5 +1,5 @@
 import TagsList from "../../components/tag/TagsList";
-import { Report, Reports } from "../../types/reports";
+import { Report, Reports } from "../../api/reports/types";
 import { stringToDate } from "../../helpers";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

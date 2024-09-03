@@ -11,11 +11,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
-import { getReports } from "../../api/reports";
+import { getReports } from "../../api/reports/index";
 import AggieButton from "../../components/AggieButton";
 import { useMultiSelect } from "../../hooks/useMultiSelect";
 import { useQueryParams } from "../../hooks/useQueryParams";
-import { ReportQueryState } from "../../types/reports";
+import type { ReportQueryState } from "../../api/reports/types";
 import ReportListItem from "./ReportListItem";
 import ReportsFilters from "./ReportsFilters";
 import { useReportMutations } from "./useReportMutations";

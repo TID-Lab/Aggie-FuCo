@@ -20,7 +20,7 @@ import {
   facebookUrlToEmbedUrl,
   sourcesNamesById,
 } from "../../helpers";
-import { VERACITY_OPTIONS, type VeracityOptions } from "../../api/enums";
+import { VERACITY_OPTIONS, type VeracityOptions } from "../../api/common";
 import {
   faCopy,
   faEnvelope,
@@ -37,7 +37,7 @@ import {
   setSelectedRead,
   setSelectedTags,
   setSelectedVeracity,
-} from "../../api/reports";
+} from "../../api/reports/index";
 import { getSources } from "../../api/sources";
 import { getGroup, getGroups_old } from "../../api/groups";
 import { getTags } from "../../api/tags";

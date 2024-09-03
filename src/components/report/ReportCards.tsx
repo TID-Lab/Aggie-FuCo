@@ -35,7 +35,7 @@ import {
   capitalizeFirstLetter,
 } from "../../helpers";
 import { Group, Report, Source, Tag } from "../../objectTypes";
-import { editReport, setSelectedRead } from "../../api/reports";
+import { editReport, setSelectedRead } from "../../api/reports/index";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import TagsTypeahead from "../tag/TagsTypeahead";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";

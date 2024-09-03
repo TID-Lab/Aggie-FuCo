@@ -1,5 +1,5 @@
 import { Option } from "react-bootstrap-typeahead";
-import { VeracityOptions } from "./api/enums";
+import { VeracityOptions } from "./api/common";
 
 interface hasId {
   _id: string;

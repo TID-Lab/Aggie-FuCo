@@ -1,8 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
-import { IrrelevanceOptions } from "../../api/enums";
-import { setSelectedRead, setSelectedIrrelevance } from "../../api/reports";
+import { IrrelevanceOptions } from "../../api/common";
+import {
+  setSelectedRead,
+  setSelectedIrrelevance,
+} from "../../api/reports/index";
 
 import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
 import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
@@ -10,7 +13,11 @@ import { useQueryParams } from "../../hooks/useQueryParams";
 
 import { updateByIds } from "../../utils/immutable";
 
-import type { Reports, Report, ReportQueryState } from "../../types/reports";
+import type {
+  Reports,
+  Report,
+  ReportQueryState,
+} from "../../api/reports/types";
 
 const defaultOptions = {
   key: ["reports"],

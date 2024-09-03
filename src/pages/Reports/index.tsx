@@ -3,8 +3,8 @@ import { useOutlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
-import type { ReportQueryState } from "../../types/reports";
-import { getReports } from "../../api/reports";
+import type { ReportQueryState } from "../../api/reports/types";
+import { getReports } from "../../api/reports/index";
 
 import AddReportsToIncidents from "./AddReportsToIncident";
 import { formatPageCount } from "../../utils/format";

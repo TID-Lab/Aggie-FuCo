@@ -1,4 +1,4 @@
-import { Report } from "../../types/reports";
+import { Report } from "../../api/reports/types";
 
 export const reportAuthorUrl = (report: Report) => {
   if (report.metadata.accountUrl) {

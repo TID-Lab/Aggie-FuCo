@@ -40,7 +40,7 @@ import {
   CLOSED_OPTIONS,
   ESCALATED_OPTIONS,
   VERACITY_OPTIONS,
-} from "../../api/enums";
+} from "../../api/common";
 
 import DatePickerField from "../../components/DatePickerField";
 import TagsTypeahead from "../../components/tag/TagsTypeahead";

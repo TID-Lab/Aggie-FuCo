@@ -9,7 +9,7 @@ import {
   hasId,
   Reports,
 } from "../objectTypes";
-import { VeracityOptions } from "./enums";
+import { VeracityOptions } from "./common";
 
 export const getGroups = async (
   searchState: GroupQueryState = {},

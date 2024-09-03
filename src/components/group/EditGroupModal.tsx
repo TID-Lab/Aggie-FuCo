@@ -38,7 +38,10 @@ import { GroupRow } from "./GroupTable";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllGroups, getGroups_old } from "../../api/groups";
 import { getUsers } from "../../api/users";
-import { setSelectedEscalated, setSelectedGroup } from "../../api/reports";
+import {
+  setSelectedEscalated,
+  setSelectedGroup,
+} from "../../api/reports/index";
 import { getSources } from "../../api/sources";
 import { getTags } from "../../api/tags";
 import AggiePagination from "../AggiePagination";

@@ -43,7 +43,7 @@ import {
   getReports,
   getReports_untyped,
   setSelectedRead,
-} from "../../api/reports";
+} from "../../api/reports/index";
 import { getSources } from "../../api/sources";
 import { getGroups_old } from "../../api/groups";
 import { getTags } from "../../api/tags";

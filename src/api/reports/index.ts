@@ -1,12 +1,7 @@
 import axios from "axios";
-import {
-  hasId,
-  Report,
-  ReportQueryState,
-  ReportQueryState_old,
-  Reports,
-} from "../objectTypes";
-import { IrrelevanceOptions, VeracityOptions } from "./enums";
+import type { Report, ReportQueryState, Reports } from "./types";
+import type { ReportQueryState_old } from "../../objectTypes";
+import type { hasId, IrrelevanceOptions, VeracityOptions } from "../common";
 
 export const getReports = async (
   searchState: ReportQueryState,

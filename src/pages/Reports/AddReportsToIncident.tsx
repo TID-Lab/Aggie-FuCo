@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import type { Group, Report, Reports } from "../../objectTypes";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getGroups } from "../../api/groups";
-import { getReports, setReportsToGroup } from "../../api/reports";
-import ReportListItemSmall from "./ReportListItemSmall";
+import { getReports, setReportsToGroup } from "../../api/reports/index";
 import AggieButton from "../../components/AggieButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TagsList from "../../components/tag/TagsList";
 import IncidentListItem from "../incidents/IncidentListItem";
+import SocialMediaPost from "../../components/SocialMediaPost";
 interface IAddReportsToIncidents {
   isOpen: boolean;
   reports?: Report[];
@@ -60,7 +60,7 @@ const AddReportsToIncidents = ({
           <div className='overflow-y-scroll max-h-[80vh] flex flex-col gap-1'>
             {reports &&
               reports.map((item) => (
-                <ReportListItemSmall key={item._id} report={item} />
+                <SocialMediaPost key={item._id} report={item} />
               ))}
           </div>
           <div className='overflow-y-scroll max-h-[80vh]'>
