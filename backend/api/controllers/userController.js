@@ -38,6 +38,7 @@ exports.user_create = (req, res) => {
       {
         username: req.body.username,
         email: req.body.email,
+        role: req.body.role,
       },
       req.body.password,
       (err, user) => {

@@ -129,6 +129,7 @@ const Login = (props: IProps) => {
                   autoComplete={"loginPassword"}
                 />
                 <AggieButton
+                  type='button'
                   className='rounded-r-lg w-12 bg-slate-100 border-y border-r border-slate-300 justify-center hover:bg-slate-200'
                   onClick={() => setPasswordVisibility(!passwordVisibility)}
                 >
@@ -147,8 +148,8 @@ const Login = (props: IProps) => {
                   loading={loginQuery.isLoading}
                   disabled={
                     loginQuery.isLoading ||
-                    !!errors.loginPassword ||
-                    !!errors.loginUsername
+                    !values.loginPassword ||
+                    !values.loginUsername
                   }
                 >
                   Sign in
