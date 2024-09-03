@@ -37,7 +37,7 @@ import {
   setSelectedRead,
   setSelectedTags,
   setSelectedVeracity,
-} from "../../api/reports/index";
+} from "../../api/reports";
 import { getSources } from "../../api/sources";
 import { getGroup, getGroups_old } from "../../api/groups";
 import { getTags } from "../../api/tags";

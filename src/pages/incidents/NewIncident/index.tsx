@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { newGroup } from "../../../api/groups";
 import { getUsers } from "../../../api/users";
 import AggieButton from "../../../components/AggieButton";
-import { setReportsToGroup } from "../../../api/reports/index";
+import { setReportsToGroup } from "../../../api/reports";
 import IncidentForm from "../IncidentForm";
 import { Dialog } from "@headlessui/react";
 import { useEffect, useState } from "react";
@@ -18,7 +18,7 @@ import {
   faSpinner,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
-import { Group, Groups, Report, Reports } from "../../../objectTypes";
+import { Report, Reports } from "../../../api/reports/types";
 import SocialMediaPost from "../../../components/SocialMediaPost";
 interface NewIncidentQueryState {
   reports?: string;

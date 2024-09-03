@@ -1,30 +1,16 @@
-// this entire page needs refactoring
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import {
-  faBookmark,
-  faComment,
-  faExternalLink,
-  faEye,
-  faHeart,
-  faPlay,
-  faReply,
-  faRetweet,
-  faShare,
-  faStar,
-  faThumbsDown,
-  faThumbsUp,
-} from "@fortawesome/free-solid-svg-icons";
+import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Linkify from "linkify-react";
 import { Report } from "../../api/reports/types";
 import { formatAuthor, formatText } from "../../utils/format";
 import PostReactions from "./PostReactions";
-
+import MediaPreview from "./MediaPreview";
 interface IProps {
   report: Report;
+  showMedia?: boolean;
 }
 
-const SocialMediaPost = ({ report }: IProps) => {
+const SocialMediaPost = ({ report, showMedia }: IProps) => {
   return (
     <div className='pt-1 pb-2  bg-white rounded-xl border border-slate-200 text-base'>
       <div className='px-3 pt-2'>
@@ -53,13 +39,13 @@ const SocialMediaPost = ({ report }: IProps) => {
               href={report.url}
               className='ml-1 px-2 py-1 rounded-full border border-slate-200 font-medium text-xs inline-flex gap-1 items-center bg-slate-100 hover:bg-white text-nowrap'
             >
-              <p>Open Post</p>
+              <span>Open Post</span>
               <FontAwesomeIcon icon={faExternalLink} />
             </a>
           </p>
         </div>
 
-        <p className='whitespace-pre-line'>
+        <div className='whitespace-pre-line mb-1'>
           <Linkify
             options={{
               target: "_blank",
@@ -68,7 +54,14 @@ const SocialMediaPost = ({ report }: IProps) => {
           >
             {formatText(report.content)}
           </Linkify>
-        </p>
+        </div>
+        {showMedia && (
+          <MediaPreview
+            mediaUrl={report.metadata.mediaUrl}
+            media={report._media[0]}
+            report={report}
+          />
+        )}
         <div className='flex justify-between'>
           <div className='flex gap-3 text-sm text-slate-500 font-medium mt-1'>
             <PostReactions

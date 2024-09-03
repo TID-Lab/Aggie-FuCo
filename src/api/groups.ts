@@ -6,10 +6,10 @@ import {
   Groups,
   GroupSearchState,
   GroupQueryState,
-  hasId,
-  Reports,
 } from "../objectTypes";
-import { VeracityOptions } from "./common";
+
+import type { Reports } from "./reports/types";
+import { hasId, VeracityOptions } from "./common";
 
 export const getGroups = async (
   searchState: GroupQueryState = {},

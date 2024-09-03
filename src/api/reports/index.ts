@@ -1,6 +1,9 @@
 import axios from "axios";
 import type { Report, ReportQueryState, Reports } from "./types";
-import type { ReportQueryState_old } from "../../objectTypes";
+import type {
+  ReportQueryState_old,
+  Report as Report_old,
+} from "../../objectTypes";
 import type { hasId, IrrelevanceOptions, VeracityOptions } from "../common";
 
 export const getReports = async (
@@ -51,6 +54,12 @@ export const getReport_untyped = async (id: string | undefined) => {
   }
 };
 export const editReport = async (report: Report) => {
+  const { data } = await axios.put("/api/report/" + report._id, report);
+  return data;
+};
+
+//TODO: deprecate, same thing using old types
+export const editReport_old = async (report: Report_old) => {
   const { data } = await axios.put("/api/report/" + report._id, report);
   return data;
 };

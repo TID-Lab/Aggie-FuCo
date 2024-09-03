@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
 import type { ReportQueryState } from "../../api/reports/types";
-import { getReports } from "../../api/reports/index";
+import { getReports } from "../../api/reports";
 
 import AddReportsToIncidents from "./AddReportsToIncident";
 import { formatPageCount } from "../../utils/format";

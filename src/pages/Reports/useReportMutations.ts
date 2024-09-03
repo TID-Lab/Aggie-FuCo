@@ -2,10 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 import { IrrelevanceOptions } from "../../api/common";
-import {
-  setSelectedRead,
-  setSelectedIrrelevance,
-} from "../../api/reports/index";
+import { setSelectedRead, setSelectedIrrelevance } from "../../api/reports";
 
 import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
 import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";

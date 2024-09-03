@@ -1,9 +1,10 @@
 import { Dialog } from "@headlessui/react";
 import React, { useState } from "react";
-import type { Group, Report, Reports } from "../../objectTypes";
+import type { Group } from "../../objectTypes";
+import type { Report } from "../../api/reports/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getGroups } from "../../api/groups";
-import { getReports, setReportsToGroup } from "../../api/reports/index";
+import { getReports, setReportsToGroup } from "../../api/reports";
 import AggieButton from "../../components/AggieButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TagsList from "../../components/tag/TagsList";

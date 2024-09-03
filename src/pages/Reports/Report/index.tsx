@@ -4,7 +4,7 @@ import {
   getReport,
   setSelectedRead,
   setSelectedTags,
-} from "../../../api/reports/index";
+} from "../../../api/reports";
 
 import AggieButton from "../../../components/AggieButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -258,7 +258,7 @@ const Report = () => {
           </div>
         </div>
 
-        <SocialMediaPost report={reportQuery.data} />
+        <SocialMediaPost report={reportQuery.data} showMedia />
       </article>
     );
   }

@@ -16,8 +16,9 @@ export const MEDIA_OPTIONS = [
   "RSS",
   "elmo",
   "SMS GH",
+  "youtube",
   "facebook",
-];
+] as const;
 export type MediaOptions = (typeof MEDIA_OPTIONS)[number];
 
 export const ESCALATED_OPTIONS = ["true", "false"] as const;
