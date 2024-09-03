@@ -7,7 +7,6 @@ import { getReports, setReportsToGroup } from "../../api/reports";
 import ReportListItemSmall from "./ReportListItemSmall";
 import AggieButton from "../../components/AggieButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import TagsList from "../../components/tag/TagsList";
 import IncidentListItem from "../incidents/IncidentListItem";
 interface IAddReportsToIncidents {
@@ -52,11 +51,9 @@ const AddReportsToIncidents = ({
             <AggieButton
               variant='primary'
               onClick={onAddIncident}
+              loading={addReportsMutation.isLoading}
               disabled={addReportsMutation.isLoading}
             >
-              {addReportsMutation.isLoading && (
-                <FontAwesomeIcon icon={faSpinner} className='animate-spin' />
-              )}
               Attach to incident
             </AggieButton>
           </div>

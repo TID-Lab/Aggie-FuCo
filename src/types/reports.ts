@@ -47,4 +47,5 @@ export interface ReportQueryState {
   after?: Date | string;
   tags?: string[];
   page?: number;
+  batch?: boolean;
 }

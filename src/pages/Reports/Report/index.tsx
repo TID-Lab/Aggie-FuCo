@@ -8,15 +8,7 @@ import {
 
 import AggieButton from "../../../components/AggieButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCaretDown,
-  faEnvelope,
-  faEnvelopeOpen,
-  faExternalLink,
-  faFile,
-  faPlus,
-  faSpinner,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faFile, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { getSources } from "../../../api/sources";
 import { useQueryParams } from "../../../hooks/useQueryParams";
 import type { ReportQueryState, Reports, Tag } from "../../../objectTypes";
@@ -28,6 +20,7 @@ import ReportListItemSmall from "../ReportListItemSmall";
 import { useUpdateQueryData } from "../../../hooks/useUpdateQueryData";
 import { updateByIds } from "../../../utils/immutable";
 import DropdownMenu from "../../../components/DropdownMenu";
+
 const Report = () => {
   let { id } = useParams();
   const { setParams } = useQueryParams<ReportQueryState>();
@@ -197,15 +190,9 @@ const Report = () => {
                   read: !reportQuery.data?.read,
                 })
               }
+              loading={setSingleReadMutation.isLoading}
               disabled={!reportQuery.data || setSingleReadMutation.isLoading}
             >
-              {setSingleReadMutation.isLoading ? (
-                <FontAwesomeIcon icon={faSpinner} className='animate-spin' />
-              ) : (
-                <FontAwesomeIcon
-                  icon={reportQuery.data?.read ? faEnvelope : faEnvelopeOpen}
-                />
-              )}
               {reportQuery.data?.read ? <>mark unread</> : <>mark read</>}
             </AggieButton>
             <div className='flex font-medium'>

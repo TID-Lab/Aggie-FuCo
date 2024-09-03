@@ -24,13 +24,13 @@ import DropdownMenu from "../../components/DropdownMenu";
 import Pagination from "../../components/Pagination";
 import { formatPageCount } from "../../utils/format";
 import { useEffect } from "react";
+import AggieCheck from "../../components/AggieCheck";
 
 interface IProps {
   onAttachIncident: (id: string[]) => void;
-  onNavigateReport: (id: string) => void;
 }
 
-const AllReportsList = ({ onAttachIncident, onNavigateReport }: IProps) => {
+const AllReportsList = ({ onAttachIncident }: IProps) => {
   const { id: currentPageId } = useParams();
   const navigate = useNavigate();
   const { setRead, setIrrelevance } = useReportMutations();
@@ -51,8 +51,7 @@ const AllReportsList = ({ onAttachIncident, onNavigateReport }: IProps) => {
   });
 
   function onReportItemClick(id: string, isRead: boolean) {
-    onNavigateReport(id);
-    multiSelect.set([id]);
+    navigate({ pathname: id, search: searchParams.toString() });
     if (!isRead)
       setRead.mutate({ reportIds: [id], read: true, currentPageId: id });
   }
@@ -80,29 +79,16 @@ const AllReportsList = ({ onAttachIncident, onNavigateReport }: IProps) => {
             </AggieButton>
           }
         />
-        <div className='flex justify-between items-center'></div>
         <div className='px-1 flex gap-2 text-xs font-medium items-center'>
           {multiSelect.isActive && (
             <>
-              <div
-                className='pointer-events-auto cursor-pointer group -m-2 hover:bg-blue-300/25 rounded-lg p-2 '
+              <AggieCheck
+                active={multiSelect.any()}
+                icon={!multiSelect.all() ? faMinus : undefined}
                 onClick={() =>
                   multiSelect.addRemoveAll(reportsQuery.data?.results)
                 }
-              >
-                <div
-                  className={`w-4 h-4  border border-slate-400 group-hover:border-slate-600 grid place-items-center rounded ${
-                    multiSelect.any() ? "bg-blue-500 text-slate-50" : ""
-                  }`}
-                >
-                  {multiSelect.any() && (
-                    <FontAwesomeIcon
-                      icon={multiSelect.all() ? faCheck : faMinus}
-                      size='xs'
-                    />
-                  )}
-                </div>
-              </div>
+              />
               <p>
                 Mark {multiSelect.selection.length} report{"(s)"} as:
               </p>

@@ -1,9 +1,9 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Link, useOutlet, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useOutlet, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
-import type { ReportQueryState } from "../../objectTypes";
+import type { ReportQueryState } from "../../types/reports";
 import { getReports } from "../../api/reports";
 
 import AddReportsToIncidents from "./AddReportsToIncident";
@@ -25,9 +25,7 @@ const Reports = () => {
   function addReportsToIncidents() {
     setAddReportModal(true);
   }
-  function navigateToReport(id: string) {
-    navigate({ pathname: id, search: searchParams.toString() });
-  }
+
   return (
     <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-3 gap-3'>
       {/* <AddReportsToIncidents
@@ -39,13 +37,14 @@ const Reports = () => {
       /> */}
       <main className='col-span-2 '>
         <Tab.Group
+          defaultIndex={!!getParam("batch") ? 1 : 0}
           onChange={(index) => {
             // unset report page
             navigate({ pathname: "/reports", search: searchParams.toString() });
           }}
         >
           <div className='flex justify-between text-slate-500 mt-3 mb-1'>
-            <Tab.List className={"text-3xl font-medium flex gap-1"}>
+            <Tab.List className={"text-3xl font-medium flex"}>
               <Tab className='focus-theme ui-selected:text-black hover:bg-slate-200 ui-selected:hover:bg-transparent rounded-lg px-2 py-1'>
                 <h1 className=''>All Reports</h1>
               </Tab>
@@ -64,10 +63,7 @@ const Reports = () => {
 
           <Tab.Panels>
             <Tab.Panel>
-              <AllReportsList
-                onAttachIncident={addReportsToIncidents}
-                onNavigateReport={navigateToReport}
-              />
+              <AllReportsList onAttachIncident={addReportsToIncidents} />
             </Tab.Panel>
             <Tab.Panel>
               <BatchReportList />

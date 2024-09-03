@@ -12,7 +12,13 @@ import { updateByIds } from "../../utils/immutable";
 
 import type { Reports, Report, ReportQueryState } from "../../types/reports";
 
-export const useReportMutations = () => {
+const defaultOptions = {
+  key: ["reports"],
+};
+
+export const useReportMutations = (
+  options: typeof defaultOptions = defaultOptions
+) => {
   const queryData = useUpdateQueryData();
   const navigate = useNavigate();
   const { searchParams } = useQueryParams<ReportQueryState>();
@@ -27,8 +33,8 @@ export const useReportMutations = () => {
     }) => setSelectedRead(params.reportIds, params.read),
     onMutate: (params) => {
       // update reports list
-      queryData.queryClient.cancelQueries(["reports"]);
-      const contextReports = queryData.update<Reports>(["reports"], (data) => {
+      queryData.queryClient.cancelQueries(options.key);
+      const contextReports = queryData.update<Reports>(options.key, (data) => {
         const updateData = updateByIds(params.reportIds, data.results, {
           read: params.read,
         });
@@ -59,7 +65,7 @@ export const useReportMutations = () => {
       if (!context) return;
       // if mutation fails, revert
       //@ts-ignore this is fixed in typescript 5 but we cant update it bc were using react-scripts soooooo
-      queryData.queryClient.setQueryData(["reports"], context.reports);
+      queryData.queryClient.setQueryData(options.key, context.reports);
       if (context.reportId && context.report)
         queryData.queryClient.setQueryData(
           ["report", context.reportId],
@@ -76,7 +82,7 @@ export const useReportMutations = () => {
     }) => setSelectedIrrelevance(params.reportIds, params.irrelevant),
     onSuccess: (_, params) => {
       // update reports list
-      queryData.update<Reports>(["reports"], (previousData) => {
+      queryData.update<Reports>(options.key, (previousData) => {
         const updateData = updateByIds(params.reportIds, previousData.results, {
           irrelevant: params.irrelevant,
         });

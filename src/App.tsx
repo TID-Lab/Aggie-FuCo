@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
-import "@yaireo/tagify/dist/tagify.css";
-import AggieNavbar from "./components/AggieNavbar";
-import AlertService, { AlertContent } from "./components/AlertService";
 import {
   Navigate,
   Route,
@@ -10,6 +6,17 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import AggieNavbar from "./components/AggieNavbar";
+import AlertService, { AlertContent } from "./components/AlertService";
+import { Modal } from "react-bootstrap";
+import { getSession } from "./api/session";
+
+import type { AxiosError } from "axios";
+import type { Session } from "./objectTypes";
+
+import "./App.css";
+import "@yaireo/tagify/dist/tagify.css";
+
 import ReportsIndex from "./pages/report/ReportsIndex";
 import ReportDetails from "./pages/report/ReportDetails";
 import GroupsIndex from "./pages/group/GroupsIndex";
@@ -25,13 +32,7 @@ import Login from "./pages/Login";
 import Analysis from "./pages/Analysis";
 import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getSession } from "./api/session";
-import { Axios, AxiosError } from "axios";
-import { Session } from "./objectTypes";
 import RelevantReportsIndex from "./pages/report/RelevantReportsIndex";
-import { getAllGroups } from "./api/groups";
-import { Button, Modal } from "react-bootstrap";
 import Incidents from "./pages/incidents";
 import Incident from "./pages/incidents/Incident";
 import Reports from "./pages/Reports";
@@ -39,6 +40,7 @@ import Report from "./pages/Reports/Report";
 import NewIncident from "./pages/incidents/NewIncident";
 import FetchIndicator from "./components/FetchIndicator";
 
+// im currently working on this
 //TODO: BIG TODO is to correctly type all of react-query usage. Its not critical for function, but it is good for clarity in development.
 //TODO: Also BIG TODO is to ensure EVERY API call has a way of surfacing an error message. I want readble UI alerts but at least console.errors.
 const isSafari = () =>
@@ -98,7 +100,6 @@ const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
   );
 };
 const App = () => {
-  const queryClient = useQueryClient();
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [userData, setUserData] = useState<Session | undefined>(undefined);
 
