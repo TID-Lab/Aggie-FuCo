@@ -1,14 +1,15 @@
-import TagsList from "../../components/tag/TagsList";
-import { Report, Reports } from "../../api/reports/types";
-import { stringToDate } from "../../helpers";
+import TagsList from "../../../components/tag/TagsList";
+import { Report, Reports } from "../../../api/reports/types";
+import { stringToDate } from "../../../helpers";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { formatText } from "../../utils/format";
-import AggieButton from "../../components/AggieButton";
+import { formatText } from "../../../utils/format";
+import AggieButton from "../../../components/AggieButton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getGroup } from "../../api/groups";
+import { getGroup } from "../../../api/groups";
 import { useNavigate } from "react-router-dom";
+import SocialMediaIcon from "../../../components/SocialMediaPost/SocialMediaIcon";
 
 //TODO: refactor and clean up tech debt
 interface IProps {
@@ -94,6 +95,9 @@ const ReportListItem = ({
                   report.read ? "" : ""
                 }`}
               >
+                <span className='mr-2 text-slate-600 text-xs'>
+                  <SocialMediaIcon mediaKey={report._media[0]} />
+                </span>
                 {report.author}
               </h1>
               <TagsList values={report.smtcTags} />

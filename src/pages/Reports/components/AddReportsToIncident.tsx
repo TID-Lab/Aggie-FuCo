@@ -1,28 +1,46 @@
 import { Dialog } from "@headlessui/react";
-import React, { useState } from "react";
-import type { Group } from "../../objectTypes";
-import type { Report } from "../../api/reports/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getGroups } from "../../api/groups";
-import { getReports, setReportsToGroup } from "../../api/reports";
-import AggieButton from "../../components/AggieButton";
+import React, { useEffect, useState } from "react";
+import type { Group } from "../../../objectTypes";
+import type { Report, Reports } from "../../../api/reports/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getGroups } from "../../../api/groups";
+import { getReports, setReportsToGroup } from "../../../api/reports";
+import AggieButton from "../../../components/AggieButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import TagsList from "../../components/tag/TagsList";
-import IncidentListItem from "../incidents/IncidentListItem";
-import SocialMediaPost from "../../components/SocialMediaPost";
+import TagsList from "../../../components/tag/TagsList";
+import IncidentListItem from "../../incidents/IncidentListItem";
+import SocialMediaPost from "../../../components/SocialMediaPost";
 interface IAddReportsToIncidents {
   isOpen: boolean;
-  reports?: Report[];
+  selection?: string[];
+  queryKey: string[];
   onClose: () => void;
 }
 const AddReportsToIncidents = ({
   isOpen,
-  reports,
+  selection,
+  queryKey,
   onClose,
 }: IAddReportsToIncidents) => {
   const [selectedIncident, setSelectedIncident] = useState<Group>();
+  const queryClient = useQueryClient();
 
+  function ReportsFromSelection(
+    ids: string[] | undefined,
+    openStatus: boolean
+  ) {
+    // dont run if window not open
+    if (!openStatus) return [];
+    if (!ids || ids.length === 0) return [];
+    const data = queryClient.getQueryData<Reports>(queryKey);
+    //TODO: nice error window
+    if (!data) return [];
+    const getReports = data?.results.filter((i) => ids.includes(i._id));
+    if (!getReports) return [];
+    return getReports;
+  }
   const { data: incidents } = useQuery(["groups"], () => getGroups());
+
   const addReportsMutation = useMutation({
     mutationFn: setReportsToGroup,
     onSuccess: () => {
@@ -31,9 +49,11 @@ const AddReportsToIncidents = ({
   });
 
   function onAddIncident() {
-    if (!reports || !selectedIncident) return;
-    const ids = reports.map((i) => i._id);
-    addReportsMutation.mutate({ reportIds: ids, groupId: selectedIncident });
+    if (!selection || selection.length === 0 || !selectedIncident) return;
+    addReportsMutation.mutate({
+      reportIds: selection,
+      groupId: selectedIncident,
+    });
   }
 
   return (
@@ -59,10 +79,9 @@ const AddReportsToIncidents = ({
             </AggieButton>
           </div>
           <div className='overflow-y-scroll max-h-[80vh] flex flex-col gap-1'>
-            {reports &&
-              reports.map((item) => (
-                <SocialMediaPost key={item._id} report={item} />
-              ))}
+            {ReportsFromSelection(selection, isOpen).map((report) => (
+              <SocialMediaPost key={report._id} report={report} />
+            ))}
           </div>
           <div className='overflow-y-scroll max-h-[80vh]'>
             <div className='flex flex-col gap-1 '>

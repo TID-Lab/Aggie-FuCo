@@ -5,6 +5,7 @@ import { Report } from "../../api/reports/types";
 import { formatAuthor, formatText } from "../../utils/format";
 import PostReactions from "./PostReactions";
 import MediaPreview from "./MediaPreview";
+import SocialMediaIcon from "./SocialMediaIcon";
 interface IProps {
   report: Report;
   showMedia?: boolean;
@@ -20,9 +21,13 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
             <a
               target='_blank'
               href={report.metadata.accountUrl}
+              title={`open ${report._media[0]} account`}
               className='hover:underline hover:bg-slate-100 group hover:text-blue-600'
             >
               <h1>
+                <span className='mr-1 text-slate-600 '>
+                  <SocialMediaIcon mediaKey={report._media[0]} />
+                </span>
                 {formatAuthor(report.author, report._media)}{" "}
                 <span className='opacity-0 group-hover:opacity-100'>
                   <FontAwesomeIcon icon={faExternalLink} size='xs' />

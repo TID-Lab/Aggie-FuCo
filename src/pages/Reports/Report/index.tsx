@@ -15,7 +15,7 @@ import type { ReportQueryState, Reports, Tag } from "../../../objectTypes";
 import { getTags } from "../../../api/tags";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
-import AddReportsToIncidents from "../AddReportsToIncident";
+import AddReportsToIncidents from "../components/AddReportsToIncident";
 import { useUpdateQueryData } from "../../../hooks/useUpdateQueryData";
 import { updateByIds } from "../../../utils/immutable";
 import DropdownMenu from "../../../components/DropdownMenu";
@@ -162,7 +162,7 @@ const Report = () => {
   function addReportsToIncidents() {
     setAddReportModal(true);
   }
-
+  // refactor to be more pretty and have placeholders
   if (reportQuery.isLoading)
     return (
       <span className='pt-4 sticky top-0 font-medium text-center'>
@@ -174,8 +174,9 @@ const Report = () => {
     return (
       <article className='pt-4 sticky top-0 overflow-y-auto max-h-[93vh] '>
         <AddReportsToIncidents
-          reports={[reportQuery.data]}
+          selection={id ? [id] : undefined}
           isOpen={addReportModal}
+          queryKey={["reports"]}
           onClose={() => setAddReportModal(false)}
         />
         <nav className='pl-3 pr-2 py-2 flex justify-between items-center rounded-lg text-xs border border-slate-300 mb-2 shadow-md bg-white'>
@@ -225,10 +226,6 @@ const Report = () => {
           </div>
         </nav>
         <div className='flex flex-col gap-1 my-2'>
-          <div className='grid grid-cols-3'>
-            <p className='font-medium text-sm py-1 px-2 '> Platform</p>
-            <p className='col-span-2'>{reportQuery.data._media}</p>
-          </div>
           <div className='grid grid-cols-3'>
             <p className='font-medium text-sm py-1 px-2 '>Source</p>
             <p className='col-span-2 '>

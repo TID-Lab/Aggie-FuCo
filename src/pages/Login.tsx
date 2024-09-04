@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Field, Formik, FormikValues, Form } from "formik";
 import * as Yup from "yup";
-import { LoginData } from "../objectTypes";
 import { logIn } from "../api/session";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import AggieButton from "../components/AggieButton";
+import { useQueryParams } from "../hooks/useQueryParams";
 
 const loginFormSchema = Yup.object().shape({
   loginUsername: Yup.string().required("Username required"),
@@ -17,20 +17,21 @@ const loginFormSchema = Yup.object().shape({
 interface IProps {}
 
 const Login = (props: IProps) => {
-  let navigate = useNavigate();
+  const { getParam } = useQueryParams<{ to: string }>();
+  console.log(getParam("to"));
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const loginQuery = useMutation(
-    (logInData: LoginData) => {
-      return logIn(logInData);
+  const loginQuery = useMutation(logIn, {
+    onSuccess: (data) => {
+      // if theres a return parameter, return to that url
+      if (!!getParam("to")) {
+        navigate(getParam("to"));
+      }
+      //reload website to check for session in root
+      navigate(0);
     },
-    {
-      onSuccess: (data) => {
-        //reload website to check for session in root
-        navigate(0);
-      },
-      onError: (data) => {},
-    }
-  );
+    onError: (data) => {},
+  });
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const formValuesToLogin = (values: FormikValues) => {
     return {

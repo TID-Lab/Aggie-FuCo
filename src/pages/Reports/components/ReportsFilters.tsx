@@ -1,19 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { useQueryParams } from "../../hooks/useQueryParams";
+import { useQueryParams } from "../../../hooks/useQueryParams";
 
-import { getSources } from "../../api/sources";
-import { MEDIA_OPTIONS } from "../../api/common";
-import type { ReportQueryState } from "../../objectTypes";
+import { getSources } from "../../../api/sources";
+import { MEDIA_OPTIONS } from "../../../api/common";
+import type { ReportQueryState } from "../../../objectTypes";
 
-import FilterComboBox from "../../components/filters/FilterComboBox";
-import FilterListbox from "../../components/filters/FilterListBox";
+import FilterComboBox from "../../../components/filters/FilterComboBox";
+import FilterListbox from "../../../components/filters/FilterListBox";
 import { Field, Form, Formik } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
-import AggieButton from "../../components/AggieButton";
-import Pagination from "../../components/Pagination";
+import AggieButton from "../../../components/AggieButton";
+import Pagination from "../../../components/Pagination";
 
-//TODO: refactor onSelectMode
 interface IReportFilters {
   reportCount?: number;
   headerElement: React.ReactElement;
@@ -33,7 +32,6 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
     }));
     return [{ key: "", value: "All Sources" }, ...array];
   }
-  function onSearch() {}
 
   return (
     <>
@@ -44,32 +42,39 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
             initialValues={{ keywords: getParam("keywords") }}
             onSubmit={(e) => setParams(e)}
           >
-            <Form className='flex items-center focus-within-theme rounded-lg'>
-              <Field
-                name='keywords'
-                className='focus-theme px-2 py-1 border-y border-l border-slate-300 bg-white rounded-l-lg min-w-[20rem]'
-                placeholder='Search Keywords'
-              />
+            {({ resetForm }) => (
+              <Form className='flex gap-2'>
+                <div className='flex items-center focus-within-theme rounded-lg'>
+                  {" "}
+                  <Field
+                    name='keywords'
+                    className='focus-theme px-2 py-1 border-y border-l border-slate-300 bg-white rounded-l-lg min-w-[20rem]'
+                    placeholder='Search Keywords'
+                  />
+                  <AggieButton
+                    type='submit'
+                    className='px-4 py-1 h-full hover:bg-white bg-slate-100 rounded-r-lg border border-l-0 border-slate-30'
+                    title='search'
+                  >
+                    <FontAwesomeIcon icon={faSearch} />
+                  </AggieButton>
+                </div>
 
-              <AggieButton
-                type='submit'
-                onClick={onSearch}
-                className='px-4 py-1 h-full hover:bg-white bg-slate-100 rounded-r-lg border border-l-0 border-slate-30'
-                title='search'
-              >
-                <FontAwesomeIcon icon={faSearch} />
-              </AggieButton>
-            </Form>
+                {searchParams.size > 0 && (
+                  <AggieButton
+                    className='hover:underline hover:bg-slate-100 px-2 py-1 text-sm rounded'
+                    onClick={() => {
+                      clearAllParams();
+                      resetForm();
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faXmarkSquare} />
+                    Clear All Parameters
+                  </AggieButton>
+                )}
+              </Form>
+            )}
           </Formik>
-          {searchParams.size > 0 && (
-            <AggieButton
-              className='hover:underline hover:bg-slate-100 px-2 py-1 text-sm rounded'
-              onClick={clearAllParams}
-            >
-              <FontAwesomeIcon icon={faXmarkSquare} />
-              Clear All Parameters
-            </AggieButton>
-          )}
         </div>
         <div className='text-xs'>
           <Pagination

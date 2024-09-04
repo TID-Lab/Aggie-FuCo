@@ -1,52 +1,58 @@
-import {
-  faMinus,
-  faEnvelopeOpen,
-  faEnvelope,
-  faXmark,
-  faDotCircle,
-  faPlus,
-  faCaretDown,
-  faFile,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import DropdownMenu from "../../components/DropdownMenu";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { cancelBatch, getBatch, getNewBatch } from "../../api/reports";
-import AggieButton from "../../components/AggieButton";
-import AggieCheck from "../../components/AggieCheck";
 import { useMultiSelect } from "../../hooks/useMultiSelect";
 import { useQueryParams } from "../../hooks/useQueryParams";
-import { Report, ReportQueryState } from "../../api/reports/types";
-import ReportListItem from "./ReportListItem";
 import { useReportMutations } from "./useReportMutations";
 
-const BatchReportList = () => {
+import { cancelBatch, getBatch, getNewBatch } from "../../api/reports";
+import type { Report, ReportQueryState } from "../../api/reports/types";
+
+import AggieButton from "../../components/AggieButton";
+import AggieCheck from "../../components/AggieCheck";
+import ReportListItem from "./components/ReportListItem";
+import MultiSelectActions from "./components/MultiSelectActions";
+
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
+
+interface IProps {}
+
+const BatchReportList = ({}: IProps) => {
   const { id: currentPageId } = useParams();
 
   const { searchParams, getParam, setParams } =
     useQueryParams<ReportQueryState>();
 
-  const { setRead, setIrrelevance } = useReportMutations({ key: ["batch"] });
-
+  const { setRead } = useReportMutations({ key: ["batch"] });
   const navigate = useNavigate();
+
   const newBatch = useMutation(getNewBatch);
   const cancelCurrentBatch = useMutation(cancelBatch);
 
-  const batchQuery = useQuery(["batch"], getBatch, {
-    enabled: !!getParam("batch"),
-  });
+  const { data: batchData, refetch: batchRefetch } = useQuery(
+    ["batch"],
+    getBatch,
+    {
+      enabled: !!getParam("batch"),
+    }
+  );
+
+  useEffect(() => {
+    if (!batchData || batchData?.results.length === 0) {
+      setParams({ batch: undefined });
+      return;
+    }
+    setParams({ batch: true });
+  }, [batchData]);
   const multiSelect = useMultiSelect({
-    allItems: batchQuery.data?.results,
+    allItems: batchData?.results,
     mapFn: (i) => i._id,
   });
 
   function onActivateBatchMode() {
     newBatch.mutate(undefined, {
       onSuccess: () => {
-        setParams({ batch: true });
-        batchQuery.refetch();
+        batchRefetch();
       },
     });
   }
@@ -104,8 +110,8 @@ const BatchReportList = () => {
 
           <div className='flex gap-1 text-xs'>
             <p className='text-sm'>
-              {filteredCount(batchQuery.data?.results, "read")} read of{" "}
-              {batchQuery.data?.total}
+              {filteredCount(batchData?.results, "read")} read of{" "}
+              {batchData?.total}
             </p>
             <AggieButton
               variant='secondary'
@@ -129,105 +135,24 @@ const BatchReportList = () => {
               <AggieCheck
                 active={multiSelect.any()}
                 icon={!multiSelect.all() ? faMinus : undefined}
-                onClick={() =>
-                  multiSelect.addRemoveAll(batchQuery.data?.results)
-                }
+                onClick={() => multiSelect.addRemoveAll(batchData?.results)}
               />
               <p>
                 Mark {multiSelect.selection.length} report{"(s)"} as:
               </p>
-              <div className=' rounded-lg flex overflow-hidden min-w-fit'>
-                <AggieButton
-                  className='py-1 px-2 hover:bg-lime-200 bg-lime-100 text-lime-800'
-                  disabled={!multiSelect.any()}
-                  onClick={() =>
-                    setRead.mutate({
-                      reportIds: multiSelect.selection,
-                      read: true,
-                      currentPageId,
-                    })
-                  }
-                >
-                  <FontAwesomeIcon icon={faEnvelopeOpen} />
-                  Read
-                </AggieButton>
-                <AggieButton
-                  className='py-1 px-2 hover:bg-amber-200 bg-amber-100 text-amber-800'
-                  disabled={!multiSelect.any()}
-                  onClick={() =>
-                    setRead.mutate({
-                      reportIds: multiSelect.selection,
-                      read: false,
-                      currentPageId,
-                    })
-                  }
-                >
-                  <FontAwesomeIcon icon={faEnvelope} />
-                  Unread
-                </AggieButton>
-              </div>
-              <AggieButton
-                className='bg-rose-200 text-rose-800 border border-rose-500 border-none  px-2 py-1 rounded-lg hover:bg-rose-300'
+              <MultiSelectActions
+                queryKey={["reports"]}
+                selection={multiSelect.selection}
                 disabled={!multiSelect.any()}
-                onClick={() =>
-                  setIrrelevance.mutate({
-                    reportIds: multiSelect.selection,
-                    irrelevant: "true",
-                    currentPageId,
-                  })
-                }
-              >
-                <FontAwesomeIcon icon={faXmark} />
-                Not Relevant
-              </AggieButton>
-              <AggieButton
-                className='bg-green-100 text-green-800 border border-green-200 border-none  px-2 py-1 rounded-lg hover:bg-green-300'
-                disabled={!multiSelect.any()}
-                onClick={() =>
-                  setIrrelevance.mutate({
-                    reportIds: multiSelect.selection,
-                    irrelevant: "false",
-                    currentPageId,
-                  })
-                }
-              >
-                <FontAwesomeIcon icon={faDotCircle} />
-                Relevant
-              </AggieButton>
-              <div className='flex font-medium'>
-                <AggieButton
-                  className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-200 hover:bg-slate-200'
-                  onClick={() => console.log()}
-                  disabled={!multiSelect.any()}
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                  Attach Incident
-                </AggieButton>
-                <DropdownMenu
-                  variant='secondary'
-                  buttonElement={
-                    <FontAwesomeIcon
-                      icon={faCaretDown}
-                      className='ui-open:rotate-180'
-                    />
-                  }
-                  className='px-2 py-1 rounded-r-lg border-y border-r'
-                  panelClassName='right-0'
-                  disabled={!multiSelect.any()}
-                >
-                  <AggieButton className='px-3 py-2 hover:bg-slate-200'>
-                    <FontAwesomeIcon icon={faFile} />
-                    Create New Incident with Report
-                  </AggieButton>
-                </DropdownMenu>
-              </div>
+                currentPageId={currentPageId}
+              />
             </>
           )}
         </div>
       </div>
       <div className='flex flex-col border border-slate-200 rounded-lg overflow-hidden'>
-        {batchQuery.isSuccess &&
-          batchQuery.data?.results.map((report) => (
+        {batchData &&
+          batchData.results.map((report) => (
             <div
               onClick={() => onReportClick(report._id, report.read)}
               className='cursor-pointer group focus-theme'

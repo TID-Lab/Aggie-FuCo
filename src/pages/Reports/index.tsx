@@ -3,38 +3,25 @@ import { useOutlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
-import type { ReportQueryState } from "../../api/reports/types";
+import type { Report, ReportQueryState } from "../../api/reports/types";
 import { getReports } from "../../api/reports";
-
-import AddReportsToIncidents from "./AddReportsToIncident";
 import { formatPageCount } from "../../utils/format";
 
-import AllReportsList from "./AllReportsList";
 import { Tab } from "@headlessui/react";
+import AddReportsToIncidents from "./components/AddReportsToIncident";
+import AllReportsList from "./AllReportsList";
 import BatchReportList from "./BatchReportsList";
 
 const Reports = () => {
   const navigate = useNavigate();
   const outlet = useOutlet();
-  const { searchParams, getAllParams, setParams, getParam } =
+  const { searchParams, getAllParams, getParam } =
     useQueryParams<ReportQueryState>();
 
   const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()));
 
-  const [addReportModal, setAddReportModal] = useState(false);
-  function addReportsToIncidents() {
-    setAddReportModal(true);
-  }
-
   return (
     <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-3 gap-3'>
-      {/* <AddReportsToIncidents
-        reports={reportsQuery.data?.results?.filter((i) =>
-          multiSelect.exists(i._id)
-        )}
-        isOpen={addReportModal}
-        onClose={() => setAddReportModal(false)}
-      /> */}
       <main className='col-span-2 '>
         <Tab.Group
           defaultIndex={!!getParam("batch") ? 1 : 0}
@@ -63,7 +50,7 @@ const Reports = () => {
 
           <Tab.Panels>
             <Tab.Panel>
-              <AllReportsList onAttachIncident={addReportsToIncidents} />
+              <AllReportsList />
             </Tab.Panel>
             <Tab.Panel>
               <BatchReportList />

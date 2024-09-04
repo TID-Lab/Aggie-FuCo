@@ -46,12 +46,22 @@ import FetchIndicator from "./components/FetchIndicator";
 const isSafari = () =>
   /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
+const RerouteToLogin = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const searchParam = new URLSearchParams([["to", location.pathname]]);
+    navigate({ pathname: "/login", search: searchParam.toString() });
+  }, []);
+  return <>Rerouting to login...</>;
+};
+
 const PublicRoutes = () => {
   return (
     <Routes>
       <Route path='/reset-password' element={<ResetPassword />} />
       <Route path='/login' element={<Login />} />
-      <Route path='/*' element={<Navigate replace to='login' />} />
+      <Route path='/*' element={<RerouteToLogin />} />
     </Routes>
   );
 };
