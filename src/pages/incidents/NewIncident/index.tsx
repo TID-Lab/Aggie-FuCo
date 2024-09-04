@@ -1,25 +1,23 @@
-import { Formik, FormikValues } from "formik";
-import { Form, FormGroup, FormLabel, FormCheck, Button } from "react-bootstrap";
-import { VERACITY_OPTIONS, type VeracityOptions } from "../../../api/common";
 import { useQueryParams } from "../../../hooks/useQueryParams";
-
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+
 import { newGroup } from "../../../api/groups";
-import { getUsers } from "../../../api/users";
-import AggieButton from "../../../components/AggieButton";
 import { setReportsToGroup } from "../../../api/reports";
+import type { Report, Reports } from "../../../api/reports/types";
+
 import IncidentForm from "../IncidentForm";
 import { Dialog } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import SocialMediaPost from "../../../components/SocialMediaPost";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
   faSpinner,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
-import { Report, Reports } from "../../../api/reports/types";
-import SocialMediaPost from "../../../components/SocialMediaPost";
+
 interface NewIncidentQueryState {
   reports?: string;
 }
@@ -32,7 +30,7 @@ const NewIncident = () => {
 
   const { searchParams, getParam } = useQueryParams<NewIncidentQueryState>();
 
-  const { isSuccess, data, isError, isLoading, mutate, status } = useMutation({
+  const { isLoading, mutate, status } = useMutation({
     mutationFn: newGroup,
     onMutate: () => {
       setShowDialog(true);
@@ -46,6 +44,7 @@ const NewIncident = () => {
         });
     },
   });
+
   useEffect(() => {
     const data = queryClient.getQueryData<Reports>(["reports"]);
     if (!data) return;

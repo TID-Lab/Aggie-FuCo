@@ -1,13 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-
-import { IrrelevanceOptions } from "../../api/common";
-import { setSelectedRead, setSelectedIrrelevance } from "../../api/reports";
-
-import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
 import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
+import { IrrelevanceOptions } from "../../api/common";
+import { setSelectedRead, setSelectedIrrelevance } from "../../api/reports";
 import { updateByIds } from "../../utils/immutable";
 
 import type {

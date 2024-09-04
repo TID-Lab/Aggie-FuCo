@@ -1,12 +1,22 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Group, GroupEditableData, Groups } from "../../objectTypes";
-
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
+import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
+
+import { deleteGroup, editGroup } from "../../api/groups";
+import { getSession } from "../../api/session";
+import type { Group, Groups } from "../../objectTypes";
+import { updateByIds } from "../../utils/immutable";
+
 import TagsList from "../../components/tag/TagsList";
 import VeracityToken from "../../components/VeracityToken";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Menu } from "@headlessui/react";
+import AggieButton from "../../components/AggieButton";
+import ConfirmationModal from "../../components/ConfirmationModal";
+import IncidentForm from "./IncidentForm";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
   faEdit,
@@ -17,19 +27,11 @@ import {
   faTrash,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
-import AggieButton from "../../components/AggieButton";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteGroup, editGroup } from "../../api/groups";
-import { getSession } from "../../api/session";
-import ConfirmationModal from "../../components/ConfirmationModal";
-import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
-import IncidentForm from "./IncidentForm";
-import { updateByIds } from "../../utils/immutable";
-import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
 
 interface IProps {
   item: Group;
 }
+//TODO: refactor
 
 const IncidentListItem = ({ item }: IProps) => {
   const navigate = useNavigate();
@@ -37,7 +39,6 @@ const IncidentListItem = ({ item }: IProps) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   const sessionQuery = useQuery(["session"], getSession);
-  const queryClient = useQueryClient();
   const queryData = useUpdateQueryData();
 
   const editAssignMutation = useOptimisticMutation({
@@ -73,7 +74,7 @@ const IncidentListItem = ({ item }: IProps) => {
       setIsEditOpen(false);
     },
     onSettled: (newTodo) => {
-      queryClient.invalidateQueries({ queryKey: ["groups"] });
+      queryData.queryClient.invalidateQueries({ queryKey: ["groups"] });
     },
   });
 
@@ -87,7 +88,7 @@ const IncidentListItem = ({ item }: IProps) => {
       });
     },
     onSettled: (newTodo) => {
-      queryClient.invalidateQueries({ queryKey: ["groups"] });
+      queryData.queryClient.invalidateQueries({ queryKey: ["groups"] });
     },
   });
 
@@ -100,7 +101,6 @@ const IncidentListItem = ({ item }: IProps) => {
     e.stopPropagation();
   }
 
-  //TODO: refactor
   function onAssignClick(e: React.MouseEvent) {
     e.stopPropagation();
     e.preventDefault();

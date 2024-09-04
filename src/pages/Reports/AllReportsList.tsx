@@ -7,11 +7,10 @@ import { useQueryParams } from "../../hooks/useQueryParams";
 
 import { formatPageCount } from "../../utils/format";
 import { getReports } from "../../api/reports";
-import type { Report, ReportQueryState } from "../../api/reports/types";
+import type { ReportQueryState } from "../../api/reports/types";
 
 import ReportListItem from "./components/ReportListItem";
 import ReportsFilters from "./components/ReportsFilters";
-import DropdownMenu from "../../components/DropdownMenu";
 import Pagination from "../../components/Pagination";
 import AggieCheck from "../../components/AggieCheck";
 import AggieButton from "../../components/AggieButton";

@@ -2,19 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
 import { getUsers } from "../../api/users";
-import { getSources } from "../../api/sources";
-import { getTags } from "../../api/tags";
 import { VERACITY_OPTIONS, ESCALATED_OPTIONS } from "../../api/common";
 import type { GroupSearchState } from "../../objectTypes";
 
+import { Field, Form, Formik } from "formik";
 import FilterComboBox from "../../components/filters/FilterComboBox";
 import FilterListbox from "../../components/filters/FilterListBox";
 import FilterRadioGroup from "../../components/filters/FilterRadioGroup";
-import { Field, Form, Formik } from "formik";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
 import AggieButton from "../../components/AggieButton";
 import AggiePagination from "../../components/AggiePagination";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
 
 interface IIncidentFilters {
   reportCount?: number;

@@ -3,7 +3,7 @@ import { useQueryParams } from "../../../hooks/useQueryParams";
 
 import { getSources } from "../../../api/sources";
 import { MEDIA_OPTIONS } from "../../../api/common";
-import type { ReportQueryState } from "../../../objectTypes";
+import type { ReportQueryState } from "../../../api/reports/types";
 
 import FilterComboBox from "../../../components/filters/FilterComboBox";
 import FilterListbox from "../../../components/filters/FilterListBox";
@@ -45,7 +45,6 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
             {({ resetForm }) => (
               <Form className='flex gap-2'>
                 <div className='flex items-center focus-within-theme rounded-lg'>
-                  {" "}
                   <Field
                     name='keywords'
                     className='focus-theme px-2 py-1 border-y border-l border-slate-300 bg-white rounded-l-lg min-w-[20rem]'
@@ -60,7 +59,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
                   </AggieButton>
                 </div>
 
-                {searchParams.size > 0 && (
+                {searchParams.size && (
                   <AggieButton
                     className='hover:underline hover:bg-slate-100 px-2 py-1 text-sm rounded'
                     onClick={() => {

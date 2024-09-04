@@ -1,14 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useOutlet, useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
-import type { Report, ReportQueryState } from "../../api/reports/types";
+import type { ReportQueryState } from "../../api/reports/types";
 import { getReports } from "../../api/reports";
 import { formatPageCount } from "../../utils/format";
 
 import { Tab } from "@headlessui/react";
-import AddReportsToIncidents from "./components/AddReportsToIncident";
 import AllReportsList from "./AllReportsList";
 import BatchReportList from "./BatchReportsList";
 

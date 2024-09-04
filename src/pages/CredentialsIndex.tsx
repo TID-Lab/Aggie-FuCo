@@ -22,7 +22,6 @@ import { AxiosError } from "axios";
 interface IProps {}
 
 const CredentialsIndex = (props: IProps) => {
-  const queryClient = useQueryClient();
   const credentialsQuery = useQuery(["credentials"], getCredentials, {});
   const placeHolderValues = [3, 5, 4];
 

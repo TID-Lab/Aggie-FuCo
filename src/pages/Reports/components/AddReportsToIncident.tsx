@@ -1,15 +1,17 @@
-import { Dialog } from "@headlessui/react";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { getGroups } from "../../../api/groups";
+import { setReportsToGroup } from "../../../api/reports";
 import type { Group } from "../../../objectTypes";
 import type { Report, Reports } from "../../../api/reports/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getGroups } from "../../../api/groups";
-import { getReports, setReportsToGroup } from "../../../api/reports";
+
+import { Dialog } from "@headlessui/react";
 import AggieButton from "../../../components/AggieButton";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TagsList from "../../../components/tag/TagsList";
 import IncidentListItem from "../../incidents/IncidentListItem";
 import SocialMediaPost from "../../../components/SocialMediaPost";
+
 interface IAddReportsToIncidents {
   isOpen: boolean;
   selection?: string[];
