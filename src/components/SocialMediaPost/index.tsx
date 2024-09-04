@@ -13,7 +13,7 @@ interface IProps {
 
 const SocialMediaPost = ({ report, showMedia }: IProps) => {
   return (
-    <div className='pt-1 pb-2  bg-white rounded-xl border border-slate-200 text-base'>
+    <div className='pt-1 pb-2  bg-white rounded-xl border border-slate-200 text-base font-emojisans'>
       <div className='px-3 pt-2'>
         <div className='flex justify-between mb-2'>
           {/* <TagsList values={report.smtcTags} /> */}
