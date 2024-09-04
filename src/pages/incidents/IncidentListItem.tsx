@@ -13,7 +13,7 @@ import TagsList from "../../components/tag/TagsList";
 import VeracityToken from "../../components/VeracityToken";
 import { Dialog, Menu } from "@headlessui/react";
 import AggieButton from "../../components/AggieButton";
-import ConfirmationModal from "../../components/ConfirmationModal";
+import ConfirmationModal from "../../components/ConfirmationDialog";
 import IncidentForm from "./IncidentForm";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

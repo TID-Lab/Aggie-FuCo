@@ -11,9 +11,11 @@ import IncidentsFilters from "./IncidentsFilters";
 import IncidentListItem from "./IncidentListItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import Pagination from "../../components/Pagination";
+import { formatPageCount } from "../../utils/format";
 
 const Incidents = () => {
-  const { searchParams, getAllParams, setParams } =
+  const { searchParams, getAllParams, getParam, setParams } =
     useQueryParams<GroupQueryState>();
 
   const groupsQuery = useQuery(["groups"], () => getGroups(getAllParams()));
@@ -49,6 +51,23 @@ const Incidents = () => {
               <IncidentListItem item={groupItem} />
             </Link>
           ))}
+      </div>
+      <div className='w-full flex items-center flex-col mb-10 mt-3'>
+        <div className='w-fit text-sm'>
+          <Pagination
+            currentPage={Number(getParam("page")) || 0}
+            totalCount={groupsQuery.data?.total || 0}
+            onPageChange={(num) => setParams({ page: num })}
+            size={4}
+          />
+        </div>
+        <small className={"text-center font-medium w-full mt-2"}>
+          {formatPageCount(
+            Number(getParam("page")),
+            50,
+            groupsQuery.data?.total
+          )}
+        </small>
       </div>
     </section>
   );

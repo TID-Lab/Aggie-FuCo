@@ -39,12 +39,18 @@ const AllReportsList = ({}: IProps) => {
     useQueryParams<ReportQueryState>();
 
   const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()));
-
+  const { status: reportsStatus } = reportsQuery;
   useEffect(() => {
     // refetch on filter change
     reportsQuery.refetch();
     multiSelect.set([]);
   }, [searchParams]);
+
+  useEffect(() => {
+    if (reportsStatus === "success") {
+      window.scrollTo(0, 0);
+    }
+  }, [reportsStatus]);
 
   const multiSelect = useMultiSelect({
     allItems: reportsQuery.data?.results,

@@ -31,6 +31,7 @@ const Pagination = ({
   // light logic wrapper for whether or not to display buttons
   const NumberButton = (props: {
     direction: "prev" | "next";
+    disabled?: boolean;
     toPage: number;
     children?: React.ReactElement;
   }) => {
@@ -41,6 +42,7 @@ const Pagination = ({
         <AggieButton
           className={"px-2 py-2 hover:bg-slate-200 justify-center "}
           onClick={() => onPageChange(props.toPage)}
+          disabled={props.disabled}
         >
           {props.children || props.toPage}
         </AggieButton>
@@ -50,6 +52,14 @@ const Pagination = ({
   };
   return (
     <div className='flex font-medium bg-white rounded-lg border divide-x border-slate-300 divide-slate-300 h-fit'>
+      <AggieButton
+        className={"px-2 py-2 hover:bg-slate-200 justify-center "}
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage - 1 < 0}
+      >
+        <FontAwesomeIcon icon={faChevronLeft} />
+      </AggieButton>
+
       <NumberButton direction='prev' toPage={currentPage - 1}>
         <FontAwesomeIcon icon={faChevronLeft} />
       </NumberButton>
@@ -64,7 +74,7 @@ const Pagination = ({
         ))}
 
       <Popover className='relative'>
-        <Popover.Button className='focus-theme px-2 py-2 hover:bg-slate-200'>
+        <Popover.Button className='focus-theme px-2 py-2 hover:bg-slate-200 whitespace-nowrap'>
           Page {currentPage} {totalCount !== 0 && <span>of {totalPages}</span>}
         </Popover.Button>
 
@@ -126,9 +136,13 @@ const Pagination = ({
           />
         ))}
 
-      <NumberButton direction='next' toPage={currentPage + 1}>
+      <AggieButton
+        className={"px-2 py-2 hover:bg-slate-200 justify-center "}
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage + 1 > (totalCount || 0) / pageSize}
+      >
         <FontAwesomeIcon icon={faChevronRight} />
-      </NumberButton>
+      </AggieButton>
     </div>
   );
 };

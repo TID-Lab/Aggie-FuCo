@@ -1,15 +1,9 @@
 // Or known on the backend as groups.
-import axios, { AxiosError } from "axios";
-import {
-  Group,
-  GroupEditableData,
-  Groups,
-  GroupSearchState,
-  GroupQueryState,
-} from "../objectTypes";
-
-import type { Reports } from "./reports/types";
-import { hasId, VeracityOptions } from "./common";
+import axios from "axios";
+import { Group, GroupEditableData, Groups, GroupQueryState } from "./types";
+import type { GroupSearchState } from "../../objectTypes";
+import type { Reports } from "../reports/types";
+import { hasId, VeracityOptions } from "../common";
 
 export const getGroups = async (
   searchState: GroupQueryState = {},

@@ -98,7 +98,8 @@ export const useReportMutations = (
             irrelevant: params.irrelevant,
           };
         });
-        navigate({ pathname: "/reports", search: searchParams.toString() });
+        if (params.irrelevant === "true")
+          navigate({ pathname: "/reports", search: searchParams.toString() });
       }
     },
   });

@@ -59,7 +59,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
                   </AggieButton>
                 </div>
 
-                {searchParams.size && (
+                {!!searchParams.size && (
                   <AggieButton
                     className='hover:underline hover:bg-slate-100 px-2 py-1 text-sm rounded'
                     onClick={() => {

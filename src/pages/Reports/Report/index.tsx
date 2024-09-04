@@ -20,11 +20,13 @@ import { useUpdateQueryData } from "../../../hooks/useUpdateQueryData";
 import { updateByIds } from "../../../utils/immutable";
 import DropdownMenu from "../../../components/DropdownMenu";
 import SocialMediaPost from "../../../components/SocialMediaPost";
+import { useReportMutations } from "../useReportMutations";
 const Report = () => {
   let { id } = useParams();
   const { setParams } = useQueryParams<ReportQueryState>();
   const navigate = useNavigate();
   const queryData = useUpdateQueryData();
+  const { setRead, setIrrelevance } = useReportMutations();
 
   const reportQuery = useQuery(["report", id], () => getReport(id));
   const sourcesQuery = useQuery(["sources"], getSources);
@@ -108,30 +110,6 @@ const Report = () => {
     }
   );
 
-  const setSingleReadMutation = useMutation({
-    mutationFn: (params: { reportId: string | undefined; read: boolean }) => {
-      if (!params.reportId) throw "error";
-      return setSelectedRead([params.reportId], params.read);
-    },
-    onSuccess: (newData, variables) => {
-      if (variables.reportId === undefined) return;
-      queryData.update<Reports>(["reports"], (data) => {
-        return {
-          results: updateByIds([variables.reportId || ""], data.results, {
-            read: variables.read,
-          }),
-        };
-      });
-
-      if (reportQuery.data) {
-        queryData.queryClient.setQueryData(["report", id], {
-          ...reportQuery.data,
-          read: variables.read,
-        });
-      }
-    },
-  });
-
   // lol
   const emptyTag: Tag = {
     isCommentTag: false,
@@ -180,21 +158,43 @@ const Report = () => {
           onClose={() => setAddReportModal(false)}
         />
         <nav className='pl-3 pr-2 py-2 flex justify-between items-center rounded-lg text-xs border border-slate-300 mb-2 shadow-md bg-white'>
-          <h2 className=' font-medium'>Quick Actions</h2>
-          <div className='flex gap-1'>
+          <div className='flex gap-1 items-center'>
+            <p>Mark as:</p>
             <AggieButton
-              className='font-medium px-2 py-1 rounded-lg bg-slate-100 border border-slate-200 hover:bg-slate-200'
+              variant='secondary'
               onClick={() =>
-                setSingleReadMutation.mutate({
-                  reportId: id,
+                setRead.mutate({
+                  reportIds: id ? [id] : [],
                   read: !reportQuery.data?.read,
+                  currentPageId: id,
                 })
               }
-              loading={setSingleReadMutation.isLoading}
-              disabled={!reportQuery.data || setSingleReadMutation.isLoading}
+              loading={setRead.isLoading}
+              disabled={!reportQuery.data || setRead.isLoading}
             >
-              {reportQuery.data?.read ? <>mark unread</> : <>mark read</>}
+              {reportQuery.data?.read ? <> unread</> : <> read</>}
             </AggieButton>
+            <AggieButton
+              variant='secondary'
+              onClick={() =>
+                setIrrelevance.mutate({
+                  reportIds: id ? [id] : [],
+                  irrelevant:
+                    reportQuery.data?.irrelevant === "true" ? "false" : "true",
+                  currentPageId: id,
+                })
+              }
+              loading={setIrrelevance.isLoading}
+              disabled={!reportQuery.data || setIrrelevance.isLoading}
+            >
+              {reportQuery.data?.irrelevant === "true" ? (
+                <>relevant</>
+              ) : (
+                <>irrelevant</>
+              )}
+            </AggieButton>
+          </div>
+          <div className='flex gap-1'>
             <div className='flex font-medium'>
               <AggieButton
                 className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-200 hover:bg-slate-200'
@@ -259,7 +259,7 @@ const Report = () => {
       </article>
     );
   }
-  return <> bruh</>;
+  return <> error loading page</>;
 };
 
 export default Report;

@@ -28,8 +28,11 @@ const DropdownMenu = ({
   className = "",
   panelClassName = "",
 }: IProps) => {
+  // wrapped in an extra div to make react ref error go away (cloneElement tries to attach a ref to the element, but custom components do not thave that)
   const ChildrenWithProps = Children.map(children, (child) => (
-    <Menu.Item>{({ active }) => cloneElement(child as JSX.Element)}</Menu.Item>
+    <Menu.Item>
+      {({ active }) => cloneElement(<div>{child as JSX.Element}</div>)}
+    </Menu.Item>
   ));
   const defaultButtonStyle =
     "focus-theme disabled:opacity-70 disabled:pointer-events-none font-medium";
