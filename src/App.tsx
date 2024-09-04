@@ -173,7 +173,7 @@ const App = () => {
 
   const AppToRender = isSafari() ? WrongBrowser : InitialApp;
 
-  return AppToRender;
+  return InitialApp;
 };
 
 export default App;
