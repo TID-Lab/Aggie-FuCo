@@ -1,121 +1,94 @@
-import React, { Component } from "react";
-import axios from "axios";
-import {
-  Container,
-  Col,
-  Row,
-  Card,
-  ButtonToolbar,
-  Placeholder,
-  Button,
-} from "react-bootstrap";
-import CredentialTable from "../components/credentials/CredentialTable";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getSources } from "../api/sources";
-import { getCredentials } from "../api/credentials";
-import CredentialModal from "../components/credentials/CredentialModal";
-import Table from "react-bootstrap/Table";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import { AxiosError } from "axios";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteCredential, getCredentials } from "../api/credentials";
+import { useState } from "react";
+import type { Credential } from "../api/credentials/types";
 
+import AxiosErrorCard from "../components/AxiosErrorCard";
+import AggieButton from "../components/AggieButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner, faTrash } from "@fortawesome/free-solid-svg-icons";
+import ConfirmationDialog from "../components/ConfirmationDialog";
+import CredentialModal from "../components/credentials/CredentialModal";
 interface IProps {}
 
 const CredentialsIndex = (props: IProps) => {
-  const credentialsQuery = useQuery(["credentials"], getCredentials, {});
-  const placeHolderValues = [3, 5, 4];
+  const queryClient = useQueryClient();
+  const [deletionModal, setDeletionModal] = useState<Credential>();
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+
+  const { data, isError, error } = useQuery(["credentials"], getCredentials);
+  const deleteMutation = useMutation(deleteCredential, {
+    onSuccess: () => {
+      setDeletionModal(undefined);
+      queryClient.invalidateQueries(["credentials"]);
+    },
+  });
+
+  const grid = "grid grid-cols-6";
+
+  if (isError)
+    return (
+      <section className='max-w-screen-lg mx-auto'>
+        <AxiosErrorCard error={error} />
+      </section>
+    );
 
   return (
-    <div className='mt-4'>
-      <Container fluid>
-        <Row>
-          <Col></Col>
-          <Col xl={9}>
-            <Container fluid>
-              <h3 className={"mb-4"}>Credentials</h3>
-              {credentialsQuery.isSuccess && credentialsQuery.data && (
-                <CredentialTable
-                  credentials={credentialsQuery.data}
-                ></CredentialTable>
-              )}
-              {credentialsQuery.isLoading && (
-                <Card className='mt-3'>
-                  <Card.Header
-                    as={ButtonToolbar}
-                    className='justify-content-end'
-                  >
-                    <Button variant={"primary"} disabled>
-                      <FontAwesomeIcon
-                        icon={faPlusCircle}
-                        className='me-2'
-                      ></FontAwesomeIcon>
-                      Create credentials
-                    </Button>
-                  </Card.Header>
-                  <Card.Body>
-                    <Table hover>
-                      <thead>
-                        <tr>
-                          <th>Type</th>
-                          <th>Name</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {placeHolderValues.map((value) => {
-                          return (
-                            <tr key={value}>
-                              <td>
-                                <Placeholder as={Card.Text} animation='glow'>
-                                  <Placeholder xs={value} />
-                                </Placeholder>
-                              </td>
-                              <td>
-                                <Placeholder as={Card.Text} animation='glow'>
-                                  <Placeholder xs={1} />
-                                </Placeholder>
-                              </td>
-                              <td>
-                                <Placeholder as={Card.Text} animation='glow'>
-                                  <Placeholder xs={2} />
-                                </Placeholder>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </Table>
-                  </Card.Body>
-                </Card>
-              )}
-              {credentialsQuery.isError && (
-                <Card>
-                  <Card.Body>
-                    {/*@ts-ignore*/}
-                    <h1 className={"text-danger"}>
-                      {/* {credentialsQuery.error && credentialsQuery.error.response.status} */}
-                      fix this later lol Error
-                    </h1>
-                    <p>
-                      Please contact your system administrator with the error
-                      code below.{" "}
-                    </p>
-                    {/*@ts-ignore*/}
-                    <small>
-                      {/* {credentialsQuery.error.response.status}:{" "}
-                      {credentialsQuery.error.response.data} */}
-                    </small>
-                  </Card.Body>
-                </Card>
-              )}
-            </Container>
-          </Col>
-          <Col>
-            <div className='d-none d-xl-block'></div>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+    <section className='max-w-screen-lg mx-auto px-2'>
+      <div className='flex justify-between items-center'>
+        <h1 className={"my-3 text-3xl font-medium"}>Credentials</h1>
+        <CredentialModal />
+      </div>
+      <div className='flex flex-col overflow-hidden bg-white border border-slate-300 rounded-lg divide-y divide-slate-300'>
+        <header
+          className={`${grid} px-3 py-2 font-medium text-sm border-b border-slate-300`}
+        >
+          <p>Type</p>
+          <p>Label</p>
+        </header>
+        {data &&
+          data.map((credential) => (
+            <div className={`${grid} px-3 py-3`} key={credential._id}>
+              <div className='text-sm items-center'>{credential.type}</div>
+              <p className='col-start-2 -col-end-1 font-medium flex justify-between items-center'>
+                {credential.name}
+                <AggieButton
+                  onClick={() => setDeletionModal(credential)}
+                  className='border border-slate-300 bg-slate-100 rounded px-2 py-2 hover:bg-slate-200'
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </AggieButton>
+              </p>
+            </div>
+          ))}
+        <ConfirmationDialog
+          isOpen={!!deletionModal}
+          onClose={() => setDeletionModal(undefined)}
+          onConfirm={() => {
+            if (!!deletionModal) deleteMutation.mutate(deletionModal);
+          }}
+          data={{
+            title: `Delete: ${
+              data?.find((c) => c._id === deletionModal?._id)?.name
+            }?`,
+          }}
+          confirmButton={
+            <span className='bg-red-700 text-white hover:bg-red-600 rounded-lg flex gap-1 items-center px-2 py-1'>
+              <FontAwesomeIcon
+                icon={deleteMutation.isLoading ? faSpinner : faTrash}
+                className={deleteMutation.isLoading ? "animate-spin" : ""}
+              />
+              Delete
+            </span>
+          }
+          disabled={deleteMutation.isLoading}
+        >
+          <div className='mx-3 my-2 max-w-lg'>
+            <p>Are you sure you want to do this?</p>
+          </div>
+        </ConfirmationDialog>
+      </div>
+    </section>
   );
 };
 

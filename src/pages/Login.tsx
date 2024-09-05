@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import { Field, Formik, FormikValues, Form } from "formik";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryParams } from "../hooks/useQueryParams";
+
 import * as Yup from "yup";
 import { logIn } from "../api/session";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { Field, Formik, FormikValues, Form } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { useLocation, useNavigate } from "react-router-dom";
 import AggieButton from "../components/AggieButton";
-import { useQueryParams } from "../hooks/useQueryParams";
 
 const loginFormSchema = Yup.object().shape({
   loginUsername: Yup.string().required("Username required"),
@@ -18,9 +20,11 @@ interface IProps {}
 
 const Login = (props: IProps) => {
   const { getParam } = useQueryParams<{ to: string }>();
-  console.log(getParam("to"));
+
   const navigate = useNavigate();
+
   const queryClient = useQueryClient();
+
   const loginQuery = useMutation(logIn, {
     onSuccess: (data) => {
       // if theres a return parameter, return to that url

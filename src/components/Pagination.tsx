@@ -1,16 +1,15 @@
+import { Popover } from "@headlessui/react";
+import { Formik, Field, Form } from "formik";
+import AggieButton from "./AggieButton";
+
 import {
   faAngleDoubleLeft,
   faAngleDoubleRight,
   faArrowRight,
   faChevronLeft,
   faChevronRight,
-  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Popover } from "@headlessui/react";
-import { Formik, Field } from "formik";
-import { Form } from "react-bootstrap";
-import AggieButton from "./AggieButton";
 
 interface IPagination {
   currentPage: number;
@@ -60,9 +59,6 @@ const Pagination = ({
         <FontAwesomeIcon icon={faChevronLeft} />
       </AggieButton>
 
-      <NumberButton direction='prev' toPage={currentPage - 1}>
-        <FontAwesomeIcon icon={faChevronLeft} />
-      </NumberButton>
       {Array(size)
         .fill(0)
         .map((value, index) => (
@@ -138,7 +134,7 @@ const Pagination = ({
 
       <AggieButton
         className={"px-2 py-2 hover:bg-slate-200 justify-center "}
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage + 1 > (totalCount || 0) / pageSize}
       >
         <FontAwesomeIcon icon={faChevronRight} />

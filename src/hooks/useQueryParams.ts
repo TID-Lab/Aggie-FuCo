@@ -43,9 +43,7 @@ export function useQueryParams<T extends object>(initialParams?: T) {
    * sets multiple parameters at once. accepts an object with properties that exist in initialized object type
    * @param values
    */
-  const setParams = (values: {
-    [key in keyof T]?: T[keyof T];
-  }) => {
+  const setParams = (values: Partial<T>) => {
     Object.entries(values).forEach(([key, value]) => {
       if (!value || value === "") searchParams.delete(key);
       else searchParams.set(key, value as string);

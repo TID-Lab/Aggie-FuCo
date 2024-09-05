@@ -1,10 +1,14 @@
 import { useQueryClient } from "@tanstack/react-query";
 
+/**
+ *
+ * @returns
+ */
 export function useUpdateQueryData() {
   const queryClient = useQueryClient();
 
   /**
-   * updates local query data
+   * gets and sets data in a the query data cache locally
    * @param queryKey tanstack-query querykey
    * @param updateFn callback that returns the new data
    * @returns pass reference to old and new data objects

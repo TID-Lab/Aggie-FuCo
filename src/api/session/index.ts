@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LoginData, Session } from "../objectTypes";
+import { LoginData, Session } from "./types";
 
 export const logIn = async (loginData: LoginData) => {
   const { data } = await axios.request({

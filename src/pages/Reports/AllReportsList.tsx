@@ -102,8 +102,8 @@ const AllReportsList = ({}: IProps) => {
         </div>
       </div>
 
-      <div className='flex flex-col border border-slate-200 rounded-lg overflow-hidden'>
-        {reportsQuery.isSuccess &&
+      <div className='flex flex-col border border-slate-300 rounded-lg overflow-hidden'>
+        {reportsQuery.isSuccess && !!reportsQuery.data?.results ? (
           reportsQuery.data?.results.map((report) => (
             <div
               onClick={() => onReportItemClick(report._id, report.read)}
@@ -119,7 +119,14 @@ const AllReportsList = ({}: IProps) => {
                 onCheckChange={() => multiSelect.addRemove(report._id)}
               />
             </div>
-          ))}
+          ))
+        ) : (
+          <div className='w-full bg-white py-12 grid place-items-center font-medium'>
+            <p>
+              {reportsQuery.isLoading ? "Loading data..." : "No Results Found"}
+            </p>
+          </div>
+        )}
       </div>
       <div className='flex flex-col items-center justify-center mt-3 mb-40 w-full'>
         <div className='w-fit text-sm'>

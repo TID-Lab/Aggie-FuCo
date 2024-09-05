@@ -6,19 +6,19 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import AggieNavbar from "./components/AggieNavbar";
-import AlertService, { AlertContent } from "./components/AlertService";
 import { Modal } from "react-bootstrap";
 import { getSession } from "./api/session";
 
 import type { AxiosError } from "axios";
-import type { Session } from "./objectTypes";
+import type { Session } from "./api/session/types";
 
 import "./App.css";
 import "@yaireo/tagify/dist/tagify.css";
 
-import ReportsIndex from "./pages/report/ReportsIndex";
-import ReportDetails from "./pages/report/ReportDetails";
+import AggieNavbar from "./components/AggieNavbar";
+import AlertService, { AlertContent } from "./components/AlertService";
+import ReportsIndex from "./pages/report_old/ReportsIndex";
+import ReportDetails from "./pages/report_old/ReportDetails";
 import GroupsIndex from "./pages/group/GroupsIndex";
 import GroupDetails from "./pages/group/GroupDetails";
 import SourcesIndex from "./pages/source/SourcesIndex";
@@ -32,7 +32,7 @@ import Login from "./pages/Login";
 import Analysis from "./pages/Analysis";
 import NotFound from "./pages/NotFound";
 import ResetPassword from "./pages/ResetPassword";
-import RelevantReportsIndex from "./pages/report/RelevantReportsIndex";
+import RelevantReportsIndex from "./pages/report_old/RelevantReportsIndex";
 import Incidents from "./pages/incidents";
 import Incident from "./pages/incidents/Incident";
 import Reports from "./pages/Reports";

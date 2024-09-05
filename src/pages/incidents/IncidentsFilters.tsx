@@ -45,7 +45,7 @@ const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
             onSubmit={(e) => setParams(e)}
           >
             {({ resetForm }) => (
-              <Form>
+              <Form className='flex gap-1'>
                 <div>
                   <Field
                     name='title'

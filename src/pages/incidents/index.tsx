@@ -41,8 +41,8 @@ const Incidents = () => {
         reportCount={groupsQuery.data && groupsQuery.data.total}
       />
       <div className='divide-y divide-slate-200 border border-slate-200 rounded-lg bg-white'>
-        {groupsQuery.isSuccess &&
-          groupsQuery.data?.results.map((groupItem) => (
+        {!!groupsQuery.data && !!groupsQuery.data.total ? (
+          groupsQuery.data.results.map((groupItem) => (
             <Link
               to={"/incidents/" + groupItem._id}
               className={"group no-underline"}
@@ -50,7 +50,14 @@ const Incidents = () => {
             >
               <IncidentListItem item={groupItem} />
             </Link>
-          ))}
+          ))
+        ) : (
+          <div className='w-full bg-white py-12 grid place-items-center font-medium'>
+            <p>
+              {groupsQuery.isLoading ? "Loading data..." : "No Results Found"}
+            </p>
+          </div>
+        )}
       </div>
       <div className='w-full flex items-center flex-col mb-10 mt-3'>
         <div className='w-fit text-sm'>
