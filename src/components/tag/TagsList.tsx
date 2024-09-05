@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { Tag } from "../../objectTypes";
 import { getTags } from "../../api/tags";
 
 interface IProps {
@@ -14,32 +13,22 @@ const TagsList = ({ values }: IProps) => {
   /// lol i should refactor this
   function renderTag(id: string) {
     if (isLoading || !data) return undefined;
-
-    return data.find((i) => i._id === id);
-  }
-  function tagInList(id: string) {
-    if (!data) return false;
-    return data.some((i) => i._id === id);
+    const tag = data.find((i) => i._id === id);
+    if (!tag) return undefined;
+    return (
+      <span
+        key={id}
+        className='bg-slate-200 font-medium px-2 text-slate-700 rounded-full'
+      >
+        {tag.name}
+      </span>
+    );
   }
 
   if (isSuccess && values) {
-    return (
-      <>
-        {values.map(
-          (id) =>
-            tagInList(id) && (
-              <span
-                key={id}
-                className='bg-slate-200 font-medium px-2 text-slate-700 rounded-full'
-              >
-                {renderTag(id)?.name}
-              </span>
-            )
-        )}
-      </>
-    );
+    return <>{values.map((id) => renderTag(id))}</>;
   }
-  return <span></span>;
+  return <></>;
 };
 
 export default TagsList;

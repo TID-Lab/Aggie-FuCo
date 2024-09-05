@@ -1,14 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteCredential, getCredentials } from "../api/credentials";
+import { deleteCredential, getCredentials } from "../../api/credentials";
 import { useState } from "react";
-import type { Credential } from "../api/credentials/types";
+import type { Credential } from "../../api/credentials/types";
 
-import AxiosErrorCard from "../components/AxiosErrorCard";
-import AggieButton from "../components/AggieButton";
+import AxiosErrorCard from "../../components/AxiosErrorCard";
+import AggieButton from "../../components/AggieButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faTrash } from "@fortawesome/free-solid-svg-icons";
-import ConfirmationDialog from "../components/ConfirmationDialog";
-import CredentialModal from "../components/credentials/CredentialModal";
+import ConfirmationDialog from "../../components/ConfirmationDialog";
+import CredentialModal from "../../components/credentials/CredentialModal";
 interface IProps {}
 
 const CredentialsIndex = (props: IProps) => {

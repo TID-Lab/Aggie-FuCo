@@ -22,7 +22,7 @@ export default function UserTable(props: IProps) {
     userRows = props.users.map((user: User) => (
       <tr key={user._id}>
         <td className={"align-middle"}>
-          <Link to={"/user/" + user._id}>
+          <Link to={"/settings/user/" + user._id}>
             <b>{user.username}</b>
           </Link>
         </td>

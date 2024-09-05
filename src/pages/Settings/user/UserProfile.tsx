@@ -1,9 +1,9 @@
-import UserProfileTable from "../../components/user/UserProfileTable";
+import UserProfileTable from "../../../components/user/UserProfileTable";
 import { useQuery } from "@tanstack/react-query";
-import { getUser } from "../../api/users";
+import { getUser } from "../../../api/users";
 import { useNavigate, useParams } from "react-router-dom";
-import { Groups, Session, Source, Tag } from "../../objectTypes";
-import { compareIds } from "../../helpers";
+import { Groups, Session, Source, Tag } from "../../../objectTypes";
+import { compareIds } from "../../../helpers";
 
 interface IProps {
   session: Session | undefined;

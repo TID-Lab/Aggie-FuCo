@@ -19,11 +19,11 @@ const mainLinks = {
 };
 
 const menuLinks = {
-  Config: { to: "/config", icon: faCog },
-  Credentials: { to: "/credentials", icon: faKey },
-  "Manage Users": { to: "/users", icon: faUsersCog },
-  "Manage Tags": { to: "/tags", icon: faTags },
-  "Manage Sources": { to: "/sources", icon: faCloudArrowDown },
+  Config: { to: "/settings/config", icon: faCog },
+  Credentials: { to: "/settings/credentials", icon: faKey },
+  "Manage Users": { to: "/settings/users", icon: faUsersCog },
+  "Manage Tags": { to: "/settings/tags", icon: faTags },
+  "Manage Sources": { to: "/settings/sources", icon: faCloudArrowDown },
   "Log Out": { to: "/404", icon: faRightFromBracket },
 };
 
@@ -76,7 +76,7 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
       <div className='flex gap-2 '>
         {session && (
           <Link
-            to={"/user/" + session._id}
+            to={"/settings/user/" + session._id}
             className='focus-theme rounded-full hover:underline  hover:bg-slate-100'
           >
             <div className='px-3 flex gap-2 h-full  items-center border border-slate-200 rounded-full font-medium text-xs'>

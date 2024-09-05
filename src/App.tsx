@@ -21,13 +21,13 @@ import ReportsIndex from "./pages/report_old/ReportsIndex";
 import ReportDetails from "./pages/report_old/ReportDetails";
 import GroupsIndex from "./pages/group/GroupsIndex";
 import GroupDetails from "./pages/group/GroupDetails";
-import SourcesIndex from "./pages/source/SourcesIndex";
-import SourceDetails from "./pages/source/SourceDetails";
-import UsersIndex from "./pages/user/UsersIndex";
-import UserProfile from "./pages/user/UserProfile";
-import TagsIndex from "./pages/tag/TagsIndex";
-import Configuration from "./pages/Configuration";
-import CredentialsIndex from "./pages/CredentialsIndex";
+import SourcesIndex from "./pages/Settings/source/SourcesIndex";
+import SourceDetails from "./pages/Settings/source/SourceDetails";
+import UsersIndex from "./pages/Settings/user/UsersIndex";
+import UserProfile from "./pages/Settings/user/UserProfile";
+import TagsIndex from "./pages/Settings/tag/TagsIndex";
+import Configuration from "./pages/Settings/Configuration";
+import CredentialsIndex from "./pages/Settings/CredentialsIndex";
 import Login from "./pages/Login";
 import Analysis from "./pages/Analysis";
 import NotFound from "./pages/NotFound";
@@ -39,6 +39,7 @@ import Reports from "./pages/Reports";
 import Report from "./pages/Reports/Report";
 import NewIncident from "./pages/incidents/NewIncident";
 import FetchIndicator from "./components/FetchIndicator";
+import Settings from "./pages/Settings";
 
 // im currently working on this
 //TODO: BIG TODO is to correctly type all of react-query usage. Its not critical for function, but it is good for clarity in development.
@@ -91,19 +92,24 @@ const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
         path='/relevant-reports'
         element={<RelevantReportsIndex setGlobalAlert={setGlobalAlert} />}
       />
-      <Route path='/groups' element={<GroupsIndex />} />
       <Route path='/incidents' element={<Incidents />} />
       <Route path='/incidents/:id' element={<Incident />} />
       <Route path='/incidents/new' element={<NewIncident />} />
+      <Route path='/groups-old' element={<GroupsIndex />} />
+      <Route path='/group-old/:id' element={<GroupDetails />} />
 
-      <Route path='/group/:id' element={<GroupDetails />} />
-      <Route path='/sources' element={<SourcesIndex />} />
-      <Route path='/source/:id' element={<SourceDetails />} />
-      <Route path='/users' element={<UsersIndex />} />
-      <Route path='/user/:id' element={<UserProfile session={sessionData} />} />
-      <Route path='/tags' element={<TagsIndex />} />
-      <Route path='/config' element={<Configuration />} />
-      <Route path='/credentials' element={<CredentialsIndex />} />
+      <Route path='/settings' element={<Settings />}>
+        <Route path='sources' element={<SourcesIndex />} />
+        <Route path='source/:id' element={<SourceDetails />} />
+        <Route path='users' element={<UsersIndex />} />
+        <Route
+          path='user/:id'
+          element={<UserProfile session={sessionData} />}
+        />
+        <Route path='tags' element={<TagsIndex />} />
+        <Route path='config' element={<Configuration />} />
+        <Route path='credentials' element={<CredentialsIndex />} />
+      </Route>
       <Route path='/analysis' element={<Analysis />} />
       <Route path='/404' element={<NotFound />} />
     </Routes>

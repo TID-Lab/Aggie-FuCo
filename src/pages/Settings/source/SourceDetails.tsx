@@ -10,14 +10,14 @@ import {
   Image,
   Form,
 } from "react-bootstrap";
-import ConfirmModal from "../../components/ConfirmModal";
-import SourceModal from "../../components/source/SourceModal";
-import { capitalizeFirstLetter } from "../../helpers";
+import ConfirmModal from "../../../components/ConfirmModal";
+import SourceModal from "../../../components/source/SourceModal";
+import { capitalizeFirstLetter } from "../../../helpers";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { editSource, getSource } from "../../api/sources";
+import { editSource, getSource } from "../../../api/sources";
 import { useParams } from "react-router-dom";
-import { Credential, Source, SourceEvent } from "../../objectTypes";
-import { getCredentials } from "../../api/credentials";
+import { Credential, Source, SourceEvent } from "../../../objectTypes";
+import { getCredentials } from "../../../api/credentials";
 
 const SourceDetails = () => {
   let { id } = useParams<{ id: string }>();

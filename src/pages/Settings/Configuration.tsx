@@ -5,7 +5,7 @@ import {
   getEmailSettings,
   getFetchStatus,
   putFetchingStatus,
-} from "../api/configuration";
+} from "../../api/configuration";
 import { Switch } from "@headlessui/react";
 
 const Configuration = () => {
@@ -39,7 +39,7 @@ const Configuration = () => {
   );
 
   return (
-    <section className='max-w-screen-md mx-auto'>
+    <section className='w-full'>
       <h1 className='font-medium text-3xl my-3'> Configuration</h1>
       <div
         className={`px-4 py-3 bg-white border border-slate-300 rounded-lg flex justify-between items-center ${
