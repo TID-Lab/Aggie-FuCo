@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { getGroups } from "../../../api/groups";
@@ -8,9 +8,10 @@ import type { Report, Reports } from "../../../api/reports/types";
 
 import { Dialog } from "@headlessui/react";
 import AggieButton from "../../../components/AggieButton";
-import TagsList from "../../../components/tag/TagsList";
-import IncidentListItem from "../../incidents/IncidentListItem";
+
 import SocialMediaPost from "../../../components/SocialMediaPost";
+
+import NestedIncidentsList from "./NestedIncidentsList";
 
 interface IAddReportsToIncidents {
   isOpen: boolean;
@@ -62,59 +63,41 @@ const AddReportsToIncidents = ({
     <Dialog open={isOpen} onClose={onClose} className='relative z-50'>
       <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
       <div className='fixed inset-0 flex w-screen items-center justify-center p-4'>
-        <Dialog.Panel className='bg-white rounded-xl border border-slate-200 shadow-xl min-w-24 max-h-[90vh] min-h-12 p-3 grid grid-cols-2 gap-2'>
+        <Dialog.Panel className='bg-gray-50 rounded-xl border border-slate-200 shadow-xl min-w-24 h-full max-h-[90vh] min-h-12 p-3 grid grid-cols-2 gap-2'>
           <div className='col-span-2 flex justify-between'>
-            <AggieButton
-              className='px-2 py-1 rounded-lg bg-slate-100 border border-slate-200'
-              onClick={onClose}
-            >
-              Cancel
-            </AggieButton>
+            <div className='flex-1'>
+              <AggieButton variant='secondary' onClick={onClose}>
+                Cancel
+              </AggieButton>
+            </div>
+
             <p className='font-medium text-lg'>Attach Reports to Incident</p>
-            <AggieButton
-              variant='primary'
-              onClick={onAddIncident}
-              loading={addReportsMutation.isLoading}
-              disabled={addReportsMutation.isLoading}
-            >
-              Attach to incident
-            </AggieButton>
+            <div className='flex-1 flex justify-end'>
+              <AggieButton
+                variant='primary'
+                onClick={onAddIncident}
+                loading={addReportsMutation.isLoading}
+                disabled={addReportsMutation.isLoading || !selectedIncident}
+              >
+                Attach to incident
+              </AggieButton>
+            </div>
           </div>
-          <div className='overflow-y-scroll max-h-[80vh] flex flex-col gap-1'>
+          <h2 className='font-medium text-lg mb-1'>Selected Reports:</h2>
+
+          <h2 className='font-medium text-lg mb-1'>Select an Incident:</h2>
+          <div className='overflow-y-scroll flex flex-col gap-1'>
             {ReportsFromSelection(selection, isOpen).map((report) => (
               <SocialMediaPost key={report._id} report={report} />
             ))}
           </div>
-          <div className='overflow-y-scroll max-h-[80vh]'>
-            <div className='flex flex-col gap-1 '>
-              {incidents &&
-                incidents.results.map((item) => (
-                  <button
-                    key={item._id}
-                    className={`w-full text-left ${
-                      selectedIncident?._id === item._id
-                        ? "bg-blue-200"
-                        : "hover:bg-slate-50"
-                    }`}
-                    onClick={() => setSelectedIncident(item)}
-                  >
-                    {/* <div className='flex justify-between mb-1'>
-                      <p className='font-medium'>
-                        {item.title} #{item.idnum}
-                        <span className='ml-1 inline-flex gap-1 text-sm'>
-                          <TagsList values={item.smtcTags} />
-                        </span>
-                      </p>
-                    </div>
-                    <div>
-                      <p className='px-2 py-1 bg-slate-100 h-[6em] overflow-y-auto border border-slate-200 rounded whitespace-pre-line'>
-                        {item.notes && item.notes}
-                      </p>
-                    </div> */}
-                    <IncidentListItem item={item} />
-                  </button>
-                ))}
-            </div>
+
+          <div className='overflow-y-scroll bg-white border border-slate-300 rounded-lg'>
+            <NestedIncidentsList
+              incidents={incidents}
+              selectedIncident={selectedIncident}
+              onIncidentClicked={(item) => setSelectedIncident(item)}
+            />
           </div>
         </Dialog.Panel>
       </div>

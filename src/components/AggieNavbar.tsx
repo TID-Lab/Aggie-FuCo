@@ -9,9 +9,14 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import { Menu } from "@headlessui/react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Session } from "../objectTypes";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
+import AggieButton from "./AggieButton";
+import ConfirmationDialog from "./ConfirmationDialog";
+import { useState } from "react";
+import { logOut } from "../api/session";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const mainLinks = {
   Reports: { to: "/reports" },
@@ -24,7 +29,6 @@ const menuLinks = {
   "Manage Users": { to: "/settings/users", icon: faUsersCog },
   "Manage Tags": { to: "/settings/tags", icon: faTags },
   "Manage Sources": { to: "/settings/sources", icon: faCloudArrowDown },
-  "Log Out": { to: "/404", icon: faRightFromBracket },
 };
 
 interface IProps {
@@ -33,7 +37,20 @@ interface IProps {
 }
 const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const isActive = (to: string) => location.pathname.includes(to);
+
+  const [logoutModal, setLogoutModal] = useState(false);
+
+  const doLogout = useMutation({
+    mutationFn: logOut,
+    onSuccess: () => {
+      navigate({ pathname: "/login" });
+      setLogoutModal(false);
+      queryClient.invalidateQueries(["session"]);
+    },
+  });
 
   if (!isAuthenticated) return <></>;
   return (
@@ -90,7 +107,7 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
           <Menu.Button className='focus-theme px-3 py-1 rounded-lg bg-slate-100 border-y border border-slate-300 hover:bg-slate-200 ui-open:bg-slate-300 disabled:opacity-70 disabled:pointer-events-none'>
             <FontAwesomeIcon icon={faBars} className='' />
           </Menu.Button>
-          <Menu.Items className='absolute top-full right-0 mt-1 shadow-md rounded-lg bg-white border border-slate-200 z-30 text-sm font-medium'>
+          <Menu.Items className='absolute top-full right-0 mt-1 shadow-md overflow-hidden rounded-lg bg-white border border-slate-200 z-30 text-sm font-medium'>
             {Object.entries(menuLinks).map(([name, link]) => (
               <Menu.Item key={name}>
                 {({ active }) => (
@@ -98,14 +115,50 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
                     className='px-3 py-2  hover:bg-slate-200 grid grid-cols-[16px_1fr] gap-2 items-center whitespace-nowrap text-left'
                     to={link.to}
                   >
-                    <FontAwesomeIcon icon={link.icon} />
+                    <FontAwesomeIcon
+                      icon={link.icon}
+                      className='place-self-center'
+                    />
                     {name}
                   </Link>
                 )}
               </Menu.Item>
             ))}
+            <Menu.Item>
+              <span>
+                <AggieButton
+                  className='px-3 py-2 hover:bg-red-200 hover:text-red-800 grid grid-cols-[16px_1fr] gap-2 items-center whitespace-nowrap text-left w-full'
+                  onClick={() => setLogoutModal(true)}
+                >
+                  <FontAwesomeIcon
+                    icon={faRightFromBracket}
+                    className='place-self-center'
+                  />
+                  Logout
+                </AggieButton>
+              </span>
+            </Menu.Item>
           </Menu.Items>
         </Menu>
+        <ConfirmationDialog
+          isOpen={logoutModal}
+          onClose={() => setLogoutModal(false)}
+          onConfirm={() => doLogout.mutate()}
+          disabled={doLogout.isLoading}
+          data={{ title: "Logout?" }}
+          className='max-w-md w-full'
+          confirmButton={
+            <span className='flex items-center gap-1 bg-red-200 text-red-700 hover:bg-red-300 px-2 py-1 rounded-lg'>
+              <FontAwesomeIcon
+                icon={faRightFromBracket}
+                className='place-self-center'
+              />
+              Logout
+            </span>
+          }
+        >
+          <p className='px-3 my-3'>Are you sure you want to log out?</p>
+        </ConfirmationDialog>
       </div>
     </nav>
   );

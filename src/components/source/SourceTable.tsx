@@ -43,7 +43,7 @@ export default function SourceTable(props: IProps) {
           <Image src={"/images/" + source.media + ".png"} rounded />
         </td>
         <td className={"align-middle"}>
-          <Link to={"/source/" + source._id} className='source__link'>
+          <Link to={"/settings/source/" + source._id} className='source__link'>
             {source.nickname}
           </Link>
         </td>

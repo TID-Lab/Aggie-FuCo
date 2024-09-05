@@ -95,12 +95,13 @@ const IncidentListItem = ({ item }: IProps) => {
   function onUserClick(e: React.MouseEvent, id: string) {
     e.stopPropagation();
     e.preventDefault();
-    navigate(`/user/${id}`);
+    navigate(`/settings/user/${id}`);
   }
   function onOptionsClick(e: React.MouseEvent) {
     e.stopPropagation();
   }
 
+  // lol.
   function onAssignClick(e: React.MouseEvent) {
     e.stopPropagation();
     e.preventDefault();

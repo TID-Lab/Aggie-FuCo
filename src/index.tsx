@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import reportWebVitals from "./reportWebVitals";
 import { AxiosError } from "axios";
 
+// default queryClient stuff. will need to refactor as this is deprecated in v5
 //https://dev-listener.medium.com/react-routes-nodejs-routes-2875f148065b
 const queryClient = new QueryClient({
   defaultOptions: {
