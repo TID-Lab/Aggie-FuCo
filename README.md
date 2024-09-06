@@ -24,7 +24,7 @@ Aggie is built for scalability and can handle hundreds of incoming reports per s
 
 Users can be assigned to _admin_, _manager_, _monitor_, and _viewer_ roles, each with appropriate permissions.
 
-Aggie is built using Angular.js and Express.js, both state-of-the-art development frameworks.
+Aggie is built using React and Express.js, commonly used and popular web frameworks.
 
 Contact mikeb@cc.gatech.edu for more information on the Aggie project.
 
@@ -45,7 +45,7 @@ Extensive documentation about using the application can be found in [ReadTheDocs
 
 ## Source Installation
 
-We recommend the **[semi-automated installation script](#semi-automated-installation-script)** below to install the required components on Ubuntu.
+<del>We recommend the **[semi-automated installation script](#semi-automated-installation-script)** below to install the required components on Ubuntu.</del>
 
 ### System requirements
 
