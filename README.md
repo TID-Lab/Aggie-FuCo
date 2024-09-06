@@ -78,8 +78,6 @@ we are not using any of the above anymore :^)
 
 ### Installation notes
 
-Again, see below for automated installation.
-
 1. Clone the [aggie repo](https://github.com/TID-Lab/aggie).
    - you can use github-desktop, or clone using git.
    - In your terminal, navigate to your main projects folder (e.g. Documents).
@@ -119,7 +117,9 @@ Again, see below for automated installation.
 1. run `npm start`
    - remember to have your `ENVIRONMENT=production` in the `.env` file.
 
-### Semi-automated installation script
+### Legacy Installation scripts
+
+#### NOTE: don't use this unless you know what you're doing. for reference only.
 
 This is intended for setup on a fresh Ubuntu v18.04 system. Setup may need to be modified for other linux systems.
 
@@ -302,8 +302,8 @@ npx pm2 restart aggie # Serve the new version.
 1. To run migrations run `npx migrate`.
 1. To run unit tests, run `npm test`.
    - **Leave your HTTPS certificate files unencrypted for testing**. If necessary, re-run `openssl` with the `-nodes` option as described above.
-   - Calling `npm run mocha` will run just the backend tests
-   - Calling `npm run karma` will run just the frontend tests
+   - <del>Calling `npm run mocha` will run just the backend tests
+   - <del>Calling `npm run karma` will run just the frontend tests
 1. To monitor code while developing, run `npx gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
 
 1. <del>To run end-to-end tests:

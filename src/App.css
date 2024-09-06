@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -52,6 +52,7 @@ button.toolTipIcon:hover {
   background-color: transparent;
   border: 0;
 }
+*/
 /* // remove bootstrap defaults temporarily while we switch to tailwind */
 h1,
 h2,

@@ -1,33 +1,45 @@
-Aggie Front End Development
-==============================
+# Aggie Front End Development
 
-Aggie's frontend is built on the following technologies and packages:
+Aggie's codebase is built on pretty old legacy code (in 2024 terms). be careful when pulling from tutorials as they may not work for our stack. the best way is to directly read documentation for the versions we are using.
 
-To allow for controlled experiments and evaluation of Aggie, we have developed
-a content service that will replay the reports found in a json file.
+The primary limitation is that the React SPA is built using `react-scripts`, an old, abandoned project. this limits our react version to 17 and typescript to 4.5.
 
-Reports will be "replayed" with the same cadence than in the original
-"recording". To set up and save a recording
+- React 17
+- Tanstack Query v4
+- Typescript v4.5
+- Tailwind v3
+- headless-ui v1.7
+- axios 0.28 ( needs to be updated for security...)
 
-1. Start Aggie normally with the sources you want to record.
-2. Set fetching off when you want to finish your recording.
-3. Dump the sources `mongodump --db aggie --collection sources` as we need to use the same mongoDB's `_id`.
-4. Export the reports you want to replay to a json file for the time range you want e.g:
-   `mongoexport --db aggie -c reports -q '{storedAt: { "$gt": {"$date" : "2016-11-14T03:54:26.130Z"}, "$lt": {"$date" : "2016-11-14T03:54:30.130Z"}}}' --sort '{storedAt: 1}' --sort '{storedAt: 1}' > reports.json`
-5. Export the previous reports:
-   `mongoexport --db aggie -c reports -q '{storedAt: { "$lte": {"$date" : "2016-11-14T03:54:26.130Z"}}}' --sort '{storedAt: 1}' > previous_reports.json`
+### file structure
 
-To play a recording:
+The general rule of thumb is that folders define _scope_. Place files as near as they can be to where those files are called.
 
-1. Set fetching off
-1. Stop Aggie.
-1. Drop sources, groups, reports. Drop other collections if not needed in your experiment.
-1. Load previous reports if needed:
-   `mongoimport --db aggie --collection reports --file previous_reports.json`
-1. Set the experimental variables of `secrets.json`: `experiment` to `true`
-   and point `experimentFile` variable to where the json file is, relative to the Aggie folder.
-1. Restore the sources dump to the database:
-   `mongorestore --db aggie --collection sources dump/aggie/sources.bson`
-1. Start Aggie.
-1. Set fetching on.
-1. We are now replaying `reports.json`.
+eg. the file `useReportsMutations.ts` exists in `/pages/Reports/`, as it's only used within that folder even though its not a page component.
+
+```
+./
+├── src/
+│   ├── api/
+│   │   └── api name/
+│   │       ├── /index.ts -> axios endpoints to backend
+│   │       └── /types.ts -> type definitions for endpoint responses
+│   ├── components/
+│   │   └── global components
+│   ├── fonts/ -> here instead of /public due to annoying react-scripts limitation
+│   ├── hooks/
+│   ├── pages/ -> file structure should match router structure
+│   ├── utils/ -> pure ts utility functions
+│   ├── app.tsx -> router logic and session check logic
+│   ├── index.tsx -> react entry file
+│   ├── /objectTypes.d.ts -> [LEGACY] old type definition file.
+│   └── /helpers.tsx -> [LEGACY] old helpers file.
+├── /public -> static files
+├── tailwind.config.js
+├── package.json
+└── .env
+```
+
+### notes
+
+as this is legacy code, there are many outdated / unused / irrelevent code. To insure nothing breaks, make sure to keep a copy of the old code. if names conflict, rename the old file with `_old`, or `_untyped`. We will eventually do cleanup during downtime.
