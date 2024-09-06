@@ -54,22 +54,27 @@ Again, see below for automated installation.
 1. **node.js** (v18.20 LTS)
    1. Use [Node Version Manager](https://github.com/nvm-sh/nvm).
       - Node Version Manager (nvm) allows multiple versions of node.js to be used on your system and manages the versions within each project.
+      - on windows, you can either use `nvm-windows` and `nvs`
       - After installing nvm:
         1. Navigate to the aggie project directory: `cd aggie`.
         1. Run `nvm install` to install the version specified in `.nvmrc`.
 1. **Mongo DB** (requires >= 4.2.0)
    1. Follow the [installation instructions](https://docs.mongodb.com/v4.2/installation/#mongodb-community-edition-installation-tutorials) for your operating system.
-   1. Make sure MongoDB is running:
-      1. On Linux run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
-   1. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
-1. (optional) **SMTP email server**
-   1. Required in production for adding new users.
-1. (optional) **JRE**
+   1. You can connect to the live database, ask a maintainer for a copy of the db access token. you will need mongoCompass installed.
+   1. if you are running a copy of the dabase locally:
+      1. Make sure MongoDB is running:
+         - On Linux run `sudo systemtl status mongod` to see whether the `mongod` daemon started MongoDB successfully. If there are any errors, you can check out the logs in `/var/log/mongodb` to see them.
+      1. Note: You do not need to create a user or database for aggie in Mongo DB. These will be generated during the installation process below.
+1. <del>(optional) **SMTP email server**
+   1. Required in production for adding new users.</del>
+1. <del>(optional) **JRE**
    - Java is only required for running end-to-end tests with protractor. Installing Java can be safely skipped if these tests are not needed.
-   - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager
-1. (optional) **Python** (requires >= 2.7)
+   - Install the Java SE Runtime Environment (JRE) from [Oracle](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html) or your package manager</del>
+1. <del>(optional) **Python** (requires >= 2.7)
    - Python 2.7 is required to use the hate speech classifier (presently only available for Burmese language).
-   - Python 2.7 is required because one of the dependencies ([Burmese Language Tools](https://github.com/MyanmarOnlineAdvertising/myanmar_language_tools)) for segmenting Burmese text is written in Python 2.7.
+   - Python 2.7 is required because one of the dependencies ([Burmese Language Tools](https://github.com/MyanmarOnlineAdvertising/myanmar_language_tools)) for segmenting Burmese text is written in Python 2.7.</del>
+
+we are not using any of the above anymore :^)
 
 ### Installation notes
 
@@ -81,22 +86,29 @@ Again, see below for automated installation.
    - Use this command: `git clone https://github.com/TID-Lab/aggie.git`.
    - `cd aggie`
 1. Copy `config/secrets.json.example` to `config/secrets.json`.
-   - Set `adminPassword` to the default password your want to use for the `admin` user during installation.
-   - For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
-   - If using hate speech indication icons, set hateSpeechThreshold at the threshold the icon appears (.0 - 1) and set enable to true.
+
+   - ask current developers for a copy of the secrets.json
+
+   - <del>Set `adminPassword` to the default password your want to use for the `admin` user during installation.
+   - <del>For production, set `log_user_activity` flag to `true`. For testing, set it as `false` (default value).
+   - <del>If using hate speech indication icons, set hateSpeechThreshold at the threshold the icon appears (.0 - 1) and set enable to true.</del>
+
 1. (optional, rarely needed) To make https work, you need to copy your SSL certificate information to the `config` folder (two files named `key.pem` and `cert.pem`).
+
    - If you do not have the certificate you can create a new self-signed certificate with the following command:
      `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365`
    - This will allow you to start the server but it will generate unsafe warnings in the browser. You will need a real trusted certificate for production use.
    - Adding the `-nodes` flag will generate an unencrypted private key, allowing you to run tests without passphrase prompt
-1. Hate speech detection is available for Burmese language. Set up steps are listed in Semi-automated installation script. In config/secrets.json, set the detectHateSpeech parameter to true. The API will run on http://localhost:5000. User will never directly interact with this API.
+
+1. <del>Hate speech detection is available for Burmese language. Set up steps are listed in Semi-automated installation script. In config/secrets.json, set the detectHateSpeech parameter to true. The API will run on http://localhost:5000. User will never directly interact with this API.</del>
+
 1. Run `npm install` from the project directory.
    - This installs all dependencies.
 
 ### Development
 
 1. Use `npm run dev:all` for development.
-   - In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
+   - <del>In your terminal, a user and password were generated. You will use these credentials to log into the application. Example: `"admin" user created with password "password"`.
    - you can run frontend and backend in separate shells with `npm run dev:frontend` and `npm run dev:backend`
 1. Navigate to `https://localhost:8000` in your browser.
    - This will show you the running site. Login with the user name and password from your terminal mentioned above.
@@ -293,16 +305,17 @@ npx pm2 restart aggie # Serve the new version.
    - Calling `npm run mocha` will run just the backend tests
    - Calling `npm run karma` will run just the frontend tests
 1. To monitor code while developing, run `npx gulp`. You can pass an optional `--file=[test/filename]` parameter to only test a specific file.
-1. To run end-to-end tests:
-   1. first start Aggie on the test database with `npm run testrun`
-   1. then run protractor with `npm run protractor`
-1. To run end-to-end tests with external APIs
-   1. Set up the appropriate keys in `secrets.json` (e.g. Twitter)
-   1. start Aggie on the test database with `npm run testrun`
-   1. run protractor with `npm run protractor-with-apis`
-1. To verify if the CRON job for updating Account Ids <-> Crowdtangle List Names and Saved Searches works
-   1. Empty the contents of config/crowdtangle_list.json.
-   1. Let the CRON job run at midnight UTC and check if the config/crowdtangle_list.json is updated with Account Ids <-> Crowdtangle List Names and Saved Searches.
+
+1. <del>To run end-to-end tests:
+   1. <del>first start Aggie on the test database with `npm run testrun`
+   1. <del>then run protractor with `npm run protractor`
+1. <del>To run end-to-end tests with external APIs
+   1. <del>Set up the appropriate keys in `secrets.json` (e.g. Twitter)
+   1. <del>start Aggie on the test database with `npm run testrun`
+   1. <del>run protractor with `npm run protractor-with-apis`
+1. <del>To verify if the CRON job for updating Account Ids <-> Crowdtangle List Names and Saved Searches works
+   1. <del>Empty the contents of config/crowdtangle_list.json.
+   1. <del>Let the CRON job run at midnight UTC and check if the config/crowdtangle_list.json is updated with Account Ids <-> Crowdtangle List Names and Saved Searches.
 
 ## Project Configuration
 
@@ -310,24 +323,30 @@ You can adjust the settings in the `config/secrets.json` file to configure the a
 
 ### Tests
 
-Set `config.adminParty=true` if you want to run tests.
+tests are broken at the moment. this is a work in progress
+
+<del>Set `config.adminParty=true` if you want to run tests.
 
 ### Social Media and Feeds
 
+#### 2424 update:
+
+changes to many social media APIs means we need new ways of obtaining data from these sites. crowdtangle is being sunset. work in progress.
+
 #### Twitter
 
-1. Follow [these instructions](https://developer.twitter.com/en/docs/basics/authentication/oauth-1-0a/obtaining-user-access-tokens) to generate tokens to use the Twitter API.
-1. Go to Settings > Configuration and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
+1. <del>Follow [these instructions](https://developer.twitter.com/en/docs/basics/authentication/oauth-1-0a/obtaining-user-access-tokens) to generate tokens to use the Twitter API.
+1. <del>Go to Settings > Configuration and edit the Twitter settings. Remember to toggle the switch on, once you have saved the settings.
 
 #### CrowdTangle
 
-1. Create a dashboard on CrowdTangle and generate the dashboard token.
-1. Add your CT API token to `config/secrets.json`.
-1. Run `npm run update-ct-lists` to fetch data.
+1. <del>Create a dashboard on CrowdTangle and generate the dashboard token.
+1. <del>Add your CT API token to `config/secrets.json`.
+1. <del>Run `npm run update-ct-lists` to fetch data.
    - This will update `config/crowdtangle_list.json`.
    - This also happens automatically every night at midnight while Aggie is running.
 
-Note: To have git ignore changes, run `git update-index --skip-worktree config/crowdtangle_list.json`
+Note: <del>To have git ignore changes, run `git update-index --skip-worktree config/crowdtangle_list.json`
 
 #### WhatsApp
 
@@ -360,12 +379,14 @@ Aggie uses Google Places for guessing locations in the application. To make it w
 
 ### Emails
 
-Email service is required to create new users.
+The current build does not have email support
 
-1. `fromEmail` is the email address from which system emails come. Also used for the default admin user.
-1. `email.from` is the address from which application emails will come
-1. `email.transport` is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com). Valid transport method values are: 'SES', 'sendgrid' and 'SMTP'.
-1. If you are using SES for sending emails, make sure `config.fromEmail` has been authorized in your Amazon SES configuration.
+<del>Email service is required to create new users.
+
+1. <del>`fromEmail` is the email address from which system emails come. Also used for the default admin user.
+1. <del>`email.from` is the address from which application emails will come
+1. <del>`email.transport` is the set of parameters that will be passed to [NodeMailer](http://www.nodemailer.com). Valid transport method values are: 'SES', 'sendgrid' and 'SMTP'.
+1. <del>If you are using SES for sending emails, make sure `config.fromEmail` has been authorized in your Amazon SES configuration.
 
 ### Fetching
 
@@ -388,13 +409,13 @@ Set various logging options in `logger` section.
 
 Only the `console` and `file` transports are enabled by default. Transports can be disabled using the `"disabled"` field included in each section in the `config/secrets.json` file.
 
-### Remote access
+### <del>Remote access
 
-See the first part of the Tableau docs in [BI Connector setup](docs/content/tableau/bi-connector-setup.md).
+<del>See the first part of the Tableau docs in [BI Connector setup](docs/content/tableau/bi-connector-setup.md).
 
-### Data visualization using Tableau
+### <del>Data visualization using Tableau
 
-Setting up and viewing Tableau visualizations in Aggie requires installing Tableau's MongoDB BI Connector on the server that acts as a bridge between Tableau and MongoDB.
+<del>Setting up and viewing Tableau visualizations in Aggie requires installing Tableau's MongoDB BI Connector on the server that acts as a bridge between Tableau and MongoDB.
 To set up the BI Connector, follow these steps: [BI Connector setup](docs/content/tableau/bi-connector-setup.md).
 
 ## Architecture
@@ -415,10 +436,13 @@ The model layer (in `/models`) is shared among all three modules.
 
 ### Frontend
 
-The frontend is a single-page Angular.js app that runs in the browser and interfaces with the API, via both pull (REST) and push (WebSockets) modalities. It is contained in `/public/angular`.
+The frontend is a SPA react app that runs in the browser and interfaces with the API, via both pull (REST) and push (WebSockets) modalities. It source files contained in `/src` and `/public`. when built, files are served from `/build`
 
 ## Building and Publishing Aggie's documentation
 
+would be nice to have modern docs, but we dont at the moment
+
+<del>
 The documentation is in the `docs` directory. These are automatically built and
 pushed on each commit for the `master` and `develop` branches in Github:
 
