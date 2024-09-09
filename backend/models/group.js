@@ -49,6 +49,7 @@ let schema = new mongoose.Schema({
     default: [],
   },
   notes: String
+
 });
 
 schema.pre('save', function (next) {
