@@ -11,6 +11,7 @@ import AggieButton from "../../../components/AggieButton";
 import UserToken from "../../../components/UserToken";
 import { Formik, Field, Form } from "formik";
 import { getSession } from "../../../api/session";
+import Linkify from "linkify-react";
 
 interface IProps {
   data: GroupComment;
@@ -129,7 +130,9 @@ const Comment = ({ data, groupdId }: IProps) => {
           </Formik>
         </>
       ) : (
-        <p className='whitespace-pre-line px-3 py-3 bg-slate-50'>{data.data}</p>
+        <p className='whitespace-pre-line px-3 py-3 bg-slate-50'>
+          <Linkify>{data.data}</Linkify>
+        </p>
       )}
     </div>
   );

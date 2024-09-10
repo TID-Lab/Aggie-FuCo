@@ -6,7 +6,7 @@ import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
 
 import { deleteGroup, editGroup } from "../../api/groups";
 import { getSession } from "../../api/session";
-import type { Group, Groups } from "../../objectTypes";
+import type { Group, Groups } from "../../api/groups/types";
 import { updateByIds } from "../../utils/immutable";
 
 import TagsList from "../../components/tag/TagsList";
@@ -118,18 +118,6 @@ const IncidentListItem = ({ item }: IProps) => {
       escalated: item.escalated,
       _id: item._id,
     });
-  }
-  function setEditData(data: Group) {
-    const assignId = data.assignedTo ? data.assignedTo.map((i) => i._id) : [];
-    return {
-      groupName: data.title,
-      groupVeracity: data.veracity,
-      groupClosed: data.closed,
-      groupEscalated: data.escalated,
-      groupLocation: data.locationName,
-      groupAssignedTo: assignId,
-      groupNotes: data.notes || "",
-    };
   }
 
   return (
@@ -290,7 +278,7 @@ const IncidentListItem = ({ item }: IProps) => {
           <div className='flex min-h-full items-center justify-center p-4'>
             <Dialog.Panel className='bg-white rounded-xl border border-slate-200 shadow-xl min-w-[30rem] min-h-12 p-4 flex flex-col gap-2'>
               <IncidentForm
-                initialValues={setEditData(item)}
+                group={item}
                 onCancel={() => setIsEditOpen(false)}
                 onSubmit={(values) =>
                   editGroupMutation.mutate({ ...values, _id: item._id })

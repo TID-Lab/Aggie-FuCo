@@ -4,7 +4,7 @@ import { Form, FormGroup, FormLabel, FormCheck } from "react-bootstrap";
 import { VERACITY_OPTIONS, type VeracityOptions } from "../../api/common";
 import { getUsers } from "../../api/users";
 import AggieButton from "../../components/AggieButton";
-import { Group, GroupEditableData } from "../../objectTypes";
+import { Group, GroupEditableData } from "../../api/groups/types";
 import * as Yup from "yup";
 
 const groupSchema = Yup.object().shape({
@@ -39,19 +39,32 @@ const defaultFormValues: IDefaultFormValues = {
 };
 
 interface IIncidentForm {
-  initialValues?: IDefaultFormValues;
-  onSubmit: (values: GroupEditableData) => void;
+  group?: Group;
+  onSubmit: (values: GroupEditableData, resetForm: () => void) => void;
   onCancel: () => void;
   isLoading: boolean;
 }
 
 const IncidentForm = ({
-  initialValues = defaultFormValues,
+  group,
   onSubmit,
   onCancel,
   isLoading,
 }: IIncidentForm) => {
   const usersQuery = useQuery(["users"], getUsers);
+
+  function GroupToFormValues(data: Group) {
+    const assignId = data.assignedTo ? data.assignedTo.map((i) => i._id) : [];
+    return {
+      groupName: data.title,
+      groupVeracity: data.veracity,
+      groupClosed: data.closed,
+      groupEscalated: data.escalated,
+      groupLocation: data.locationName,
+      groupAssignedTo: assignId,
+      groupNotes: data.notes || "",
+    };
+  }
 
   const formValuesToGroup = (values: FormikValues) => {
     // This is because we can't use a null value as a select value.
@@ -71,12 +84,14 @@ const IncidentForm = ({
     };
   };
 
+  const initialValues = !!group ? GroupToFormValues(group) : defaultFormValues;
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={groupSchema}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        onSubmit(formValuesToGroup(values));
+        onSubmit(formValuesToGroup(values), resetForm);
       }}
     >
       {({
@@ -86,6 +101,7 @@ const IncidentForm = ({
         handleChange,
         handleSubmit,
         handleBlur,
+        resetForm,
         isSubmitting,
       }) => (
         <Form noValidate onSubmit={handleSubmit}>

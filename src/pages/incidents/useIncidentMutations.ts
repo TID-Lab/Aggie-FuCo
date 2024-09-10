@@ -10,10 +10,10 @@ import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
 import type { Groups } from "../../api/groups/types";
 
 const defaultOptions = {
-  key: ["reports"],
+  key: ["groups"],
 };
 
-export const useReportMutations = (
+export const useIncidentMutations = (
   options: typeof defaultOptions = defaultOptions
 ) => {
   const queryData = useUpdateQueryData();

@@ -40,6 +40,7 @@ import Report from "./pages/Reports/Report";
 import NewIncident from "./pages/incidents/NewIncident";
 import FetchIndicator from "./components/FetchIndicator";
 import Settings from "./pages/Settings";
+import { useQueryClient } from "@tanstack/react-query";
 
 // im currently working on this
 //TODO: BIG TODO is to correctly type all of react-query usage. Its not critical for function, but it is good for clarity in development.
@@ -121,14 +122,17 @@ const App = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-
+  const queryClient = useQueryClient();
   // we just wanna check session once, no need for react query.
   useEffect(() => {
     getSession()
       .then((data: Session) => {
         // did log in
         setIsLoggedIn(true);
-        if (data) setUserData(data);
+        if (data) {
+          setUserData(data);
+          queryClient.setQueryData(["session"], data);
+        }
         if (location.pathname === "/login") {
           navigate("/reports");
         }
@@ -150,16 +154,22 @@ const App = () => {
     variant: "primary",
   });
   const InitialApp = (
-    <>
-      <AggieNavbar isAuthenticated={isLoggedIn} session={userData} />
-      <FetchIndicator />
-      <AlertService globalAlert={globalAlert} setGlobalAlert={setGlobalAlert} />
+    <div className='grid-rows-[auto_1fr]'>
+      <div>
+        <AggieNavbar isAuthenticated={isLoggedIn} session={userData} />
+        <FetchIndicator />
+        <AlertService
+          globalAlert={globalAlert}
+          setGlobalAlert={setGlobalAlert}
+        />
+      </div>
+
       {isLoggedIn ? (
         <PrivateRoutes sessionData={userData} setGlobalAlert={setGlobalAlert} />
       ) : (
         <PublicRoutes />
       )}
-    </>
+    </div>
   );
 
   const WrongBrowser = (
