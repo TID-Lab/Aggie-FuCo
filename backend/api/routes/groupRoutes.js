@@ -55,6 +55,16 @@ router.patch('/_untag', User.can('edit data'), groupController.group_tags_remove
 //User.can('edit data')
 router.patch('/_clearTags', groupController.group_tags_clear);
 
+// Route to add comment
+router.patch('/_comment_add', User.can('edit data'), groupController.group_comment_add);
+
+// Route to update comment
+router.patch('/_comment_update', User.can('edit data'), groupController.group_comment_update);
+
+// Route to remove comment
+router.patch('/_comment_remove', User.can('edit data'), groupController.group_comment_remove);
+
+
 // User.can('edit data')
 router.delete('/:_id', groupController.group_delete);
 

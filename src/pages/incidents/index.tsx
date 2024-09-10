@@ -18,7 +18,9 @@ const Incidents = () => {
   const { searchParams, getAllParams, getParam, setParams } =
     useQueryParams<GroupQueryState>();
 
-  const groupsQuery = useQuery(["groups"], () => getGroups(getAllParams()));
+  const groupsQuery = useQuery(["groups"], () => getGroups(getAllParams()), {
+    refetchInterval: 120000,
+  });
 
   useEffect(() => {
     // refetch on filter change

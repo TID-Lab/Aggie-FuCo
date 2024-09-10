@@ -304,6 +304,76 @@ exports.group_notes_update = (req, res) => {
   });
 };
 
+// add group comment
+exports.group_comment_add = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Group.find({ _id: { $in: req.body.ids } }, (err, groups) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (groups.length === 0) return res.sendStatus(200);
+    let remaining = groups.length;
+    groups.forEach(async (group) => {
+      group.comments.push(req.body.comment)
+
+      group.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message);
+          return;
+        }
+        console.log(group.comments)
+        writelog.writeReport(req, group, 'commentAddGroup');
+        if (--remaining === 0) return res.sendStatus(200);
+      });
+    });
+  });
+};
+
+// Update group comment
+exports.group_comment_update = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Group.find({ _id: { $in: req.body.ids } }, (err, groups) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (groups.length === 0) return res.sendStatus(200);
+    let remaining = groups.length;
+    groups.forEach((group) => {
+      const newData = req.body.comment
+      const commentToUpdate = group.comments.id(req.body.comment._id)
+      commentToUpdate.data = req.body.comment.data
+
+      group.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message);
+          return;
+        }
+        writelog.writeReport(req, group, 'commentEditGroup');
+        if (--remaining === 0) return res.sendStatus(200);
+      });
+    });
+  });
+};
+// remove group comment
+exports.group_comment_remove = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Group.find({ _id: { $in: req.body.ids } }, (err, groups) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (groups.length === 0) return res.sendStatus(200);
+    let remaining = groups.length;
+    groups.forEach((group) => {
+
+      const commentToDelete = group.comments.id(req.body.comment._id).remove()
+
+
+      group.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message);
+          return;
+        }
+        writelog.writeReport(req, group, 'commentRemoveGroup');
+        if (--remaining === 0) return res.sendStatus(200);
+      });
+    });
+  });
+};
+
 exports.group_tags_clear = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Group.find({ _id: { $in: req.body.ids } }, function (err, groups) {

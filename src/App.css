@@ -40,7 +40,7 @@
 /* .color-nav {
   background-color: #0e7c41;
 } */
-
+/* 
 button.toolTipIcon {
   padding: 0;
   margin: 0;
@@ -51,8 +51,8 @@ button.toolTipIcon:hover {
   color: transparent;
   background-color: transparent;
   border: 0;
-}
-*/
+} */
+
 /* // remove bootstrap defaults temporarily while we switch to tailwind */
 h1,
 h2,
