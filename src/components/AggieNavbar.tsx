@@ -73,10 +73,8 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
             <Link
               key={name}
               to={path.to}
-              className={`px-2 rounded-lg focus-theme ${
-                isActive(path.to)
-                  ? "pointer-events-none"
-                  : "hover:bg-gray-100 rounded-lg text-[#416B34] hover:text-[#416B34]"
+              className={`px-2 rounded-lg focus-theme hover:bg-gray-100 rounded-lg text-[#416B34] hover:text-[#416B34] ${
+                isActive(path.to) ? "" : ""
               }`}
             >
               <p

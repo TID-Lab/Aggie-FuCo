@@ -1,6 +1,13 @@
 // Or known on the backend as groups.
 import axios from "axios";
-import { Group, GroupEditableData, Groups, GroupQueryState } from "./types";
+import {
+  Group,
+  GroupEditableData,
+  Groups,
+  GroupQueryState,
+  GroupComment,
+  EditableGroupComment,
+} from "./types";
 import type { GroupSearchState } from "../../objectTypes";
 import type { Reports } from "../reports/types";
 import { hasId, VeracityOptions } from "../common";
@@ -145,6 +152,40 @@ export const setSelectedNotes = async (groupIds: string[], notes: string) => {
   const { data } = await axios.patch("/api/group/_notes", {
     ids: groupIds,
     notes: notes,
+  });
+  return data;
+};
+
+export const addComment = async (params: {
+  groupId: string | undefined;
+  comment: EditableGroupComment;
+}) => {
+  if (!params.groupId) return undefined;
+  const { data } = await axios.patch("/api/group/_comment_add", {
+    ids: [params.groupId],
+    comment: params.comment,
+  });
+  return data;
+};
+export const editComment = async (params: {
+  groupId: string | undefined;
+  comment: EditableGroupComment;
+}) => {
+  if (!params.groupId) return undefined;
+  const { data } = await axios.patch("/api/group/_comment_update", {
+    ids: [params.groupId],
+    comment: params.comment,
+  });
+  return data;
+};
+export const removeComment = async (params: {
+  groupId: string | undefined;
+  comment: EditableGroupComment | GroupComment;
+}) => {
+  if (!params.groupId) return undefined;
+  const { data } = await axios.patch("/api/group/_comment_remove", {
+    ids: [params.groupId],
+    comment: params.comment,
   });
   return data;
 };

@@ -48,8 +48,13 @@ let schema = new mongoose.Schema({
     type: [{ type: SchemaTypes.ObjectId, ref: 'Report' }],
     default: [],
   },
-  notes: String
+  notes: String,
+  comments: [new mongoose.Schema({
 
+    data: String,
+    author: { type: mongoose.Schema.ObjectId, ref: 'User' },
+
+  }, { timestamps: true })]
 });
 
 schema.pre('save', function (next) {

@@ -1,8 +1,9 @@
 import { type VeracityOptions } from "../api/common";
-
 import { type IconDefinition } from "@fortawesome/fontawesome-common-types";
 import { faCheck, faMinus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import PlaceholderDiv from "../components/PlaceholderDiv";
 
 type VeracityKeyMap<T> = {
   [key in VeracityOptions]: T;
@@ -30,10 +31,13 @@ interface IProps {
   value?: VeracityOptions;
 }
 const VeracityToken = ({ value }: IProps) => {
-  if (!value) return <></>;
+  if (!value)
+    return (
+      <span className='h-[1.2em] w-[8em] inline-flex animate-pulse rounded-lg bg-slate-200'></span>
+    );
   return (
     <span
-      className={`font-medium px-1 flex gap-1 items-center ${VeracityColor[value]}`}
+      className={`font-medium px-1 inline-flex gap-1 items-center ${VeracityColor[value]}`}
     >
       <FontAwesomeIcon icon={VeracityIcon[value]} />
       {VeracityText[value]}

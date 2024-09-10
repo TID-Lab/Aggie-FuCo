@@ -27,6 +27,7 @@ export interface Group extends hasId {
   __v: number;
   notes?: string;
   locationName: string;
+  comments?: GroupComment[];
 }
 
 export interface Groups {
@@ -62,4 +63,15 @@ export interface GroupQueryState {
   idnum?: string | number;
   locationName?: string;
   page?: string | number;
+}
+
+export interface GroupComment extends EditableGroupComment {
+  createdAt: Date;
+  updatedAt: Date;
+  _id: string;
+}
+
+export interface EditableGroupComment {
+  data: string;
+  author: string;
 }
