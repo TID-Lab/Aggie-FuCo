@@ -1,15 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { AxiosError } from "axios";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import reportWebVitals from "./reportWebVitals";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 
-import App from "./App";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import reportWebVitals from "./reportWebVitals";
-import { AxiosError } from "axios";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
 
 // default queryClient stuff. will need to refactor as this is deprecated in v5
 //https://dev-listener.medium.com/react-routes-nodejs-routes-2875f148065b

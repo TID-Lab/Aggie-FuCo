@@ -234,38 +234,27 @@ const IncidentListItem = ({ item }: IProps) => {
             </div>
           </Menu.Items>
         </Menu>
+
         <ConfirmationDialog
           isOpen={isDeleteOpen}
           onClose={() => setIsDeleteOpen(false)}
-          onConfirm={() => {
+          onConfirm={() =>
             deleteGroupMutation.mutate(item, {
               onSuccess: () => setIsDeleteOpen(false),
-            });
-          }}
-          data={{ title: "Delete Incident?" }}
-          disabled={deleteGroupMutation.isLoading}
-          confirmButton={
-            <span className='bg-red-700 text-white hover:bg-red-600 rounded-lg flex gap-1 items-center px-2 py-1'>
-              <FontAwesomeIcon
-                icon={deleteGroupMutation.isLoading ? faSpinner : faTrash}
-                className={deleteGroupMutation.isLoading ? "animate-spin" : ""}
-              />
-              Delete
-            </span>
+            })
           }
+          disabled={deleteGroupMutation.isLoading}
+          loading={deleteGroupMutation.isLoading}
+          title={`'Delete incident ${item?.title} ?`}
+          variant='danger'
+          description='Are you sure you want to log out of this account?'
+          className='max-w-md w-full'
+          confirmText={"Logout"}
         >
-          <div className='px-3 py-2'>
-            <p>
-              deleting:{" "}
-              <span className='px-1 bg-slate-100 rounded font-medium'>
-                {item?.title}
-              </span>
-            </p>
-            <p>
-              There are {item?._reports?.length} report(s) attached, which will
-              be permanently removed.
-            </p>
-          </div>
+          <p>
+            There are {item?._reports?.length} report(s) attached, which will be
+            permanently removed.
+          </p>
         </ConfirmationDialog>
       </footer>
       <Dialog

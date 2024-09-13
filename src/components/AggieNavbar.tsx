@@ -138,25 +138,19 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
             </Menu.Item>
           </Menu.Items>
         </Menu>
+
         <ConfirmationDialog
           isOpen={logoutModal}
           onClose={() => setLogoutModal(false)}
           onConfirm={() => doLogout.mutate()}
           disabled={doLogout.isLoading}
-          data={{ title: "Logout?" }}
+          title='Logout?'
+          variant='warning'
+          description='Are you sure you want to log out of this account?'
           className='max-w-md w-full'
-          confirmButton={
-            <span className='flex items-center gap-1 bg-red-200 text-red-700 hover:bg-red-300 px-2 py-1 rounded-lg'>
-              <FontAwesomeIcon
-                icon={faRightFromBracket}
-                className='place-self-center'
-              />
-              Logout
-            </span>
-          }
-        >
-          <p className='px-3 my-3'>Are you sure you want to log out?</p>
-        </ConfirmationDialog>
+          confirmText={"Logout"}
+          icon={faRightFromBracket}
+        ></ConfirmationDialog>
       </div>
     </nav>
   );

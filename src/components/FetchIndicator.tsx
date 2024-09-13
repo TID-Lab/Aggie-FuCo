@@ -4,8 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
 
 type IState = "loading" | "finished" | "idle";
-
-const FetchIndicator = () => {
+interface IProps {
+  className?: string;
+}
+const FetchIndicator = ({ className }: IProps) => {
   const [fetchState, setFetchState] = useState<IState>("idle");
   const isFetching = useIsFetching();
   //const isMutating = useIsMutating();
@@ -32,7 +34,8 @@ const FetchIndicator = () => {
     return state === "finished" ? 100 : width;
   }
   return (
-    <div className='w-full  pointer-events-none sticky top-0 z-20 '>
+    <div className={`w-full  pointer-events-none ${className}`}>
+      <span className='h-[1em] w-full bg-green-600 '></span>
       <span
         className='h-[0.12em] absolute top-0 left-0 transition duration-800 bg-green-600'
         style={{

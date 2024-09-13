@@ -1,22 +1,26 @@
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const defaultCSS =
   "disabled:pointer-events-none disabled:opacity-50 inline-flex gap-1 items-center text-nowrap focus-theme font-medium";
 
-const variantCSS = {
-  primary:
-    "bg-green-800 text-slate-100 hover:bg-green-700 rounded-lg px-2 py-1 ",
+export const VariantCSS = {
+  primary: "bg-green-800 text-slate-100 hover:bg-green-700 rounded-lg ",
   secondary:
-    "bg-slate-100 px-2 py-1 hover:bg-slate-200 border border-slate-200 rounded-lg",
-  outline: "",
+    "bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg",
+  transparent: "hover:bg-slate-200 hover:underline  rounded-lg",
+  danger: "bg-red-700 text-white hover:bg-red-600 rounded-lg ",
+  warning: "bg-red-200 text-red-700 hover:bg-red-300 rounded-lg",
 };
 
 interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   override?: boolean;
-  variant?: keyof typeof variantCSS;
+  variant?: keyof typeof VariantCSS;
+  padding?: string;
   loading?: boolean;
+  icon?: IconProp;
 }
 
 const AggieButton = ({
@@ -24,6 +28,8 @@ const AggieButton = ({
   override = false,
   loading = false,
   variant,
+  padding,
+  icon,
   children,
   ...props
 }: IProps) => {
@@ -32,11 +38,17 @@ const AggieButton = ({
       className={
         override
           ? className
-          : `${defaultCSS} ${className} ${variant ? variantCSS[variant] : ""}`
+          : `${defaultCSS} ${padding ? padding : "px-2 py-1"} ${className} ${
+              variant ? VariantCSS[variant] : ""
+            }`
       }
       {...props}
     >
-      {loading && <FontAwesomeIcon icon={faSpinner} className='animate-spin' />}
+      {loading ? (
+        <FontAwesomeIcon icon={faSpinner} className={"animate-spin"} />
+      ) : (
+        !!icon && <FontAwesomeIcon icon={icon} />
+      )}
       {children}
     </button>
   );

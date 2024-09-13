@@ -1,21 +1,24 @@
 import { hasId } from "../common";
 
+export const USER_ROLES = ["viewer", "monitor", "admin"] as const;
+export type UserRoles = (typeof USER_ROLES)[number];
+
 export interface User extends hasId {
   provider: string;
   hasDefaultPassword: boolean;
-  role: string;
+  role: UserRoles | string; // string for backwards compat
   email: string;
   username: string;
   __v: number;
 }
 
-export interface UserCreationData extends UserEditableData {
-  password: string;
-}
-
 export interface UserEditableData {
   username: string;
   email: string;
-  role: "viewer" | "monitor" | "admin";
+  role: UserRoles;
   _id?: string;
+}
+
+export interface UserCreationData extends UserEditableData {
+  password: string;
 }

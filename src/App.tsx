@@ -6,7 +6,6 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { Modal } from "react-bootstrap";
 import { getSession } from "./api/session";
 
 import type { AxiosError } from "axios";
@@ -102,7 +101,7 @@ const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
       <Route path='/settings' element={<Settings />}>
         <Route path='sources' element={<SourcesIndex />} />
         <Route path='source/:id' element={<SourceDetails />} />
-        <Route path='users' element={<UsersIndex />} />
+        <Route path='users' element={<UsersIndex session={sessionData} />} />
         <Route
           path='user/:id'
           element={<UserProfile session={sessionData} />}
@@ -154,15 +153,15 @@ const App = () => {
     variant: "primary",
   });
   const InitialApp = (
-    <div className='grid-rows-[auto_1fr]'>
+    <div className='grid-rows-[auto_auto_1fr]'>
       <div>
         <AggieNavbar isAuthenticated={isLoggedIn} session={userData} />
-        <FetchIndicator />
         <AlertService
           globalAlert={globalAlert}
           setGlobalAlert={setGlobalAlert}
         />
       </div>
+      <FetchIndicator className='sticky top-0 z-20 ' />
 
       {isLoggedIn ? (
         <PrivateRoutes sessionData={userData} setGlobalAlert={setGlobalAlert} />
@@ -173,18 +172,12 @@ const App = () => {
   );
 
   const WrongBrowser = (
-    <Modal.Dialog color='danger'>
-      <Modal.Header>
-        <Modal.Title>{":("}</Modal.Title>
-      </Modal.Header>
-
-      <Modal.Body>
-        <p>
-          Hi, unfortunately Aggie does not support Safari yet. Please use Google
-          Chrome, Firefox or Edge browser to run Aggie.
-        </p>
-      </Modal.Body>
-    </Modal.Dialog>
+    <div className='grid place-items-center'>
+      <p>
+        Hi, unfortunately Aggie does not support Safari yet. Please use Google
+        Chrome, Firefox or Edge browser to run Aggie.
+      </p>
+    </div>
   );
 
   const AppToRender = isSafari() ? WrongBrowser : InitialApp;

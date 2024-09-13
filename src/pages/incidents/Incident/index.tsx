@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   addComment,
@@ -17,6 +17,7 @@ import AggieButton from "../../../components/AggieButton";
 import DropdownMenu from "../../../components/DropdownMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faArrowLeft,
   faCircleDot,
   faEdit,
   faEllipsisH,
@@ -38,6 +39,7 @@ import { useIncidentMutations } from "../useIncidentMutations";
 import { group } from "console";
 const Incident = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   let { id } = useParams();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -91,6 +93,14 @@ const Incident = () => {
   return (
     <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-2 pt-6 gap-8 h-full '>
       <main className='col-span-1 h-full mb-12'>
+        <AggieButton
+          variant='transparent'
+          className='text-sm'
+          onClick={() => navigate("/incidents")}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} />
+          Go Back
+        </AggieButton>
         <header className='text-slate-600 border-b border-slate-300 py-2'>
           <div className='flex justify-between'>
             <div>
