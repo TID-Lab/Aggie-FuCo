@@ -76,7 +76,7 @@ exports.user_update = (req, res) => {
     // Only admin can update users other than itself
     if (
       req.user &&
-      !new UserPermissions(req.user).can('admin users') &&
+      !User.can('admin users') &&
       req.params._id != req.user._id
     )
       return res.send(403);

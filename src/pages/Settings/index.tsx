@@ -24,10 +24,11 @@ const Settings = () => {
       <nav className='flex flex-col gap-2 mt-3 border-r border-slate-300 min-h-[80vh]'>
         {Object.entries(menuLinks).map(([name, link]) => (
           <Link
-            className={`px-3 py-2  grid grid-cols-[16px_1fr] gap-2 items-center  whitespace-nowrap text-left rounded-lg w-fit ${
+            key={name}
+            className={`px-3 py-2  grid grid-cols-[16px_1fr] gap-2 items-center font-medium whitespace-nowrap text-left rounded-lg w-fit ${
               location.pathname.includes(link.to)
                 ? "bg-green-700 text-slate-100 hover:text-slate-100 "
-                : "hover:bg-slate-200 "
+                : "hover:bg-slate-200 hover:text-green-900"
             }`}
             to={link.to}
           >
