@@ -33,7 +33,14 @@ const userCreateSchema = Yup.object().shape({
   email: Yup.string()
     .email("Please provide valid email address.")
     .required("Email address is required."),
-  password: Yup.string().required("Password is required.").min(4),
+  password: Yup.string()
+    .required("Password is required.")
+    .min(7, "Password must be greater than 7 characters"),
+  confirmPassword: Yup.string()
+    .required("Please re-type your password")
+    // use oneOf to match one of the values inside the array.
+    // use "ref" to get the value of passwrod.
+    .oneOf([Yup.ref("password")], "Passwords does not match"),
 });
 
 type createSchema = Yup.InferType<typeof userCreateSchema>;
@@ -61,7 +68,7 @@ const CreateEditUser = ({ user, onClose }: IProps) => {
     },
   });
 
-  function doSubmitForm(data: editSchema | createSchema) {
+  function onSubmitForm(data: editSchema | createSchema) {
     if (!user) {
       doCreateUser.mutate(data);
     } else {
@@ -83,7 +90,7 @@ const CreateEditUser = ({ user, onClose }: IProps) => {
   return (
     <Formik
       initialValues={defaultUser}
-      onSubmit={(e) => doSubmitForm(e)}
+      onSubmit={(e) => onSubmitForm(e)}
       validationSchema={schema}
       validateOnBlur={true}
     >
@@ -92,7 +99,14 @@ const CreateEditUser = ({ user, onClose }: IProps) => {
         <FormikInput label='Username' name='username' />
         <FormikInput label='Email' name='email' type='email' />
         {!user && (
-          <FormikInput name='password' label='Password' type='password' />
+          <>
+            <FormikInput name='password' label='Password' type='password' />
+            <FormikInput
+              name='confirmPassword'
+              label='Re-type Password'
+              type='password'
+            />
+          </>
         )}
         <div className='flex justify-between'>
           <AggieButton

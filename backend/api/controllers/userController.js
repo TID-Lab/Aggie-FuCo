@@ -92,6 +92,32 @@ exports.user_update = (req, res) => {
   });
 };
 
+// Update a User Password
+exports.user_update_password = (req, res) => {
+  User.findById(req.params._id, (err, user) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (!user) return res.sendStatus(404);
+
+    // Only admin can update users other than itself
+    // (im not sure if this logic works)
+    if (
+      req.user &&
+      !User.can('admin users') &&
+      req.params._id != req.user._id
+    )
+      return res.send(403);
+    user.setPassword(req.body.password, (err, user) => {
+      if (err) res.status(err.status).send(err.message);
+      else
+        user.save(user, (err, user) => {
+          if (err) res.status(err.status).send(err.message);
+          else res.sendStatus(200)
+        })
+    })
+
+  });
+};
+
 // Delete a User
 exports.user_delete = (req, res) => {
   User.findById(req.params._id, (err, user) => {

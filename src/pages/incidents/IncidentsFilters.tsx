@@ -50,7 +50,7 @@ const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
                   <Field
                     name='title'
                     className='px-2 py-1 border border-r-0 border-slate-300 bg-white rounded-l-lg min-w-[20rem]'
-                    placeholder='search through titles'
+                    placeholder='search for title, location, description'
                   />
                   <button
                     type='submit'

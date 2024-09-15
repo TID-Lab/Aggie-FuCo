@@ -37,7 +37,8 @@ let schema = new Schema({
 
 schema.index({ 'metadata.ct_tag': 1 }, { background: true });
 // Add fulltext index to the `content` and `author` field.
-//schema.index({ content: 'text', author: 'text' });
+// this increases RAM useage, lets keep an eye out for this
+schema.index({ content: 'text', author: 'text' });
 schema.path('_group').set(function (_group) {
   this._prevGroup = this._group;
   return _group;
@@ -213,6 +214,19 @@ Report.queryReports = function (query, page, callback) {
   if (query.veracity === 'confirmed true') filter.veracity = 'Confirmed True';
   if (query.veracity === 'confirmed false') filter.veracity = 'Confirmed False';
   if (query.veracity === 'unconfirmed') filter.veracity = 'Unconfirmed';
+
+  console.log(JSON.stringify(filter))
+
+  // if (!!query.keywords) {
+  //   const keywordsToFilter = ["content", "author"]
+  //   const orArray = keywordsToFilter.map(i => {
+  //     return { [i]: new RegExp(query.keywords, 'i') }
+  //   })
+  //   const prevOr = filter.$or || []
+  //   filter.$or = [...prevOr, ...orArray]
+  // }
+  // delete query.keywords
+
 
   Report.findSortedPage(filter, page, callback);
 };

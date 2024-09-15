@@ -57,6 +57,7 @@ let schema = new mongoose.Schema({
   }, { timestamps: true })]
 });
 
+schema.index({ title: 'text', locationName: "text", notes: "text" })
 schema.pre('save', function (next) {
   if (this.isNew) this.storedAt = new Date();
   this.updatedAt = new Date();
@@ -199,7 +200,10 @@ Group.queryGroups = function (query, page, options, callback) {
   }
 
   // find empty assignedTo objects
-  if (query.assignedTo === 'none') filter.$or = [{ assignedTo: { $eq: null } }, { assignedTo: { $size: 0 } }]
+  if (query.assignedTo === 'none') {
+
+    filter.$or = [...prevOr, { assignedTo: { $eq: null } }, { assignedTo: { $size: 0 } }]
+  }
 
 
   if (query.veracity === 'confirmed true') filter.veracity = 'Confirmed True';
@@ -218,7 +222,11 @@ Group.queryGroups = function (query, page, options, callback) {
   if (query.public === 'private') filter.public = false;
 
   // Search for substrings
-  if (query.title) filter.title = new RegExp(query.title, 'i');
+  if (query.title) {
+    // filter.title = new RegExp(query.title, 'i');
+    filter.$text = { $search: new RegExp(query.title, 'i') }
+    delete filter.title;
+  }
   else delete filter.title;
   if (query.locationName)
     filter.locationName = new RegExp(query.locationName, 'i');

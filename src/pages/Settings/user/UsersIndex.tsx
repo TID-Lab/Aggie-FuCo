@@ -14,11 +14,14 @@ import {
   faEllipsisH,
   faPlusCircle,
   faRefresh,
+  faShield,
   faTrash,
   faTrashAlt,
+  faUserShield,
 } from "@fortawesome/free-solid-svg-icons";
 import { Session } from "../../../api/session/types";
 import ConfirmationDialog from "../../../components/ConfirmationDialog";
+import SetPassword from "./SetPassword";
 
 interface IProps {
   session?: Session;
@@ -29,6 +32,7 @@ const UsersIndex = ({ session }: IProps) => {
   const { data, isSuccess } = useQuery(["users"], getUsers);
   const [editUser, setEditUser] = useState("");
   const [removeUser, setRemoveUser] = useState("");
+  const [editPassword, setEditPassword] = useState("");
 
   const doDeleteUser = useMutation(deleteUser, {
     onSuccess: () => {
@@ -99,6 +103,13 @@ const UsersIndex = ({ session }: IProps) => {
                       Edit
                     </AggieButton>
                     <AggieButton
+                      className='px-3 py-2 hover:bg-slate-100 text-slate-600 w-full'
+                      onClick={() => setEditPassword(user._id)}
+                    >
+                      <FontAwesomeIcon icon={faUserShield} />
+                      Change Password
+                    </AggieButton>
+                    <AggieButton
                       className='px-3 py-2 hover:bg-slate-100 text-red-600'
                       onClick={() => setRemoveUser(user._id)}
                     >
@@ -133,6 +144,19 @@ const UsersIndex = ({ session }: IProps) => {
         <CreateEditUser
           user={userFromId(editUser)}
           onClose={() => setEditUser("")}
+        />
+      </AggieDialog>
+      <AggieDialog
+        isOpen={!!editPassword}
+        onClose={() => setEditPassword("")}
+        className='px-3 py-4 w-full max-w-lg'
+        data={{
+          title: `Change password for: ${userFromId(editPassword)?.username}`,
+        }}
+      >
+        <SetPassword
+          user={userFromId(editPassword)}
+          onClose={() => setEditPassword("")}
         />
       </AggieDialog>
 

@@ -27,3 +27,10 @@ export const deleteUser = async (user: User) => {
   const { data } = await axios.delete("/api/user/" + user._id);
   return data;
 };
+
+export const setPassword = async (params: { _id: string; pass: string }) => {
+  const { data } = await axios.put("/api/user/password_set/" + params._id, {
+    password: params.pass,
+  });
+  return data;
+};
