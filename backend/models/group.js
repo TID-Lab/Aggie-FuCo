@@ -224,7 +224,7 @@ Group.queryGroups = function (query, page, options, callback) {
   // Search for substrings
   if (query.title) {
     // filter.title = new RegExp(query.title, 'i');
-    filter.$text = { $search: query.title }
+    filter.$text = { $search: new RegExp(query.title, 'i') }
     delete filter.title;
   }
   else delete filter.title;
