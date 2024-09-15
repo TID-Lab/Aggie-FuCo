@@ -199,7 +199,10 @@ Group.queryGroups = function (query, page, options, callback) {
   }
 
   // find empty assignedTo objects
-  if (query.assignedTo === 'none') filter.$or = [{ assignedTo: { $eq: null } }, { assignedTo: { $size: 0 } }]
+  if (query.assignedTo === 'none') {
+
+    filter.$or = [...prevOr, { assignedTo: { $eq: null } }, { assignedTo: { $size: 0 } }]
+  }
 
 
   if (query.veracity === 'confirmed true') filter.veracity = 'Confirmed True';

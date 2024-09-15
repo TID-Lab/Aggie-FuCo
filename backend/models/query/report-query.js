@@ -34,18 +34,18 @@ function ReportQuery(options) {
 _.extend(ReportQuery, Query);
 util.inherits(ReportQuery, Query);
 
-ReportQuery.prototype.run = function(callback) {
-  Report.queryReports(this, function(err, results) {
+ReportQuery.prototype.run = function (callback) {
+  Report.queryReports(this, function (err, results) {
     callback(err, results);
   });
 };
 
 // Normalize query for comparison
-ReportQuery.prototype.normalize = function() {
+ReportQuery.prototype.normalize = function () {
   return _.pick(this, ['keywords', 'status', 'after', 'before', 'sourceId', 'media', 'groupId', 'author', 'list', 'tags', 'escalated', 'veracity', 'isRelevantReports']);
 };
 
-ReportQuery.prototype.toMongooseFilter = function() {
+ReportQuery.prototype.toMongooseFilter = function () {
   var filter = {
     _sources: this.sourceId,
     _media: this.media,
@@ -55,16 +55,16 @@ ReportQuery.prototype.toMongooseFilter = function() {
     escalated: this.escalated,
     veracity: this.veracity,
   }
-  if (this.escalated === 'unescalated') filter.escalated= false;
+  if (this.escalated === 'unescalated') filter.escalated = false;
   if (this.escalated === 'escalated') filter.escalated = true;
 
   filter = _.omitBy(filter, _.isNil);
-  if (this.before)    filter.authoredAt = { $lte: this.before }
-  if (this.after)     filter.authoredAt = Object.assign({}, filter.authoredAt, { $gte: this.after });
+  if (this.before) filter.authoredAt = { $lte: this.before }
+  if (this.after) filter.authoredAt = Object.assign({}, filter.authoredAt, { $gte: this.after });
   //Two step search for content/author. First search for any terms in content or author using the indexed $text search.
   //Second step is to match exact phrase using regex in the returned superset of the documents from first step.
   // if (this.author || this.keywords) filter.author = [{$text: { $search: `${this.author || ""}` }}];
-  if (this.author)    filter.author = {$regex: this.author, $options: 'si'};
+  if (this.author) filter.author = { $regex: this.author, $options: 'si' };
   // if (this.keywords)  filter.$and.push({"$text": {"$search": this.keywords}});
 
   if (this.keywords) {
@@ -87,44 +87,42 @@ ReportQuery.prototype.toMongooseFilter = function() {
     this.keywords = this.keywords.replace(/\"/g, "%")
     this.keywords = this.keywords.replace(/\'/g, "%")
 
-    console.log(this.keywords.toString())
-    
-      // Convert raw query into nested logical array, e.g (Amhara OR Oromo) AND Ethiopia => [ 'AND', [ 'OR', 'Amhara', 'Oromo' ], 'Ethiopia' ]
-      let exp = new Expression(this.keywords.toString());
-      console.log(exp)
 
-      // Convert the nested logical array into the approriate mongo query with $and, $or and $not
-      // Change to true if you want to use $regex for all queries (instead of $text for some queries)
-      let res = exp.generate_search_query(false);
-      console.log(JSON.stringify(res))
-      filter.$and = [res]
-      
-      //filter.$and.push(res)
+    // Convert raw query into nested logical array, e.g (Amhara OR Oromo) AND Ethiopia => [ 'AND', [ 'OR', 'Amhara', 'Oromo' ], 'Ethiopia' ]
+    let exp = new Expression(this.keywords.toString());
+    console.log(JSON.stringify(exp))
+    // Convert the nested logical array into the approriate mongo query with $and, $or and $not
+    // Change to true if you want to use $regex for all queries (instead of $text for some queries)
+    let res = exp.generate_search_query(false);
+
+
+    filter.$and = [res]
+    //filter.$and.push(res)
   }
 
   if (this.tags) {
-      filter.smtcTags = { $all: this.tags };
+    filter.smtcTags = { $all: this.tags };
   } else {
     if (this.isRelevantReports == 'true') {
       filter.hasSMTCTags = true;
     }
   }
-  if (this.list)      filter["metadata.ct_tag"] = {$in: [this.list] };
+  if (this.list) filter["metadata.ct_tag"] = { $in: [this.list] };
   return filter;
 };
 
-ReportQuery.prototype._parseStatus = function(status) {
+ReportQuery.prototype._parseStatus = function (status) {
   switch (status) {
-  case 'Read':
-    this.read = true;
-    break;
-  case 'Unread':
-    this.read = false;
-    break;
+    case 'Read':
+      this.read = true;
+      break;
+    case 'Unread':
+      this.read = false;
+      break;
   }
 };
 
-ReportQuery.prototype._parseGroupId = function(groupId) {
+ReportQuery.prototype._parseGroupId = function (groupId) {
   if (groupId === 'any') {
     this.groupId = { $nin: [null, ''] };
   } else if (groupId === 'none') {
