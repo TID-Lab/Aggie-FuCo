@@ -57,7 +57,9 @@ let schema = new mongoose.Schema({
   }, { timestamps: true })]
 });
 
+// index for full text search
 schema.index({ title: 'text', locationName: "text", notes: "text" })
+
 schema.pre('save', function (next) {
   if (this.isNew) this.storedAt = new Date();
   this.updatedAt = new Date();
@@ -224,7 +226,7 @@ Group.queryGroups = function (query, page, options, callback) {
   // Search for substrings
   if (query.title) {
     // filter.title = new RegExp(query.title, 'i');
-    filter.$text = { $search: new RegExp(query.title, 'i') }
+    filter.$text = { $search: query.title }
     delete filter.title;
   }
   else delete filter.title;
