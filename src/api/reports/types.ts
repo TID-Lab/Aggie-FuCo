@@ -69,11 +69,11 @@ interface RawApiResponse {
   [key: string]: any;
 }
 // i need to redo this...
-export interface Statistics
-  extends TwitterStatistics,
-    TiktokStatistics,
-    FacebookStatistics,
-    YoutubeStatistics {}
+export type Statistics =
+  | TwitterStatistics
+  | TiktokStatistics
+  | FacebookStatistics
+  | YoutubeStatistics;
 
 export interface FacebookStatistics {
   sadCount: number;

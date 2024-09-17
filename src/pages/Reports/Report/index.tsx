@@ -148,7 +148,7 @@ const Report = () => {
       </span>
     );
   if (reportQuery.data) {
-    console.log(reportQuery.data.metadata);
+    console.log(reportQuery.data);
     return (
       <article className='pt-4 sticky top-0 overflow-y-auto max-h-[93vh] '>
         <AddReportsToIncidents

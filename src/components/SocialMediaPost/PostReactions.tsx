@@ -13,7 +13,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { MediaOptions } from "../../api/common";
-import type { Statistics } from "../../api/reports/types";
+import type {
+  FacebookStatistics,
+  Statistics,
+  TiktokStatistics,
+  TwitterStatistics,
+  YoutubeStatistics,
+} from "../../api/reports/types";
 
 interface IProps {
   stats: Statistics;
@@ -39,53 +45,62 @@ const PostReactions = ({ stats, media }: IProps) => {
 
   switch (media) {
     case "twitter": {
+      // type narrowing isnt working, so this is a workaround.
+      //TODO: fix type narrowing
+      const twitterStats = stats as TwitterStatistics;
       return (
         <>
-          <Reaction icon={faHeart} value={stats.like_count} />
-          <Reaction icon={faComment} value={stats.reply_count} />
-          <Reaction icon={faRetweet} value={stats.retweet_count} />
-          <Reaction icon={faEye} value={stats.view_count} />
+          <Reaction icon={faHeart} value={twitterStats.like_count} />
+          <Reaction icon={faComment} value={twitterStats.reply_count} />
+          <Reaction icon={faRetweet} value={twitterStats.retweet_count} />
+          <Reaction icon={faEye} value={twitterStats.view_count} />
         </>
       );
     }
     case "facebook": {
+      const facebook = stats as FacebookStatistics;
+
       return (
         <>
           <span className=' bg-slate-200 rounded-full px-2'>
-            {stats.angryCount +
-              stats.careCount +
-              stats.hahaCount +
-              stats.likeCount +
-              stats.sadCount +
-              stats.loveCount +
-              stats.thankfulCount +
-              stats.wowCount}{" "}
+            {facebook.angryCount +
+              facebook.careCount +
+              facebook.hahaCount +
+              facebook.likeCount +
+              facebook.sadCount +
+              facebook.loveCount +
+              facebook.thankfulCount +
+              facebook.wowCount}{" "}
             Reactions
           </span>
-          <Reaction icon={faComment} value={stats.commentCount} />
-          <Reaction icon={faShare} value={stats.shareCount} />
+          <Reaction icon={faComment} value={facebook.commentCount} />
+          <Reaction icon={faShare} value={facebook.shareCount} />
         </>
       );
     }
     case "tiktok": {
+      const tiktok = stats as TiktokStatistics;
+
       return (
         <>
-          <Reaction icon={faPlay} value={stats.playCount} />
-          <Reaction icon={faComment} value={stats.commentCount} />
-          <Reaction icon={faShare} value={stats.shareCount} />
-          <Reaction icon={faRetweet} value={stats.repostCount} />
-          <Reaction icon={faBookmark} value={stats.collectCount} />
+          <Reaction icon={faPlay} value={tiktok.playCount} />
+          <Reaction icon={faComment} value={tiktok.commentCount} />
+          <Reaction icon={faShare} value={tiktok.shareCount} />
+          <Reaction icon={faRetweet} value={tiktok.repostCount} />
+          <Reaction icon={faBookmark} value={tiktok.collectCount} />
         </>
       );
     }
     case "youtube": {
+      const youtube = stats as YoutubeStatistics;
+
       return (
         <>
-          <Reaction icon={faThumbsUp} value={stats.like_count} />
-          <Reaction icon={faThumbsDown} value={stats.dislike_count} />
-          <Reaction icon={faComment} value={stats.comment_count} />
-          <Reaction icon={faEye} value={stats.view_count} />
-          <Reaction icon={faStar} value={stats.favorite_count} />
+          <Reaction icon={faThumbsUp} value={youtube.like_count} />
+          <Reaction icon={faThumbsDown} value={youtube.dislike_count} />
+          <Reaction icon={faComment} value={youtube.comment_count} />
+          <Reaction icon={faEye} value={youtube.view_count} />
+          <Reaction icon={faStar} value={youtube.favorite_count} />
         </>
       );
     }

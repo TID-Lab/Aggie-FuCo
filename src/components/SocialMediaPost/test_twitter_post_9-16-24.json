@@ -1,0 +1,2187 @@
+{
+  "veracity": "Unconfirmed",
+  "smtcTags": [],
+  "hasSMTCTags": false,
+  "closed": false,
+  "read": true,
+  "_sources": ["66ad0f0a99fdbc40c90c6190"],
+  "_media": ["twitter"],
+  "_sourceNicknames": [],
+  "escalated": false,
+  "irrelevant": "false",
+  "_id": "66e86e895b1db666923be35a",
+  "authoredAt": "2024-09-16T17:20:55.000Z",
+  "fetchedAt": "2024-09-16T17:44:40.980Z",
+  "author": "Mara Davis",
+  "url": "https://twitter.com/MaraDavis/status/1835730598469529894",
+  "content": "RT @SamforGeorgia: After the Trump/ Kemp abortion ban went into effect in July 2022, @GovKemp said “he was ‘overjoyed’ and believed the sta…",
+  "metadata": {
+    "imageText": null,
+    "junkipediaId": 313764132,
+    "channelId": 10455850,
+    "accountHandle": "Mara Davis",
+    "accountUrl": "https://www.twitter.com/MaraDavis",
+    "mediaUrl": null,
+    "actualStatistics": {
+      "like_count": 0,
+      "view_count": null,
+      "reply_count": 0,
+      "retweet_count": 55
+    },
+    "rawAPIResponse": {
+      "id": "313764132",
+      "type": "posts",
+      "attributes": {
+        "id": 313764132,
+        "channel_id": 10455850,
+        "post_uid": "1835730598469529894",
+        "url": "https://twitter.com/MaraDavis/status/1835730598469529894",
+        "engagement_data": {
+          "like_count": 0,
+          "view_count": null,
+          "reply_count": 0,
+          "retweet_count": 55
+        },
+        "engagement_fields": {
+          "likes_count": 0,
+          "shares_count": 55,
+          "comments_count": 0,
+          "views_count": 0
+        },
+        "published_at": "2024-09-16T17:20:55.000Z",
+        "created_at": "2024-09-16T17:39:56.170Z",
+        "updated_at": "2024-09-16T17:39:56.932Z",
+        "audio_text": null,
+        "image_text": null,
+        "complete_post_text": null,
+        "thumbnail_url": "",
+        "image_text_data": null,
+        "post_data": {
+          "bookmark_count": 0,
+          "bookmarked": false,
+          "created_at": "Mon Sep 16 17:20:55 +0000 2024",
+          "conversation_id_str": "1835730598469529894",
+          "display_text_range": [0, 140],
+          "entities": {
+            "hashtags": [],
+            "symbols": [],
+            "timestamps": [],
+            "urls": [],
+            "user_mentions": [
+              {
+                "id_str": "720737029743509504",
+                "name": "Sam Park",
+                "screen_name": "SamforGeorgia",
+                "indices": [3, 17]
+              },
+              {
+                "id_str": "1064659902071808000",
+                "name": "Governor Brian P. Kemp",
+                "screen_name": "GovKemp",
+                "indices": [85, 93]
+              }
+            ]
+          },
+          "favorite_count": 0,
+          "favorited": false,
+          "full_text": "RT @SamforGeorgia: After the Trump/ Kemp abortion ban went into effect in July 2022, @GovKemp said “he was ‘overjoyed’ and believed the sta…",
+          "is_quote_status": true,
+          "lang": "en",
+          "quote_count": 0,
+          "quoted_status_id_str": "1835607539389497678",
+          "quoted_status_permalink": {
+            "url": "https://t.co/fw62iJMFz9",
+            "expanded": "https://twitter.com/propublica/status/1835607539389497678",
+            "display": "x.com/propublica/sta…"
+          },
+          "reply_count": 0,
+          "retweet_count": 55,
+          "retweeted": false,
+          "user_id_str": "20998003",
+          "id_str": "1835730598469529894",
+          "retweeted_status_result": {
+            "result": {
+              "__typename": "Tweet",
+              "rest_id": "1835709829018481083",
+              "core": {
+                "user_results": {
+                  "result": {
+                    "__typename": "User",
+                    "id": "VXNlcjo3MjA3MzcwMjk3NDM1MDk1MDQ=",
+                    "rest_id": "720737029743509504",
+                    "has_graduated_access": true,
+                    "is_blue_verified": false,
+                    "profile_image_shape": "Circle",
+                    "legacy": {
+                      "can_dm": true,
+                      "can_media_tag": true,
+                      "created_at": "Thu Apr 14 22:14:33 +0000 2016",
+                      "default_profile": false,
+                      "default_profile_image": false,
+                      "description": "Whip, Georgia House Democratic Caucus | Georgia State Representative, District 107 | Nonprofit Attorney | Brother | Guncle | Cat Dad",
+                      "entities": {
+                        "description": {
+                          "urls": []
+                        },
+                        "url": {
+                          "urls": [
+                            {
+                              "display_url": "samforgeorgia.com",
+                              "expanded_url": "https://www.samforgeorgia.com",
+                              "url": "https://t.co/C36NFVfjGs",
+                              "indices": [0, 23]
+                            }
+                          ]
+                        }
+                      },
+                      "fast_followers_count": 0,
+                      "favourites_count": 10012,
+                      "followers_count": 11433,
+                      "friends_count": 2246,
+                      "has_custom_timelines": true,
+                      "is_translator": false,
+                      "listed_count": 152,
+                      "location": "Lawrenceville, GA",
+                      "media_count": 602,
+                      "name": "Sam Park",
+                      "normal_followers_count": 11433,
+                      "pinned_tweet_ids_str": [],
+                      "possibly_sensitive": false,
+                      "profile_banner_url": "https://pbs.twimg.com/profile_banners/720737029743509504/1602394331",
+                      "profile_image_url_https": "https://pbs.twimg.com/profile_images/1579900984213573637/_fpYeypw_normal.jpg",
+                      "profile_interstitial_type": "",
+                      "screen_name": "SamforGeorgia",
+                      "statuses_count": 3926,
+                      "translator_type": "none",
+                      "url": "https://t.co/C36NFVfjGs",
+                      "verified": false,
+                      "want_retweets": false,
+                      "withheld_in_countries": []
+                    }
+                  }
+                }
+              },
+              "edit_control": {
+                "edit_tweet_ids": ["1835709829018481083"],
+                "editable_until_msecs": "1726505903000",
+                "is_edit_eligible": true,
+                "edits_remaining": "5"
+              },
+              "is_translatable": false,
+              "views": {
+                "count": "1853",
+                "state": "EnabledWithCount"
+              },
+              "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+              "quoted_status_result": {
+                "result": {
+                  "__typename": "Tweet",
+                  "rest_id": "1835607539389497678",
+                  "core": {
+                    "user_results": {
+                      "result": {
+                        "__typename": "User",
+                        "id": "VXNlcjoxNDYwNjA3OQ==",
+                        "rest_id": "14606079",
+                        "has_graduated_access": true,
+                        "is_blue_verified": true,
+                        "profile_image_shape": "Circle",
+                        "legacy": {
+                          "can_dm": true,
+                          "can_media_tag": true,
+                          "created_at": "Wed Apr 30 21:17:15 +0000 2008",
+                          "default_profile": false,
+                          "default_profile_image": false,
+                          "description": "Pursuing stories with moral force\nSend us things: https://t.co/mbPBrKq9nN\nNewsletter: https://t.co/mGR9bzZXr1\nMasto: https://t.co/L1E2InEHhO\nTikTok: https://t.co/YaqiYCJD6L",
+                          "entities": {
+                            "description": {
+                              "urls": [
+                                {
+                                  "display_url": "propub.li/3ewuUKH",
+                                  "expanded_url": "http://propub.li/3ewuUKH",
+                                  "url": "https://t.co/mbPBrKq9nN",
+                                  "indices": [50, 73]
+                                },
+                                {
+                                  "display_url": "propub.li/2Opjiys",
+                                  "expanded_url": "http://propub.li/2Opjiys",
+                                  "url": "https://t.co/mGR9bzZXr1",
+                                  "indices": [86, 109]
+                                },
+                                {
+                                  "display_url": "newsie.social/@ProPublica",
+                                  "expanded_url": "http://newsie.social/@ProPublica",
+                                  "url": "https://t.co/L1E2InEHhO",
+                                  "indices": [117, 140]
+                                },
+                                {
+                                  "display_url": "propub.li/3J4re5o",
+                                  "expanded_url": "http://propub.li/3J4re5o",
+                                  "url": "https://t.co/YaqiYCJD6L",
+                                  "indices": [149, 172]
+                                }
+                              ]
+                            },
+                            "url": {
+                              "urls": [
+                                {
+                                  "display_url": "propublica.org",
+                                  "expanded_url": "http://www.propublica.org/",
+                                  "url": "https://t.co/fMf6LmgwHL",
+                                  "indices": [0, 23]
+                                }
+                              ]
+                            }
+                          },
+                          "fast_followers_count": 0,
+                          "favourites_count": 18994,
+                          "followers_count": 937350,
+                          "friends_count": 681,
+                          "has_custom_timelines": true,
+                          "is_translator": false,
+                          "listed_count": 17415,
+                          "location": "New York, NY",
+                          "media_count": 9057,
+                          "name": "ProPublica",
+                          "normal_followers_count": 937350,
+                          "pinned_tweet_ids_str": [],
+                          "possibly_sensitive": false,
+                          "profile_banner_url": "https://pbs.twimg.com/profile_banners/14606079/1503930270",
+                          "profile_image_url_https": "https://pbs.twimg.com/profile_images/902174720040292354/rLSBbM4r_normal.jpg",
+                          "profile_interstitial_type": "",
+                          "screen_name": "propublica",
+                          "statuses_count": 123244,
+                          "translator_type": "none",
+                          "url": "https://t.co/fMf6LmgwHL",
+                          "verified": false,
+                          "want_retweets": false,
+                          "withheld_in_countries": []
+                        },
+                        "professional": {
+                          "rest_id": "1550531265505497094",
+                          "professional_type": "Business",
+                          "category": [
+                            {
+                              "id": 580,
+                              "name": "Media & News Company",
+                              "icon_name": "IconBriefcaseStroke"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "card": {
+                    "rest_id": "https://t.co/ZZhqtEQdWB",
+                    "legacy": {
+                      "binding_values": [
+                        {
+                          "key": "photo_image_full_size_large",
+                          "value": {
+                            "image_value": {
+                              "height": 419,
+                              "width": 800,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=800x419"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "thumbnail_image",
+                          "value": {
+                            "image_value": {
+                              "height": 147,
+                              "width": 280,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=280x150"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "description",
+                          "value": {
+                            "string_value": "At least two women in Georgia died after they couldn’t access legal abortions and timely medical care in their state, ProPublica has found. This is one of their stories.",
+                            "type": "STRING"
+                          }
+                        },
+                        {
+                          "key": "domain",
+                          "value": {
+                            "string_value": "www.propublica.org",
+                            "type": "STRING"
+                          }
+                        },
+                        {
+                          "key": "thumbnail_image_large",
+                          "value": {
+                            "image_value": {
+                              "height": 315,
+                              "width": 600,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=600x600"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "summary_photo_image_small",
+                          "value": {
+                            "image_value": {
+                              "height": 202,
+                              "width": 386,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=386x202"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "thumbnail_image_original",
+                          "value": {
+                            "image_value": {
+                              "height": 630,
+                              "width": 1200,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=orig"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "site",
+                          "value": {
+                            "scribe_key": "publisher_id",
+                            "type": "USER",
+                            "user_value": {
+                              "id_str": "14606079",
+                              "path": []
+                            }
+                          }
+                        },
+                        {
+                          "key": "photo_image_full_size_small",
+                          "value": {
+                            "image_value": {
+                              "height": 202,
+                              "width": 386,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=386x202"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "summary_photo_image_large",
+                          "value": {
+                            "image_value": {
+                              "height": 419,
+                              "width": 800,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=800x419"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "thumbnail_image_small",
+                          "value": {
+                            "image_value": {
+                              "height": 76,
+                              "width": 144,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=144x144"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "creator",
+                          "value": {
+                            "type": "USER",
+                            "user_value": {
+                              "id_str": "14606079",
+                              "path": []
+                            }
+                          }
+                        },
+                        {
+                          "key": "thumbnail_image_x_large",
+                          "value": {
+                            "image_value": {
+                              "height": 630,
+                              "width": 1200,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=png&name=2048x2048_2_exp"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "photo_image_full_size_original",
+                          "value": {
+                            "image_value": {
+                              "height": 630,
+                              "width": 1200,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=orig"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "vanity_url",
+                          "value": {
+                            "scribe_key": "vanity_url",
+                            "string_value": "propublica.org",
+                            "type": "STRING"
+                          }
+                        },
+                        {
+                          "key": "photo_image_full_size",
+                          "value": {
+                            "image_value": {
+                              "height": 314,
+                              "width": 600,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=600x314"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "thumbnail_image_color",
+                          "value": {
+                            "image_color_value": {
+                              "palette": [
+                                {
+                                  "rgb": {
+                                    "blue": 66,
+                                    "green": 113,
+                                    "red": 181
+                                  },
+                                  "percentage": 42.76
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 152,
+                                    "green": 165,
+                                    "red": 164
+                                  },
+                                  "percentage": 33.7
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 41,
+                                    "green": 49,
+                                    "red": 64
+                                  },
+                                  "percentage": 11
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 78,
+                                    "green": 102,
+                                    "red": 148
+                                  },
+                                  "percentage": 8.31
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 37,
+                                    "green": 60,
+                                    "red": 98
+                                  },
+                                  "percentage": 1.73
+                                }
+                              ]
+                            },
+                            "type": "IMAGE_COLOR"
+                          }
+                        },
+                        {
+                          "key": "title",
+                          "value": {
+                            "string_value": "Abortion Bans Have Delayed Emergency Medical Care. In Georgia, Experts Say This Mother’s Death Was...",
+                            "type": "STRING"
+                          }
+                        },
+                        {
+                          "key": "summary_photo_image_color",
+                          "value": {
+                            "image_color_value": {
+                              "palette": [
+                                {
+                                  "rgb": {
+                                    "blue": 66,
+                                    "green": 113,
+                                    "red": 181
+                                  },
+                                  "percentage": 42.76
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 152,
+                                    "green": 165,
+                                    "red": 164
+                                  },
+                                  "percentage": 33.7
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 41,
+                                    "green": 49,
+                                    "red": 64
+                                  },
+                                  "percentage": 11
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 78,
+                                    "green": 102,
+                                    "red": 148
+                                  },
+                                  "percentage": 8.31
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 37,
+                                    "green": 60,
+                                    "red": 98
+                                  },
+                                  "percentage": 1.73
+                                }
+                              ]
+                            },
+                            "type": "IMAGE_COLOR"
+                          }
+                        },
+                        {
+                          "key": "summary_photo_image_x_large",
+                          "value": {
+                            "image_value": {
+                              "height": 630,
+                              "width": 1200,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=png&name=2048x2048_2_exp"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "summary_photo_image",
+                          "value": {
+                            "image_value": {
+                              "height": 314,
+                              "width": 600,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=600x314"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "photo_image_full_size_color",
+                          "value": {
+                            "image_color_value": {
+                              "palette": [
+                                {
+                                  "rgb": {
+                                    "blue": 66,
+                                    "green": 113,
+                                    "red": 181
+                                  },
+                                  "percentage": 42.76
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 152,
+                                    "green": 165,
+                                    "red": 164
+                                  },
+                                  "percentage": 33.7
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 41,
+                                    "green": 49,
+                                    "red": 64
+                                  },
+                                  "percentage": 11
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 78,
+                                    "green": 102,
+                                    "red": 148
+                                  },
+                                  "percentage": 8.31
+                                },
+                                {
+                                  "rgb": {
+                                    "blue": 37,
+                                    "green": 60,
+                                    "red": 98
+                                  },
+                                  "percentage": 1.73
+                                }
+                              ]
+                            },
+                            "type": "IMAGE_COLOR"
+                          }
+                        },
+                        {
+                          "key": "photo_image_full_size_x_large",
+                          "value": {
+                            "image_value": {
+                              "height": 630,
+                              "width": 1200,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=png&name=2048x2048_2_exp"
+                            },
+                            "type": "IMAGE"
+                          }
+                        },
+                        {
+                          "key": "card_url",
+                          "value": {
+                            "scribe_key": "card_url",
+                            "string_value": "https://t.co/ZZhqtEQdWB",
+                            "type": "STRING"
+                          }
+                        },
+                        {
+                          "key": "summary_photo_image_original",
+                          "value": {
+                            "image_value": {
+                              "height": 630,
+                              "width": 1200,
+                              "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=orig"
+                            },
+                            "type": "IMAGE"
+                          }
+                        }
+                      ],
+                      "card_platform": {
+                        "platform": {
+                          "audience": {
+                            "name": "production"
+                          },
+                          "device": {
+                            "name": "Swift",
+                            "version": "12"
+                          }
+                        }
+                      },
+                      "name": "summary_large_image",
+                      "url": "https://t.co/ZZhqtEQdWB",
+                      "user_refs_results": [
+                        {
+                          "result": {
+                            "__typename": "User",
+                            "id": "VXNlcjoxNDYwNjA3OQ==",
+                            "rest_id": "14606079",
+                            "has_graduated_access": true,
+                            "is_blue_verified": true,
+                            "profile_image_shape": "Circle",
+                            "legacy": {
+                              "can_dm": true,
+                              "can_media_tag": true,
+                              "created_at": "Wed Apr 30 21:17:15 +0000 2008",
+                              "default_profile": false,
+                              "default_profile_image": false,
+                              "description": "Pursuing stories with moral force\nSend us things: https://t.co/mbPBrKq9nN\nNewsletter: https://t.co/mGR9bzZXr1\nMasto: https://t.co/L1E2InEHhO\nTikTok: https://t.co/YaqiYCJD6L",
+                              "entities": {
+                                "description": {
+                                  "urls": [
+                                    {
+                                      "display_url": "propub.li/3ewuUKH",
+                                      "expanded_url": "http://propub.li/3ewuUKH",
+                                      "url": "https://t.co/mbPBrKq9nN",
+                                      "indices": [50, 73]
+                                    },
+                                    {
+                                      "display_url": "propub.li/2Opjiys",
+                                      "expanded_url": "http://propub.li/2Opjiys",
+                                      "url": "https://t.co/mGR9bzZXr1",
+                                      "indices": [86, 109]
+                                    },
+                                    {
+                                      "display_url": "newsie.social/@ProPublica",
+                                      "expanded_url": "http://newsie.social/@ProPublica",
+                                      "url": "https://t.co/L1E2InEHhO",
+                                      "indices": [117, 140]
+                                    },
+                                    {
+                                      "display_url": "propub.li/3J4re5o",
+                                      "expanded_url": "http://propub.li/3J4re5o",
+                                      "url": "https://t.co/YaqiYCJD6L",
+                                      "indices": [149, 172]
+                                    }
+                                  ]
+                                },
+                                "url": {
+                                  "urls": [
+                                    {
+                                      "display_url": "propublica.org",
+                                      "expanded_url": "http://www.propublica.org/",
+                                      "url": "https://t.co/fMf6LmgwHL",
+                                      "indices": [0, 23]
+                                    }
+                                  ]
+                                }
+                              },
+                              "fast_followers_count": 0,
+                              "favourites_count": 18994,
+                              "followers_count": 937350,
+                              "friends_count": 681,
+                              "has_custom_timelines": true,
+                              "is_translator": false,
+                              "listed_count": 17415,
+                              "location": "New York, NY",
+                              "media_count": 9057,
+                              "name": "ProPublica",
+                              "normal_followers_count": 937350,
+                              "pinned_tweet_ids_str": [],
+                              "possibly_sensitive": false,
+                              "profile_banner_url": "https://pbs.twimg.com/profile_banners/14606079/1503930270",
+                              "profile_image_url_https": "https://pbs.twimg.com/profile_images/902174720040292354/rLSBbM4r_normal.jpg",
+                              "profile_interstitial_type": "",
+                              "screen_name": "propublica",
+                              "statuses_count": 123244,
+                              "translator_type": "none",
+                              "url": "https://t.co/fMf6LmgwHL",
+                              "verified": false,
+                              "want_retweets": false,
+                              "withheld_in_countries": []
+                            },
+                            "professional": {
+                              "rest_id": "1550531265505497094",
+                              "professional_type": "Business",
+                              "category": [
+                                {
+                                  "id": 580,
+                                  "name": "Media & News Company",
+                                  "icon_name": "IconBriefcaseStroke"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "result": {
+                            "__typename": "User",
+                            "id": "VXNlcjoxNDYwNjA3OQ==",
+                            "rest_id": "14606079",
+                            "has_graduated_access": true,
+                            "is_blue_verified": true,
+                            "profile_image_shape": "Circle",
+                            "legacy": {
+                              "can_dm": true,
+                              "can_media_tag": true,
+                              "created_at": "Wed Apr 30 21:17:15 +0000 2008",
+                              "default_profile": false,
+                              "default_profile_image": false,
+                              "description": "Pursuing stories with moral force\nSend us things: https://t.co/mbPBrKq9nN\nNewsletter: https://t.co/mGR9bzZXr1\nMasto: https://t.co/L1E2InEHhO\nTikTok: https://t.co/YaqiYCJD6L",
+                              "entities": {
+                                "description": {
+                                  "urls": [
+                                    {
+                                      "display_url": "propub.li/3ewuUKH",
+                                      "expanded_url": "http://propub.li/3ewuUKH",
+                                      "url": "https://t.co/mbPBrKq9nN",
+                                      "indices": [50, 73]
+                                    },
+                                    {
+                                      "display_url": "propub.li/2Opjiys",
+                                      "expanded_url": "http://propub.li/2Opjiys",
+                                      "url": "https://t.co/mGR9bzZXr1",
+                                      "indices": [86, 109]
+                                    },
+                                    {
+                                      "display_url": "newsie.social/@ProPublica",
+                                      "expanded_url": "http://newsie.social/@ProPublica",
+                                      "url": "https://t.co/L1E2InEHhO",
+                                      "indices": [117, 140]
+                                    },
+                                    {
+                                      "display_url": "propub.li/3J4re5o",
+                                      "expanded_url": "http://propub.li/3J4re5o",
+                                      "url": "https://t.co/YaqiYCJD6L",
+                                      "indices": [149, 172]
+                                    }
+                                  ]
+                                },
+                                "url": {
+                                  "urls": [
+                                    {
+                                      "display_url": "propublica.org",
+                                      "expanded_url": "http://www.propublica.org/",
+                                      "url": "https://t.co/fMf6LmgwHL",
+                                      "indices": [0, 23]
+                                    }
+                                  ]
+                                }
+                              },
+                              "fast_followers_count": 0,
+                              "favourites_count": 18994,
+                              "followers_count": 937350,
+                              "friends_count": 681,
+                              "has_custom_timelines": true,
+                              "is_translator": false,
+                              "listed_count": 17415,
+                              "location": "New York, NY",
+                              "media_count": 9057,
+                              "name": "ProPublica",
+                              "normal_followers_count": 937350,
+                              "pinned_tweet_ids_str": [],
+                              "possibly_sensitive": false,
+                              "profile_banner_url": "https://pbs.twimg.com/profile_banners/14606079/1503930270",
+                              "profile_image_url_https": "https://pbs.twimg.com/profile_images/902174720040292354/rLSBbM4r_normal.jpg",
+                              "profile_interstitial_type": "",
+                              "screen_name": "propublica",
+                              "statuses_count": 123244,
+                              "translator_type": "none",
+                              "url": "https://t.co/fMf6LmgwHL",
+                              "verified": false,
+                              "want_retweets": false,
+                              "withheld_in_countries": []
+                            },
+                            "professional": {
+                              "rest_id": "1550531265505497094",
+                              "professional_type": "Business",
+                              "category": [
+                                {
+                                  "id": 580,
+                                  "name": "Media & News Company",
+                                  "icon_name": "IconBriefcaseStroke"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "edit_control": {
+                    "edit_tweet_ids": ["1835607539389497678"],
+                    "editable_until_msecs": "1726481515000",
+                    "is_edit_eligible": true,
+                    "edits_remaining": "5"
+                  },
+                  "is_translatable": false,
+                  "views": {
+                    "count": "2393129",
+                    "state": "EnabledWithCount"
+                  },
+                  "source": "<a href=\"https://sproutsocial.com\" rel=\"nofollow\">Sprout Social</a>",
+                  "legacy": {
+                    "bookmark_count": 1603,
+                    "bookmarked": false,
+                    "created_at": "Mon Sep 16 09:11:55 +0000 2024",
+                    "conversation_id_str": "1835607539389497678",
+                    "display_text_range": [0, 198],
+                    "entities": {
+                      "hashtags": [],
+                      "symbols": [],
+                      "timestamps": [],
+                      "urls": [
+                        {
+                          "display_url": "propub.li/3N7xPgN",
+                          "expanded_url": "https://propub.li/3N7xPgN",
+                          "url": "https://t.co/ZZhqtEQdWB",
+                          "indices": [175, 198]
+                        }
+                      ],
+                      "user_mentions": []
+                    },
+                    "favorite_count": 12066,
+                    "favorited": false,
+                    "full_text": "New: At least two women in Georgia died after they couldn't access legal abortions and timely medical care in their state, ProPublica has found. This is one of their stories. https://t.co/ZZhqtEQdWB",
+                    "is_quote_status": false,
+                    "lang": "en",
+                    "possibly_sensitive": false,
+                    "possibly_sensitive_editable": true,
+                    "quote_count": 1179,
+                    "reply_count": 496,
+                    "retweet_count": 8995,
+                    "retweeted": false,
+                    "user_id_str": "14606079",
+                    "id_str": "1835607539389497678"
+                  }
+                }
+              },
+              "legacy": {
+                "bookmark_count": 1,
+                "bookmarked": false,
+                "created_at": "Mon Sep 16 15:58:23 +0000 2024",
+                "conversation_id_str": "1835709829018481083",
+                "display_text_range": [0, 278],
+                "entities": {
+                  "hashtags": [
+                    {
+                      "indices": [272, 278],
+                      "text": "gapol"
+                    }
+                  ],
+                  "symbols": [],
+                  "timestamps": [],
+                  "urls": [],
+                  "user_mentions": [
+                    {
+                      "id_str": "1064659902071808000",
+                      "name": "Governor Brian P. Kemp",
+                      "screen_name": "GovKemp",
+                      "indices": [66, 74]
+                    }
+                  ]
+                },
+                "favorite_count": 68,
+                "favorited": false,
+                "full_text": "After the Trump/ Kemp abortion ban went into effect in July 2022, @GovKemp said “he was ‘overjoyed’ and believed the state had found an approach that would keep women ‘safe, healthy and informed.’ \n\nTwo weeks later, Thurman was dead.”\n\nElections matter. Vote accordingly. #gapol",
+                "is_quote_status": true,
+                "lang": "en",
+                "quote_count": 2,
+                "quoted_status_id_str": "1835607539389497678",
+                "quoted_status_permalink": {
+                  "url": "https://t.co/fw62iJMFz9",
+                  "expanded": "https://twitter.com/propublica/status/1835607539389497678",
+                  "display": "x.com/propublica/sta…"
+                },
+                "reply_count": 1,
+                "retweet_count": 55,
+                "retweeted": false,
+                "user_id_str": "720737029743509504",
+                "id_str": "1835709829018481083"
+              }
+            }
+          },
+          "user": {
+            "can_dm": true,
+            "can_media_tag": true,
+            "created_at": "Mon Feb 16 16:13:51 +0000 2009",
+            "default_profile": false,
+            "default_profile_image": false,
+            "description": "Media Maven, Talent Booker, PR, Pop culture, podcast & political enthusiast. Co host of @podcastvote. @pastemagazine contributor. Email: mara@maradavis.com",
+            "entities": {
+              "description": {
+                "urls": []
+              },
+              "url": {
+                "urls": [
+                  {
+                    "display_url": "maradavis.com",
+                    "expanded_url": "https://maradavis.com/",
+                    "url": "https://t.co/8gnZo1pGYc",
+                    "indices": [0, 23]
+                  }
+                ]
+              }
+            },
+            "fast_followers_count": 0,
+            "favourites_count": 66431,
+            "followers_count": 25622,
+            "friends_count": 2625,
+            "has_custom_timelines": true,
+            "is_translator": false,
+            "listed_count": 334,
+            "location": "Atlanta, GA",
+            "media_count": 2936,
+            "name": "Mara Davis",
+            "normal_followers_count": 25622,
+            "pinned_tweet_ids_str": [],
+            "possibly_sensitive": false,
+            "profile_banner_url": "https://pbs.twimg.com/profile_banners/20998003/1398296905",
+            "profile_image_url_https": "https://pbs.twimg.com/profile_images/1578418884088139776/JfOZvcD7_normal.jpg",
+            "profile_interstitial_type": "",
+            "screen_name": "MaraDavis",
+            "statuses_count": 54306,
+            "translator_type": "none",
+            "url": "https://t.co/8gnZo1pGYc",
+            "verified": false,
+            "want_retweets": false,
+            "withheld_in_countries": []
+          },
+          "extended_entities": null,
+          "card": null,
+          "view_count": null,
+          "id": "1835730598469529894",
+          "api_data": {
+            "__typename": "Tweet",
+            "rest_id": "1835730598469529894",
+            "core": {
+              "user_results": {
+                "result": {
+                  "__typename": "User",
+                  "id": "VXNlcjoyMDk5ODAwMw==",
+                  "rest_id": "20998003",
+                  "has_graduated_access": true,
+                  "is_blue_verified": false,
+                  "profile_image_shape": "Circle",
+                  "legacy": {
+                    "can_dm": true,
+                    "can_media_tag": true,
+                    "created_at": "Mon Feb 16 16:13:51 +0000 2009",
+                    "default_profile": false,
+                    "default_profile_image": false,
+                    "description": "Media Maven, Talent Booker, PR, Pop culture, podcast & political enthusiast. Co host of @podcastvote. @pastemagazine contributor. Email: mara@maradavis.com",
+                    "entities": {
+                      "description": {
+                        "urls": []
+                      },
+                      "url": {
+                        "urls": [
+                          {
+                            "display_url": "maradavis.com",
+                            "expanded_url": "https://maradavis.com/",
+                            "url": "https://t.co/8gnZo1pGYc",
+                            "indices": [0, 23]
+                          }
+                        ]
+                      }
+                    },
+                    "fast_followers_count": 0,
+                    "favourites_count": 66431,
+                    "followers_count": 25622,
+                    "friends_count": 2625,
+                    "has_custom_timelines": true,
+                    "is_translator": false,
+                    "listed_count": 334,
+                    "location": "Atlanta, GA",
+                    "media_count": 2936,
+                    "name": "Mara Davis",
+                    "normal_followers_count": 25622,
+                    "pinned_tweet_ids_str": [],
+                    "possibly_sensitive": false,
+                    "profile_banner_url": "https://pbs.twimg.com/profile_banners/20998003/1398296905",
+                    "profile_image_url_https": "https://pbs.twimg.com/profile_images/1578418884088139776/JfOZvcD7_normal.jpg",
+                    "profile_interstitial_type": "",
+                    "screen_name": "MaraDavis",
+                    "statuses_count": 54306,
+                    "translator_type": "none",
+                    "url": "https://t.co/8gnZo1pGYc",
+                    "verified": false,
+                    "want_retweets": false,
+                    "withheld_in_countries": []
+                  }
+                }
+              }
+            },
+            "edit_control": {
+              "edit_tweet_ids": ["1835730598469529894"],
+              "editable_until_msecs": "1726510855557",
+              "is_edit_eligible": false,
+              "edits_remaining": "5"
+            },
+            "is_translatable": false,
+            "views": {
+              "state": "Enabled"
+            },
+            "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+            "legacy": {
+              "bookmark_count": 0,
+              "bookmarked": false,
+              "created_at": "Mon Sep 16 17:20:55 +0000 2024",
+              "conversation_id_str": "1835730598469529894",
+              "display_text_range": [0, 140],
+              "entities": {
+                "hashtags": [],
+                "symbols": [],
+                "timestamps": [],
+                "urls": [],
+                "user_mentions": [
+                  {
+                    "id_str": "720737029743509504",
+                    "name": "Sam Park",
+                    "screen_name": "SamforGeorgia",
+                    "indices": [3, 17]
+                  },
+                  {
+                    "id_str": "1064659902071808000",
+                    "name": "Governor Brian P. Kemp",
+                    "screen_name": "GovKemp",
+                    "indices": [85, 93]
+                  }
+                ]
+              },
+              "favorite_count": 0,
+              "favorited": false,
+              "full_text": "RT @SamforGeorgia: After the Trump/ Kemp abortion ban went into effect in July 2022, @GovKemp said “he was ‘overjoyed’ and believed the sta…",
+              "is_quote_status": true,
+              "lang": "en",
+              "quote_count": 0,
+              "quoted_status_id_str": "1835607539389497678",
+              "quoted_status_permalink": {
+                "url": "https://t.co/fw62iJMFz9",
+                "expanded": "https://twitter.com/propublica/status/1835607539389497678",
+                "display": "x.com/propublica/sta…"
+              },
+              "reply_count": 0,
+              "retweet_count": 55,
+              "retweeted": false,
+              "user_id_str": "20998003",
+              "id_str": "1835730598469529894",
+              "retweeted_status_result": {
+                "result": {
+                  "__typename": "Tweet",
+                  "rest_id": "1835709829018481083",
+                  "core": {
+                    "user_results": {
+                      "result": {
+                        "__typename": "User",
+                        "id": "VXNlcjo3MjA3MzcwMjk3NDM1MDk1MDQ=",
+                        "rest_id": "720737029743509504",
+                        "has_graduated_access": true,
+                        "is_blue_verified": false,
+                        "profile_image_shape": "Circle",
+                        "legacy": {
+                          "can_dm": true,
+                          "can_media_tag": true,
+                          "created_at": "Thu Apr 14 22:14:33 +0000 2016",
+                          "default_profile": false,
+                          "default_profile_image": false,
+                          "description": "Whip, Georgia House Democratic Caucus | Georgia State Representative, District 107 | Nonprofit Attorney | Brother | Guncle | Cat Dad",
+                          "entities": {
+                            "description": {
+                              "urls": []
+                            },
+                            "url": {
+                              "urls": [
+                                {
+                                  "display_url": "samforgeorgia.com",
+                                  "expanded_url": "https://www.samforgeorgia.com",
+                                  "url": "https://t.co/C36NFVfjGs",
+                                  "indices": [0, 23]
+                                }
+                              ]
+                            }
+                          },
+                          "fast_followers_count": 0,
+                          "favourites_count": 10012,
+                          "followers_count": 11433,
+                          "friends_count": 2246,
+                          "has_custom_timelines": true,
+                          "is_translator": false,
+                          "listed_count": 152,
+                          "location": "Lawrenceville, GA",
+                          "media_count": 602,
+                          "name": "Sam Park",
+                          "normal_followers_count": 11433,
+                          "pinned_tweet_ids_str": [],
+                          "possibly_sensitive": false,
+                          "profile_banner_url": "https://pbs.twimg.com/profile_banners/720737029743509504/1602394331",
+                          "profile_image_url_https": "https://pbs.twimg.com/profile_images/1579900984213573637/_fpYeypw_normal.jpg",
+                          "profile_interstitial_type": "",
+                          "screen_name": "SamforGeorgia",
+                          "statuses_count": 3926,
+                          "translator_type": "none",
+                          "url": "https://t.co/C36NFVfjGs",
+                          "verified": false,
+                          "want_retweets": false,
+                          "withheld_in_countries": []
+                        }
+                      }
+                    }
+                  },
+                  "edit_control": {
+                    "edit_tweet_ids": ["1835709829018481083"],
+                    "editable_until_msecs": "1726505903000",
+                    "is_edit_eligible": true,
+                    "edits_remaining": "5"
+                  },
+                  "is_translatable": false,
+                  "views": {
+                    "count": "1853",
+                    "state": "EnabledWithCount"
+                  },
+                  "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+                  "quoted_status_result": {
+                    "result": {
+                      "__typename": "Tweet",
+                      "rest_id": "1835607539389497678",
+                      "core": {
+                        "user_results": {
+                          "result": {
+                            "__typename": "User",
+                            "id": "VXNlcjoxNDYwNjA3OQ==",
+                            "rest_id": "14606079",
+                            "has_graduated_access": true,
+                            "is_blue_verified": true,
+                            "profile_image_shape": "Circle",
+                            "legacy": {
+                              "can_dm": true,
+                              "can_media_tag": true,
+                              "created_at": "Wed Apr 30 21:17:15 +0000 2008",
+                              "default_profile": false,
+                              "default_profile_image": false,
+                              "description": "Pursuing stories with moral force\nSend us things: https://t.co/mbPBrKq9nN\nNewsletter: https://t.co/mGR9bzZXr1\nMasto: https://t.co/L1E2InEHhO\nTikTok: https://t.co/YaqiYCJD6L",
+                              "entities": {
+                                "description": {
+                                  "urls": [
+                                    {
+                                      "display_url": "propub.li/3ewuUKH",
+                                      "expanded_url": "http://propub.li/3ewuUKH",
+                                      "url": "https://t.co/mbPBrKq9nN",
+                                      "indices": [50, 73]
+                                    },
+                                    {
+                                      "display_url": "propub.li/2Opjiys",
+                                      "expanded_url": "http://propub.li/2Opjiys",
+                                      "url": "https://t.co/mGR9bzZXr1",
+                                      "indices": [86, 109]
+                                    },
+                                    {
+                                      "display_url": "newsie.social/@ProPublica",
+                                      "expanded_url": "http://newsie.social/@ProPublica",
+                                      "url": "https://t.co/L1E2InEHhO",
+                                      "indices": [117, 140]
+                                    },
+                                    {
+                                      "display_url": "propub.li/3J4re5o",
+                                      "expanded_url": "http://propub.li/3J4re5o",
+                                      "url": "https://t.co/YaqiYCJD6L",
+                                      "indices": [149, 172]
+                                    }
+                                  ]
+                                },
+                                "url": {
+                                  "urls": [
+                                    {
+                                      "display_url": "propublica.org",
+                                      "expanded_url": "http://www.propublica.org/",
+                                      "url": "https://t.co/fMf6LmgwHL",
+                                      "indices": [0, 23]
+                                    }
+                                  ]
+                                }
+                              },
+                              "fast_followers_count": 0,
+                              "favourites_count": 18994,
+                              "followers_count": 937350,
+                              "friends_count": 681,
+                              "has_custom_timelines": true,
+                              "is_translator": false,
+                              "listed_count": 17415,
+                              "location": "New York, NY",
+                              "media_count": 9057,
+                              "name": "ProPublica",
+                              "normal_followers_count": 937350,
+                              "pinned_tweet_ids_str": [],
+                              "possibly_sensitive": false,
+                              "profile_banner_url": "https://pbs.twimg.com/profile_banners/14606079/1503930270",
+                              "profile_image_url_https": "https://pbs.twimg.com/profile_images/902174720040292354/rLSBbM4r_normal.jpg",
+                              "profile_interstitial_type": "",
+                              "screen_name": "propublica",
+                              "statuses_count": 123244,
+                              "translator_type": "none",
+                              "url": "https://t.co/fMf6LmgwHL",
+                              "verified": false,
+                              "want_retweets": false,
+                              "withheld_in_countries": []
+                            },
+                            "professional": {
+                              "rest_id": "1550531265505497094",
+                              "professional_type": "Business",
+                              "category": [
+                                {
+                                  "id": 580,
+                                  "name": "Media & News Company",
+                                  "icon_name": "IconBriefcaseStroke"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "card": {
+                        "rest_id": "https://t.co/ZZhqtEQdWB",
+                        "legacy": {
+                          "binding_values": [
+                            {
+                              "key": "photo_image_full_size_large",
+                              "value": {
+                                "image_value": {
+                                  "height": 419,
+                                  "width": 800,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=800x419"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "thumbnail_image",
+                              "value": {
+                                "image_value": {
+                                  "height": 147,
+                                  "width": 280,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=280x150"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "description",
+                              "value": {
+                                "string_value": "At least two women in Georgia died after they couldn’t access legal abortions and timely medical care in their state, ProPublica has found. This is one of their stories.",
+                                "type": "STRING"
+                              }
+                            },
+                            {
+                              "key": "domain",
+                              "value": {
+                                "string_value": "www.propublica.org",
+                                "type": "STRING"
+                              }
+                            },
+                            {
+                              "key": "thumbnail_image_large",
+                              "value": {
+                                "image_value": {
+                                  "height": 315,
+                                  "width": 600,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=600x600"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "summary_photo_image_small",
+                              "value": {
+                                "image_value": {
+                                  "height": 202,
+                                  "width": 386,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=386x202"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "thumbnail_image_original",
+                              "value": {
+                                "image_value": {
+                                  "height": 630,
+                                  "width": 1200,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=orig"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "site",
+                              "value": {
+                                "scribe_key": "publisher_id",
+                                "type": "USER",
+                                "user_value": {
+                                  "id_str": "14606079",
+                                  "path": []
+                                }
+                              }
+                            },
+                            {
+                              "key": "photo_image_full_size_small",
+                              "value": {
+                                "image_value": {
+                                  "height": 202,
+                                  "width": 386,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=386x202"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "summary_photo_image_large",
+                              "value": {
+                                "image_value": {
+                                  "height": 419,
+                                  "width": 800,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=800x419"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "thumbnail_image_small",
+                              "value": {
+                                "image_value": {
+                                  "height": 76,
+                                  "width": 144,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=144x144"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "creator",
+                              "value": {
+                                "type": "USER",
+                                "user_value": {
+                                  "id_str": "14606079",
+                                  "path": []
+                                }
+                              }
+                            },
+                            {
+                              "key": "thumbnail_image_x_large",
+                              "value": {
+                                "image_value": {
+                                  "height": 630,
+                                  "width": 1200,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=png&name=2048x2048_2_exp"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "photo_image_full_size_original",
+                              "value": {
+                                "image_value": {
+                                  "height": 630,
+                                  "width": 1200,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=orig"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "vanity_url",
+                              "value": {
+                                "scribe_key": "vanity_url",
+                                "string_value": "propublica.org",
+                                "type": "STRING"
+                              }
+                            },
+                            {
+                              "key": "photo_image_full_size",
+                              "value": {
+                                "image_value": {
+                                  "height": 314,
+                                  "width": 600,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=600x314"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "thumbnail_image_color",
+                              "value": {
+                                "image_color_value": {
+                                  "palette": [
+                                    {
+                                      "rgb": {
+                                        "blue": 66,
+                                        "green": 113,
+                                        "red": 181
+                                      },
+                                      "percentage": 42.76
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 152,
+                                        "green": 165,
+                                        "red": 164
+                                      },
+                                      "percentage": 33.7
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 41,
+                                        "green": 49,
+                                        "red": 64
+                                      },
+                                      "percentage": 11
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 78,
+                                        "green": 102,
+                                        "red": 148
+                                      },
+                                      "percentage": 8.31
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 37,
+                                        "green": 60,
+                                        "red": 98
+                                      },
+                                      "percentage": 1.73
+                                    }
+                                  ]
+                                },
+                                "type": "IMAGE_COLOR"
+                              }
+                            },
+                            {
+                              "key": "title",
+                              "value": {
+                                "string_value": "Abortion Bans Have Delayed Emergency Medical Care. In Georgia, Experts Say This Mother’s Death Was...",
+                                "type": "STRING"
+                              }
+                            },
+                            {
+                              "key": "summary_photo_image_color",
+                              "value": {
+                                "image_color_value": {
+                                  "palette": [
+                                    {
+                                      "rgb": {
+                                        "blue": 66,
+                                        "green": 113,
+                                        "red": 181
+                                      },
+                                      "percentage": 42.76
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 152,
+                                        "green": 165,
+                                        "red": 164
+                                      },
+                                      "percentage": 33.7
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 41,
+                                        "green": 49,
+                                        "red": 64
+                                      },
+                                      "percentage": 11
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 78,
+                                        "green": 102,
+                                        "red": 148
+                                      },
+                                      "percentage": 8.31
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 37,
+                                        "green": 60,
+                                        "red": 98
+                                      },
+                                      "percentage": 1.73
+                                    }
+                                  ]
+                                },
+                                "type": "IMAGE_COLOR"
+                              }
+                            },
+                            {
+                              "key": "summary_photo_image_x_large",
+                              "value": {
+                                "image_value": {
+                                  "height": 630,
+                                  "width": 1200,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=png&name=2048x2048_2_exp"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "summary_photo_image",
+                              "value": {
+                                "image_value": {
+                                  "height": 314,
+                                  "width": 600,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=600x314"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "photo_image_full_size_color",
+                              "value": {
+                                "image_color_value": {
+                                  "palette": [
+                                    {
+                                      "rgb": {
+                                        "blue": 66,
+                                        "green": 113,
+                                        "red": 181
+                                      },
+                                      "percentage": 42.76
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 152,
+                                        "green": 165,
+                                        "red": 164
+                                      },
+                                      "percentage": 33.7
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 41,
+                                        "green": 49,
+                                        "red": 64
+                                      },
+                                      "percentage": 11
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 78,
+                                        "green": 102,
+                                        "red": 148
+                                      },
+                                      "percentage": 8.31
+                                    },
+                                    {
+                                      "rgb": {
+                                        "blue": 37,
+                                        "green": 60,
+                                        "red": 98
+                                      },
+                                      "percentage": 1.73
+                                    }
+                                  ]
+                                },
+                                "type": "IMAGE_COLOR"
+                              }
+                            },
+                            {
+                              "key": "photo_image_full_size_x_large",
+                              "value": {
+                                "image_value": {
+                                  "height": 630,
+                                  "width": 1200,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=png&name=2048x2048_2_exp"
+                                },
+                                "type": "IMAGE"
+                              }
+                            },
+                            {
+                              "key": "card_url",
+                              "value": {
+                                "scribe_key": "card_url",
+                                "string_value": "https://t.co/ZZhqtEQdWB",
+                                "type": "STRING"
+                              }
+                            },
+                            {
+                              "key": "summary_photo_image_original",
+                              "value": {
+                                "image_value": {
+                                  "height": 630,
+                                  "width": 1200,
+                                  "url": "https://pbs.twimg.com/card_img/1835607543390855168/qnINDkSu?format=jpg&name=orig"
+                                },
+                                "type": "IMAGE"
+                              }
+                            }
+                          ],
+                          "card_platform": {
+                            "platform": {
+                              "audience": {
+                                "name": "production"
+                              },
+                              "device": {
+                                "name": "Swift",
+                                "version": "12"
+                              }
+                            }
+                          },
+                          "name": "summary_large_image",
+                          "url": "https://t.co/ZZhqtEQdWB",
+                          "user_refs_results": [
+                            {
+                              "result": {
+                                "__typename": "User",
+                                "id": "VXNlcjoxNDYwNjA3OQ==",
+                                "rest_id": "14606079",
+                                "has_graduated_access": true,
+                                "is_blue_verified": true,
+                                "profile_image_shape": "Circle",
+                                "legacy": {
+                                  "can_dm": true,
+                                  "can_media_tag": true,
+                                  "created_at": "Wed Apr 30 21:17:15 +0000 2008",
+                                  "default_profile": false,
+                                  "default_profile_image": false,
+                                  "description": "Pursuing stories with moral force\nSend us things: https://t.co/mbPBrKq9nN\nNewsletter: https://t.co/mGR9bzZXr1\nMasto: https://t.co/L1E2InEHhO\nTikTok: https://t.co/YaqiYCJD6L",
+                                  "entities": {
+                                    "description": {
+                                      "urls": [
+                                        {
+                                          "display_url": "propub.li/3ewuUKH",
+                                          "expanded_url": "http://propub.li/3ewuUKH",
+                                          "url": "https://t.co/mbPBrKq9nN",
+                                          "indices": [50, 73]
+                                        },
+                                        {
+                                          "display_url": "propub.li/2Opjiys",
+                                          "expanded_url": "http://propub.li/2Opjiys",
+                                          "url": "https://t.co/mGR9bzZXr1",
+                                          "indices": [86, 109]
+                                        },
+                                        {
+                                          "display_url": "newsie.social/@ProPublica",
+                                          "expanded_url": "http://newsie.social/@ProPublica",
+                                          "url": "https://t.co/L1E2InEHhO",
+                                          "indices": [117, 140]
+                                        },
+                                        {
+                                          "display_url": "propub.li/3J4re5o",
+                                          "expanded_url": "http://propub.li/3J4re5o",
+                                          "url": "https://t.co/YaqiYCJD6L",
+                                          "indices": [149, 172]
+                                        }
+                                      ]
+                                    },
+                                    "url": {
+                                      "urls": [
+                                        {
+                                          "display_url": "propublica.org",
+                                          "expanded_url": "http://www.propublica.org/",
+                                          "url": "https://t.co/fMf6LmgwHL",
+                                          "indices": [0, 23]
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "fast_followers_count": 0,
+                                  "favourites_count": 18994,
+                                  "followers_count": 937350,
+                                  "friends_count": 681,
+                                  "has_custom_timelines": true,
+                                  "is_translator": false,
+                                  "listed_count": 17415,
+                                  "location": "New York, NY",
+                                  "media_count": 9057,
+                                  "name": "ProPublica",
+                                  "normal_followers_count": 937350,
+                                  "pinned_tweet_ids_str": [],
+                                  "possibly_sensitive": false,
+                                  "profile_banner_url": "https://pbs.twimg.com/profile_banners/14606079/1503930270",
+                                  "profile_image_url_https": "https://pbs.twimg.com/profile_images/902174720040292354/rLSBbM4r_normal.jpg",
+                                  "profile_interstitial_type": "",
+                                  "screen_name": "propublica",
+                                  "statuses_count": 123244,
+                                  "translator_type": "none",
+                                  "url": "https://t.co/fMf6LmgwHL",
+                                  "verified": false,
+                                  "want_retweets": false,
+                                  "withheld_in_countries": []
+                                },
+                                "professional": {
+                                  "rest_id": "1550531265505497094",
+                                  "professional_type": "Business",
+                                  "category": [
+                                    {
+                                      "id": 580,
+                                      "name": "Media & News Company",
+                                      "icon_name": "IconBriefcaseStroke"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "result": {
+                                "__typename": "User",
+                                "id": "VXNlcjoxNDYwNjA3OQ==",
+                                "rest_id": "14606079",
+                                "has_graduated_access": true,
+                                "is_blue_verified": true,
+                                "profile_image_shape": "Circle",
+                                "legacy": {
+                                  "can_dm": true,
+                                  "can_media_tag": true,
+                                  "created_at": "Wed Apr 30 21:17:15 +0000 2008",
+                                  "default_profile": false,
+                                  "default_profile_image": false,
+                                  "description": "Pursuing stories with moral force\nSend us things: https://t.co/mbPBrKq9nN\nNewsletter: https://t.co/mGR9bzZXr1\nMasto: https://t.co/L1E2InEHhO\nTikTok: https://t.co/YaqiYCJD6L",
+                                  "entities": {
+                                    "description": {
+                                      "urls": [
+                                        {
+                                          "display_url": "propub.li/3ewuUKH",
+                                          "expanded_url": "http://propub.li/3ewuUKH",
+                                          "url": "https://t.co/mbPBrKq9nN",
+                                          "indices": [50, 73]
+                                        },
+                                        {
+                                          "display_url": "propub.li/2Opjiys",
+                                          "expanded_url": "http://propub.li/2Opjiys",
+                                          "url": "https://t.co/mGR9bzZXr1",
+                                          "indices": [86, 109]
+                                        },
+                                        {
+                                          "display_url": "newsie.social/@ProPublica",
+                                          "expanded_url": "http://newsie.social/@ProPublica",
+                                          "url": "https://t.co/L1E2InEHhO",
+                                          "indices": [117, 140]
+                                        },
+                                        {
+                                          "display_url": "propub.li/3J4re5o",
+                                          "expanded_url": "http://propub.li/3J4re5o",
+                                          "url": "https://t.co/YaqiYCJD6L",
+                                          "indices": [149, 172]
+                                        }
+                                      ]
+                                    },
+                                    "url": {
+                                      "urls": [
+                                        {
+                                          "display_url": "propublica.org",
+                                          "expanded_url": "http://www.propublica.org/",
+                                          "url": "https://t.co/fMf6LmgwHL",
+                                          "indices": [0, 23]
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "fast_followers_count": 0,
+                                  "favourites_count": 18994,
+                                  "followers_count": 937350,
+                                  "friends_count": 681,
+                                  "has_custom_timelines": true,
+                                  "is_translator": false,
+                                  "listed_count": 17415,
+                                  "location": "New York, NY",
+                                  "media_count": 9057,
+                                  "name": "ProPublica",
+                                  "normal_followers_count": 937350,
+                                  "pinned_tweet_ids_str": [],
+                                  "possibly_sensitive": false,
+                                  "profile_banner_url": "https://pbs.twimg.com/profile_banners/14606079/1503930270",
+                                  "profile_image_url_https": "https://pbs.twimg.com/profile_images/902174720040292354/rLSBbM4r_normal.jpg",
+                                  "profile_interstitial_type": "",
+                                  "screen_name": "propublica",
+                                  "statuses_count": 123244,
+                                  "translator_type": "none",
+                                  "url": "https://t.co/fMf6LmgwHL",
+                                  "verified": false,
+                                  "want_retweets": false,
+                                  "withheld_in_countries": []
+                                },
+                                "professional": {
+                                  "rest_id": "1550531265505497094",
+                                  "professional_type": "Business",
+                                  "category": [
+                                    {
+                                      "id": 580,
+                                      "name": "Media & News Company",
+                                      "icon_name": "IconBriefcaseStroke"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "edit_control": {
+                        "edit_tweet_ids": ["1835607539389497678"],
+                        "editable_until_msecs": "1726481515000",
+                        "is_edit_eligible": true,
+                        "edits_remaining": "5"
+                      },
+                      "is_translatable": false,
+                      "views": {
+                        "count": "2393129",
+                        "state": "EnabledWithCount"
+                      },
+                      "source": "<a href=\"https://sproutsocial.com\" rel=\"nofollow\">Sprout Social</a>",
+                      "legacy": {
+                        "bookmark_count": 1603,
+                        "bookmarked": false,
+                        "created_at": "Mon Sep 16 09:11:55 +0000 2024",
+                        "conversation_id_str": "1835607539389497678",
+                        "display_text_range": [0, 198],
+                        "entities": {
+                          "hashtags": [],
+                          "symbols": [],
+                          "timestamps": [],
+                          "urls": [
+                            {
+                              "display_url": "propub.li/3N7xPgN",
+                              "expanded_url": "https://propub.li/3N7xPgN",
+                              "url": "https://t.co/ZZhqtEQdWB",
+                              "indices": [175, 198]
+                            }
+                          ],
+                          "user_mentions": []
+                        },
+                        "favorite_count": 12066,
+                        "favorited": false,
+                        "full_text": "New: At least two women in Georgia died after they couldn't access legal abortions and timely medical care in their state, ProPublica has found. This is one of their stories. https://t.co/ZZhqtEQdWB",
+                        "is_quote_status": false,
+                        "lang": "en",
+                        "possibly_sensitive": false,
+                        "possibly_sensitive_editable": true,
+                        "quote_count": 1179,
+                        "reply_count": 496,
+                        "retweet_count": 8995,
+                        "retweeted": false,
+                        "user_id_str": "14606079",
+                        "id_str": "1835607539389497678"
+                      }
+                    }
+                  },
+                  "legacy": {
+                    "bookmark_count": 1,
+                    "bookmarked": false,
+                    "created_at": "Mon Sep 16 15:58:23 +0000 2024",
+                    "conversation_id_str": "1835709829018481083",
+                    "display_text_range": [0, 278],
+                    "entities": {
+                      "hashtags": [
+                        {
+                          "indices": [272, 278],
+                          "text": "gapol"
+                        }
+                      ],
+                      "symbols": [],
+                      "timestamps": [],
+                      "urls": [],
+                      "user_mentions": [
+                        {
+                          "id_str": "1064659902071808000",
+                          "name": "Governor Brian P. Kemp",
+                          "screen_name": "GovKemp",
+                          "indices": [66, 74]
+                        }
+                      ]
+                    },
+                    "favorite_count": 68,
+                    "favorited": false,
+                    "full_text": "After the Trump/ Kemp abortion ban went into effect in July 2022, @GovKemp said “he was ‘overjoyed’ and believed the state had found an approach that would keep women ‘safe, healthy and informed.’ \n\nTwo weeks later, Thurman was dead.”\n\nElections matter. Vote accordingly. #gapol",
+                    "is_quote_status": true,
+                    "lang": "en",
+                    "quote_count": 2,
+                    "quoted_status_id_str": "1835607539389497678",
+                    "quoted_status_permalink": {
+                      "url": "https://t.co/fw62iJMFz9",
+                      "expanded": "https://twitter.com/propublica/status/1835607539389497678",
+                      "display": "x.com/propublica/sta…"
+                    },
+                    "reply_count": 1,
+                    "retweet_count": 55,
+                    "retweeted": false,
+                    "user_id_str": "720737029743509504",
+                    "id_str": "1835709829018481083"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "search_data_fields": {
+          "post_link": "https://www.junkipedia.org/posts/313764132",
+          "channel_id": 10455850,
+          "post_uid": "1835730598469529894",
+          "url": "https://twitter.com/MaraDavis/status/1835730598469529894",
+          "published_at": "2024-09-16T17:20:55.000Z",
+          "created_at": "2024-09-16T17:39:56.170Z",
+          "language_code": "EN",
+          "engagement": 55,
+          "view_count": 0,
+          "like_count": 0,
+          "share_count": 0,
+          "comment_count": 0,
+          "list_ids": [],
+          "channel_name": "Mara Davis",
+          "search_terms": [],
+          "search_term_ids": [],
+          "project_ids": [],
+          "exercise_ids": [],
+          "label_data": [],
+          "labels_metadata": [],
+          "project_labeled_post_ids": [],
+          "labeler_ids": [],
+          "all_labels": [],
+          "label_ids": [],
+          "is_ad": false,
+          "transcript_text": " ",
+          "image_text": null,
+          "video_length": null,
+          "is_verified": false,
+          "channel_data": {
+            "channel_id": 10455850,
+            "channel_name": "Mara Davis",
+            "channel_profile_image": "https://www.junkipedia.org/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCSEluQ3dJPSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--2c94bc53850da522761f298790225ded4822fc83/piX_pfZy_normal.jpg",
+            "channel_engagement_data": {
+              "follower_count": 25622,
+              "following_count": 2625,
+              "like_count": null,
+              "post_count": 54305,
+              "views_count": null,
+              "comment_count": null,
+              "share_count": null
+            },
+            "channel_url_external": "https://www.twitter.com/MaraDavis",
+            "channel_url": "/channels/10455850"
+          },
+          "platform_name": "Twitter",
+          "shared_id": 313764146,
+          "quoted_id": null,
+          "replied_id": null,
+          "ai_label": null,
+          "ocr_data": null,
+          "performance_scores": {
+            "likes": -58.18,
+            "shares": -15.06,
+            "comments": -3.48,
+            "views": -1628
+          },
+          "has_embed_media": false,
+          "description": "RT @SamforGeorgia: After the Trump/ Kemp abortion ban went into effect in July 2022, @GovKemp said “he was ‘overjoyed’ and believed the sta…",
+          "repost_channel_data": null,
+          "post_type": [],
+          "inner_link": null,
+          "post_title": null,
+          "media_data": [],
+          "is_reply": false,
+          "ad_fields": null,
+          "likes_count": 0,
+          "shares_count": 55,
+          "comments_count": 0,
+          "views_count": 0,
+          "searchable_text": "RT @SamforGeorgia: After the Trump/ Kemp abortion ban went into effect in July 2022, @GovKemp said “he was ‘overjoyed’ and believed the sta…",
+          "all_text": "RT @SamforGeorgia: After the Trump/ Kemp abortion ban went into effect in July 2022, @GovKemp said “he was ‘overjoyed’ and believed the sta…",
+          "contrast_agent_project_ids": [],
+          "agent_ids": [],
+          "segment_ids": [],
+          "thumb_url": null,
+          "media_url": null
+        },
+        "channel": {
+          "id": 10455850,
+          "platform_id": 5,
+          "channel_name": "Mara Davis",
+          "channel_uid": "MaraDavis",
+          "channel_type": null,
+          "engagement_data": {
+            "media_count": 2936,
+            "listed_count": 334,
+            "friends_count": 2625,
+            "statuses_count": 54305,
+            "favorites_count": 66431,
+            "followers_count": 25622
+          },
+          "created_at": "2022-09-06T15:15:29.426Z",
+          "updated_at": "2024-09-16T17:40:05.708Z",
+          "channel_data": {
+            "id": 20998003,
+            "ext": {
+              "highlightedLabel": {
+                "ttl": -1
+              }
+            },
+            "url": "https://t.co/8gnZo1p98E",
+            "name": "Mara Davis",
+            "entities": {
+              "url": {
+                "urls": [
+                  {
+                    "url": "https://t.co/8gnZo1p98E",
+                    "indices": [0, 23],
+                    "display_url": "maradavis.com",
+                    "expanded_url": "https://maradavis.com/"
+                  }
+                ]
+              },
+              "description": {
+                "urls": [
+                  {
+                    "url": "https://t.co/zjY32YYuTh",
+                    "indices": [127, 150],
+                    "display_url": "post.news/mara_davis",
+                    "expanded_url": "http://post.news/mara_davis"
+                  }
+                ]
+              }
+            },
+            "location": "Atlanta, GA",
+            "verified": false,
+            "created_at": "Mon Feb 16 16:13:51 +0000 2009",
+            "description": "Media Maven, Talent Booker, pop culture, podcast & political enthusiast. Co host of @podcastvote. @pastemagazine contributor.  https://t.co/zjY32YYuTh",
+            "media_count": 2772,
+            "screen_name": "MaraDavis",
+            "listed_count": 345,
+            "friends_count": 2419,
+            "retrieved_utc": 1674419420,
+            "statuses_count": 51246,
+            "default_profile": false,
+            "followers_count": 23517,
+            "favourites_count": 62884,
+            "pinned_tweet_ids": [],
+            "profile_image_url": "http://pbs.twimg.com/profile_images/1578418884088139776/JfOZvcD7_normal.jpg",
+            "profile_banner_url": "https://pbs.twimg.com/profile_banners/20998003/1398296905",
+            "has_custom_timelines": true,
+            "default_profile_image": false,
+            "withheld_in_countries": [],
+            "business_profile_state": "none",
+            "advertiser_account_type": "promotable_user",
+            "profile_interstitial_type": "",
+            "advertiser_account_service_levels": []
+          },
+          "latest_post_date": "2024-09-16T17:39:46.000Z",
+          "posts_count": 505,
+          "collect_historical": null,
+          "entity_types": [],
+          "affiliations": [],
+          "languages": [],
+          "blocked_in": [],
+          "locations": [],
+          "labels": [],
+          "monitized": null,
+          "removed": null,
+          "last_available_at": null,
+          "follower_count": 24404,
+          "following_count": 2549,
+          "like_count": null,
+          "post_count": 52704,
+          "is_tracked": true,
+          "total_content_removed_attempts": 0,
+          "content_removed_at": null,
+          "content_removed": false,
+          "engagement_last_updated_at": "2024-09-14T22:19:28.366Z",
+          "engagement_growth_velocity": 12438.714285714286,
+          "engagement_growth_acceleration": null,
+          "views_count": null,
+          "bio": "Media Maven, Talent Booker, PR, Pop culture, podcast & political enthusiast. Co host of @podcastvote. @pastemagazine contributor. Email: mara@maradavis.com",
+          "location": null,
+          "collected_at": null,
+          "collection_frequency": null,
+          "collect_after": "2024-09-17T05:40:05.670Z",
+          "comment_count": null,
+          "company_id": null,
+          "person_id": null,
+          "share_count": null,
+          "channel_attributes": null,
+          "collect_ads": false,
+          "latest_ad_date": null,
+          "facebook_advertiser_id": null,
+          "all_time_popular_terms": [],
+          "popular_terms_last30": [],
+          "popular_terms_last7": [],
+          "engagements_per_post_all_time": null,
+          "engagements_per_post_last30": null,
+          "engagements_per_post_last7": null,
+          "posts_per_day_last30": null,
+          "posts_per_day_last90": null,
+          "follower_by_following_ratio": null,
+          "engagements_per_post_by_follower_ratio": null,
+          "views_count_big": null,
+          "handle": "MaraDavis",
+          "channel_url": null,
+          "collect_post_engagement_steps": null,
+          "is_verified": false,
+          "is_public": null,
+          "published_at": null,
+          "unique_name": "MaraDavis",
+          "signature": null,
+          "link": "https://www.twitter.com/MaraDavis",
+          "data_migration_status": null,
+          "has_information_fields": true,
+          "big_like_count": null,
+          "big_post_count": 54305,
+          "big_follower_count": 25622,
+          "big_following_count": 2625,
+          "big_views_count": null,
+          "engagement_benchmarks": {
+            "average_likes_last100": 29.09,
+            "average_views_last100": 814,
+            "average_comments_last100": 1.74,
+            "average_shares_last100": 828.18
+          },
+          "sort_by_options": null
+        }
+      }
+    },
+    "testingFlagForPotentialDeletion": true
+  },
+  "storedAt": "2024-09-16T17:44:41.008Z",
+  "reportId": 1,
+  "__v": 0
+}
