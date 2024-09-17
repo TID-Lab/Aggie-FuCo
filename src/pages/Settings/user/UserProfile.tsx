@@ -15,7 +15,7 @@ import DropdownMenu from "../../../components/DropdownMenu";
 import AggieButton from "../../../components/AggieButton";
 import { useState } from "react";
 import AggieDialog from "../../../components/AggieDialog";
-import CreateEditUser from "./CreateEditUser";
+import CreateEditUserForm from "./CreateEditUserForm";
 import ConfirmationDialog from "../../../components/ConfirmationDialog";
 
 interface IProps {
@@ -100,7 +100,7 @@ const UserProfile = ({ session }: IProps) => {
           title: "Edit user details",
         }}
       >
-        <CreateEditUser user={data} onClose={() => setOpenEdit(false)} />
+        <CreateEditUserForm user={data} onClose={() => setOpenEdit(false)} />
       </AggieDialog>
       <ConfirmationDialog
         isOpen={!!openDelete}

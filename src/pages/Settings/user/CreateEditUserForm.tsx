@@ -52,7 +52,7 @@ interface IProps {
   onClose: () => void;
 }
 
-const CreateEditUser = ({ user, onClose }: IProps) => {
+const CreateEditUserForm = ({ user, onClose }: IProps) => {
   const queryClient = useQueryClient();
 
   const doCreateUser = useMutation(newUser, {
@@ -131,4 +131,4 @@ const CreateEditUser = ({ user, onClose }: IProps) => {
   );
 };
 
-export default CreateEditUser;
+export default CreateEditUserForm;
