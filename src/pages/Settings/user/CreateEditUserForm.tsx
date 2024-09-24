@@ -95,7 +95,13 @@ const CreateEditUserForm = ({ user, onClose }: IProps) => {
       validateOnBlur={true}
     >
       <Form className='flex flex-col gap-3'>
-        <FormikDropdown label='Role' name='role' list={[...USER_ROLES]} />
+        <FormikDropdown
+          label='Role'
+          name='role'
+          list={[...USER_ROLES].map((i) => {
+            return { _id: i, label: i };
+          })}
+        />
         <FormikInput label='Username' name='username' />
         <FormikInput label='Email' name='email' type='email' />
         {!user && (

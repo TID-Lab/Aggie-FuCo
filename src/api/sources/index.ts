@@ -1,30 +1,30 @@
 import axios from "axios";
-import {Source} from "../objectTypes";
+import { Source } from "./types";
 
 export const getSources = async () => {
-  const { data } = await axios.get<Source[] | undefined>('/api/source');
+  const { data } = await axios.get<Source[] | undefined>("/api/source");
   return data;
-}
+};
 
 export const getSource = async (id: string | undefined) => {
   if (id) {
-    const { data } = await axios.get<Source | undefined>('/api/source/' + id);
+    const { data } = await axios.get<Source | undefined>("/api/source/" + id);
     return data;
   }
-}
+};
 
 export const newSource = async (sourceData: any) => {
   console.log(sourceData);
-  const { data } = await axios.post('/api/source', sourceData);
+  const { data } = await axios.post("/api/source", sourceData);
   return data;
-}
+};
 
 export const editSource = async (sourceData: any) => {
-  const { data } = await axios.put('/api/source/' + sourceData._id, sourceData);
+  const { data } = await axios.put("/api/source/" + sourceData._id, sourceData);
   return data;
-}
+};
 
 export const deleteSource = async (source: Source) => {
-  const { data } = await axios.delete('/api/source/' + source._id);
+  const { data } = await axios.delete("/api/source/" + source._id);
   return data;
-}
+};

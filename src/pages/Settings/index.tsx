@@ -11,9 +11,9 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 
 const menuLinks = {
   Config: { to: "config", icon: faCog },
-  Credentials: { to: "credentials", icon: faKey },
   "Manage Users": { to: "users", icon: faUsersCog },
   "Manage Tags": { to: "tags", icon: faTags },
+  "API Credentials": { to: "credentials", icon: faKey },
   "Manage Sources": { to: "sources", icon: faCloudArrowDown },
 };
 

@@ -26,7 +26,7 @@ import UsersIndex from "./pages/Settings/user/UsersIndex";
 import UserProfile from "./pages/Settings/user/UserProfile";
 import TagsIndex from "./pages/Settings/tag/TagsIndex";
 import Configuration from "./pages/Settings/Configuration";
-import CredentialsIndex from "./pages/Settings/CredentialsIndex";
+import CredentialsIndex from "./pages/Settings/Credentials/CredentialsIndex";
 import Login from "./pages/Login";
 import Analysis from "./pages/Analysis";
 import NotFound from "./pages/NotFound";

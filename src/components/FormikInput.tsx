@@ -14,14 +14,18 @@ interface IProps {
 }
 const FormikInput = ({ name, label, type, placeholder }: IProps) => {
   const [field, meta, helpers] = useField(name);
+  const { value } = meta;
+  const { setValue } = helpers;
   return (
     <label className='flex flex-col gap-1 text-slate-600'>
       {label ? label : name}
-      <Field
+
+      <input
         name={name}
-        type={type}
-        className='px-3 py-2 focus-theme rounded border border-slate-300 bg-slate-50'
         placeholder={placeholder ? placeholder : "enter " + label}
+        value={value || ""}
+        onChange={(e) => setValue(e.target.value)}
+        className='px-3 py-2 focus-theme rounded border border-slate-300 bg-slate-50'
       />
       {meta.touched && meta.error ? (
         <p className='text-orange-600 my-1 ml-1 inline-flex gap-1 items-center text-sm'>
