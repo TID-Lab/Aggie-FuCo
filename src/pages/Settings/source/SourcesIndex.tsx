@@ -50,12 +50,12 @@ const SourcesIndex = (props: IProps) => {
   const doDeleteSource = useMutation(deleteSource, {
     onSuccess: () => {
       setDeletionModal(undefined);
-      queryClient.invalidateQueries(["credentials"]);
+      queryClient.invalidateQueries(["sources"]);
     },
   });
   const doEnableSource = useMutation(editSource, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["credentials"]);
+      queryClient.invalidateQueries(["sources"]);
     },
   });
 

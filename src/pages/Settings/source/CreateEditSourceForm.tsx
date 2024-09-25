@@ -41,7 +41,9 @@ const CreateEditSourceForm = ({ source, onClose }: IProps) => {
 
   const queryClient = useQueryClient();
 
-  const { data: credentials } = useQuery(["credentials"], getCredentials);
+  const { data: credentials } = useQuery(["credentials"], getCredentials, {
+    staleTime: 50000,
+  });
 
   const defaultCredential =
     credentials && credentials.find((cred) => cred.type === credentialType);
