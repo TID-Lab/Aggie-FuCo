@@ -35,6 +35,8 @@ const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
   }
 
   function onSearch() {}
+
+  const closedFilter = getParam("closed");
   return (
     <>
       <div className='flex justify-between mb-2 '>
@@ -91,16 +93,16 @@ const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
       <div className='flex justify-between mb-2 text-sm'>
         <div className='flex gap-2'>
           <FilterRadioGroup
-            options={["Open", "Closed"]}
-            defaultOption='All'
-            value={
-              getParam("closed") === undefined
-                ? ""
-                : getParam("closed")
-                ? "Closed"
-                : "Open"
+            options={{
+              false: "Open",
+              true: "Closed",
+              all: "All",
+            }}
+            value={getParam("closed")}
+            defaultValue={"false"}
+            onChange={(e) =>
+              setParams({ closed: e === "false" ? undefined : e })
             }
-            onChange={(e) => setParams({ closed: e === "Closed" })}
           />
         </div>
         <div className='flex items-center gap-1'>

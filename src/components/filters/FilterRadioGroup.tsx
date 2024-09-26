@@ -1,18 +1,18 @@
 import { RadioGroup } from "@headlessui/react";
 
-interface IProps<T> {
-  options: T[];
-  value: T;
-  defaultOption?: string;
-  onChange: (value: T) => void;
+interface IProps {
+  options: Record<string, string>;
+  value: string;
+  defaultValue?: string;
+  onChange: (value: string) => void;
 }
 
-const FilterRadioGroup = <T extends string>({
+const FilterRadioGroup = ({
   options,
   value,
-  defaultOption,
   onChange,
-}: IProps<T>) => {
+  defaultValue,
+}: IProps) => {
   const OptionStyle =
     "ui-not-checked:px-1 py-1 hover:bg-slate-100 rounded cursor-pointer hover:underline transition";
   const OptionCheckedStyle =
@@ -20,25 +20,16 @@ const FilterRadioGroup = <T extends string>({
   return (
     <RadioGroup
       className='flex items-center gap-1  text-slate-700  underline-offset-2 font-normal'
-      value={value ? value : ""}
+      value={value ? value : defaultValue}
       onChange={onChange}
     >
-      {defaultOption && (
+      {Object.entries(options).map(([k, v]) => (
         <RadioGroup.Option
-          value={""}
-          key=''
+          value={k}
+          key={k}
           className={`${OptionStyle} ${OptionCheckedStyle}`}
         >
-          {defaultOption}
-        </RadioGroup.Option>
-      )}
-      {options.map((option) => (
-        <RadioGroup.Option
-          value={option}
-          key={option}
-          className={`${OptionStyle} ${OptionCheckedStyle}`}
-        >
-          {option}
+          {v}
         </RadioGroup.Option>
       ))}
     </RadioGroup>

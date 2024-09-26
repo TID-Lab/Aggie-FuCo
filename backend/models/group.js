@@ -203,7 +203,7 @@ Group.queryGroups = function (query, page, options, callback) {
 
   // find empty assignedTo objects
   if (query.assignedTo === 'none') {
-
+    const prevOr = filter.$or || []
     filter.$or = [...prevOr, { assignedTo: { $eq: null } }, { assignedTo: { $size: 0 } }]
   }
 
@@ -212,8 +212,9 @@ Group.queryGroups = function (query, page, options, callback) {
   if (query.veracity === 'confirmed false') filter.veracity = 'Confirmed False';
   if (query.veracity === 'unconfirmed') filter.veracity = 'Unconfirmed';
 
-  if (query.status === 'open') filter.closed = false;
-  if (query.status === 'closed') filter.closed = true;
+  filter.closed = false;
+  if (query.closed === 'all') delete filter.closed
+  if (query.closed === 'true') filter.closed = true;
   delete filter.status;
 
 
