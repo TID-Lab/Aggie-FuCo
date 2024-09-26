@@ -53,10 +53,11 @@ const FilterComboBox = ({
     clearSearch();
   }
   function valueFromLists(key: string) {
-    if (list.some((i) => i.key === key))
-      return list.find((i) => i.key === key)?.value;
-    else if (optionalItems.some((i) => i.key === key))
-      return optionalItems.find((i) => i.key === key)?.value;
+    const listValue = list.find((i) => i.key === key)?.value;
+    if (!!listValue) return listValue;
+
+    const optionalValue = optionalItems.find((i) => i.key === key)?.value;
+    if (!!optionalValue) return optionalValue;
     return undefined;
   }
   return (

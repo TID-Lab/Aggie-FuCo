@@ -6,9 +6,10 @@ const defaultCSS =
   "disabled:pointer-events-none disabled:opacity-50 inline-flex gap-1 items-center text-nowrap focus-theme font-medium";
 
 export const VariantCSS = {
-  primary: "bg-green-800 text-slate-100 hover:bg-green-700 rounded-lg ",
+  primary:
+    "bg-green-800 text-slate-100 hover:bg-green-700 border border-green-600 rounded-lg ",
   secondary:
-    "bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg",
+    "bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg",
   transparent: "hover:bg-slate-200 hover:underline  rounded-lg",
   danger: "bg-red-700 text-white hover:bg-red-600 rounded-lg ",
   warning: "bg-red-200 text-red-700 hover:bg-red-300 rounded-lg",

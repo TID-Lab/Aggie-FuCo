@@ -77,7 +77,7 @@ const MultiSelectActions = ({
       </div>
       <div className='flex'>
         <AggieButton
-          className='bg-rose-200 text-rose-800 border border-rose-500 border-none  px-2 py-1 rounded-l-lg hover:bg-rose-300'
+          className='bg-rose-200 text-rose-800 border border-rose-300 border-r-0  px-2 py-1 rounded-l-lg hover:bg-rose-300'
           disabled={disabled || setIrrelevance.isLoading}
           onClick={() =>
             setIrrelevance.mutate({
@@ -91,7 +91,7 @@ const MultiSelectActions = ({
           Not Relevant
         </AggieButton>
         <AggieButton
-          className='bg-green-100 text-green-800 border border-green-200 border-none  px-2 py-1 rounded-r-lg hover:bg-green-300'
+          className='bg-green-100 text-green-800 border border-green-200 border-l-0  px-2 py-1 rounded-r-lg hover:bg-green-300'
           disabled={disabled || setIrrelevance.isLoading}
           onClick={() =>
             setIrrelevance.mutate({
@@ -108,7 +108,7 @@ const MultiSelectActions = ({
 
       <div className='flex font-medium'>
         <AggieButton
-          className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-200 hover:bg-slate-200'
+          className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-300 hover:bg-slate-200'
           onClick={() => setAddReportModal(true)}
           disabled={disabled}
         >

@@ -42,7 +42,7 @@ const Incidents = () => {
       <IncidentsFilters
         reportCount={groupsQuery.data && groupsQuery.data.total}
       />
-      <div className='divide-y divide-slate-200 border border-slate-200 rounded-lg bg-white'>
+      <div className='border border-slate-300 rounded-lg bg-white'>
         {!!groupsQuery.data && !!groupsQuery.data.total ? (
           groupsQuery.data.results.map((groupItem) => (
             <Link

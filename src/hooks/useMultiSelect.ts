@@ -40,6 +40,8 @@ export function useMultiSelect<T>({ allItems, mapFn, initial }: IOptions<T>) {
       const newSelection = selection.filter((i) => i !== id);
       setSelection(newSelection || []);
     } else {
+      if (selection.length === 0) setIsActive(true);
+
       setSelection([...selection, id]);
     }
   }

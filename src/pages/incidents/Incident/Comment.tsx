@@ -57,9 +57,9 @@ const Comment = ({ data, groupdId }: IProps) => {
   return (
     <div
       key={data._id}
-      className='border border-slate-300 rounded-lg bg-white overflow-hidden my-2'
+      className='border border-slate-300 rounded-lg bg-slate-50 overflow-hidden my-2'
     >
-      <div className='flex justify-between text-sm py-1 px-2 border-b border-slate-300'>
+      <div className='flex justify-between text-sm py-2 px-2 border-b border-slate-300'>
         <p className='inline-flex items-center text-slate-600 gap-1'>
           <FontAwesomeIcon icon={faCommentAlt} /> <UserToken id={data.author} />
           <span className='italic '>comments </span>
@@ -104,7 +104,7 @@ const Comment = ({ data, groupdId }: IProps) => {
                 <Field
                   as='textarea'
                   name='commentdata'
-                  className='focus-theme px-3 py-2 border-b border-slate-300 bg-slate-50 w-full min-h-36'
+                  className='focus-theme px-3 py-2 border-b border-slate-300 bg-white w-full min-h-36'
                   placeholder='Write a comment here...'
                 />
                 <AggieButton
@@ -130,7 +130,7 @@ const Comment = ({ data, groupdId }: IProps) => {
           </Formik>
         </>
       ) : (
-        <p className='whitespace-pre-line px-3 py-3 bg-slate-50'>
+        <p className='whitespace-pre-line px-3 py-3 bg-white'>
           <Linkify>{data.data}</Linkify>
         </p>
       )}

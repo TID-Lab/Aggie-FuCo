@@ -14,7 +14,7 @@ import VeracityToken from "../../components/VeracityToken";
 import { Dialog, Menu } from "@headlessui/react";
 import AggieButton from "../../components/AggieButton";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
-import IncidentForm from "./IncidentForm";
+import IncidentForm from "./IncidentForm_old";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -27,6 +27,8 @@ import {
   faTrash,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
+import AggieDialog from "../../components/AggieDialog";
+import CreateEditIncidentForm from "./CreateEditIncidentForm";
 
 interface IProps {
   item: Group;
@@ -121,7 +123,7 @@ const IncidentListItem = ({ item }: IProps) => {
   }
 
   return (
-    <article className='grid grid-cols-4 lg:grid-cols-6 px-2 py-2 text-sm text-slate-500  group-hover:bg-slate-50 border-b border-slate-200'>
+    <article className='grid grid-cols-4 lg:grid-cols-6 p-3 text-sm text-slate-500 group-hover:bg-slate-50 border-b border-slate-300'>
       <header className='col-span-3 flex flex-col'>
         <div className='flex gap-1 '>
           <VeracityToken value={item.veracity} />
@@ -152,7 +154,7 @@ const IncidentListItem = ({ item }: IProps) => {
         </div>
       </header>
       <div className='hidden lg:block col-span-2 '>
-        <p className='px-2 py-1 bg-slate-100 h-[6em] overflow-y-auto border border-slate-200 rounded whitespace-pre-line'>
+        <p className='px-2 py-1 text-slate-700 bg-slate-100 h-[6em] overflow-y-auto border border-slate-200 rounded whitespace-pre-line'>
           {item.notes && item.notes}
         </p>
       </div>
@@ -257,27 +259,23 @@ const IncidentListItem = ({ item }: IProps) => {
           </p>
         </ConfirmationDialog>
       </footer>
-      <Dialog
-        open={isEditOpen}
+      <AggieDialog
+        isOpen={isEditOpen}
         onClose={() => console.log()}
-        className='relative z-50'
+        className='px-3 py-4 w-full max-w-lg'
+        data={{
+          title: `Edit Incident`,
+        }}
       >
-        <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
-        <div className='fixed inset-0 w-screen overflow-y-auto'>
-          <div className='flex min-h-full items-center justify-center p-4'>
-            <Dialog.Panel className='bg-white rounded-xl border border-slate-200 shadow-xl min-w-[30rem] min-h-12 p-4 flex flex-col gap-2'>
-              <IncidentForm
-                group={item}
-                onCancel={() => setIsEditOpen(false)}
-                onSubmit={(values) =>
-                  editGroupMutation.mutate({ ...values, _id: item._id })
-                }
-                isLoading={editGroupMutation.isLoading}
-              />
-            </Dialog.Panel>
-          </div>
-        </div>
-      </Dialog>
+        <CreateEditIncidentForm
+          group={item}
+          onCancel={() => setIsEditOpen(false)}
+          onSubmit={(values) =>
+            editGroupMutation.mutate({ ...values, _id: item._id })
+          }
+          isLoading={editGroupMutation.isLoading}
+        />
+      </AggieDialog>
     </article>
   );
 };

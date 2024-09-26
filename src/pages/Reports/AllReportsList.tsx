@@ -78,7 +78,11 @@ const AllReportsList = ({}: IProps) => {
             </AggieButton>
           }
         />
-        <div className='px-1 flex gap-2 text-xs font-medium items-center'>
+        <div
+          className={`px-1 flex gap-2 text-xs font-medium items-center ${
+            multiSelect.isActive ? "mt-2" : ""
+          }`}
+        >
           {multiSelect.isActive && (
             <>
               <AggieCheck

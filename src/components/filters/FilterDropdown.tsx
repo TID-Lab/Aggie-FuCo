@@ -36,7 +36,7 @@ const FilterDropdown = ({
 
         {value ? value : label}
       </Popover.Button>
-      <Popover.Panel className='absolute mt-1 right-0 rounded-lg border border-slate-200  bg-slate-100 overflow-hidden min-w-[10em] drop-shadow-lg z-10'>
+      <Popover.Panel className='absolute mt-1 right-0 rounded-lg border border-slate-300  bg-slate-100 overflow-hidden min-w-[12em] drop-shadow-lg z-10'>
         {({ close }) => (
           <>
             <header className='py-1 px-1 border-b border-slate-300 relative'>

@@ -23,21 +23,23 @@ const AggieDialog = ({
     return (
       <Dialog static open onClose={() => onClose()} className='relative z-50'>
         <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
-        <div className='fixed inset-0 flex w-screen items-center justify-center p-4'>
-          <Dialog.Panel
-            className={`bg-white rounded-xl border border-slate-200 shadow-xl min-w-24 min-h-12 ${className}`}
-          >
-            {!!data && (
-              <header className=' pb-3 '>
-                <Dialog.Title className='text-xl font-medium'>
-                  {data.title}
-                </Dialog.Title>
-                <Dialog.Description>{data.description}</Dialog.Description>
-              </header>
-            )}
+        <div className='fixed inset-0 w-screen overflow-y-auto'>
+          <div className='flex min-h-full items-center justify-center p-4'>
+            <Dialog.Panel
+              className={`bg-white rounded-xl border border-slate-200 shadow-xl min-w-24 min-h-12 ${className}`}
+            >
+              {!!data && (
+                <header className=' pb-3 '>
+                  <Dialog.Title className='text-xl font-medium'>
+                    {data.title}
+                  </Dialog.Title>
+                  <Dialog.Description>{data.description}</Dialog.Description>
+                </header>
+              )}
 
-            {children}
-          </Dialog.Panel>
+              {children}
+            </Dialog.Panel>
+          </div>
         </div>
       </Dialog>
     );

@@ -34,7 +34,7 @@ import { useEffect, useState } from "react";
 import UserToken from "../../../components/UserToken";
 import Comment from "./Comment";
 import { Dialog } from "@headlessui/react";
-import IncidentForm from "../IncidentForm";
+import IncidentForm from "../IncidentForm_old";
 import { useIncidentMutations } from "../useIncidentMutations";
 import { group } from "console";
 const Incident = () => {

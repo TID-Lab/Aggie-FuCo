@@ -2,7 +2,7 @@ import { faCheck, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface IProps {
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   active: boolean;
   icon?: IconDefinition;
 }
@@ -16,7 +16,7 @@ const AggieCheck = ({ onClick, active, icon }: IProps) => {
     >
       <div
         className={`w-4 h-4 border border-slate-400 group-hover:border-slate-600 grid place-items-center rounded ${
-          active ? "bg-blue-500 text-slate-50" : ""
+          active ? "bg-blue-500 text-slate-50" : "bg-white"
         }`}
       >
         {active && <FontAwesomeIcon icon={!!icon ? icon : faCheck} size='xs' />}

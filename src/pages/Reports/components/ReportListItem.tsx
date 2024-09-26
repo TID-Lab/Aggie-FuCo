@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import SocialMediaIcon from "../../../components/SocialMediaPost/SocialMediaIcon";
+import AggieCheck from "../../../components/AggieCheck";
 
 //TODO: refactor and clean up tech debt
 interface IProps {
@@ -48,7 +49,7 @@ const ReportListItem = ({
       return "border-2 border-slate-300 bg-slate-50 rounded-lg ";
     else if (isChecked && isSelectMode) return "bg-blue-100 ";
     else if (report.read) return "bg-slate-50 hover:bg-slate-100 ";
-    return "bg-white hover:bg-slate-50";
+    return "bg-white hover:bg-slate-100";
   }
 
   function onAttachedReportClick(
@@ -61,14 +62,14 @@ const ReportListItem = ({
 
   return (
     <article
-      className={`px-2 py-2 pb-4 border-b ${bgState()} border-slate-200 text-sm text-slate-600 grid grid-cols-5 gap-2 relative`}
+      className={`px-2 py-2 pb-4 border-b ${bgState()} border-slate-300 text-sm text-slate-600 grid grid-cols-5 gap-2 relative`}
     >
       <div
         className={`col-span-4 pl-6 ${
           report.read ? "" : " border-l-2 border-blue-600 "
         }`}
       >
-        {isSelectMode && (
+        {isSelectMode ? (
           <div
             className='flex items-center absolute inset-0 pointer-events-none'
             onClick={onChange}
@@ -83,20 +84,16 @@ const ReportListItem = ({
               </div>
             </div>
           </div>
+        ) : (
+          <div className='opacity-0 group-hover:opacity-100 flex items-center absolute top-0 left-0 pointer-events-none p-2 pl-3 '>
+            <AggieCheck active={isChecked} onClick={onChange} />
+          </div>
         )}
 
         <header className='flex justify-between mb-2 '>
           <div>
             <div className='flex gap-1 text-sm items-baseline'>
-              {/* {!report.read && (
-                <span className='px-2 bg-slate-200 font-medium '>Unread</span>
-              )} */}
-
-              <h1
-                className={`text-sm text-black mx-1 font-medium ${
-                  report.read ? "" : ""
-                }`}
-              >
+              <h1 className={`text-sm text-black mx-1 font-medium `}>
                 <span className='mr-2 text-slate-600 text-xs'>
                   <SocialMediaIcon mediaKey={report._media[0]} />
                 </span>

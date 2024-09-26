@@ -35,8 +35,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
 
   return (
     <>
-      <div></div>
-      <div className='flex justify-between mb-2 '>
+      <div className='flex justify-between mb-2'>
         <div className='flex gap-1'>
           <Formik
             initialValues={{ keywords: getParam("keywords") }}
@@ -52,7 +51,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
                   />
                   <AggieButton
                     type='submit'
-                    className='px-4 py-1 h-full hover:bg-white bg-slate-100 rounded-r-lg border border-l-0 border-slate-30'
+                    className='px-4 py-1 h-full hover:bg-white bg-slate-100 rounded-r-lg border  border-slate-300'
                     title='search'
                   >
                     <FontAwesomeIcon icon={faSearch} />
@@ -84,7 +83,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
           />
         </div>
       </div>
-      <div className='flex justify-between mb-2 text-sm'>
+      <div className='flex justify-between text-sm'>
         <div className='flex gap-2'>{headerElement}</div>
         <div className='flex items-center gap-1'>
           <FilterListbox
