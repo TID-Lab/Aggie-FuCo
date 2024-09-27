@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useIncidentMutations } from "../useIncidentMutations";
 
-import {
-  addComment,
-  getGroup,
-  getGroupReports,
-  removeComment,
-} from "../../../api/groups";
+import { addComment, getGroup, getGroupReports } from "../../../api/groups";
+import { getSession } from "../../../api/session";
+import { EditableGroupComment, GroupComment } from "../../../api/groups/types";
 
+import { Form, Formik, Field } from "formik";
 import AxiosErrorCard from "../../../components/AxiosErrorCard";
 import TagsList from "../../../components/tag/TagsList";
 import VeracityToken from "../../../components/VeracityToken";
@@ -15,28 +15,22 @@ import SocialMediaPost from "../../../components/SocialMediaPost";
 import { Link } from "react-router-dom";
 import AggieButton from "../../../components/AggieButton";
 import DropdownMenu from "../../../components/DropdownMenu";
+import PlaceholderDiv from "../../../components/PlaceholderDiv";
+import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
+import UserToken from "../../../components/UserToken";
+import Comment from "./Comment";
+import { Dialog } from "@headlessui/react";
+import CreateEditIncidentForm from "../CreateEditIncidentForm";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
-  faCircleDot,
-  faEdit,
   faEllipsisH,
   faMinusCircle,
   faTrashAlt,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
-import PlaceholderDiv from "../../../components/PlaceholderDiv";
-import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
-import { Form, Formik, Field } from "formik";
-import { EditableGroupComment, GroupComment } from "../../../api/groups/types";
-import { getSession } from "../../../api/session";
-import { useEffect, useState } from "react";
-import UserToken from "../../../components/UserToken";
-import Comment from "./Comment";
-import { Dialog } from "@headlessui/react";
-import IncidentForm from "../IncidentForm_old";
-import { useIncidentMutations } from "../useIncidentMutations";
-import { group } from "console";
+
 const Incident = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -171,9 +165,12 @@ const Incident = () => {
               </span>
             </PlaceholderDiv>
           </div>
-          <div className='border-t border-slate-300 flex gap-2 items-center py-2'>
-            Assigned To:
-            <PlaceholderDiv loading={isLoading} className='flex gap-2 '>
+          <div className='border-t border-slate-300 flex gap-2  py-2'>
+            <span className='whitespace-nowrap'>Assigned To:</span>
+            <PlaceholderDiv
+              loading={isLoading}
+              className='flex flex-wrap gap-x-2 gap-y-1 items-center '
+            >
               {groupData?.assignedTo?.map((user) => (
                 <UserToken
                   id={user._id}
@@ -295,7 +292,7 @@ const Incident = () => {
         <div className='fixed inset-0 w-screen overflow-y-auto'>
           <div className='flex min-h-full items-center justify-center p-4'>
             <Dialog.Panel className='bg-white rounded-xl border border-slate-200 shadow-xl min-w-[30rem] min-h-12 p-4 flex flex-col gap-2'>
-              <IncidentForm
+              <CreateEditIncidentForm
                 group={groupData}
                 onCancel={() => setIsEditOpen(false)}
                 onSubmit={(values) =>
