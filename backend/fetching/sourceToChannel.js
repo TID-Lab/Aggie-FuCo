@@ -140,6 +140,8 @@ function createChannel(source) {
                 apiKey: credentials.secrets.junkipediaAPIKey,
                 // Reference - https://www.junkipedia.org/apidocs#tag/Posts/paths/~1api~1v1~1posts/get
                 // TODO: Add list or channel specification
+                // interval is set to 30 minutes
+                interval: 900000,
                 queryParams: {
                     lists: lists,
                     keyword: keywords,
@@ -187,7 +189,8 @@ async function initChannels() {
         .exec();
 
     
-    console.log(sources)
+    console.log("PREPARING ALL ENABLED CHANNELS")
+    // console.log(sources)
     // create & start all enabled Channels
     sources.forEach((source) => createChannel(source));
 
