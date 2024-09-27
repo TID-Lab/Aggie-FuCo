@@ -10,7 +10,6 @@ import FilterComboBox from "../../components/filters/FilterComboBox";
 import FilterListbox from "../../components/filters/FilterListBox";
 import FilterRadioGroup from "../../components/filters/FilterRadioGroup";
 import AggieButton from "../../components/AggieButton";
-import AggiePagination from "../../components/AggiePagination";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
@@ -36,6 +35,8 @@ const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
   }
 
   function onSearch() {}
+
+  const closedFilter = getParam("closed");
   return (
     <>
       <div className='flex justify-between mb-2 '>
@@ -55,7 +56,7 @@ const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
                   <button
                     type='submit'
                     onClick={onSearch}
-                    className='px-4 py-1 bg-slate-100 rounded-r-lg border border-l-0 border-slate-30'
+                    className='px-4 py-1 bg-slate-100 rounded-r-lg border border-slate-300 hover:bg-slate-50'
                   >
                     <FontAwesomeIcon icon={faSearch} />
                   </button>
@@ -92,16 +93,16 @@ const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
       <div className='flex justify-between mb-2 text-sm'>
         <div className='flex gap-2'>
           <FilterRadioGroup
-            options={["Open", "Closed"]}
-            defaultOption='All'
-            value={
-              getParam("closed") === undefined
-                ? ""
-                : getParam("closed")
-                ? "Closed"
-                : "Open"
+            options={{
+              false: "Open",
+              true: "Closed",
+              all: "All",
+            }}
+            value={getParam("closed")}
+            defaultValue={"false"}
+            onChange={(e) =>
+              setParams({ closed: e === "false" ? undefined : e })
             }
-            onChange={(e) => setParams({ closed: e === "Closed" })}
           />
         </div>
         <div className='flex items-center gap-1'>

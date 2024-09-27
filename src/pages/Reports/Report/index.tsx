@@ -1,26 +1,22 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  getReport,
-  setSelectedRead,
-  setSelectedTags,
-} from "../../../api/reports";
+import { useEffect, useState } from "react";
+import { useUpdateQueryData } from "../../../hooks/useUpdateQueryData";
+import { useReportMutations } from "../useReportMutations";
+import { useQueryParams } from "../../../hooks/useQueryParams";
+
+import { getReport, setSelectedTags } from "../../../api/reports";
+import { getSources } from "../../../api/sources";
+import { getTags } from "../../../api/tags";
+import { AxiosError } from "axios";
+import type { ReportQueryState, Reports, Tag } from "../../../objectTypes";
 
 import AggieButton from "../../../components/AggieButton";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faFile, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { getSources } from "../../../api/sources";
-import { useQueryParams } from "../../../hooks/useQueryParams";
-import type { ReportQueryState, Reports, Tag } from "../../../objectTypes";
-import { getTags } from "../../../api/tags";
-import { useEffect, useState } from "react";
-import { AxiosError } from "axios";
 import AddReportsToIncidents from "../components/AddReportsToIncident";
-import { useUpdateQueryData } from "../../../hooks/useUpdateQueryData";
-import { updateByIds } from "../../../utils/immutable";
 import DropdownMenu from "../../../components/DropdownMenu";
 import SocialMediaPost from "../../../components/SocialMediaPost";
-import { useReportMutations } from "../useReportMutations";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretDown, faFile, faPlus } from "@fortawesome/free-solid-svg-icons";
 const Report = () => {
   let { id } = useParams();
   const { setParams } = useQueryParams<ReportQueryState>();
@@ -197,7 +193,7 @@ const Report = () => {
           <div className='flex gap-1'>
             <div className='flex font-medium'>
               <AggieButton
-                className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-200 hover:bg-slate-200'
+                className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-300 hover:bg-slate-200'
                 onClick={addReportsToIncidents}
               >
                 <FontAwesomeIcon icon={faPlus} />

@@ -52,7 +52,7 @@ interface IProps {
   onClose: () => void;
 }
 
-const CreateEditUser = ({ user, onClose }: IProps) => {
+const CreateEditUserForm = ({ user, onClose }: IProps) => {
   const queryClient = useQueryClient();
 
   const doCreateUser = useMutation(newUser, {
@@ -95,7 +95,13 @@ const CreateEditUser = ({ user, onClose }: IProps) => {
       validateOnBlur={true}
     >
       <Form className='flex flex-col gap-3'>
-        <FormikDropdown label='Role' name='role' list={[...USER_ROLES]} />
+        <FormikDropdown
+          label='Role'
+          name='role'
+          list={[...USER_ROLES].map((i) => {
+            return { _id: i, label: i };
+          })}
+        />
         <FormikInput label='Username' name='username' />
         <FormikInput label='Email' name='email' type='email' />
         {!user && (
@@ -131,4 +137,4 @@ const CreateEditUser = ({ user, onClose }: IProps) => {
   );
 };
 
-export default CreateEditUser;
+export default CreateEditUserForm;

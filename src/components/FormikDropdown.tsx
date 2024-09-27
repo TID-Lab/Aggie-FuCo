@@ -11,9 +11,10 @@ import { Listbox } from "@headlessui/react";
 interface IProps {
   label: string;
   name: string;
-  list: string[];
+  list: { _id: string; label: string }[];
+  disabled?: boolean;
 }
-const FormikDropdown = ({ label, name, list }: IProps) => {
+const FormikDropdown = ({ label, name, list, disabled = false }: IProps) => {
   const [field, meta, helpers] = useField(name);
   const { value } = meta;
   const { onBlur } = field;
@@ -23,10 +24,19 @@ const FormikDropdown = ({ label, name, list }: IProps) => {
   return (
     <div>
       <label className='text-slate-600'>{label} </label>
-      <Listbox name={name} value={value} onChange={setValue}>
-        <div className='relative font-medium'>
-          <Listbox.Button className='px-3 py-2 focus-theme flex justify-between items-center bg-slate-50 border border-slate-300 w-full hover:bg-slate-100 text-left ui-active:bg-slate-200  rounded'>
-            {value || "Select " + label}
+      <Listbox
+        name={name}
+        value={value}
+        onChange={(e) => setValue(e)}
+        disabled={disabled}
+      >
+        <div
+          className={`relative font-medium ${
+            disabled ? "pointer-events-none opacity-75" : ""
+          }`}
+        >
+          <Listbox.Button className='px-3 py-2 focus-theme flex justify-between items-center bg-slate-50 border border-slate-300 w-full hover:bg-slate-100 text-left ui-active:bg-slate-200 rounded'>
+            {list.find((i) => value === i._id)?.label || "Select " + label}
             <FontAwesomeIcon
               icon={faChevronDown}
               className='ui-active:rotate-180 text-slate-400'
@@ -34,19 +44,21 @@ const FormikDropdown = ({ label, name, list }: IProps) => {
           </Listbox.Button>
           <Listbox.Options
             onBlur={onBlur}
-            className='absolute left-0 mt-1 right-0 shadow-md border border-slate-300 bg-white rounded'
+            className='absolute left-0 mt-1 right-0 shadow-md border border-slate-300 bg-white rounded z-10'
           >
             {list.map((item) => (
               <Listbox.Option
-                key={item}
-                value={item}
+                key={item._id}
+                value={item._id}
                 className='flex justify-between px-3 py-2 hover:bg-slate-100 ui-selected:bg-slate-100 cursor-pointer items-center'
               >
-                {item}
+                {item.label}
 
                 <FontAwesomeIcon
                   icon={faCheck}
-                  className={`text-slate-400 ${item === value ? "" : "hidden"}`}
+                  className={`text-slate-400 ${
+                    item._id === value ? "" : "hidden"
+                  }`}
                 />
               </Listbox.Option>
             ))}

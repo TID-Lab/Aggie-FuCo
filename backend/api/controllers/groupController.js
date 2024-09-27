@@ -77,6 +77,7 @@ exports.group_update = (req, res, next) => {
     if (err) return res.status(err.status).send(err.message);
     if (!group) return res.sendStatus(404);
     // Update the actual values
+
     group = _.extend(group, _.omit(req.body, 'creator'));
     // Save group
     group.save(function (err, numberAffected) {

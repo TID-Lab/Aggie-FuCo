@@ -20,16 +20,16 @@
 @layer defaults {
   /* todo: switch to tailwind ring-* implementatino (conflicts with bootstrap rightno) */
   .focus-theme-base {
-    @apply outline outline-0  outline-blue-400 transition-[outline] duration-75;
+    @apply ring-blue-400 ring-offset-2 transition-[drop-shadow] duration-75 outline-0;
   }
   .focus-theme {
-    @apply focus-theme-base outline-offset-1 focus:outline-2;
+    @apply focus-theme-base appearance-none ring;
   }
   .focus-within-theme {
-    @apply focus-theme-base outline-offset-2 focus-within:outline-2;
+    @apply focus-theme-base;
   }
   .focus-within-theme .focus-theme {
-    @apply outline-offset-0 outline-blue-600;
+    @apply focus-theme-base;
   }
 }
 

@@ -7,7 +7,7 @@ import { newGroup } from "../../../api/groups";
 import { setReportsToGroup } from "../../../api/reports";
 import type { Report, Reports } from "../../../api/reports/types";
 
-import IncidentForm from "../IncidentForm";
+import IncidentForm from "../IncidentForm_old";
 import { Dialog } from "@headlessui/react";
 import SocialMediaPost from "../../../components/SocialMediaPost";
 
@@ -17,6 +17,7 @@ import {
   faSpinner,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
+import CreateEditIncidentForm from "../CreateEditIncidentForm";
 
 interface NewIncidentQueryState {
   reports?: string;
@@ -95,7 +96,7 @@ const NewIncident = () => {
         <h1 className='text-3xl font-medium'>Create New Incident</h1>
       </header>
       <div>
-        <IncidentForm
+        <CreateEditIncidentForm
           onSubmit={(values) => mutate(values)}
           onCancel={() => navigate(-1)}
           isLoading={isLoading}

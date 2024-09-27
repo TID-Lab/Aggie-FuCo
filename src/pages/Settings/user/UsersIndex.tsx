@@ -1,12 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteUser, getUsers } from "../../../api/users";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
+import { deleteUser, getUsers } from "../../../api/users";
+import { Session } from "../../../api/session/types";
+
+import { Link } from "react-router-dom";
 import AggieButton from "../../../components/AggieButton";
 import DropdownMenu from "../../../components/DropdownMenu";
-import CreateEditUser from "./CreateEditUser";
+import CreateEditUserForm from "./CreateEditUserForm";
 import AggieDialog from "../../../components/AggieDialog";
+import ConfirmationDialog from "../../../components/ConfirmationDialog";
+import SetPassword from "./SetPassword";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,22 +18,16 @@ import {
   faEllipsisH,
   faPlusCircle,
   faRefresh,
-  faShield,
-  faTrash,
   faTrashAlt,
   faUserShield,
 } from "@fortawesome/free-solid-svg-icons";
-import { Session } from "../../../api/session/types";
-import ConfirmationDialog from "../../../components/ConfirmationDialog";
-import SetPassword from "./SetPassword";
 
 interface IProps {
   session?: Session;
 }
 
 const UsersIndex = ({ session }: IProps) => {
-  const queryClient = useQueryClient();
-  const { data, isSuccess } = useQuery(["users"], getUsers);
+  const { data } = useQuery(["users"], getUsers);
   const [editUser, setEditUser] = useState("");
   const [removeUser, setRemoveUser] = useState("");
   const [editPassword, setEditPassword] = useState("");
@@ -141,7 +139,7 @@ const UsersIndex = ({ session }: IProps) => {
           title: editUser === "newUser" ? "Create User" : "Edit user details",
         }}
       >
-        <CreateEditUser
+        <CreateEditUserForm
           user={userFromId(editUser)}
           onClose={() => setEditUser("")}
         />

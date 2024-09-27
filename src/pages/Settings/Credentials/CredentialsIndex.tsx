@@ -1,24 +1,26 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteCredential, getCredentials } from "../../api/credentials";
 import { useState } from "react";
-import type { Credential } from "../../api/credentials/types";
 
-import AxiosErrorCard from "../../components/AxiosErrorCard";
-import AggieButton from "../../components/AggieButton";
+import { deleteCredential, getCredentials } from "../../../api/credentials";
+import type { Credential } from "../../../api/credentials/types";
+
+import CreateCredentialForm from "./CreateCredentialForm";
+import AxiosErrorCard from "../../../components/AxiosErrorCard";
+import AggieButton from "../../../components/AggieButton";
+import ConfirmationDialog from "../../../components/ConfirmationDialog";
+import AggieDialog from "../../../components/AggieDialog";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faPlusCircle,
   faRefresh,
-  faSpinner,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import ConfirmationDialog from "../../components/ConfirmationDialog";
-import CredentialModal from "../../components/credentials/CredentialModal";
-interface IProps {}
 
-const CredentialsIndex = (props: IProps) => {
+const CredentialsIndex = () => {
   const queryClient = useQueryClient();
   const [deletionModal, setDeletionModal] = useState<Credential>();
-  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openCreate, setOpenCreate] = useState(false);
 
   const { data, isError, error } = useQuery(["credentials"], getCredentials);
   const doDeleteCredential = useMutation(deleteCredential, {
@@ -41,7 +43,14 @@ const CredentialsIndex = (props: IProps) => {
     <section className=' w-full'>
       <div className='flex justify-between items-center'>
         <h1 className={"my-3 text-3xl font-medium"}>Credentials</h1>
-        <CredentialModal />
+        <AggieButton
+          onClick={() => setOpenCreate(true)}
+          variant='primary'
+          padding='px-3 py-2'
+          icon={faPlusCircle}
+        >
+          Create New Credential
+        </AggieButton>
       </div>
       <div className='flex flex-col overflow-hidden bg-white border border-slate-300 rounded-lg divide-y divide-slate-300'>
         <header
@@ -98,6 +107,14 @@ const CredentialsIndex = (props: IProps) => {
           }
         ></ConfirmationDialog>
       </div>
+      <AggieDialog
+        isOpen={openCreate}
+        onClose={() => setOpenCreate(false)}
+        data={{ title: "Create New Credential" }}
+        className='p-3 w-full max-w-lg'
+      >
+        <CreateCredentialForm onClose={() => setOpenCreate(false)} />
+      </AggieDialog>
     </section>
   );
 };
