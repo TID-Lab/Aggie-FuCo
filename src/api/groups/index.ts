@@ -11,6 +11,7 @@ import {
 import type { GroupSearchState } from "../../objectTypes";
 import type { Reports } from "../reports/types";
 import { hasId, VeracityOptions } from "../common";
+import { omitBy, isNil } from "lodash";
 
 export const getGroups = async (
   searchState: GroupQueryState = {},
@@ -63,13 +64,19 @@ export const getGroup_untyped = async (id: string | undefined) => {
   }
 };
 
-export const newGroup = async (groupData: GroupEditableData) => {
+export const newGroup = async (groupData: Partial<GroupEditableData>) => {
   const { data } = await axios.post<Group>("/api/group", groupData);
   return data;
 };
 
-export const editGroup = async (group: Group | GroupEditableData) => {
-  const { data } = await axios.put<Group>("/api/group/" + group._id, group);
+export const editGroup = async (group: Group | Partial<GroupEditableData>) => {
+  const updateValues = omitBy(group, (v) => isNil(v) || v === "");
+  console.log(updateValues);
+
+  const { data } = await axios.put<Group>(
+    "/api/group/" + group._id,
+    updateValues
+  );
   return data;
 };
 //TODO: deprecate

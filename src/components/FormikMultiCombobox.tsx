@@ -59,7 +59,7 @@ const FormikMultiCombobox = ({
   }
 
   function addRemoveItem(key: string) {
-    if (!value) return;
+    if (!Array.isArray(value)) return;
 
     if (!value.some((i: string) => i === key)) {
       //key isnt selected
@@ -94,7 +94,10 @@ const FormikMultiCombobox = ({
       <div className='flex flex-wrap gap-2'>
         {value && value.length > 0 ? (
           value?.map((selected: string) => (
-            <div className='pl-2 pr-1 rounded-full bg-slate-100 flex gap-1 items-center '>
+            <div
+              key={selected}
+              className='pl-2 pr-1 rounded-full bg-slate-100 flex gap-1 items-center '
+            >
               {valueFromLists(selected)}
               <button
                 type='button'
@@ -106,18 +109,7 @@ const FormikMultiCombobox = ({
             </div>
           ))
         ) : (
-          <p className='flex'>
-            <Popover.Button
-              className={({ open }) =>
-                `focus-theme pl-1 pr-2 hover:bg-slate-200 ${
-                  open ? "bg-slate-100" : ""
-                } rounded-full flex items-center gap-1 font-medium text-sm  hover:underline`
-              }
-            >
-              <FontAwesomeIcon icon={faPlus} className=' mr-1 text-slate-500' />
-              Add {unitLabel}s
-            </Popover.Button>
-          </p>
+          <p className='flex'>No {unitLabel}s Added</p>
         )}
         <div className='relative'></div>
 

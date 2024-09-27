@@ -17,6 +17,7 @@ import {
   faSpinner,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
+import CreateEditIncidentForm from "../CreateEditIncidentForm";
 
 interface NewIncidentQueryState {
   reports?: string;
@@ -95,7 +96,7 @@ const NewIncident = () => {
         <h1 className='text-3xl font-medium'>Create New Incident</h1>
       </header>
       <div>
-        <IncidentForm
+        <CreateEditIncidentForm
           onSubmit={(values) => mutate(values)}
           onCancel={() => navigate(-1)}
           isLoading={isLoading}

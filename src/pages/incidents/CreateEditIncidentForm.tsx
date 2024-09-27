@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { Field } from "formik";
+import { isNil, omitBy } from "lodash";
 import * as Yup from "yup";
 import { VERACITY_OPTIONS } from "../../api/common";
 import { Group, GroupEditableData } from "../../api/groups/types";
@@ -18,13 +19,13 @@ const incidentSchema = Yup.object().shape({
   escalated: Yup.boolean(),
   closed: Yup.boolean(),
   veracity: Yup.string(),
-  assignedTo: Yup.array().of(Yup.string()).optional(),
+  assignedTo: Yup.array().of(Yup.string()).optional().default([]),
   notes: Yup.string(),
 });
 
 interface IProps {
   group?: Group;
-  onSubmit: (values: GroupEditableData) => void;
+  onSubmit: (values: Partial<GroupEditableData>) => void;
   onCancel: () => void;
   isLoading: boolean;
 }
@@ -43,15 +44,15 @@ const CreateEditIncidentForm = ({
         initialValues={{
           title: group?.title || "",
           locationName: group?.locationName || "",
-          escalated: group?.escalated || "",
-          closed: group?.closed || "",
-          veracity: group?.veracity || "",
-          assignedTo: group?.assignedTo?.map((i) => i._id),
+          escalated: group?.escalated || false,
+          closed: group?.closed || false,
+          veracity: group?.veracity || "Unconfirmed",
+          assignedTo: group?.assignedTo?.map((i) => i._id) || [],
           notes: group?.notes || "",
         }}
         schema={incidentSchema}
         onSubmit={(values: GroupEditableData) => {
-          onSubmit(values);
+          onSubmit({ ...values, _id: group?._id });
         }}
         loading={isLoading}
         onClose={onCancel}

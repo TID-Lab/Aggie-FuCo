@@ -44,7 +44,7 @@ const FormikDropdown = ({ label, name, list, disabled = false }: IProps) => {
           </Listbox.Button>
           <Listbox.Options
             onBlur={onBlur}
-            className='absolute left-0 mt-1 right-0 shadow-md border border-slate-300 bg-white rounded'
+            className='absolute left-0 mt-1 right-0 shadow-md border border-slate-300 bg-white rounded z-10'
           >
             {list.map((item) => (
               <Listbox.Option
