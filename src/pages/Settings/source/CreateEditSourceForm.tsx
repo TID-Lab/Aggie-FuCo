@@ -81,7 +81,7 @@ const CreateEditSourceForm = ({ source, onClose }: IProps) => {
     // sourceKeywords: Yup.string().required(
     //   "Keywords are required to create a Junkipedia source"
     // ),
-    // sourceLists: Yup.string().required(
+    // lists: Yup.string().required(
     //   "Lists are required to create a Junkipedia source"
     // ),
     credentials: Yup.string().required(
@@ -110,6 +110,7 @@ const CreateEditSourceForm = ({ source, onClose }: IProps) => {
       onClose={onClose}
     >
       <FormikInput name='nickname' label='Credential Name' />
+      <FormikInput name='lists' label='Lists' />
 
       <FormikDropdown
         list={
