@@ -11,7 +11,7 @@ The primary limitation is that the React SPA is built using `react-scripts`, an 
 - [Typescript v4.5](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html)
 - [Tailwind v3](https://tailwindcss.com/docs/installation)
 - [headless-ui v1.7](https://headlessui.com/v1)
-- axios 0.28 ( needs to be updated for security...)
+- axios 1.77
 
 ### file structure
 
