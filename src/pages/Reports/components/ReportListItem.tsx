@@ -14,6 +14,7 @@ import ReactTimeAgo from "react-time-ago";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import DateTime from "../../../components/DateTime";
 //TODO: refactor and clean up tech debt
 interface IProps {
   report: Report;
@@ -60,16 +61,6 @@ const ReportListItem = ({
   ) {
     e.stopPropagation();
     navigate("/incidents/" + id);
-  }
-  function timeOrDate(datestring: string) {
-    const date = stringToDate(datestring);
-    const today = new Date();
-    if (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth()
-    )
-      return date.toLocaleTimeString();
-    return date.toLocaleDateString();
   }
 
   return (
@@ -121,14 +112,9 @@ const ReportListItem = ({
               )}
             </div>
           </div>
-          <div className='text-sm flex gap-2'>
+          <div className='text-xs flex gap-2'>
             <p>
-              <ReactTimeAgo
-                date={stringToDate(report.authoredAt)}
-                locale='en-US'
-                timeStyle='twitter'
-              />{" "}
-              ({timeOrDate(report.authoredAt)})
+              <DateTime dateString={report.authoredAt} />
             </p>
           </div>
         </header>

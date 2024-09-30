@@ -11,8 +11,7 @@ import PostReactions from "./PostReactions";
 import MediaPreview from "./MediaPreview";
 import SocialMediaIcon from "./SocialMediaIcon";
 import { MediaOptions } from "../../api/common";
-import { useEffect, useState } from "react";
-import { pick } from "lodash";
+import DateTime from "../DateTime";
 interface IProps {
   report: Report;
   showMedia?: boolean;
@@ -96,7 +95,10 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
         <div className='border border-slate-300 py-2 px-2 rounded-lg'>
           <div>
             <h2 className='font-medium'>{innerAuthor?.username}</h2>
-            <p className='text-sm text-slate-600'>{post.authoredAt}</p>
+            <p className='text-sm text-slate-600'>
+              {" "}
+              <DateTime dateString={post.authoredAt} />
+            </p>
           </div>
           <div className='whitespace-pre-line my-2'>
             <Linkify
@@ -186,7 +188,7 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
               </h1>
             </a>
             <p className='text-slate-600 text-xs font-normal mt-1'>
-              {new Date(report.authoredAt).toLocaleString("en-us")}
+              <DateTime dateString={report.authoredAt} />
             </p>
           </div>
           <p className='flex flex-col items-end gap-1'>
