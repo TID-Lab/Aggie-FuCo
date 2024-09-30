@@ -80,6 +80,12 @@ const CreateEditSourceForm = ({ source, onClose }: IProps) => {
   // could be cleaner but idk how to work the type inferencing with yup
   const JunkipediaSchema = Yup.object().shape({
     nickname: Yup.string().required("Source name is a required field"),
+    // sourceKeywords: Yup.string().required(
+    //   "Keywords are required to create a Junkipedia source"
+    // ),
+    // lists: Yup.string().required(
+    //   "Lists are required to create a Junkipedia source"
+    // ),
     credentials: Yup.string().required(
       "A credential is required to create a source"
     ),
@@ -106,6 +112,7 @@ const CreateEditSourceForm = ({ source, onClose }: IProps) => {
       onClose={onClose}
     >
       <FormikInput name='nickname' label='Credential Name' />
+      <FormikInput name='lists' label='Lists' />
 
       <FormikDropdown
         list={
