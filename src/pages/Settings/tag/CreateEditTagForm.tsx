@@ -1,13 +1,15 @@
+import * as Yup from "yup";
+
 import { Formik, Form, Field } from "formik";
-import schema from "yup/lib/schema";
-import { Tag } from "../../../api/tags/types";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { editTag, newTag } from "../../../api/tags";
+import type { Tag } from "../../../api/tags/types";
+import type { AxiosError } from "axios";
+
 import AggieButton from "../../../components/AggieButton";
 import FormikInput from "../../../components/FormikInput";
-import * as Yup from "yup";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { editTag, newTag } from "../../../api/tags";
-import { useState } from "react";
-import { AxiosError } from "axios";
 
 const tagEditSchema = Yup.object().shape({
   name: Yup.string().required("Tag name required"),

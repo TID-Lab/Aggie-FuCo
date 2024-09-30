@@ -19,8 +19,8 @@ const mediaIcons: Record<MediaOptions, IconDefinition | BrandsDef> = {
   twitter: faTwitter,
   RSS: faRss,
   facebook: faFacebook,
-  elmo: faQuestionCircle,
-  "SMS GH": faQuestionCircle,
+  // elmo: faQuestionCircle,
+  // "SMS GH": faQuestionCircle,
 };
 
 const SocialMediaIcon = ({

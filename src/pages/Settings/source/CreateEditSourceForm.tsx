@@ -1,15 +1,20 @@
-import { faChevronDown, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Listbox } from "@headlessui/react";
+import * as Yup from "yup";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import * as Yup from "yup";
+
 import { getCredentials } from "../../../api/credentials";
 import { editSource, newSource } from "../../../api/sources";
-import { Source } from "../../../api/sources/types";
+import type { Source } from "../../../api/sources/types";
+
+import { Listbox } from "@headlessui/react";
 import FormikDropdown from "../../../components/FormikDropdown";
 import FormikInput from "../../../components/FormikInput";
 import FormikWithSchema from "../../../components/FormikWithSchema";
+
+import { faChevronDown, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CredentialOption, CREDENTIAL_OPTIONS } from "../../../api/common";
 
 // const twitterFormSchema = Yup.object().shape({
 //     sourceNickname: Yup.string().required("Source name is a required field"),
@@ -28,16 +33,13 @@ import FormikWithSchema from "../../../components/FormikWithSchema";
 //     ),
 //   });
 
-const credentialTypes = ["telegram", "junkipedia"] as const;
-type Credential = (typeof credentialTypes)[number];
-
 interface IProps {
   source?: Source;
   onClose: () => void;
 }
 const CreateEditSourceForm = ({ source, onClose }: IProps) => {
   const [credentialType, setCredentialType] =
-    useState<Credential>("junkipedia");
+    useState<CredentialOption>("junkipedia");
 
   const queryClient = useQueryClient();
 
@@ -78,12 +80,6 @@ const CreateEditSourceForm = ({ source, onClose }: IProps) => {
   // could be cleaner but idk how to work the type inferencing with yup
   const JunkipediaSchema = Yup.object().shape({
     nickname: Yup.string().required("Source name is a required field"),
-    // sourceKeywords: Yup.string().required(
-    //   "Keywords are required to create a Junkipedia source"
-    // ),
-    // sourceLists: Yup.string().required(
-    //   "Lists are required to create a Junkipedia source"
-    // ),
     credentials: Yup.string().required(
       "A credential is required to create a source"
     ),
@@ -179,7 +175,7 @@ const CreateEditSourceForm = ({ source, onClose }: IProps) => {
           />
         </Listbox.Button>
         <Listbox.Options className='absolute left-0 mt-1 right-0 shadow-md border border-slate-300 bg-white rounded'>
-          {[...credentialTypes].map((item) => (
+          {[...CREDENTIAL_OPTIONS].map((item) => (
             <Listbox.Option
               key={item}
               value={item}

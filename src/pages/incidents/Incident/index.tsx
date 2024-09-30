@@ -9,7 +9,7 @@ import { EditableGroupComment, GroupComment } from "../../../api/groups/types";
 
 import { Form, Formik, Field } from "formik";
 import AxiosErrorCard from "../../../components/AxiosErrorCard";
-import TagsList from "../../../components/tag/TagsList";
+import TagsList from "../../../components/Tags/TagsList";
 import VeracityToken from "../../../components/VeracityToken";
 import SocialMediaPost from "../../../components/SocialMediaPost";
 import { Link } from "react-router-dom";

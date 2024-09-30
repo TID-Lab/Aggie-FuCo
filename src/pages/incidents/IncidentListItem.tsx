@@ -9,7 +9,7 @@ import { getSession } from "../../api/session";
 import type { Group, Groups } from "../../api/groups/types";
 import { updateByIds } from "../../utils/immutable";
 
-import TagsList from "../../components/tag/TagsList";
+import TagsList from "../../components/Tags/TagsList";
 import VeracityToken from "../../components/VeracityToken";
 import { Dialog, Menu } from "@headlessui/react";
 import AggieButton from "../../components/AggieButton";

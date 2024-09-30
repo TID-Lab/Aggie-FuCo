@@ -3,14 +3,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Report } from "../../../api/reports/types";
-import { stringToDate } from "../../../helpers";
 import { formatText } from "../../../utils/format";
 import { getGroup } from "../../../api/groups";
 
-import TagsList from "../../../components/tag/TagsList";
+import TagsList from "../../../components/Tags/TagsList";
 import SocialMediaIcon from "../../../components/SocialMediaPost/SocialMediaIcon";
 import AggieCheck from "../../../components/AggieCheck";
-import ReactTimeAgo from "react-time-ago";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";

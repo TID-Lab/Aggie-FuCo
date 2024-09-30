@@ -1,12 +1,22 @@
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { deleteSource, editSource, getSources } from "../../../api/sources";
-import { getCredentials } from "../../../api/credentials";
-import { Credential, Source } from "../../../objectTypes";
+import type { Source } from "../../../api/sources/types";
+
+import AxiosErrorCard from "../../../components/AxiosErrorCard";
+import { Link } from "react-router-dom";
+import AggieSwitch from "../../../components/AggieSwitch";
+import DropdownMenu from "../../../components/DropdownMenu";
+import AggieButton from "../../../components/AggieButton";
+import AggieDialog from "../../../components/AggieDialog";
+import CreateEditSourceForm from "./CreateEditSourceForm";
+import ConfirmationDialog from "../../../components/ConfirmationDialog";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
   faEllipsisH,
-  faEllipsisV,
   faExclamationTriangle,
   faKey,
   faPlusCircle,
@@ -14,20 +24,7 @@ import {
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { io, Socket } from "socket.io-client";
-import AxiosErrorCard from "../../../components/AxiosErrorCard";
-import { Link } from "react-router-dom";
-import AggieSwitch from "../../../components/AggieSwitch";
-import DropdownMenu from "../../../components/DropdownMenu";
-import AggieButton from "../../../components/AggieButton";
-import AggieDialog from "../../../components/AggieDialog";
-import { useState } from "react";
-import CreateEditSourceForm from "./CreateEditSourceForm";
-import ConfirmationDialog from "../../../components/ConfirmationDialog";
-
 interface IProps {}
-
-let socket: Socket;
 
 const SourcesIndex = (props: IProps) => {
   const queryClient = useQueryClient();
@@ -35,17 +32,6 @@ const SourcesIndex = (props: IProps) => {
 
   const [deletionModal, setDeletionModal] = useState<Source>();
   const [openCreate, setOpenCreate] = useState("");
-
-  // useEffect(() => {
-  //   if (!socket) {
-  //     socket = io("ws://localhost:3000/sources");
-
-  //     socket.onAny((eventName, tag) => {
-  //       console.log("Message Received from Server", eventName, tag);
-  //       sourcesQuery.refetch();
-  //     });
-  //   }
-  // });
 
   const doDeleteSource = useMutation(deleteSource, {
     onSuccess: () => {

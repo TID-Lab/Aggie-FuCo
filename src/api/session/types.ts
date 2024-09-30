@@ -13,3 +13,9 @@ export interface LoginData {
   username: string;
   password: string;
 }
+
+export interface SourceEvent {
+  datetime: string;
+  type: string;
+  message: string;
+}

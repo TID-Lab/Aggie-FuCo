@@ -6,19 +6,11 @@
     "url": "https://github.com/TID-Lab/aggie.git"
   },
   "scripts": {
-    "dev": "node install.js && cross-env DEBUG=socket.io:* nodemon app.js",
     "start": "ENVIRONMENT=production node app.js",
-    "testrun": "MONGO_AGGIE_DB=aggie-test node app.js",
     "build": "cross-env CI=false react-scripts build",
-    "update-ct-lists": "node backend/scripts/ct-list-update.js",
     "dev:frontend": "cross-env PORT=8000 react-scripts start",
     "dev:backend": "cross-env ENVIRONMENT=development nodemon app.js",
     "dev:all": "stmux -- [ \"npm run dev:frontend\" .. \"npm run dev:backend\" ]",
-    "test:frontend": "react-scripts test",
-    "premocha": "node install.js",
-    "mocha": "mocha test/backend",
-    "karma": "karma start --single-run",
-    "test": "npm run mocha && npm run karma",
     "postinstall": "node install.js"
   },
   "subdomain": "aggie",
