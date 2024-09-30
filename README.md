@@ -118,9 +118,10 @@ PR's should be reviewed by another developer, ideally the developer lead or the 
 
 resolve conflicts with the main `develop` branch by merging the latest into the current branch. for example, if you are working on a PR `example-feature-branch` then:
 
-1. `checkout example-feature-branch`
+1. `checkout develop`
 1. `git fetch --all`
-1. `git pull --all`
+1. `git pull `
+1. `checkout example-feature-branch`
 1. `git merge develop`
 1. resolve any merge conflicts then push to branch
 
