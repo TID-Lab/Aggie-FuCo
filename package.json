@@ -6,11 +6,12 @@
     "url": "https://github.com/TID-Lab/aggie.git"
   },
   "scripts": {
-    "start": "ENVIRONMENT=production node app.js",
-    "build": "cross-env CI=false react-scripts build",
+    "dev": "stmux -- [ \"npm run dev:frontend\" .. \"npm run dev:backend\" ]",
     "dev:frontend": "cross-env PORT=8000 react-scripts start",
     "dev:backend": "cross-env ENVIRONMENT=development nodemon app.js",
-    "dev:all": "stmux -- [ \"npm run dev:frontend\" .. \"npm run dev:backend\" ]",
+    "dev:all": "npm run dev",
+    "build": "cross-env CI=false react-scripts build",
+    "start": "ENVIRONMENT=production node app.js",
     "postinstall": "node install.js"
   },
   "subdomain": "aggie",

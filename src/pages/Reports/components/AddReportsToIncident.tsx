@@ -63,8 +63,8 @@ const AddReportsToIncidents = ({
     <Dialog open={isOpen} onClose={onClose} className='relative z-50'>
       <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
       <div className='fixed inset-0 flex w-screen items-center justify-center p-4'>
-        <Dialog.Panel className='bg-gray-50 rounded-xl border border-slate-200 shadow-xl min-w-24 h-full max-h-[90vh] min-h-12 p-3 grid grid-cols-2 gap-2'>
-          <div className='col-span-2 flex justify-between'>
+        <Dialog.Panel className='bg-gray-50 rounded-xl border border-slate-200 shadow-xl min-w-24 h-full max-h-[90vh] min-h-12 p-3 grid grid-cols-2 gap-2 auto-rows-max	'>
+          <div className='col-span-2 flex justify-between '>
             <div className='flex-1'>
               <AggieButton variant='secondary' onClick={onClose}>
                 Cancel
@@ -86,13 +86,13 @@ const AddReportsToIncidents = ({
           <h2 className='font-medium text-lg mb-1'>Selected Reports:</h2>
 
           <h2 className='font-medium text-lg mb-1'>Select an Incident:</h2>
-          <div className='overflow-y-scroll flex flex-col gap-1'>
+          <div className='overflow-y-scroll flex flex-col gap-1 '>
             {ReportsFromSelection(selection, isOpen).map((report) => (
               <SocialMediaPost key={report._id} report={report} />
             ))}
           </div>
 
-          <div className='overflow-y-scroll bg-white border border-slate-300 rounded-lg'>
+          <div className='overflow-y-scroll  bg-white border border-slate-300 rounded-lg'>
             <NestedIncidentsList
               incidents={incidents}
               selectedIncident={selectedIncident}

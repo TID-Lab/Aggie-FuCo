@@ -1,5 +1,3 @@
-import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Linkify from "linkify-react";
 import {
   BaseMetadata,
@@ -16,6 +14,9 @@ interface IProps {
   report: Report;
   showMedia?: boolean;
 }
+
+import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type ContentType = "default" | "twitterQuote" | "twitterRetweet";
 
@@ -181,7 +182,7 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
                 <span className='mr-1 text-slate-600 '>
                   <SocialMediaIcon mediaKey={report._media[0]} />
                 </span>
-                {formatAuthor(report.author, report._media)}{" "}
+                {report.author}
                 <span className='opacity-0 group-hover:opacity-100'>
                   <FontAwesomeIcon icon={faExternalLink} size='xs' />
                 </span>
@@ -236,7 +237,7 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
           </div>
           <p className='text-xs text-slate-600 text-right'>
             last fetched: <br />
-            {new Date(report.fetchedAt).toLocaleString("en-us")}
+            <DateTime dateString={report.fetchedAt} />
           </p>
         </div>
       </div>

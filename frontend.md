@@ -4,11 +4,13 @@ Aggie's codebase is built on pretty old legacy code (in 2024 terms). be careful 
 
 The primary limitation is that the React SPA is built using `react-scripts`, an old, abandoned project. this limits our react version to 17 and typescript to 4.5.
 
-- React 17
-- Tanstack Query v4
-- Typescript v4.5
-- Tailwind v3
-- headless-ui v1.7
+**i've included docs specific to our versions. make sure you are reading the right docs as the latest versions work quite different from ours**
+
+- [React 17](https://17.reactjs.org/)
+- [Tanstack Query v4](https://tanstack.com/query/v4/docs/framework/react/overview)
+- [Typescript v4.5](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html)
+- [Tailwind v3](https://tailwindcss.com/docs/installation)
+- [headless-ui v1.7](https://headlessui.com/v1)
 - axios 0.28 ( needs to be updated for security...)
 
 ### file structure
