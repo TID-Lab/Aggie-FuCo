@@ -1,12 +1,13 @@
-import { Form, Formik } from "formik";
-import { User } from "../../../api/users/types";
-import { USER_ROLES } from "../../../api/users/types";
 import * as Yup from "yup";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { newUser, editUser } from "../../../api/users";
+import { type User, USER_ROLES } from "../../../api/users/types";
+
+import { Form, Formik } from "formik";
 import FormikDropdown from "../../../components/FormikDropdown";
 import FormikInput from "../../../components/FormikInput";
 import AggieButton from "../../../components/AggieButton";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { newUser, editUser } from "../../../api/users";
 
 const userEditSchema = Yup.object().shape({
   username: Yup.string()

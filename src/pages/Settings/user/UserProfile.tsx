@@ -1,22 +1,24 @@
+import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { deleteUser, getUser } from "../../../api/users";
 import { useNavigate, useParams } from "react-router-dom";
-import { Groups, Session, Source, Tag } from "../../../objectTypes";
+
+import { deleteUser, getUser } from "../../../api/users";
+import type { Session } from "../../../api/session/types";
 
 import PlaceholderDiv from "../../../components/PlaceholderDiv";
+
+import DropdownMenu from "../../../components/DropdownMenu";
+import AggieButton from "../../../components/AggieButton";
+import AggieDialog from "../../../components/AggieDialog";
+import CreateEditUserForm from "./CreateEditUserForm";
+import ConfirmationDialog from "../../../components/ConfirmationDialog";
+
 import {
   faEllipsisH,
   faEdit,
   faTrashAlt,
-  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import DropdownMenu from "../../../components/DropdownMenu";
-import AggieButton from "../../../components/AggieButton";
-import { useState } from "react";
-import AggieDialog from "../../../components/AggieDialog";
-import CreateEditUserForm from "./CreateEditUserForm";
-import ConfirmationDialog from "../../../components/ConfirmationDialog";
 
 interface IProps {
   session: Session | undefined;
