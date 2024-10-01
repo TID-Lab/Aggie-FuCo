@@ -23,6 +23,7 @@ const errorListener = require('./fetching/listeners/error');
 // Import hooks
 const postToReport = require('./fetching/hooks/postToReport');
 const saveToDatabase = require('./fetching/hooks/saveToDatabase');
+const tagReportsAI = require('./fetching/hooks/tagReportsAI'); // Import the new hook
 
 // Extend global error class
 require('./error');
@@ -34,6 +35,7 @@ process.on('uncaughtException', function(err) {
 
 // Use hooks
 downstream.use(postToReport);
+downstream.use(tagReportsAI); // Add the new hook here
 downstream.use(saveToDatabase);
 
 // Register the error listener

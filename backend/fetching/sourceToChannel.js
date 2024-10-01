@@ -141,7 +141,7 @@ function createChannel(source) {
                 // Reference - https://www.junkipedia.org/apidocs#tag/Posts/paths/~1api~1v1~1posts/get
                 // TODO: Add list or channel specification
                 // interval is set to 30 minutes
-                interval: 900000,
+                interval: 60000,
                 queryParams: {
                     lists: lists,
                     keyword: keywords,
