@@ -62,7 +62,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.0",
     "downstream": "0.1.5",
-    "express": "^4.17.3",
+    "express": "^4.21.0",
     "feedparser": "^2.2.10",
     "formik": "^2.2.9",
     "graceful-fs": "^4.2.4",
