@@ -36,13 +36,17 @@ const AllReportsList = ({}: IProps) => {
     // refetch on filter change
     reportsQuery.refetch();
     multiSelect.set([]);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, [searchParams]);
 
-  useEffect(() => {
-    if (reportsStatus === "success") {
-      window.scrollTo(0, 0);
-    }
-  }, [reportsStatus]);
+  // useEffect(() => {
+  //   if (reportsStatus === "success") {
+  //     window.scrollTo(0, 0);
+  //   }
+  // }, [reportsStatus]);
 
   const multiSelect = useMultiSelect({
     allItems: reportsQuery.data?.results,

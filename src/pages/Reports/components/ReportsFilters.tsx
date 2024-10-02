@@ -33,7 +33,8 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
     return [{ key: "", value: "All Sources" }, ...array];
   }
 
-  const { data: groups } = useQuery(["groups"], () => getAllGroups());
+  const { data: groups } = useQuery(["allgroups"], () => getAllGroups());
+
   function groupsRemapComboBox(query: typeof groups) {
     if (!query || "total" in query) return [];
     console.log(query);

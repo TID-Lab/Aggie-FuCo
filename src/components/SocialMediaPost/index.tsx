@@ -22,7 +22,6 @@ import {
   parseTwitterQuote,
   parseTwitterRetweet,
 } from "./reportParser";
-import { Link } from "react-router-dom";
 
 type ContentType = "default" | "twitterQuote" | "twitterRetweet";
 
