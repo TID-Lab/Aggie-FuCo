@@ -99,7 +99,7 @@ const AllReportsList = ({}: IProps) => {
       </div>
 
       <div className='flex flex-col border border-slate-300 rounded-lg overflow-hidden'>
-        {reportsQuery.isSuccess && !!reportsQuery.data?.results ? (
+        {!!reportsQuery.data?.results && reportsQuery.data?.total > 0 ? (
           reportsQuery.data?.results.map((report) => (
             <div
               onClick={() => onReportItemClick(report._id, report.read)}

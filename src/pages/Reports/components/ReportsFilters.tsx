@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
 import AggieButton from "../../../components/AggieButton";
 import Pagination from "../../../components/Pagination";
+import { getAllGroups, getGroups } from "../../../api/groups";
 
 interface IReportFilters {
   reportCount?: number;
@@ -22,15 +23,26 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
   const { searchParams, getParam, setParams, clearAllParams } =
     useQueryParams<ReportQueryState>();
 
-  const sourcesQuery = useQuery(["sources"], getSources);
-
-  function sourcesRemapComboBox(query: typeof sourcesQuery) {
-    if (!query.data) return [];
-    const array = query.data.map((source) => ({
+  const { data: sources } = useQuery(["sources"], getSources);
+  function sourcesRemapComboBox(query: typeof sources) {
+    if (!query) return [];
+    const array = query.map((source) => ({
       key: source._id,
       value: source.nickname,
     }));
     return [{ key: "", value: "All Sources" }, ...array];
+  }
+
+  const { data: groups } = useQuery(["groups"], () => getAllGroups());
+  function groupsRemapComboBox(query: typeof groups) {
+    if (!query || "total" in query) return [];
+    console.log(query);
+    const array = query?.map((group) => ({
+      key: group._id,
+      value: group.title,
+    }));
+    if (!array) return [];
+    return [{ key: "", value: "All Incidents" }, ...array];
   }
 
   return (
@@ -94,11 +106,19 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
           />
           <FilterComboBox
             label='Sources'
-            list={sourcesRemapComboBox(sourcesQuery)}
+            list={sourcesRemapComboBox(sources)}
             onChange={(e) => {
               setParams({ sourceId: e.key });
             }}
             selectedKey={getParam("sourceId")}
+          />
+          <FilterComboBox
+            label='Incidents'
+            list={groupsRemapComboBox(groups)}
+            onChange={(e) => {
+              setParams({ groupId: e.key });
+            }}
+            selectedKey={getParam("groupId")}
           />
         </div>
       </div>

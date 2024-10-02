@@ -33,6 +33,7 @@ const MediaPreview = ({ mediaUrl, media, report }: IProps) => {
         <div className='min-h-[30vh] relative grid grid-cols-2 gap-1'>
           {images.map((url: string, index: number) => (
             <img
+              key={index}
               className={`w-full rounded object-cover ${formatTwitter(
                 index,
                 images.length
