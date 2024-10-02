@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { useQueryParams } from "../../hooks/useQueryParams";
+import { IuseQueryParams, useQueryParams } from "../../hooks/useQueryParams";
 
 import { getUsers } from "../../api/users";
 import { VERACITY_OPTIONS, ESCALATED_OPTIONS } from "../../api/common";
-import type { GroupSearchState } from "../../objectTypes";
+import type { GroupQueryState } from "../../api/groups/types";
 
 import { Field, Form, Formik } from "formik";
 import FilterComboBox from "../../components/filters/FilterComboBox";
@@ -17,12 +17,19 @@ import Pagination from "../../components/Pagination";
 import { formatPageCount } from "../../utils/format";
 
 interface IIncidentFilters {
+  isQuery: boolean;
+  get: (value: keyof GroupQueryState) => string;
+  set: (values: GroupQueryState) => void;
+  clearAll: () => void;
   reportCount?: number;
 }
-const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
-  const { searchParams, getParam, setParams, clearAllParams } =
-    useQueryParams<GroupSearchState>();
-
+const IncidentsFilters = ({
+  reportCount,
+  get,
+  set,
+  clearAll,
+  isQuery,
+}: IIncidentFilters) => {
   const usersQuery = useQuery(["users"], getUsers);
 
   function usersRemapComboBox(query: typeof usersQuery) {
@@ -36,14 +43,13 @@ const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
 
   function onSearch() {}
 
-  const closedFilter = getParam("closed");
   return (
     <>
       <div className='flex justify-between mb-2 '>
         <div className='flex gap-1'>
           <Formik
-            initialValues={{ title: getParam("title") }}
-            onSubmit={(e) => setParams(e)}
+            initialValues={{ title: get("title") }}
+            onSubmit={(e) => set(e)}
           >
             {({ resetForm }) => (
               <Form className='flex gap-1'>
@@ -62,11 +68,11 @@ const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
                   </button>
                 </div>
 
-                {!!searchParams.size && (
+                {isQuery && (
                   <AggieButton
                     className='hover:underline hover:bg-slate-100 px-2 py-1 text-sm rounded'
                     onClick={() => {
-                      clearAllParams();
+                      clearAll();
                       resetForm();
                     }}
                   >
@@ -80,12 +86,12 @@ const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
         </div>
         <div className='text-xs flex items-center gap-2'>
           <p className={"font-medium text-slate-600"}>
-            {formatPageCount(Number(getParam("page")), 50, reportCount)}
+            {formatPageCount(Number(get("page")), 50, reportCount)}
           </p>
           <Pagination
-            currentPage={Number(getParam("page")) || 0}
+            currentPage={Number(get("page")) || 0}
             totalCount={reportCount || 0}
-            onPageChange={(num) => setParams({ page: num })}
+            onPageChange={(num) => set({ page: num })}
             size={0}
           />
         </div>
@@ -98,42 +104,40 @@ const IncidentsFilters = ({ reportCount }: IIncidentFilters) => {
               true: "Closed",
               all: "All",
             }}
-            value={getParam("closed")}
+            value={get("closed")}
             defaultValue={"false"}
-            onChange={(e) =>
-              setParams({ closed: e === "false" ? undefined : e })
-            }
+            onChange={(e) => set({ closed: e === "false" ? undefined : e })}
           />
         </div>
         <div className='flex items-center gap-1'>
           <FilterListbox
             label='Veracity'
             options={[...VERACITY_OPTIONS]}
-            value={getParam("veracity")}
-            onChange={(e) => setParams({ veracity: e })}
+            value={get("veracity")}
+            onChange={(e) => set({ veracity: e })}
           />
           <FilterListbox
             label='Escalated'
             options={[...ESCALATED_OPTIONS]}
-            value={getParam("escalated")}
-            onChange={(e) => setParams({ escalated: e })}
+            value={get("escalated")}
+            onChange={(e) => set({ escalated: e })}
           />
 
           <FilterComboBox
             label='Creator'
             list={usersRemapComboBox(usersQuery)}
             onChange={(e) => {
-              setParams({ creator: e.key });
+              set({ creator: e.key });
             }}
-            selectedKey={getParam("creator")}
+            selectedKey={get("creator")}
           />
           <FilterComboBox
             label='Assignee'
             list={usersRemapComboBox(usersQuery)}
             onChange={(e) => {
-              setParams({ assignedTo: e.key });
+              set({ assignedTo: e.key });
             }}
-            selectedKey={getParam("assignedTo")}
+            selectedKey={get("assignedTo")}
             optionalItems={[{ key: "none", value: "Not Assigned" }]}
           />
         </div>

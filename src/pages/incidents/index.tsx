@@ -15,7 +15,7 @@ import Pagination from "../../components/Pagination";
 import { formatPageCount } from "../../utils/format";
 
 const Incidents = () => {
-  const { searchParams, getAllParams, getParam, setParams } =
+  const { searchParams, getAllParams, getParam, setParams, clearAllParams } =
     useQueryParams<GroupQueryState>();
 
   const groupsQuery = useQuery(["groups"], () => getGroups(getAllParams()), {
@@ -41,6 +41,10 @@ const Incidents = () => {
 
       <IncidentsFilters
         reportCount={groupsQuery.data && groupsQuery.data.total}
+        get={getParam}
+        set={setParams}
+        isQuery={!!searchParams.size}
+        clearAll={clearAllParams}
       />
       <div className='border border-slate-300 rounded-lg bg-white'>
         {!!groupsQuery.data && !!groupsQuery.data.total ? (

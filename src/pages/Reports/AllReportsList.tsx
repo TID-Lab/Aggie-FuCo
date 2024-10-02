@@ -15,17 +15,7 @@ import Pagination from "../../components/Pagination";
 import AggieCheck from "../../components/AggieCheck";
 import AggieButton from "../../components/AggieButton";
 
-import {
-  faMinus,
-  faEnvelopeOpen,
-  faEnvelope,
-  faXmark,
-  faDotCircle,
-  faPlus,
-  faCaretDown,
-  faFile,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import MultiSelectActions from "./components/MultiSelectActions";
 
 interface IProps {}
@@ -38,7 +28,9 @@ const AllReportsList = ({}: IProps) => {
   const { searchParams, getAllParams, setParams, getParam } =
     useQueryParams<ReportQueryState>();
 
-  const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()));
+  const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()), {
+    refetchInterval: 60000,
+  });
   const { status: reportsStatus } = reportsQuery;
   useEffect(() => {
     // refetch on filter change

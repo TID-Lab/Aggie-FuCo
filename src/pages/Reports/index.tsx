@@ -16,9 +16,7 @@ const Reports = () => {
   const { searchParams, getAllParams, getParam } =
     useQueryParams<ReportQueryState>();
 
-  const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()), {
-    refetchInterval: 60000,
-  });
+  const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()));
 
   return (
     <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-3 gap-3'>

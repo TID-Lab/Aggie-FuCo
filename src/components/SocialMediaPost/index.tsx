@@ -17,6 +17,7 @@ interface IProps {
 
 import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { parseTwitterQuote, parseTwitterRetweet } from "./reportParser";
 
 type ContentType = "default" | "twitterQuote" | "twitterRetweet";
 
@@ -41,38 +42,11 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
     return "default";
   }
 
-  function getTwitterUserDetails(rawPostData: any) {
-    const userData = rawPostData?.core?.user_results?.result?.legacy;
-    if (!userData) return undefined;
-    return {
-      name: userData.name,
-      username: userData.screen_name,
-      followers: userData.followers_count,
-      url: userData.url,
-      createdAt: userData.created_at,
-    };
-  }
-
   const QuoteContent = (props: { report: Report }) => {
     const { report } = props;
-    const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
-      ?.post_data;
 
-    const retweetResult = rawPostData.quoted_status_result?.result;
-
-    const innerAuthor = getTwitterUserDetails(retweetResult);
-
-    const post = {
-      content: retweetResult.legacy?.full_text,
-      authoredAt: retweetResult.legacy?.created_at,
-    };
-    const postStats: TwitterStatistics = {
-      reply_count: retweetResult.legacy?.reply_count,
-      retweet_count:
-        retweetResult.legacy?.retweet_count + retweetResult.legacy?.quote_count,
-      like_count: retweetResult.legacy?.favorite_count,
-      view_count: retweetResult.views?.count,
-    };
+    const { author, authoredAt, content, statistics } =
+      parseTwitterQuote(report);
 
     return (
       <>
@@ -95,10 +69,10 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
         )}
         <div className='border border-slate-300 py-2 px-2 rounded-lg'>
           <div>
-            <h2 className='font-medium'>{innerAuthor?.username}</h2>
+            <h2 className='font-medium'>{author?.username}</h2>
             <p className='text-sm text-slate-600'>
               {" "}
-              <DateTime dateString={post.authoredAt} />
+              <DateTime dateString={authoredAt} />
             </p>
           </div>
           <div className='whitespace-pre-line my-2'>
@@ -108,11 +82,11 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
                 className: "underline text-blue-600 hover:bg-slate-100 ",
               }}
             >
-              {formatText(post.content)}
+              {formatText(content)}
             </Linkify>
           </div>
           <div className='flex gap-3 text-sm text-slate-500 font-medium mt-1 items-center'>
-            <PostReactions stats={postStats} media={report._media[0]} />
+            <PostReactions stats={statistics} media={report._media[0]} />
           </div>
         </div>
       </>
@@ -121,32 +95,18 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
 
   const RetweetContent = (props: { report: Report }) => {
     const { report } = props;
-    const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
-      ?.post_data;
-
-    const retweetResult = rawPostData.retweeted_status_result?.result;
-
-    const innerAuthor = getTwitterUserDetails(retweetResult);
-
-    const post = {
-      content: retweetResult.legacy?.full_text,
-      authoredAt: retweetResult.legacy?.created_at,
-    };
-    const postStats: TwitterStatistics = {
-      reply_count: retweetResult.legacy?.reply_count,
-      retweet_count:
-        retweetResult.legacy?.retweet_count + retweetResult.legacy?.quote_count,
-      like_count: retweetResult.legacy?.favorite_count,
-      view_count: retweetResult.views?.count,
-    };
+    const { author, authoredAt, content, statistics } =
+      parseTwitterRetweet(report);
 
     return (
       <>
         <p>Retweeted:</p>
         <div className='border border-slate-300 py-2 px-2 rounded-lg'>
           <div>
-            <h2 className='font-medium'>{innerAuthor?.username}</h2>
-            <p className='text-sm text-slate-600'>{post.authoredAt}</p>
+            <h2 className='font-medium'>{author?.username}</h2>
+            <p className='text-sm text-slate-600'>
+              <DateTime dateString={authoredAt} />
+            </p>
           </div>
           <div className='whitespace-pre-line my-2'>
             <Linkify
@@ -155,11 +115,11 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
                 className: "underline text-blue-600 hover:bg-slate-100 ",
               }}
             >
-              {formatText(post.content)}
+              {formatText(content)}
             </Linkify>
           </div>
           <div className='flex gap-3 text-sm text-slate-500 font-medium mt-1 items-center'>
-            <PostReactions stats={postStats} media={report._media[0]} />
+            <PostReactions stats={statistics} media={report._media[0]} />
           </div>
         </div>
       </>

@@ -74,7 +74,7 @@ const Report = () => {
     {
       onSuccess: (data) => {
         // TODO: Instead of refetching, just use a React useState to adjust the UI on Success
-        reportQuery.refetch();
+        //reportQuery.refetch();
         queryData.update<Reports>(["reports"], (data) => {
           return {
             results: data?.results.map((i) =>
