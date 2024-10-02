@@ -28,7 +28,7 @@ const MediaPreview = ({ mediaUrl, media, report }: IProps) => {
       const images = getTweetImages(report);
       console.log(images);
 
-      if (!images) return <></>;
+      if (!images || images.length === 0) return <></>;
       return (
         <div className='min-h-[30vh] relative grid grid-cols-2 gap-1'>
           {images.map((url: string, index: number) => (

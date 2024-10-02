@@ -1,3 +1,7 @@
+/**
+ * parsing the mess of metadata that we get from various sources.
+ * this is a very trial-and-error process.
+ */
 import { Report, TwitterStatistics } from "../../api/reports/types";
 
 export function parseTwitterUser(rawPostData: any) {
@@ -11,17 +15,28 @@ export function parseTwitterUser(rawPostData: any) {
     createdAt: userData.created_at,
   };
 }
+
+export function isTwitterReply(report: Report) {
+  const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
+    ?.post_data;
+  const name = rawPostData?.in_reply_to_screen_name;
+  const id = rawPostData?.in_reply_to_status_id_str;
+  return {
+    author: name,
+    url: !!name && !!id ? `https://x.com/${name}/status/${id}` : undefined,
+  };
+}
+
 export function getTweetImages(report: Report) {
   const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
-    ?.post_data?.api_data;
+    ?.search_data_fields;
 
-  const images = rawPostData.legacy?.extended_entities?.media?.map(
-    (imgData: any) => {
-      return imgData.media_url_https + "?format=jpg&name=medium";
-    }
-  );
-  return images;
+  const images = rawPostData?.media_data?.map((imgData: any) => {
+    return imgData.thumb_url + "?format=jpg&name=medium";
+  });
+  return images as string[];
 }
+
 export function parseTwitterRetweet(report: Report) {
   const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
     ?.post_data;
