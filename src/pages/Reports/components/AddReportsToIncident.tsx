@@ -30,8 +30,14 @@ const AddReportsToIncidents = ({
 }: IAddReportsToIncidents) => {
   const [selectedIncident, setSelectedIncident] = useState<Group>();
   const queryClient = useQueryClient();
-  const { searchParams, getAllParams, getParam, setParams, clearAllParams } =
-    useQueryParamsInternal<GroupQueryState>();
+  const {
+    searchParams,
+    query,
+    getAllParams,
+    getParam,
+    setParams,
+    clearAllParams,
+  } = useQueryParamsInternal<GroupQueryState>();
 
   function ReportsFromSelection(
     ids: string[] | undefined,
@@ -47,13 +53,19 @@ const AddReportsToIncidents = ({
     if (!getReports) return [];
     return getReports;
   }
-  const { data: incidents, refetch } = useQuery(["groups"], () =>
-    getGroups(getAllParams())
-  );
+
+  const { data: incidents, refetch } = useQuery({
+    queryKey: ["groups"],
+    queryFn: () => getGroups(getAllParams()),
+    enabled: isOpen && !!selection,
+    staleTime: 10000,
+  });
+
   useEffect(() => {
-    console.log("test");
+    if (!isOpen || !selection) return;
     refetch();
-  }, [searchParams]);
+  }, [query]);
+
   const addReportsMutation = useMutation({
     mutationFn: setReportsToGroup,
     onSuccess: () => {

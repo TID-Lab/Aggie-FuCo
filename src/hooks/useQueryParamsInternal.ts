@@ -48,6 +48,7 @@ export function useQueryParamsInternal<T extends object>(initialParams?: T) {
 
   return {
     searchParams: searchParams,
+    query,
     getAllParams,
     setParams,
     getParam,
