@@ -7,7 +7,7 @@ import {
   Report,
   TwitterStatistics,
 } from "../../api/reports/types";
-import sanitizeHtml from "sanitize-html";
+//import sanitizeHtml from "sanitize-html";
 import { MediaOptions } from "../../api/common";
 
 type ContentType =
@@ -117,10 +117,11 @@ export function parseTwitterQuote(report: Report) {
 
 // temporary, should be done server-side
 export function sanitize(string: string) {
-  return sanitizeHtml(string, {
-    allowedAttributes: {
-      ...sanitizeHtml.defaults.allowedAttributes,
-      span: ["class"],
-    },
-  });
+  return string;
+  // return sanitizeHtml(string, {
+  //   allowedAttributes: {
+  //     ...sanitizeHtml.defaults.allowedAttributes,
+  //     span: ["class"],
+  //   },
+  //});
 }
