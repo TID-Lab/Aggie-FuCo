@@ -78,7 +78,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
                     className='hover:underline hover:bg-slate-100 px-2 py-1 text-sm rounded'
                     onClick={() => {
                       clearAllParams();
-                      resetForm();
+                      resetForm({ values: { keywords: "" } });
                     }}
                   >
                     <FontAwesomeIcon icon={faXmarkSquare} />
