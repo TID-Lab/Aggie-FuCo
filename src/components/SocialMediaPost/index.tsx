@@ -4,47 +4,30 @@ import {
   Report,
   TwitterStatistics,
 } from "../../api/reports/types";
-import { formatAuthor, formatText } from "../../utils/format";
+import { formatText } from "../../utils/format";
 import PostReactions from "./PostReactions";
 import MediaPreview from "./MediaPreview";
 import SocialMediaIcon from "./SocialMediaIcon";
-import { MediaOptions } from "../../api/common";
+
 import DateTime from "../DateTime";
+
+import {
+  parseContentType,
+  isTwitterReply,
+  parseTwitterQuote,
+  parseTwitterRetweet,
+  sanitize,
+} from "./reportParser";
+
+import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 interface IProps {
   report: Report;
   showMedia?: boolean;
 }
-
-import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  isTwitterReply,
-  parseTwitterQuote,
-  parseTwitterRetweet,
-} from "./reportParser";
-
-type ContentType = "default" | "twitterQuote" | "twitterRetweet";
-
 const SocialMediaPost = ({ report, showMedia }: IProps) => {
-  const contentType = isRetweet(report._media, report.metadata);
-
-  function isRetweet(
-    _media: MediaOptions[],
-    metadata: BaseMetadata
-  ): ContentType {
-    if (!_media || _media[0] !== "twitter") return "default";
-    const rawPostData = (metadata.rawAPIResponse.attributes as any)?.post_data;
-    if (!rawPostData) return "default";
-    const isQuoteRetweet = rawPostData.quoted_status_result?.result;
-    if (isQuoteRetweet) {
-      return "twitterQuote";
-    }
-    const isRetweet = rawPostData.retweeted_status_result?.result;
-    if (isRetweet) {
-      return "twitterRetweet";
-    }
-    return "default";
-  }
+  const contentType = parseContentType(report._media, report.metadata);
 
   const QuoteContent = (props: { report: Report }) => {
     const { report } = props;
@@ -186,9 +169,28 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
           </a>
         </p>
       </div>
+
       {contentType === "twitterRetweet" && <RetweetContent report={report} />}
       {contentType === "twitterQuote" && <QuoteContent report={report} />}
-
+      {contentType === "truthsocial" && (
+        <>
+          <div className='whitespace-pre-line break-all mb-1'>
+            <p
+              className='truthsocial'
+              dangerouslySetInnerHTML={{
+                __html: sanitize(report.content),
+              }}
+            ></p>
+          </div>
+          {showMedia && (
+            <MediaPreview
+              mediaUrl={report.metadata.mediaUrl}
+              media={report._media[0]}
+              report={report}
+            />
+          )}
+        </>
+      )}
       {contentType === "default" && (
         <>
           <div className='whitespace-pre-line mb-1'>

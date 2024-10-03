@@ -16,6 +16,7 @@ export const MEDIA_OPTIONS = [
   "RSS",
   // "elmo",
   // "SMS GH",
+  "truthsocial",
   "youtube",
   "facebook",
 ] as const;

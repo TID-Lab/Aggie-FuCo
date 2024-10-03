@@ -54,3 +54,12 @@ code {
 #root {
   width: 100%;
 }
+
+/* truth social needs special css*/
+.truthsocial .quote-inline {
+  @apply text-xs flex;
+}
+/* truth social needs special css*/
+.truthsocial a {
+  @apply text-blue-600 underline;
+}
