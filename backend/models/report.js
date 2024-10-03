@@ -33,7 +33,14 @@ let schema = new Schema({
   escalated: { type: Boolean, default: false, required: true, index: true },
   content_lang: { type: String },
   irrelevant: { type: String, default: 'false', required: false, enum: ['false', 'true', 'maybe'] },
-  tags: { type: [{ key: String, val: Boolean }], default: [] },
+  tags: { 
+    type: Map, 
+    of: new Schema({
+      value: Schema.Types.Mixed, // Allows for both Boolean and String types
+      rationale: { type: String, default: null }
+    }), 
+    default: {}
+  },
   tagNames: { type: [String], default: [] }
 });
 
