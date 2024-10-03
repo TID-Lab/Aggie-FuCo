@@ -13,6 +13,7 @@ import { faSearch, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
 import AggieButton from "../../../components/AggieButton";
 import Pagination from "../../../components/Pagination";
 import { getAllGroups, getGroups } from "../../../api/groups";
+import { useCallback } from "react";
 
 interface IReportFilters {
   reportCount?: number;
@@ -32,12 +33,12 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
     }));
     return [{ key: "", value: "All Sources" }, ...array];
   }
+  const sourcesList = useCallback(sourcesRemapComboBox, [sources]);
 
   const { data: groups } = useQuery(["allgroups"], () => getAllGroups());
 
   function groupsRemapComboBox(query: typeof groups) {
     if (!query || "total" in query) return [];
-    console.log(query);
     const array = query?.map((group) => ({
       key: group._id,
       value: group.title,
@@ -45,6 +46,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
     if (!array) return [];
     return [{ key: "", value: "All Incidents" }, ...array];
   }
+  const groupsList = useCallback(groupsRemapComboBox, [groups]);
 
   return (
     <>
@@ -107,7 +109,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
           />
           <FilterComboBox
             label='Sources'
-            list={sourcesRemapComboBox(sources)}
+            list={sourcesList(sources)}
             onChange={(e) => {
               setParams({ sourceId: e.key });
             }}
@@ -115,7 +117,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
           />
           <FilterComboBox
             label='Incidents'
-            list={groupsRemapComboBox(groups)}
+            list={groupsList(groups)}
             onChange={(e) => {
               setParams({ groupId: e.key });
             }}

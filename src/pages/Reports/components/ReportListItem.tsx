@@ -31,7 +31,6 @@ const ReportListItem = ({
   isSelectMode,
   onCheckChange,
 }: IProps) => {
-  const queryClient = useQueryClient();
   const contentType = parseContentType(report._media, report.metadata);
 
   const { id: currentPageId } = useParams();

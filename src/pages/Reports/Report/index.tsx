@@ -24,7 +24,11 @@ const Report = () => {
   const queryData = useUpdateQueryData();
   const { setRead, setIrrelevance } = useReportMutations();
 
-  const reportQuery = useQuery(["report", id], () => getReport(id));
+  const {
+    data: report,
+    isLoading,
+    isFetched,
+  } = useQuery(["report", id], () => getReport(id));
   const sourcesQuery = useQuery(["sources"], getSources);
 
   function newIncidentFromReport() {
@@ -34,6 +38,19 @@ const Report = () => {
 
     navigate("/incidents/new?" + params.toString());
   }
+  //mark as read
+  const [ranOnce, setRanOnce] = useState("");
+
+  useEffect(() => {
+    if (!report || !id || ranOnce === id) return;
+
+    if (!report.read) {
+      setRead.mutate({ reportIds: [id], read: true, currentPageId: id });
+    }
+
+    setRanOnce(id);
+  }, [report, id]);
+
   function getSourceFromId(ids: string[]) {
     if (!sourcesQuery.data) return <>none</>;
 
@@ -63,199 +80,103 @@ const Report = () => {
     return names;
   }
 
-  const [tags, setTags] = useState<Tag[] | []>([]);
-  const tagsQuery = useQuery(["tags"], getTags, {
-    enabled: !!reportQuery.data,
-  });
-  const tagsUpdateMutation = useMutation(
-    (tagsUpdateInfo: { reportId: string; tags: Tag[] }) => {
-      return setSelectedTags([tagsUpdateInfo.reportId], tagsUpdateInfo.tags);
-    },
-    {
-      onSuccess: (data) => {
-        // TODO: Instead of refetching, just use a React useState to adjust the UI on Success
-        //reportQuery.refetch();
-        queryData.update<Reports>(["reports"], (data) => {
-          return {
-            results: data?.results.map((i) =>
-              i._id === reportQuery.data?._id
-                ? { ...i, smtcTags: tags.map((tag) => tag._id) }
-                : i
-            ),
-          };
-        });
-      },
-      onError: (error: AxiosError) => {
-        if (
-          error &&
-          error.response &&
-          error.response.status &&
-          error.response.data
-        ) {
-          // setShowAlert(false);
-          // setAlertMessage({
-          //   header: "Failed to update tags (" + error.response.status + ")",
-          //   //@ts-ignore
-          //   body: error.response.data,
-          // });
-          // setShowAlert(true);
-        } else {
-          console.error("Uncaught tags update error.");
-        }
-      },
-    }
-  );
-
-  // lol
-  const emptyTag: Tag = {
-    isCommentTag: false,
-    name: "",
-    color: "",
-    description: "",
-    user: {
-      _id: "",
-      username: "",
-    },
-    updatedAt: "",
-    storedAt: "",
-    __v: 0,
-    _id: "",
-  };
-  useEffect(() => {
-    if (!reportQuery.data) return;
-    if (!tagsQuery.data) return;
-    console.log(reportQuery.data);
-    setTags(
-      reportQuery.data.smtcTags.map(
-        (id) => tagsQuery.data?.find((tag) => tag._id === id) || emptyTag
-      )
-    );
-  }, [tagsQuery.isSuccess]);
-
   const [addReportModal, setAddReportModal] = useState(false);
   function addReportsToIncidents() {
     setAddReportModal(true);
   }
   // refactor to be more pretty and have placeholders
-  if (reportQuery.isLoading)
+  if (isLoading)
     return (
       <span className='pt-4 sticky top-0 font-medium text-center'>
         ...loading
       </span>
     );
-  if (reportQuery.data) {
-    console.log(reportQuery.data);
-    return (
-      <article className='pt-4 pr-2 sticky top-0 overflow-y-auto max-h-[93vh]  '>
-        <AddReportsToIncidents
-          selection={id ? [id] : undefined}
-          isOpen={addReportModal}
-          queryKey={["reports"]}
-          onClose={() => setAddReportModal(false)}
-        />
-        <nav className='pl-3 pr-2 py-2 flex justify-between items-center rounded-lg text-xs border border-slate-300 mb-2 shadow-md bg-white'>
-          <div className='flex gap-1 items-center'>
-            <p>Mark as:</p>
+  if (!report || !id) return <> error loading page</>;
+  return (
+    <article className='pt-4 pr-2 sticky top-0 overflow-y-auto max-h-[93vh]  '>
+      <AddReportsToIncidents
+        selection={id ? [id] : undefined}
+        isOpen={addReportModal}
+        queryKey={["reports"]}
+        onClose={() => setAddReportModal(false)}
+      />
+      <nav className='pl-3 pr-2 py-2 flex justify-between items-center rounded-lg text-xs border border-slate-300 mb-2 shadow-md bg-white'>
+        <div className='flex gap-1 items-center'>
+          <p>Mark as:</p>
+          <AggieButton
+            variant='secondary'
+            onClick={() =>
+              setRead.mutate({
+                reportIds: id ? [id] : [],
+                read: !report.read,
+                currentPageId: id,
+              })
+            }
+            loading={setRead.isLoading}
+            disabled={!report || setRead.isLoading}
+          >
+            {report.read ? <> unread</> : <> read</>}
+          </AggieButton>
+          <AggieButton
+            variant='secondary'
+            onClick={() =>
+              setIrrelevance.mutate({
+                reportIds: id ? [id] : [],
+                irrelevant: report.irrelevant === "true" ? "false" : "true",
+                currentPageId: id,
+              })
+            }
+            loading={setIrrelevance.isLoading}
+            disabled={!report || setIrrelevance.isLoading}
+          >
+            {report.irrelevant === "true" ? <>relevant</> : <>irrelevant</>}
+          </AggieButton>
+        </div>
+        <div className='flex gap-1'>
+          <div className='flex font-medium'>
             <AggieButton
-              variant='secondary'
-              onClick={() =>
-                setRead.mutate({
-                  reportIds: id ? [id] : [],
-                  read: !reportQuery.data?.read,
-                  currentPageId: id,
-                })
-              }
-              loading={setRead.isLoading}
-              disabled={!reportQuery.data || setRead.isLoading}
+              className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-300 hover:bg-slate-200'
+              onClick={addReportsToIncidents}
             >
-              {reportQuery.data?.read ? <> unread</> : <> read</>}
+              <FontAwesomeIcon icon={faPlus} />
+              Attach Incident
             </AggieButton>
-            <AggieButton
+            <DropdownMenu
               variant='secondary'
-              onClick={() =>
-                setIrrelevance.mutate({
-                  reportIds: id ? [id] : [],
-                  irrelevant:
-                    reportQuery.data?.irrelevant === "true" ? "false" : "true",
-                  currentPageId: id,
-                })
-              }
-              loading={setIrrelevance.isLoading}
-              disabled={!reportQuery.data || setIrrelevance.isLoading}
-            >
-              {reportQuery.data?.irrelevant === "true" ? (
-                <>relevant</>
-              ) : (
-                <>irrelevant</>
-              )}
-            </AggieButton>
-          </div>
-          <div className='flex gap-1'>
-            <div className='flex font-medium'>
-              <AggieButton
-                className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-300 hover:bg-slate-200'
-                onClick={addReportsToIncidents}
-              >
-                <FontAwesomeIcon icon={faPlus} />
-                Attach Incident
-              </AggieButton>
-              <DropdownMenu
-                variant='secondary'
-                buttonElement={
-                  <FontAwesomeIcon
-                    icon={faCaretDown}
-                    className='ui-open:rotate-180'
-                  />
-                }
-                className='px-2 py-1 rounded-r-lg border-y border-r'
-                panelClassName='right-0'
-              >
-                <AggieButton
-                  className='px-3 py-2 hover:bg-slate-200'
-                  onClick={newIncidentFromReport}
-                >
-                  <FontAwesomeIcon icon={faFile} />
-                  Create New Incident with Report
-                </AggieButton>
-              </DropdownMenu>
-            </div>
-          </div>
-        </nav>
-        <div className='flex flex-col gap-1 my-2'>
-          <div className='grid grid-cols-3'>
-            <p className='font-medium text-sm py-1 px-2 '>Source</p>
-            <p className='col-span-2 '>
-              {getSourceFromId(reportQuery.data._sources)}
-            </p>
-          </div>
-          <div className='grid grid-cols-3'>
-            <p className='font-medium text-sm py-1 px-2 '>Tags</p>
-            <p className='col-span-2'>
-              Tags don't work right now
-              {/* {tagsQuery.data && reportQuery.data._id && (
-                <TagsTypeahead
-                  id={reportQuery.data._id}
-                  options={tagsQuery.data}
-                  selected={tags}
-                  onChange={setTags}
-                  onBlur={() => {
-                    tagsUpdateMutation.mutate({
-                      reportId: reportQuery.data?._id || "",
-                      tags: tags,
-                    });
-                  }}
-                  variant={"table"}
+              buttonElement={
+                <FontAwesomeIcon
+                  icon={faCaretDown}
+                  className='ui-open:rotate-180'
                 />
-              )} */}
-            </p>
+              }
+              className='px-2 py-1 rounded-r-lg border-y border-r'
+              panelClassName='right-0'
+            >
+              <AggieButton
+                className='px-3 py-2 hover:bg-slate-200'
+                onClick={newIncidentFromReport}
+              >
+                <FontAwesomeIcon icon={faFile} />
+                Create New Incident with Report
+              </AggieButton>
+            </DropdownMenu>
           </div>
         </div>
+      </nav>
+      <div className='flex flex-col gap-1 my-2'>
+        <div className='grid grid-cols-3'>
+          <p className='font-medium text-sm py-1 px-2 '>Source</p>
+          <p className='col-span-2 '>{getSourceFromId(report._sources)}</p>
+        </div>
+        <div className='grid grid-cols-3'>
+          <p className='font-medium text-sm py-1 px-2 '>Tags</p>
+          <p className='col-span-2'>Tags don't work right now</p>
+        </div>
+      </div>
 
-        <SocialMediaPost report={reportQuery.data} showMedia />
-      </article>
-    );
-  }
-  return <> error loading page</>;
+      <SocialMediaPost report={report} showMedia />
+    </article>
+  );
 };
 
 export default Report;

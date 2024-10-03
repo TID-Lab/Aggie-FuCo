@@ -55,8 +55,6 @@ const AllReportsList = ({}: IProps) => {
 
   function onReportItemClick(id: string, isRead: boolean) {
     navigate({ pathname: id, search: searchParams.toString() });
-    if (!isRead)
-      setRead.mutate({ reportIds: [id], read: true, currentPageId: id });
   }
 
   return (
