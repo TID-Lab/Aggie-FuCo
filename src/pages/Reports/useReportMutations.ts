@@ -34,7 +34,7 @@ export const useReportMutations = (
     }) => setSelectedRead(params.reportIds, params.read),
     onMutate: (params) => {
       // update reports list
-      queryData.queryClient.cancelQueries(options.key);
+      //queryData.queryClient.cancelQueries(options.key);
       const contextReports = queryData.update<Reports>(options.key, (data) => {
         const updateData = updateByIds(params.reportIds, data.results, {
           read: params.read,

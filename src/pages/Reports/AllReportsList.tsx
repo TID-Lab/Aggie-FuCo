@@ -15,17 +15,7 @@ import Pagination from "../../components/Pagination";
 import AggieCheck from "../../components/AggieCheck";
 import AggieButton from "../../components/AggieButton";
 
-import {
-  faMinus,
-  faEnvelopeOpen,
-  faEnvelope,
-  faXmark,
-  faDotCircle,
-  faPlus,
-  faCaretDown,
-  faFile,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import MultiSelectActions from "./components/MultiSelectActions";
 
 interface IProps {}
@@ -38,19 +28,25 @@ const AllReportsList = ({}: IProps) => {
   const { searchParams, getAllParams, setParams, getParam } =
     useQueryParams<ReportQueryState>();
 
-  const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()));
+  const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()), {
+    refetchInterval: 120000,
+  });
   const { status: reportsStatus } = reportsQuery;
   useEffect(() => {
     // refetch on filter change
     reportsQuery.refetch();
     multiSelect.set([]);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, [searchParams]);
 
-  useEffect(() => {
-    if (reportsStatus === "success") {
-      window.scrollTo(0, 0);
-    }
-  }, [reportsStatus]);
+  // useEffect(() => {
+  //   if (reportsStatus === "success") {
+  //     window.scrollTo(0, 0);
+  //   }
+  // }, [reportsStatus]);
 
   const multiSelect = useMultiSelect({
     allItems: reportsQuery.data?.results,
@@ -59,8 +55,6 @@ const AllReportsList = ({}: IProps) => {
 
   function onReportItemClick(id: string, isRead: boolean) {
     navigate({ pathname: id, search: searchParams.toString() });
-    if (!isRead)
-      setRead.mutate({ reportIds: [id], read: true, currentPageId: id });
   }
 
   return (
@@ -107,7 +101,7 @@ const AllReportsList = ({}: IProps) => {
       </div>
 
       <div className='flex flex-col border border-slate-300 rounded-lg overflow-hidden'>
-        {reportsQuery.isSuccess && !!reportsQuery.data?.results ? (
+        {!!reportsQuery.data?.results && reportsQuery.data?.total > 0 ? (
           reportsQuery.data?.results.map((report) => (
             <div
               onClick={() => onReportItemClick(report._id, report.read)}

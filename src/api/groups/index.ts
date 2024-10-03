@@ -45,8 +45,23 @@ export const getGroups_old = async (
   }
 };
 
-export const getAllGroups = async () => {
-  const { data } = await axios.get("/api/group/all");
+const defaultAllGroups = {
+  lean: "true",
+};
+
+interface LeanGroups {
+  total: number;
+  results: Pick<Group, "title" | "_id">[];
+}
+export const getAllGroups = async (
+  options: Partial<typeof defaultAllGroups> = defaultAllGroups
+) => {
+  options = { ...defaultAllGroups, ...options };
+  const params = new URLSearchParams(options);
+  const { data } = await axios.get<
+    Pick<Group, "title" | "_id">[] | Groups | undefined
+  >("/api/group/all?" + params.toString());
+
   return data;
 };
 

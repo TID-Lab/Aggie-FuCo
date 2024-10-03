@@ -1,5 +1,6 @@
-import { MouseEvent, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryParamsInternal } from "../../../hooks/useQueryParamsInternal";
 
 import { getGroups } from "../../../api/groups";
 import { setReportsToGroup } from "../../../api/reports";
@@ -12,6 +13,8 @@ import AggieButton from "../../../components/AggieButton";
 import SocialMediaPost from "../../../components/SocialMediaPost";
 
 import NestedIncidentsList from "./NestedIncidentsList";
+import IncidentsFilters from "../../incidents/IncidentsFilters";
+import { GroupQueryState } from "../../../api/groups/types";
 
 interface IAddReportsToIncidents {
   isOpen: boolean;
@@ -27,6 +30,14 @@ const AddReportsToIncidents = ({
 }: IAddReportsToIncidents) => {
   const [selectedIncident, setSelectedIncident] = useState<Group>();
   const queryClient = useQueryClient();
+  const {
+    searchParams,
+    query,
+    getAllParams,
+    getParam,
+    setParams,
+    clearAllParams,
+  } = useQueryParamsInternal<GroupQueryState>();
 
   function ReportsFromSelection(
     ids: string[] | undefined,
@@ -42,7 +53,18 @@ const AddReportsToIncidents = ({
     if (!getReports) return [];
     return getReports;
   }
-  const { data: incidents } = useQuery(["groups"], () => getGroups());
+
+  const { data: incidents, refetch } = useQuery({
+    queryKey: ["groups"],
+    queryFn: () => getGroups(getAllParams()),
+    enabled: isOpen && !!selection,
+    staleTime: 10000,
+  });
+
+  useEffect(() => {
+    if (!isOpen || !selection) return;
+    refetch();
+  }, [query]);
 
   const addReportsMutation = useMutation({
     mutationFn: setReportsToGroup,
@@ -92,12 +114,20 @@ const AddReportsToIncidents = ({
             ))}
           </div>
 
-          <div className='overflow-y-scroll  bg-white border border-slate-300 rounded-lg'>
-            <NestedIncidentsList
-              incidents={incidents}
-              selectedIncident={selectedIncident}
-              onIncidentClicked={(item) => setSelectedIncident(item)}
+          <div>
+            <IncidentsFilters
+              get={getParam}
+              set={setParams}
+              isQuery={!!searchParams.size}
+              clearAll={clearAllParams}
             />
+            <div className='overflow-y-scroll  bg-white border border-slate-300 rounded-lg'>
+              <NestedIncidentsList
+                incidents={incidents}
+                selectedIncident={selectedIncident}
+                onIncidentClicked={(item) => setSelectedIncident(item)}
+              />
+            </div>
           </div>
         </Dialog.Panel>
       </div>

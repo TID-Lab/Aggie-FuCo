@@ -13,6 +13,10 @@ import AggieCheck from "../../../components/AggieCheck";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import DateTime from "../../../components/DateTime";
+import {
+  parseContentType,
+  sanitize,
+} from "../../../components/SocialMediaPost/reportParser";
 //TODO: refactor and clean up tech debt
 interface IProps {
   report: Report;
@@ -27,7 +31,8 @@ const ReportListItem = ({
   isSelectMode,
   onCheckChange,
 }: IProps) => {
-  const queryClient = useQueryClient();
+  const contentType = parseContentType(report._media, report.metadata);
+
   const { id: currentPageId } = useParams();
   const navigate = useNavigate();
 
@@ -36,9 +41,6 @@ const ReportListItem = ({
     () => getGroup(report._group),
     { enabled: !!report._group }
   );
-  function prettyDate(datestring: string) {
-    // TODO: pretty dastes like "1 day ago" and "3 minutes ago"
-  }
 
   function onChange(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
@@ -117,9 +119,18 @@ const ReportListItem = ({
           </div>
         </header>
         <div>
-          <p className=' text-black max-h-[10em] line-clamp-5'>
-            {formatText(report.content)}
-          </p>
+          {contentType === "truthsocial" ? (
+            <p
+              className='truthsocial text-black'
+              dangerouslySetInnerHTML={{
+                __html: sanitize(report.content),
+              }}
+            ></p>
+          ) : (
+            <p className=' text-black max-h-[10em] line-clamp-5'>
+              {formatText(report.content)}
+            </p>
+          )}
         </div>
       </div>
       <div className='flex flex-col'>
