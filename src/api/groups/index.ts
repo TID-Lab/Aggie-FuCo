@@ -49,10 +49,6 @@ const defaultAllGroups = {
   lean: "true",
 };
 
-interface LeanGroups {
-  total: number;
-  results: Pick<Group, "title" | "_id">[];
-}
 export const getAllGroups = async (
   options: Partial<typeof defaultAllGroups> = defaultAllGroups
 ) => {
