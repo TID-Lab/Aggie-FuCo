@@ -29,7 +29,7 @@ const AllReportsList = ({}: IProps) => {
     useQueryParams<ReportQueryState>();
 
   const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()), {
-    refetchInterval: 60000,
+    refetchInterval: 120000,
   });
   const { status: reportsStatus } = reportsQuery;
   useEffect(() => {
