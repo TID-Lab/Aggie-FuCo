@@ -121,7 +121,7 @@ const AddReportsToIncidents = ({
               isQuery={!!searchParams.size}
               clearAll={clearAllParams}
             />
-            <div className='overflow-y-scroll  bg-white border border-slate-300 rounded-lg'>
+            <div className='overflow-y-auto max-h-[60vh] bg-white border border-slate-300 rounded-lg'>
               <NestedIncidentsList
                 incidents={incidents}
                 selectedIncident={selectedIncident}
