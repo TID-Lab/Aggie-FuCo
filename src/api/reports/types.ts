@@ -31,7 +31,7 @@ export interface Report extends hasId {
   tagNames: string[];
 }
 
-interface GeneratedTagValue {
+export interface GeneratedTagValue {
   value: string | boolean;
   rationale: string | null;
 }

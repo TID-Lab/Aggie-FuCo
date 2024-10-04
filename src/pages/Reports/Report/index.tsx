@@ -230,7 +230,7 @@ const Report = () => {
             </p>
           </div>
           <div className='grid grid-cols-4'>
-            <p className='font-medium text-sm py-1 px-2 '>Generated Tags</p>
+            <p className='font-medium text-sm py-1 px-2 '>Gen Tags</p>
             <p className='col-span-3 flex-wrap flex gap-1 '>
               <GeneratedTagsList
                 tags={reportQuery.data.tags}

@@ -3,6 +3,8 @@
 import React from "react";
 import { GeneratedTags } from "../api/reports/types";
 import { isBoolean } from "lodash";
+import GeneratedTag from "./GeneratedTag";
+
 const starIcon = (
   <svg
     width='16'
@@ -17,8 +19,6 @@ const starIcon = (
     />
   </svg>
 );
-
-const keyClass = "pl-1 pr-2 flex items-center gap-1 rounded-full font-medium";
 
 interface IProps {
   tags?: GeneratedTags;
@@ -39,46 +39,37 @@ const GeneratedTagsList = ({
     };
   });
   if (!tagsList) return <></>;
+  const keyClass = "pl-1 pr-2 flex items-center gap-1 rounded-full font-medium";
 
-  const booleanTagsList = tagsList.filter((i) => isBoolean(i.value) && i.value);
-  const moreTagsLength =
-    booleanTagsList.length > 1 ? tagsList.length - 2 : tagsList.length - 1;
+  const booleanTagsList = tagsList
+    .filter((i) => isBoolean(i.value) && i.value)
+    .slice(0, showCount);
+  const moreTagsLength = tagsList.length - booleanTagsList.length;
   return (
     <>
-      {booleanTagsList?.slice(0, showCount).map((item) => (
-        <span
-          key={item.key}
-          className={`${keyClass} bg-purple-200  text-purple-900 group/gen relative`}
-        >
-          {starIcon}
-          {item.key}
-          <span
-            className={`${tempHoverCSS} group-hover/gen:opacity-100 absolute mt-1 top-full rounded p-3 inline-block opacity-0 pointer-events-none z-10 bg-purple-50 border border-purple-400 min-w-20 w-max max-w-md `}
-          >
-            <span className='block '>
-              {item.key}
-              {isBoolean(item.value) ? (
-                <span className='rounded-full px-2 bg-purple-600 text-white'>
-                  {`${item.value}`}
-                </span>
-              ) : (
-                <span className='block font-medium'>{item.value}</span>
-              )}
-            </span>
-            <span className='block mb-1 text-xs italic'>{item.rationale}</span>
+      {booleanTagsList?.map(({ key, value, rationale }) => (
+        <GeneratedTag name={key} key={key}>
+          <span className='block '>
+            {key}
+            {isBoolean(value) ? (
+              <span className='rounded-full px-2 bg-purple-600 text-white'>
+                {`${value}`}
+              </span>
+            ) : (
+              <span className='block font-medium'>{value}</span>
+            )}
           </span>
-        </span>
+          <span className='block mb-1 text-xs italic'>{rationale}</span>
+        </GeneratedTag>
       ))}
-      {tagsList.length > showCount && (
-        <span
-          className={`${keyClass} group/gen hover:bg-purple-300 bg-purple-200 border border-purple-400 text-purple-900 relative`}
+      {moreTagsLength > 0 && (
+        <GeneratedTag
+          name={`+${moreTagsLength}`}
+          className='rounded-full hover:bg-purple-100  text-purple-900 border border-purple-400'
         >
-          {starIcon} +{moreTagsLength}
-          <span
-            className={`${tempHoverCSS} group-hover/gen:opacity-100 absolute mt-1 top-full rounded p-3 inline-block opacity-0 pointer-events-none z-10 bg-purple-50 border border-purple-400 min-w-20 w-max max-w-md `}
-          >
+          <div className='divide-y divide-purple-400'>
             {tagsList.map((item) => (
-              <React.Fragment key={item.key}>
+              <div key={item.key} className='py-1'>
                 <span className='block '>
                   {item.key}{" "}
                   {isBoolean(item.value) ? (
@@ -92,10 +83,10 @@ const GeneratedTagsList = ({
                 <span className='block mb-1 text-xs italic'>
                   {item.rationale}
                 </span>
-              </React.Fragment>
+              </div>
             ))}
-          </span>
-        </span>
+          </div>
+        </GeneratedTag>
       )}
     </>
   );
