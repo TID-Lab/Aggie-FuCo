@@ -72,7 +72,7 @@ const GeneratedTag = ({ name, children, className }: IProps) => {
             ref={refs.setFloating}
             style={floatingStyles}
             {...getFloatingProps()}
-            className={`max-h-[50vh] overflow-y-auto top-full rounded-lg p-3 inline-block pointer-events-none z-10 bg-purple-50 border border-purple-400 min-w-20 w-max max-w-md `}
+            className={`max-h-[50vh] shadow-md overflow-y-auto top-full rounded-lg p-3 inline-block pointer-events-none z-10 bg-purple-50 border border-purple-400 min-w-20 w-max max-w-md `}
           >
             {children}
           </div>
