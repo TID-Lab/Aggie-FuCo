@@ -17,6 +17,7 @@ import DropdownMenu from "../../../components/DropdownMenu";
 import SocialMediaPost from "../../../components/SocialMediaPost";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faFile, faPlus } from "@fortawesome/free-solid-svg-icons";
+import GeneratedTagsList from "../../../components/GeneratedTagsList";
 const Report = () => {
   let { id } = useParams();
   const { setParams } = useQueryParams<ReportQueryState>();
@@ -146,7 +147,7 @@ const Report = () => {
   if (reportQuery.data) {
     console.log(reportQuery.data);
     return (
-      <article className='pt-4 sticky top-0 overflow-y-auto max-h-[93vh] '>
+      <article className='pt-4 sticky top-0 overflow-y-auto max-h-[93vh] min-h-svh '>
         <AddReportsToIncidents
           selection={id ? [id] : undefined}
           isOpen={addReportModal}
@@ -222,15 +223,24 @@ const Report = () => {
           </div>
         </nav>
         <div className='flex flex-col gap-1 my-2'>
-          <div className='grid grid-cols-3'>
+          <div className='grid grid-cols-4'>
             <p className='font-medium text-sm py-1 px-2 '>Source</p>
-            <p className='col-span-2 '>
+            <p className='col-span-3 '>
               {getSourceFromId(reportQuery.data._sources)}
             </p>
           </div>
-          <div className='grid grid-cols-3'>
+          <div className='grid grid-cols-4'>
+            <p className='font-medium text-sm py-1 px-2 '>Generated Tags</p>
+            <p className='col-span-3 flex-wrap flex gap-1 '>
+              <GeneratedTagsList
+                tags={reportQuery.data.tags}
+                tempHoverCSS='right-0'
+              />
+            </p>
+          </div>
+          <div className='grid grid-cols-4'>
             <p className='font-medium text-sm py-1 px-2 '>Tags</p>
-            <p className='col-span-2'>
+            <p className='col-span-3'>
               Tags don't work right now
               {/* {tagsQuery.data && reportQuery.data._id && (
                 <TagsTypeahead

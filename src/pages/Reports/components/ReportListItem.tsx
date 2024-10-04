@@ -13,6 +13,7 @@ import AggieCheck from "../../../components/AggieCheck";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import DateTime from "../../../components/DateTime";
+import GeneratedTagsList from "../../../components/GeneratedTagsList";
 //TODO: refactor and clean up tech debt
 interface IProps {
   report: Report;
@@ -95,13 +96,14 @@ const ReportListItem = ({
 
         <header className='flex justify-between mb-2 '>
           <div>
-            <div className='flex gap-1 text-sm items-baseline'>
+            <div className='flex flex-wrap gap-1 text-sm items-baseline'>
               <h1 className={`text-sm text-black mx-1 font-medium `}>
                 <span className='mr-2 text-slate-600 text-xs'>
                   <SocialMediaIcon mediaKey={report._media[0]} />
                 </span>
                 {report.author}
               </h1>
+              <GeneratedTagsList tags={report.tags} />
               <TagsList values={report.smtcTags} />
               {report.irrelevant && report.irrelevant === "true" && (
                 <span className='px-2 text-sm font-medium bg-red-200 text-red-800'>

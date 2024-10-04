@@ -28,7 +28,6 @@ const SocialMediaIcon = ({
 }: {
   mediaKey: MediaOptions | undefined;
 }) => {
-  console.log(mediaKey);
   if (!!mediaKey && mediaKey in mediaIcons) {
     //@ts-ignore
     return <FontAwesomeIcon icon={mediaIcons[mediaKey]} />;
