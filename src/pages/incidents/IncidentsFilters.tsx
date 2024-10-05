@@ -54,18 +54,20 @@ const IncidentsFilters = ({
             {({ resetForm }) => (
               <Form className='flex gap-1'>
                 <div>
-                  <Field
-                    name='title'
-                    className='px-2 py-1 border border-r-0 border-slate-300 bg-white rounded-l-lg min-w-[20rem]'
-                    placeholder='search for title, location, description'
-                  />
-                  <button
-                    type='submit'
-                    onClick={onSearch}
-                    className='px-4 py-1 bg-slate-100 rounded-r-lg border border-slate-300 hover:bg-slate-50'
-                  >
-                    <FontAwesomeIcon icon={faSearch} />
-                  </button>
+                  <div className='w-full max-w-[22rem] flex'>
+                    <Field
+                      name='title'
+                      className='px-2 py-1 border border-r-0 border-slate-300 bg-white rounded-l-lg w-full'
+                      placeholder='search for title, location, description'
+                    />
+                    <button
+                      type='submit'
+                      onClick={onSearch}
+                      className='px-4 py-1 bg-slate-100 rounded-r-lg border border-slate-300 hover:bg-slate-50'
+                    >
+                      <FontAwesomeIcon icon={faSearch} />
+                    </button>
+                  </div>
                 </div>
 
                 {isQuery && (
@@ -77,7 +79,7 @@ const IncidentsFilters = ({
                     }}
                   >
                     <FontAwesomeIcon icon={faXmarkSquare} />
-                    Clear All Parameters
+                    Clear All
                   </AggieButton>
                 )}
               </Form>

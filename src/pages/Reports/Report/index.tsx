@@ -1,14 +1,13 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUpdateQueryData } from "../../../hooks/useUpdateQueryData";
 import { useReportMutations } from "../useReportMutations";
 import { useQueryParams } from "../../../hooks/useQueryParams";
 
-import { getReport, setSelectedTags } from "../../../api/reports";
+import { getReport } from "../../../api/reports";
 import { getSources } from "../../../api/sources";
-import { getTags } from "../../../api/tags";
-import { AxiosError } from "axios";
+
 import type { ReportQueryState, Reports, Tag } from "../../../objectTypes";
 
 import AggieButton from "../../../components/AggieButton";
@@ -24,11 +23,9 @@ const Report = () => {
   const queryData = useUpdateQueryData();
   const { setRead, setIrrelevance } = useReportMutations();
 
-  const {
-    data: report,
-    isLoading,
-    isFetched,
-  } = useQuery(["report", id], () => getReport(id));
+  const { data: report, isLoading } = useQuery(["report", id], () =>
+    getReport(id)
+  );
   const sourcesQuery = useQuery(["sources"], getSources);
 
   function newIncidentFromReport() {
