@@ -46,33 +46,28 @@ const IncidentsFilters = ({
   return (
     <>
       <div className='flex justify-between mb-2 '>
-        <div className='flex gap-1'>
+        <div className='flex gap-1 max-w-[25em] w-full'>
           <Formik
             initialValues={{ title: get("title") }}
             onSubmit={(e) => set(e)}
           >
             {({ resetForm }) => (
-              <Form className='flex gap-1'>
-                <div>
-                  <div className='w-full max-w-[22rem] flex'>
-                    <Field
-                      name='title'
-                      className='px-2 py-1 border border-r-0 border-slate-300 bg-white rounded-l-lg w-full'
-                      placeholder='search for title, location, description'
-                    />
-                    <button
-                      type='submit'
-                      onClick={onSearch}
-                      className='px-4 py-1 bg-slate-100 rounded-r-lg border border-slate-300 hover:bg-slate-50'
-                    >
-                      <FontAwesomeIcon icon={faSearch} />
-                    </button>
-                  </div>
-                </div>
-
+              <Form className='flex w-full'>
+                <Field
+                  name='title'
+                  className='px-2 py-1 border border-r-0 border-slate-300 bg-white rounded-l-lg w-full'
+                  placeholder='search for title, location, description'
+                />
+                <button
+                  type='submit'
+                  onClick={onSearch}
+                  className='px-4 py-1 bg-slate-100 rounded-r-lg border border-slate-300 hover:bg-slate-50'
+                >
+                  <FontAwesomeIcon icon={faSearch} />
+                </button>
                 {isQuery && (
                   <AggieButton
-                    className='hover:underline hover:bg-slate-100 px-2 py-1 text-sm rounded'
+                    className='ml-1 hover:underline hover:bg-slate-100 px-2 py-1 text-sm rounded'
                     onClick={() => {
                       clearAll();
                       resetForm();

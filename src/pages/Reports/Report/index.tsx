@@ -135,8 +135,10 @@ const Report = () => {
               className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-300 hover:bg-slate-200'
               onClick={addReportsToIncidents}
             >
-              <FontAwesomeIcon icon={faPlus} />
-              Attach Incident
+              <>
+                <FontAwesomeIcon icon={faPlus} />
+                Add to Incident
+              </>
             </AggieButton>
             <DropdownMenu
               variant='secondary'

@@ -11,10 +11,11 @@ import { updateByIds } from "../../utils/immutable";
 
 import TagsList from "../../components/Tags/TagsList";
 import VeracityToken from "../../components/VeracityToken";
-import { Dialog, Menu } from "@headlessui/react";
+import { Menu } from "@headlessui/react";
 import AggieButton from "../../components/AggieButton";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
-import IncidentForm from "./IncidentForm_old";
+import CreateEditIncidentForm from "./CreateEditIncidentForm";
+import AggieDialog from "../../components/AggieDialog";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -23,12 +24,9 @@ import {
   faEllipsis,
   faMinusCircle,
   faPlus,
-  faSpinner,
   faTrash,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
-import AggieDialog from "../../components/AggieDialog";
-import CreateEditIncidentForm from "./CreateEditIncidentForm";
 
 interface IProps {
   item: Group;

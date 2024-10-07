@@ -18,12 +18,13 @@ const defaultOptions = {
 };
 
 export const useReportMutations = (
-  options: typeof defaultOptions = defaultOptions
+  userOptions: Partial<typeof defaultOptions>
 ) => {
   const queryData = useUpdateQueryData();
   const navigate = useNavigate();
   const { searchParams } = useQueryParams<ReportQueryState>();
 
+  const options = { ...defaultOptions, ...userOptions };
   // this is an exmaple of optimistic mutation
 
   const setRead = useMutation({
@@ -47,7 +48,7 @@ export const useReportMutations = (
       // update single report
       if (params.currentPageId) {
         contextReport = queryData.update<Report>(
-          ["report", params.currentPageId],
+          [...options.key, params.currentPageId],
           (data) => {
             return {
               read: params.read,
@@ -69,7 +70,7 @@ export const useReportMutations = (
       queryData.queryClient.setQueryData(options.key, context.reports);
       if (context.reportId && context.report)
         queryData.queryClient.setQueryData(
-          ["report", context.reportId],
+          [...options.key, context.reportId],
           context.report
         );
     },
@@ -93,11 +94,14 @@ export const useReportMutations = (
       });
       // update single report
       if (params.currentPageId) {
-        queryData.update<Report>(["report", params.currentPageId], (data) => {
-          return {
-            irrelevant: params.irrelevant,
-          };
-        });
+        queryData.update<Report>(
+          [...options.key, params.currentPageId],
+          (data) => {
+            return {
+              irrelevant: params.irrelevant,
+            };
+          }
+        );
         if (params.irrelevant === "true")
           navigate({ pathname: "/reports", search: searchParams.toString() });
       }

@@ -18,13 +18,17 @@ const Incidents = () => {
   const { searchParams, getAllParams, getParam, setParams, clearAllParams } =
     useQueryParams<GroupQueryState>();
 
-  const groupsQuery = useQuery(["groups"], () => getGroups(getAllParams()), {
-    refetchInterval: 120000,
-  });
+  const { data, refetch, isLoading } = useQuery(
+    ["groups"],
+    () => getGroups(getAllParams()),
+    {
+      refetchInterval: 120000,
+    }
+  );
 
   useEffect(() => {
     // refetch on filter change
-    groupsQuery.refetch();
+    refetch();
   }, [searchParams]);
 
   return (
@@ -40,15 +44,15 @@ const Incidents = () => {
       </header>
 
       <IncidentsFilters
-        reportCount={groupsQuery.data && groupsQuery.data.total}
+        reportCount={data && data.total}
         get={getParam}
         set={setParams}
         isQuery={!!searchParams.size}
         clearAll={clearAllParams}
       />
       <div className='border border-slate-300 rounded-lg bg-white'>
-        {!!groupsQuery.data && !!groupsQuery.data.total ? (
-          groupsQuery.data.results.map((groupItem) => (
+        {!!data && !!data.total ? (
+          data.results.map((groupItem) => (
             <Link
               to={"/incidents/" + groupItem._id}
               className={"group no-underline"}
@@ -59,9 +63,7 @@ const Incidents = () => {
           ))
         ) : (
           <div className='w-full bg-white py-12 grid place-items-center font-medium'>
-            <p>
-              {groupsQuery.isLoading ? "Loading data..." : "No Results Found"}
-            </p>
+            <p>{isLoading ? "Loading data..." : "No Results Found"}</p>
           </div>
         )}
       </div>
@@ -69,17 +71,13 @@ const Incidents = () => {
         <div className='w-fit text-sm'>
           <Pagination
             currentPage={Number(getParam("page")) || 0}
-            totalCount={groupsQuery.data?.total || 0}
+            totalCount={data?.total || 0}
             onPageChange={(num) => setParams({ page: num })}
             size={4}
           />
         </div>
         <small className={"text-center font-medium w-full mt-2"}>
-          {formatPageCount(
-            Number(getParam("page")),
-            50,
-            groupsQuery.data?.total
-          )}
+          {formatPageCount(Number(getParam("page")), 50, data?.total)}
         </small>
       </div>
     </section>
