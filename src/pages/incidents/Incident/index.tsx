@@ -37,7 +37,7 @@ const Incident = () => {
   let { id } = useParams();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const { update } = useIncidentMutations();
+  const { doUpdate } = useIncidentMutations();
 
   const {
     isLoading,
@@ -49,17 +49,13 @@ const Incident = () => {
       console.log(data?.comments);
     },
   });
-  const { data: groupReports, refetch: refetchGroup } = useQuery(
-    ["reports", { groupId: id }],
+  const { data: groupReports } = useQuery(
+    ["groups", "reports", { groupId: id }],
     () => getGroupReports(id, 0)
   );
   const { data: session } = useQuery(["session"], getSession, {
     staleTime: 50000,
   });
-  // TODO: refactor into its own component or something
-  // if (isLoading) {
-  //   return <span>Loading...</span>;
-  // }
 
   const postNewComment = useMutation(addComment);
 
@@ -69,9 +65,8 @@ const Incident = () => {
       data: formData.commentdata,
       author: session._id,
     };
-    console.log(formData.commentdata);
     postNewComment.mutate(
-      { groupId: id, comment: post },
+      { id: id, comment: post },
       {
         onSuccess: () => {
           resetForm();
@@ -154,9 +149,14 @@ const Incident = () => {
               <span className='font-medium'>{groupData?._reports.length}</span>{" "}
               reports attached
             </PlaceholderDiv>
+
             <PlaceholderDiv as='p' width='7em' loading={isLoading}>
-              located at{" "}
-              <span className='font-medium'>{groupData?.locationName}</span>
+              {groupData?.locationName && (
+                <>
+                  located at{" "}
+                  <span className='font-medium'>{groupData?.locationName}</span>
+                </>
+              )}
             </PlaceholderDiv>
             <PlaceholderDiv as='p' width='7em' loading={isLoading}>
               created by{" "}
@@ -296,7 +296,7 @@ const Incident = () => {
                 group={groupData}
                 onCancel={() => setIsEditOpen(false)}
                 onSubmit={(values) =>
-                  update.mutate(
+                  doUpdate.mutate(
                     { ...values, _id: groupData?._id },
                     {
                       onSuccess: () => {
@@ -306,7 +306,7 @@ const Incident = () => {
                     }
                   )
                 }
-                isLoading={update.isLoading}
+                isLoading={doUpdate.isLoading}
               />
             </Dialog.Panel>
           </div>

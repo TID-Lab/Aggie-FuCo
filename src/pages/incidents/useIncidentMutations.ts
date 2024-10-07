@@ -1,12 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
-import { useQueryParams } from "../../hooks/useQueryParams";
 
 import { updateByIds } from "../../utils/immutable";
-import type { ReportQueryState } from "../../api/reports/types";
-import { editGroup, deleteGroup } from "../../api/groups";
-import { useOptimisticMutation } from "../../hooks/useOptimisticMutation";
+import {
+  editGroup,
+  deleteGroup,
+  setSelectedClosed,
+  setSelectedEscalated,
+} from "../../api/groups";
 import type { Groups } from "../../api/groups/types";
 
 const defaultOptions = {
@@ -17,13 +18,11 @@ export const useIncidentMutations = (
   options: typeof defaultOptions = defaultOptions
 ) => {
   const queryData = useUpdateQueryData();
-  const navigate = useNavigate();
-  const { searchParams } = useQueryParams<ReportQueryState>();
 
-  const update = useMutation({
+  const doUpdate = useMutation({
     mutationFn: editGroup,
     onSuccess: (_, variables) => {
-      queryData.update<Groups>(["groups"], (data) => {
+      queryData.update<Groups>(options.key, (data) => {
         if (!variables._id) return {};
         return {
           results: updateByIds([variables._id], data.results, {
@@ -32,23 +31,51 @@ export const useIncidentMutations = (
         };
       });
     },
-    onSettled: (newTodo) => {
-      queryData.queryClient.invalidateQueries({ queryKey: ["groups"] });
+    onSettled: (data) => {
+      queryData.queryClient.invalidateQueries({ queryKey: options.key });
     },
   });
 
-  const remove = useMutation({
+  const doRemove = useMutation({
     mutationFn: deleteGroup,
     onSuccess: (_, variables) => {
-      queryData.update<Groups>(["groups"], (data) => {
+      queryData.update<Groups>(options.key, (data) => {
         return {
           results: data.results.filter((i) => i._id !== variables._id),
         };
       });
     },
-    onSettled: (newTodo) => {
-      queryData.queryClient.invalidateQueries({ queryKey: ["groups"] });
+    onSettled: (data) => {
+      queryData.queryClient.invalidateQueries({ queryKey: options.key });
     },
   });
-  return { update, remove };
+
+  const doSetClosed = useMutation({
+    mutationFn: setSelectedClosed,
+    onSuccess: (_, params) => {
+      queryData.update<Groups>(options.key, (data) => {
+        const updateData = updateByIds(params.ids, data.results, {
+          closed: params.closed,
+        });
+        return {
+          results: updateData,
+        };
+      });
+    },
+  });
+
+  const doSetEscalate = useMutation({
+    mutationFn: setSelectedEscalated,
+    onSuccess: (_, params) => {
+      queryData.update<Groups>(options.key, (data) => {
+        const updateData = updateByIds(params.ids, data.results, {
+          escalated: params.escalated,
+        });
+        return {
+          results: updateData,
+        };
+      });
+    },
+  });
+  return { doUpdate, doRemove, doSetClosed, doSetEscalate };
 };

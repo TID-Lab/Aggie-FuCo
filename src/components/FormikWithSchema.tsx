@@ -10,6 +10,7 @@ interface IProps {
   onSubmit: (e: any) => void;
   loading?: boolean;
   disabled?: boolean;
+  onSubmitText?: React.ReactNode;
   onClose?: () => void;
 }
 const FormikWithSchema = ({
@@ -17,6 +18,7 @@ const FormikWithSchema = ({
   children,
   onSubmit,
   initialValues,
+  onSubmitText,
   loading = false,
   disabled = false,
   onClose,
@@ -45,7 +47,7 @@ const FormikWithSchema = ({
               loading={loading}
               type={"submit"}
             >
-              Confirm
+              {onSubmitText || "Confirm"}
             </AggieButton>
           </div>
         </Form>

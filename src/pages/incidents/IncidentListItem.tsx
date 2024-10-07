@@ -22,11 +22,14 @@ import {
   faClose,
   faEdit,
   faEllipsis,
+  faLocation,
+  faLocationPin,
   faMinusCircle,
   faPlus,
   faTrash,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
+import { useIncidentMutations } from "./useIncidentMutations";
 
 interface IProps {
   item: Group;
@@ -39,7 +42,7 @@ const IncidentListItem = ({ item }: IProps) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   const sessionQuery = useQuery(["session"], getSession);
-  const queryData = useUpdateQueryData();
+  const { doUpdate, doRemove } = useIncidentMutations();
 
   const editAssignMutation = useOptimisticMutation({
     queryKey: ["groups"],
@@ -57,38 +60,6 @@ const IncidentListItem = ({ item }: IProps) => {
           creator: user,
         }),
       };
-    },
-  });
-
-  const editGroupMutation = useMutation({
-    mutationFn: editGroup,
-    onSuccess: (_, variables) => {
-      queryData.update<Groups>(["groups"], (data) => {
-        return {
-          results: updateByIds([item._id], data.results, {
-            ...variables,
-          }),
-        };
-      });
-
-      setIsEditOpen(false);
-    },
-    onSettled: (newTodo) => {
-      queryData.queryClient.invalidateQueries({ queryKey: ["groups"] });
-    },
-  });
-
-  const deleteGroupMutation = useMutation({
-    mutationFn: deleteGroup,
-    onSuccess: (_) => {
-      queryData.update<Groups>(["groups"], (data) => {
-        return {
-          results: data.results.filter((i) => i._id !== item._id),
-        };
-      });
-    },
-    onSettled: (newTodo) => {
-      queryData.queryClient.invalidateQueries({ queryKey: ["groups"] });
     },
   });
 
@@ -121,7 +92,7 @@ const IncidentListItem = ({ item }: IProps) => {
   }
 
   return (
-    <article className='grid grid-cols-4 lg:grid-cols-6 p-3 text-sm text-slate-500 group-hover:bg-slate-50 border-b border-slate-300'>
+    <article className='grid grid-cols-4 lg:grid-cols-6 p-3 text-sm text-slate-600 group-hover:bg-slate-50 border-b border-slate-300'>
       <header className='col-span-3 flex flex-col'>
         <div className='flex gap-1 '>
           <VeracityToken value={item.veracity} />
@@ -147,12 +118,19 @@ const IncidentListItem = ({ item }: IProps) => {
         <div className='grid grid-cols-4 flex-grow items-end font-medium'>
           <p>#{item.idnum}</p>
           <p>{item._reports?.length} reports</p>
-          <p>{item.locationName}</p>
-          <p>{item.creator?.username}</p>
+          <p>
+            {!!item.locationName && (
+              <>
+                <FontAwesomeIcon icon={faLocationPin} size='xs' />{" "}
+                {item.locationName}
+              </>
+            )}
+          </p>
+          <p>By: {item.creator?.username}</p>
         </div>
       </header>
       <div className='hidden lg:block col-span-2 '>
-        <p className='px-2 py-1 text-slate-700 bg-slate-100 h-[6em] overflow-y-auto border border-slate-200 rounded whitespace-pre-line'>
+        <p className='px-2 py-1 text-slate-700 bg-slate-50 h-[6em] overflow-y-auto border border-slate-200 rounded whitespace-pre-line'>
           {item.notes && item.notes}
         </p>
       </div>
@@ -239,17 +217,17 @@ const IncidentListItem = ({ item }: IProps) => {
           isOpen={isDeleteOpen}
           onClose={() => setIsDeleteOpen(false)}
           onConfirm={() =>
-            deleteGroupMutation.mutate(item, {
+            doRemove.mutate(item, {
               onSuccess: () => setIsDeleteOpen(false),
             })
           }
-          disabled={deleteGroupMutation.isLoading}
-          loading={deleteGroupMutation.isLoading}
+          disabled={doRemove.isLoading}
+          loading={doRemove.isLoading}
           title={`'Delete incident ${item?.title} ?`}
           variant='danger'
           description='Are you sure you want to log out of this account?'
           className='max-w-md w-full'
-          confirmText={"Logout"}
+          confirmText={"Delete"}
         >
           <p>
             There are {item?._reports?.length} report(s) attached, which will be
@@ -268,10 +246,8 @@ const IncidentListItem = ({ item }: IProps) => {
         <CreateEditIncidentForm
           group={item}
           onCancel={() => setIsEditOpen(false)}
-          onSubmit={(values) =>
-            editGroupMutation.mutate({ ...values, _id: item._id })
-          }
-          isLoading={editGroupMutation.isLoading}
+          onSubmit={(values) => doUpdate.mutate({ ...values, _id: item._id })}
+          isLoading={doUpdate.isLoading}
         />
       </AggieDialog>
     </article>

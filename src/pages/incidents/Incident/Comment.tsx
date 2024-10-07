@@ -41,7 +41,7 @@ const Comment = ({ data, groupdId }: IProps) => {
   ) {
     updateComment.mutate(
       {
-        groupId: groupdId,
+        id: groupdId,
         comment: { ...data, data: formData.commentdata },
       },
       {
@@ -80,7 +80,7 @@ const Comment = ({ data, groupdId }: IProps) => {
               <AggieButton
                 variant='secondary'
                 onClick={() =>
-                  deleteComment.mutate({ groupId: groupdId, comment: data })
+                  deleteComment.mutate({ id: groupdId, comment: data })
                 }
                 loading={deleteComment.isLoading}
                 disabled={deleteComment.isLoading}

@@ -70,13 +70,13 @@ const ReportListItem = ({
       } border-slate-300 text-sm text-slate-600 grid grid-cols-5 gap-2 relative`}
     >
       <div
-        className={`col-span-4 pl-6 ${
+        className={`col-span-4 pl-7 ${
           report.read ? "" : " border-l-2 border-blue-600 "
         }`}
       >
         {isSelectMode ? (
           <div
-            className='flex items-center absolute inset-0 pointer-events-none'
+            className='flex items-center absolute top-0 bottom-0 left-0 w-8 pointer-events-none  border-r border-slate-300'
             onClick={onChange}
           >
             <div className='w-full h-full pointer-events-auto cursor-pointer group hover:bg-blue-300/25 rounded p-2 pl-3 '>

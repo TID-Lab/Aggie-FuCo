@@ -29,22 +29,6 @@ export const getGroups = async (
   }
 };
 
-// todo: depreacate
-export const getGroups_old = async (
-  searchState: GroupSearchState = {},
-  tagIds: hasId[] = []
-) => {
-  if (generateGroupsSearchURL(searchState, tagIds) != "") {
-    const { data } = await axios.get<Groups | undefined>(
-      "/api/group?" + generateGroupsSearchURL(searchState, tagIds)
-    );
-    return data;
-  } else {
-    const { data } = await axios.get<Groups | undefined>("/api/group");
-    return data;
-  }
-};
-
 const defaultAllGroups = {
   lean: "true",
 };
@@ -67,13 +51,6 @@ export const getGroup = async (id: string | undefined) => {
     return data;
   }
 };
-// todo: remove when refactor
-export const getGroup_untyped = async (id: string | undefined) => {
-  if (id) {
-    const { data } = await axios.get("/api/group/" + id);
-    return data;
-  }
-};
 
 export const newGroup = async (groupData: Partial<GroupEditableData>) => {
   const { data } = await axios.post<Group>("/api/group", groupData);
@@ -90,11 +67,7 @@ export const editGroup = async (group: Group | Partial<GroupEditableData>) => {
   );
   return data;
 };
-//TODO: deprecate
-export const editGroup_old = async (group: Group | GroupEditableData) => {
-  const { data } = await axios.put("/api/group/" + group._id, group);
-  return data;
-};
+
 export const deleteGroup = async (group: Group) => {
   const { data } = await axios.delete("/api/group/" + group._id);
   return data;
@@ -111,49 +84,41 @@ export const getGroupReports = async (
     return data;
   }
 };
-
-// todo: remove when refactor
-export const getGroupReports_untyped = async (
-  groupId: string | undefined,
-  page: number
-) => {
-  if (groupId) {
-    const { data } = await axios.get(
-      "/api/report?groupId=" + groupId + "&page=" + page
-    );
-    return data;
-  }
-};
-
-export const setSelectedVeracity = async (
-  groupIds: string[],
-  veracity: VeracityOptions | string
-) => {
+interface Selected {
+  ids: string[];
+}
+interface SelectedOne {
+  id: string;
+}
+interface SetVeracityParams extends Selected {
+  veracity: VeracityOptions | string;
+}
+export const setSelectedVeracity = async (params: SetVeracityParams) => {
   const { data } = await axios.patch("/api/group/_veracity", {
-    ids: groupIds,
-    veracity: veracity,
+    ids: params.ids,
+    veracity: params.veracity,
   });
   return data;
 };
 
-export const setSelectedEscalated = async (
-  groupIds: string[],
-  escalated: boolean
-) => {
+interface SetEscalatedParams extends Selected {
+  escalated: boolean;
+}
+export const setSelectedEscalated = async (params: SetEscalatedParams) => {
   const { data } = await axios.patch("/api/group/_escalated", {
-    ids: groupIds,
-    escalated: escalated,
+    ids: params.ids,
+    escalated: params.escalated,
   });
   return data;
 };
 
-export const setSelectedClosed = async (
-  groupIds: string[],
-  closed: boolean
-) => {
+interface SetClosedParams extends Selected {
+  closed: boolean;
+}
+export const setSelectedClosed = async (params: SetClosedParams) => {
   const { data } = await axios.patch("/api/group/_closed", {
-    ids: groupIds,
-    closed: closed,
+    ids: params.ids,
+    closed: params.closed,
   });
   return data;
 };
@@ -174,35 +139,37 @@ export const setSelectedNotes = async (groupIds: string[], notes: string) => {
   return data;
 };
 
-export const addComment = async (params: {
-  groupId: string | undefined;
+interface addCommentParams extends SelectedOne {
   comment: EditableGroupComment;
-}) => {
-  if (!params.groupId) return undefined;
+}
+export const addComment = async (params: addCommentParams) => {
+  if (!params.id) return undefined;
   const { data } = await axios.patch("/api/group/_comment_add", {
-    ids: [params.groupId],
+    ids: [params.id],
     comment: params.comment,
   });
   return data;
 };
-export const editComment = async (params: {
-  groupId: string | undefined;
+
+interface editCommentParams extends Partial<SelectedOne> {
   comment: EditableGroupComment;
-}) => {
-  if (!params.groupId) return undefined;
+}
+export const editComment = async (params: editCommentParams) => {
+  if (!params.id) return undefined;
   const { data } = await axios.patch("/api/group/_comment_update", {
-    ids: [params.groupId],
+    ids: [params.id],
     comment: params.comment,
   });
   return data;
 };
-export const removeComment = async (params: {
-  groupId: string | undefined;
+
+interface deleteCommentParams extends Partial<SelectedOne> {
   comment: EditableGroupComment | GroupComment;
-}) => {
-  if (!params.groupId) return undefined;
+}
+export const removeComment = async (params: deleteCommentParams) => {
+  if (!params.id) return undefined;
   const { data } = await axios.patch("/api/group/_comment_remove", {
-    ids: [params.groupId],
+    ids: [params.id],
     comment: params.comment,
   });
   return data;

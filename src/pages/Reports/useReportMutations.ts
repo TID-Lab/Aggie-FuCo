@@ -18,7 +18,7 @@ const defaultOptions = {
 };
 
 export const useReportMutations = (
-  userOptions: Partial<typeof defaultOptions>
+  userOptions: Partial<typeof defaultOptions> = defaultOptions
 ) => {
   const queryData = useUpdateQueryData();
   const navigate = useNavigate();
