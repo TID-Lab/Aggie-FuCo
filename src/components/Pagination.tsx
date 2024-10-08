@@ -71,7 +71,8 @@ const Pagination = ({
 
       <Popover className='relative'>
         <Popover.Button className='focus-theme px-2 py-2 hover:bg-slate-200 whitespace-nowrap'>
-          Page {currentPage} {totalCount !== 0 && <span>of {totalPages}</span>}
+          Page {currentPage + 1}{" "}
+          {totalCount !== 0 && <span>of {totalPages || 1}</span>}
         </Popover.Button>
 
         <Popover.Panel className='absolute top-full mt-1 z-10 p-2 bg-white rounded-lg shadow-md border border-slate-300'>
