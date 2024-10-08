@@ -52,14 +52,8 @@ const Incidents = () => {
       />
       <div className='border border-slate-300 rounded-lg bg-white'>
         {!!data && !!data.total ? (
-          data.results.map((groupItem) => (
-            <Link
-              to={"/incidents/" + groupItem._id}
-              className={"group no-underline"}
-              key={groupItem._id}
-            >
-              <IncidentListItem item={groupItem} />
-            </Link>
+          data.results.map((incident) => (
+            <IncidentListItem key={incident._id} item={incident} />
           ))
         ) : (
           <div className='w-full bg-white py-12 grid place-items-center font-medium'>

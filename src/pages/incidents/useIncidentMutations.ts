@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
 
 import { updateByIds } from "../../utils/immutable";
@@ -7,8 +7,10 @@ import {
   deleteGroup,
   setSelectedClosed,
   setSelectedEscalated,
+  setSelectedAssignedTo,
 } from "../../api/groups";
 import type { Groups } from "../../api/groups/types";
+import { getUsers } from "../../api/users";
 
 const defaultOptions = {
   key: ["groups"],
@@ -18,6 +20,10 @@ export const useIncidentMutations = (
   options: typeof defaultOptions = defaultOptions
 ) => {
   const queryData = useUpdateQueryData();
+  const { data: users } = useQuery({
+    queryKey: ["users"],
+    queryFn: getUsers,
+  });
 
   const doUpdate = useMutation({
     mutationFn: editGroup,
@@ -77,5 +83,28 @@ export const useIncidentMutations = (
       });
     },
   });
-  return { doUpdate, doRemove, doSetClosed, doSetEscalate };
+
+  const doSetAssign = useMutation({
+    mutationFn: setSelectedAssignedTo,
+    onSuccess: (_, params) => {
+      if (!users) {
+        queryData.queryClient.invalidateQueries([options.key]);
+        return;
+      }
+
+      queryData.update<Groups>(options.key, (data) => {
+        const updateData = updateByIds(params.ids, data.results, {
+          assignedTo: params.assignedTo.map((id) => {
+            const user = users.find((user) => user._id === id);
+            if (!!user) return user;
+            else return { _id: "", username: "User not found" };
+          }),
+        });
+        return {
+          results: updateData,
+        };
+      });
+    },
+  });
+  return { doUpdate, doRemove, doSetClosed, doSetEscalate, doSetAssign };
 };

@@ -123,6 +123,17 @@ export const setSelectedClosed = async (params: SetClosedParams) => {
   return data;
 };
 
+interface SetAssignedToParams extends Selected {
+  assignedTo: string[];
+}
+export const setSelectedAssignedTo = async (params: SetAssignedToParams) => {
+  const { data } = await axios.patch("/api/group/_assignedto", {
+    ids: params.ids,
+    assignedTo: params.assignedTo,
+  });
+  return data;
+};
+
 export const setSelectedTitle = async (groupIds: string[], title: string) => {
   const { data } = await axios.patch("/api/group/_title", {
     ids: groupIds,

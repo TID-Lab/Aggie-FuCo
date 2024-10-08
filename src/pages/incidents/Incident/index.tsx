@@ -16,7 +16,6 @@ import { Link } from "react-router-dom";
 import AggieButton from "../../../components/AggieButton";
 import DropdownMenu from "../../../components/DropdownMenu";
 import PlaceholderDiv from "../../../components/PlaceholderDiv";
-import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
 import UserToken from "../../../components/UserToken";
 import Comment from "./Comment";
 import { Dialog } from "@headlessui/react";
@@ -30,6 +29,7 @@ import {
   faTrashAlt,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
+import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
 
 const Incident = () => {
   const queryClient = useQueryClient();

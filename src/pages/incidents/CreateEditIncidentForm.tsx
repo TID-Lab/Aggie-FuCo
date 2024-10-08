@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { Field } from "formik";
-import { isNil, omitBy } from "lodash";
 import * as Yup from "yup";
 import { VERACITY_OPTIONS } from "../../api/common";
 import { Group, GroupEditableData } from "../../api/groups/types";
