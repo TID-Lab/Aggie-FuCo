@@ -6,6 +6,7 @@ import { useIncidentMutations } from "../useIncidentMutations";
 import { addComment, getGroup, getGroupReports } from "../../../api/groups";
 import { getSession } from "../../../api/session";
 import { EditableGroupComment, GroupComment } from "../../../api/groups/types";
+import * as Yup from "yup";
 
 import { Form, Formik, Field } from "formik";
 import AxiosErrorCard from "../../../components/AxiosErrorCard";
@@ -30,6 +31,7 @@ import {
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
+import DateTime from "../../../components/DateTime";
 
 const Incident = () => {
   const queryClient = useQueryClient();
@@ -213,32 +215,45 @@ const Incident = () => {
                 {" "}
                 created this incident on
               </span>{" "}
-              <span>{groupData?.storedAt}</span>
+              <span>
+                {" "}
+                <DateTime dateString={groupData?.storedAt} />
+              </span>
             </h2>
             <p></p>
           </div>
           <div>
             {!!groupData?.comments &&
-              groupData.comments.map((comment) => (
+              groupData.comments.map((comment: GroupComment) => (
                 <Comment data={comment} groupdId={id} key={comment._id} />
               ))}
           </div>
-          <div className=' bg-white border border-slate-300 rounded-lg'>
+          <div className=' bg-slate-50 border border-slate-300 rounded-lg'>
             <h2 className='font-medium ml-3 my-2'>Add Comment</h2>
             <Formik
               initialValues={{ commentdata: "" }}
               onSubmit={(e, { resetForm }) => {
                 onPostAdd(e, resetForm);
               }}
+              validationSchema={Yup.object().shape({
+                commentdata: Yup.string().required(
+                  "Cannot Post Empty Comment!"
+                ),
+              })}
             >
-              {({ resetForm }) => (
-                <Form noValidate>
+              {({ resetForm, errors }) => (
+                <Form>
                   <Field
                     as='textarea'
                     name='commentdata'
-                    className='focus-theme px-3 py-1 border-y border-slate-300 bg-slate-50 w-full min-h-36'
+                    className='focus-theme px-3 py-1 border-y border-slate-300 bg-white w-full min-h-36'
                     placeholder='Write a comment here...'
                   />
+                  {errors && (
+                    <p className='text-sm text-rose-700 italic ml-2'>
+                      {errors.commentdata}
+                    </p>
+                  )}
 
                   <AggieButton
                     type='submit'
@@ -277,7 +292,7 @@ const Incident = () => {
                 <Link to='/reports' className='underline text-blue-600'>
                   Reports Page
                 </Link>{" "}
-                to add relevent reports to this page
+                to add relevant reports to this page
               </p>
             </div>
           )}

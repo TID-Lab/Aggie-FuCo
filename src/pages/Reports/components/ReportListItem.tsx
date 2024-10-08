@@ -11,12 +11,20 @@ import SocialMediaIcon from "../../../components/SocialMediaPost/SocialMediaIcon
 import AggieCheck from "../../../components/AggieCheck";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faDotCircle,
+  faEnvelope,
+  faEnvelopeOpen,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import DateTime from "../../../components/DateTime";
 import {
   parseContentType,
   sanitize,
 } from "../../../components/SocialMediaPost/reportParser";
+import AggieButton from "../../../components/AggieButton";
+import { useReportMutations } from "../useReportMutations";
 //TODO: refactor and clean up tech debt
 interface IProps {
   report: Report;
@@ -35,6 +43,7 @@ const ReportListItem = ({
 
   const { id: currentPageId } = useParams();
   const navigate = useNavigate();
+  const { setRead, setIrrelevance } = useReportMutations();
 
   const { data: incident } = useQuery(
     ["group", report._group],
@@ -70,7 +79,7 @@ const ReportListItem = ({
       } border-slate-300 text-sm text-slate-600 grid grid-cols-5 gap-2 relative`}
     >
       <div
-        className={`col-span-4 pl-7 ${
+        className={`col-span-4 pl-7  ${
           report.read ? "" : " border-l-2 border-blue-600 "
         }`}
       >
@@ -95,7 +104,7 @@ const ReportListItem = ({
           </div>
         )}
 
-        <header className='flex justify-between mb-2 '>
+        <header className='flex justify-between mb-2 relative'>
           <div>
             <div className='flex gap-1 text-sm items-baseline'>
               <h1 className={`text-sm text-black mx-1 font-medium `}>
@@ -112,10 +121,49 @@ const ReportListItem = ({
               )}
             </div>
           </div>
-          <div className='text-xs flex gap-2'>
+          <div className='text-xs flex gap-2 group-hover:opacity-0'>
             <p>
               <DateTime dateString={report.authoredAt} />
             </p>
+          </div>
+          <div className='flex absolute right-0 top-0 text-xs shadow-md rounded-lg border border-slate-300 group-hover:opacity-100 opacity-0'>
+            <AggieButton
+              variant={report.read ? "light:lime" : "light:amber"}
+              className='rounded-l-lg'
+              onClick={(e) => {
+                e.stopPropagation();
+
+                setRead.mutate({
+                  reportIds: [report._id],
+                  read: !report.read,
+                  currentPageId: currentPageId,
+                });
+              }}
+              loading={setRead.isLoading}
+              disabled={!report || setRead.isLoading}
+              icon={report.read ? faEnvelopeOpen : faEnvelope}
+            >
+              {report.read ? <> unread</> : <> read</>}
+            </AggieButton>
+            <AggieButton
+              variant={
+                report.irrelevant === "true" ? "light:green" : "light:rose"
+              }
+              className='rounded-r-lg'
+              onClick={(e) => {
+                e.stopPropagation();
+                setIrrelevance.mutate({
+                  reportIds: [report._id],
+                  irrelevant: report.irrelevant === "true" ? "false" : "true",
+                  currentPageId: currentPageId,
+                });
+              }}
+              icon={report.irrelevant === "true" ? faDotCircle : faXmark}
+              loading={setIrrelevance.isLoading}
+              disabled={!report || setIrrelevance.isLoading}
+            >
+              {report.irrelevant === "true" ? <>relevant</> : <>irrelevant</>}
+            </AggieButton>
           </div>
         </header>
         <div>

@@ -15,7 +15,15 @@ import AddReportsToIncidents from "../components/AddReportsToIncident";
 import DropdownMenu from "../../../components/DropdownMenu";
 import SocialMediaPost from "../../../components/SocialMediaPost";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faFile, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCaretDown,
+  faDotCircle,
+  faEnvelope,
+  faEnvelopeOpen,
+  faFile,
+  faPlus,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 const Report = () => {
   let { id } = useParams();
   const { setParams } = useQueryParams<ReportQueryState>();
@@ -23,7 +31,7 @@ const Report = () => {
   const queryData = useUpdateQueryData();
   const { setRead, setIrrelevance } = useReportMutations();
 
-  const { data: report, isLoading } = useQuery(["report", id], () =>
+  const { data: report, isLoading } = useQuery(["reports", id], () =>
     getReport(id)
   );
   const sourcesQuery = useQuery(["sources"], getSources);
@@ -98,31 +106,39 @@ const Report = () => {
         onClose={() => setAddReportModal(false)}
       />
       <nav className='pl-3 pr-2 py-2 flex justify-between items-center rounded-lg text-xs border border-slate-300 mb-2 shadow-md bg-white'>
-        <div className='flex gap-1 items-center'>
-          <p>Mark as:</p>
+        <div className='flex  text-xs  rounded-lg border border-slate-300 '>
           <AggieButton
-            variant='secondary'
-            onClick={() =>
+            variant={report.read ? "light:lime" : "light:amber"}
+            className='rounded-l-lg'
+            onClick={(e) => {
+              e.stopPropagation();
+
               setRead.mutate({
-                reportIds: id ? [id] : [],
+                reportIds: [report._id],
                 read: !report.read,
                 currentPageId: id,
-              })
-            }
+              });
+            }}
             loading={setRead.isLoading}
             disabled={!report || setRead.isLoading}
+            icon={report.read ? faEnvelopeOpen : faEnvelope}
           >
             {report.read ? <> unread</> : <> read</>}
           </AggieButton>
           <AggieButton
-            variant='secondary'
-            onClick={() =>
+            variant={
+              report.irrelevant === "true" ? "light:green" : "light:rose"
+            }
+            className='rounded-r-lg'
+            onClick={(e) => {
+              e.stopPropagation();
               setIrrelevance.mutate({
-                reportIds: id ? [id] : [],
+                reportIds: [report._id],
                 irrelevant: report.irrelevant === "true" ? "false" : "true",
                 currentPageId: id,
-              })
-            }
+              });
+            }}
+            icon={report.irrelevant === "true" ? faDotCircle : faXmark}
             loading={setIrrelevance.isLoading}
             disabled={!report || setIrrelevance.isLoading}
           >

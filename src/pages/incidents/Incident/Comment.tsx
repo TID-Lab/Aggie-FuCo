@@ -1,17 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
+import * as Yup from "yup";
+
 import { editComment, removeComment } from "../../../api/groups";
 import { GroupComment } from "../../../api/groups/types";
-import type { Session } from "../../../api/session/types";
-import { faComment, faCommentAlt } from "@fortawesome/free-regular-svg-icons";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getSession } from "../../../api/session";
+
 import AggieButton from "../../../components/AggieButton";
 import UserToken from "../../../components/UserToken";
 import { Formik, Field, Form } from "formik";
-import { getSession } from "../../../api/session";
 import Linkify from "linkify-react";
+
+import { faComment, faCommentAlt } from "@fortawesome/free-regular-svg-icons";
+import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import DateTime from "../../../components/DateTime";
+
+const CommentSchema = Yup.object().shape({
+  commentdata: Yup.string().required("Cannot Post Empty Comment!"),
+});
 
 interface IProps {
   data: GroupComment;
@@ -66,7 +74,8 @@ const Comment = ({ data, groupdId }: IProps) => {
         </p>
         <div className='flex gap-2 items-center'>
           <p className='italic'>
-            last updated {data.updatedAt || data.createdAt}
+            last updated{" "}
+            <DateTime dateString={data.updatedAt || data.createdAt} />
           </p>
           {(data.author === session?._id || session?.role === "admin") && (
             <>
@@ -98,15 +107,21 @@ const Comment = ({ data, groupdId }: IProps) => {
             onSubmit={(e, { resetForm }) => {
               onEditSubmit(e, resetForm);
             }}
+            validationSchema={CommentSchema}
           >
-            {({ resetForm }) => (
-              <Form noValidate>
+            {({ resetForm, errors, isValid }) => (
+              <Form>
                 <Field
                   as='textarea'
                   name='commentdata'
                   className='focus-theme px-3 py-2 border-b border-slate-300 bg-white w-full min-h-36'
                   placeholder='Write a comment here...'
                 />
+                {errors && (
+                  <p className='text-sm text-rose-700 italic ml-2'>
+                    {errors.commentdata}
+                  </p>
+                )}
                 <AggieButton
                   type='button'
                   variant='secondary'

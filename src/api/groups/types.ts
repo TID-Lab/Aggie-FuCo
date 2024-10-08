@@ -66,8 +66,8 @@ export interface GroupQueryState {
 }
 
 export interface GroupComment extends EditableGroupComment {
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   _id: string;
 }
 
