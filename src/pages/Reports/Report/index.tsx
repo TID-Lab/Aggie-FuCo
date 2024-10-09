@@ -34,6 +34,7 @@ const Report = () => {
   const { data: report, isLoading } = useQuery(["reports", id], () =>
     getReport(id)
   );
+
   const sourcesQuery = useQuery(["sources"], getSources);
 
   function newIncidentFromReport() {
@@ -99,6 +100,7 @@ const Report = () => {
   if (!report || !id) return <> error loading page</>;
   return (
     <article className='pt-4 pr-2 sticky top-0 overflow-y-auto max-h-[93vh]  '>
+      {console.log(report)}
       <AddReportsToIncidents
         selection={id ? [id] : undefined}
         isOpen={addReportModal}
@@ -106,46 +108,48 @@ const Report = () => {
         onClose={() => setAddReportModal(false)}
       />
       <nav className='pl-3 pr-2 py-2 flex justify-between items-center rounded-lg text-xs border border-slate-300 mb-2 shadow-md bg-white'>
-        <div className='flex  text-xs  rounded-lg border border-slate-300 '>
-          <AggieButton
-            variant={report.read ? "light:lime" : "light:amber"}
-            className='rounded-l-lg'
-            onClick={(e) => {
-              e.stopPropagation();
-
-              setRead.mutate({
-                reportIds: [report._id],
-                read: !report.read,
-                currentPageId: id,
-              });
-            }}
-            loading={setRead.isLoading}
-            disabled={!report || setRead.isLoading}
-            icon={report.read ? faEnvelopeOpen : faEnvelope}
-          >
-            {report.read ? <> unread</> : <> read</>}
-          </AggieButton>
-          <AggieButton
-            variant={
-              report.irrelevant === "true" ? "light:green" : "light:rose"
-            }
-            className='rounded-r-lg'
-            onClick={(e) => {
-              e.stopPropagation();
-              setIrrelevance.mutate({
-                reportIds: [report._id],
-                irrelevant: report.irrelevant === "true" ? "false" : "true",
-                currentPageId: id,
-              });
-            }}
-            icon={report.irrelevant === "true" ? faDotCircle : faXmark}
-            loading={setIrrelevance.isLoading}
-            disabled={!report || setIrrelevance.isLoading}
-          >
-            {report.irrelevant === "true" ? <>relevant</> : <>irrelevant</>}
-          </AggieButton>
-        </div>
+        <div className='flex   '>Actions</div>
         <div className='flex gap-1'>
+          <div className='flex text-xs  rounded-lg border border-slate-300'>
+            <AggieButton
+              variant={report.read ? "light:lime" : "light:amber"}
+              className='rounded-l-lg'
+              onClick={(e) => {
+                e.stopPropagation();
+
+                setRead.mutate({
+                  reportIds: [report._id],
+                  read: !report.read,
+                  currentPageId: id,
+                });
+              }}
+              loading={setRead.isLoading}
+              disabled={!report || setRead.isLoading}
+              icon={report.read ? faEnvelopeOpen : faEnvelope}
+            >
+              {report.read ? <> unread</> : <> read</>}
+            </AggieButton>
+            <AggieButton
+              variant={
+                report.irrelevant === "true" ? "light:green" : "light:rose"
+              }
+              className='rounded-r-lg'
+              onClick={(e) => {
+                e.stopPropagation();
+                setIrrelevance.mutate({
+                  reportIds: [report._id],
+                  irrelevant: report.irrelevant === "true" ? "false" : "true",
+                  currentPageId: id,
+                });
+              }}
+              icon={report.irrelevant === "true" ? faDotCircle : faXmark}
+              loading={setIrrelevance.isLoading}
+              disabled={!report || setIrrelevance.isLoading}
+            >
+              {report.irrelevant === "true" ? <>relevant</> : <>irrelevant</>}
+            </AggieButton>
+          </div>
+
           <div className='flex font-medium'>
             <AggieButton
               className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-300 hover:bg-slate-200'

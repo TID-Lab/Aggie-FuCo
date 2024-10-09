@@ -1,6 +1,7 @@
 /**
  * parsing the mess of metadata that we get from various sources.
  * this is a very trial-and-error process.
+ * would love to refactor this into something that makes more sense
  */
 import {
   BaseMetadata,
@@ -10,11 +11,14 @@ import {
 //import sanitizeHtml from "sanitize-html";
 import { MediaOptions } from "../../api/common";
 
+// key for custom parsing, default means i dont have a specialized parser for this
+
 type ContentType =
   | "default"
   | "twitterQuote"
   | "twitterRetweet"
-  | "truthsocial";
+  | "truthsocial"
+  | "youtube";
 
 export function parseContentType(
   _media: MediaOptions[],
@@ -22,6 +26,8 @@ export function parseContentType(
 ): ContentType {
   if (!_media) return "default";
   if (_media[0] === "truthsocial") return "truthsocial";
+  if (_media[0] === "youtube") return "youtube";
+
   if (_media[0] !== "twitter") return "default";
   const rawPostData = (metadata.rawAPIResponse.attributes as any)?.post_data;
   if (!rawPostData) return "default";
@@ -115,6 +121,15 @@ export function parseTwitterQuote(report: Report) {
   };
 }
 
+export function parseYoutube(report: Report) {
+  const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
+    ?.post_data;
+  const youtubeData = rawPostData.snippet.data;
+  return {
+    title: youtubeData.title,
+    description: youtubeData.description,
+  };
+}
 // temporary, should be done server-side
 export function sanitize(string: string) {
   return string;

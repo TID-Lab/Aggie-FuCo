@@ -1,3 +1,4 @@
+// yeah.... i gotta refactor this one
 import { debounce } from "lodash";
 import { useCallback, useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -82,9 +83,9 @@ const FormikMultiCombobox = ({
         <h2>{label}</h2>
         <Popover.Button
           className={({ open }) =>
-            `focus-theme pl-2 pr-1 hover:bg-slate-200 ${
+            `focus-theme pl-2 pr-1 py-1 hover:bg-slate-200 ${
               open ? "bg-slate-100" : ""
-            } rounded-full flex items-center gap-1 font-medium text-sm  hover:underline`
+            } rounded flex items-center gap-1 font-medium text-sm  hover:underline`
           }
         >
           Add / Remove {unitLabel}s
@@ -152,7 +153,7 @@ const FormikMultiCombobox = ({
                 </button>
               )}
 
-              <div className='bg-white divide-y divide-slate-200'>
+              <div className='bg-white divide-y divide-slate-200 max-h-[15em] overflow-y-auto'>
                 {filteredList.length > 0 ? (
                   filteredList?.map((item) => (
                     <button

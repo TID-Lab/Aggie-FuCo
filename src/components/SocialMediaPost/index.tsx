@@ -1,9 +1,5 @@
 import Linkify from "linkify-react";
-import {
-  BaseMetadata,
-  Report,
-  TwitterStatistics,
-} from "../../api/reports/types";
+import { Report } from "../../api/reports/types";
 import { formatText } from "../../utils/format";
 import PostReactions from "./PostReactions";
 import MediaPreview from "./MediaPreview";
@@ -172,6 +168,7 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
 
       {contentType === "twitterRetweet" && <RetweetContent report={report} />}
       {contentType === "twitterQuote" && <QuoteContent report={report} />}
+      {contentType === "youtube" && <></>}
       {contentType === "truthsocial" && (
         <>
           <div className='whitespace-pre-line break-all mb-1'>

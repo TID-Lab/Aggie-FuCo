@@ -21,7 +21,6 @@ const DateTime = (props: IProps) => {
       : stringToDate(props.dateString || "");
 
   if (!date) return <></>;
-  console.log(date);
   function timeOrDate(d: Date) {
     const today = new Date();
     if (d.getDate() === today.getDate() && d.getMonth() === today.getMonth())

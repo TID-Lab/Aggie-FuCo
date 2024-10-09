@@ -1,5 +1,4 @@
 import { CTList, Group, hasId, Report, Source, Tag } from "./objectTypes";
-import { useLocation } from "react-router-dom";
 import { FormikValues } from "formik";
 
 export function tagById(tagId: string, tags: Tag[] | undefined) {

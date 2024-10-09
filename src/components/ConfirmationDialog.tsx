@@ -34,55 +34,53 @@ const ConfirmationDialog = ({
   confirmText,
   className,
 }: IProps) => {
-  if (isOpen)
-    return (
-      <Dialog
-        static
-        open
-        onClose={() => !disabled && onClose()}
-        className='relative z-50 '
-      >
-        <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
-        <div className='fixed inset-0 flex w-screen items-center justify-center p-4'>
-          <Dialog.Panel
-            className={`bg-white rounded-xl border border-slate-200 shadow-xl min-w-24 min-h-12 ${className}`}
-          >
-            <header className='px-3 py-3'>
-              <Dialog.Title className='text-xl font-medium'>
-                {title}
-              </Dialog.Title>
-              <Dialog.Description>{description}</Dialog.Description>
-            </header>
+  if (!isOpen) return <></>;
 
-            {children}
-            <div className='flex gap-1 justify-between border-t px-3 py-3 w-full max-w-lg text-center border-slate-200'>
-              <AggieButton
-                variant='secondary'
-                onClick={onClose}
-                className='w-full justify-center'
-                disabled={disabled}
-              >
-                Cancel
-              </AggieButton>
+  return (
+    <Dialog
+      static
+      open
+      onClose={() => !disabled && onClose()}
+      className='relative z-50 '
+    >
+      <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
+      <div className='fixed inset-0 flex w-screen items-center justify-center p-4'>
+        <Dialog.Panel
+          className={`bg-white rounded-xl border border-slate-200 shadow-xl min-w-24 min-h-12 ${className}`}
+        >
+          <header className='px-3 py-3'>
+            <Dialog.Title className='text-xl font-medium'>{title}</Dialog.Title>
+            <Dialog.Description>{description}</Dialog.Description>
+          </header>
 
-              <AggieButton
-                variant={variant}
-                className='w-full justify-center'
-                loading={loading}
-                onClick={() => {
-                  onConfirm();
-                }}
-                icon={variant === "danger" ? faTrash : icon}
-                disabled={disabled}
-              >
-                {confirmText ? confirmText : "Confirm"}
-              </AggieButton>
-            </div>
-          </Dialog.Panel>
-        </div>
-      </Dialog>
-    );
-  return <></>;
+          {children}
+          <div className='flex gap-1 justify-between border-t px-3 py-3 w-full max-w-lg text-center border-slate-200'>
+            <AggieButton
+              variant='secondary'
+              onClick={onClose}
+              className='w-full justify-center'
+              disabled={disabled}
+            >
+              Cancel
+            </AggieButton>
+
+            <AggieButton
+              variant={variant}
+              className='w-full justify-center'
+              loading={loading}
+              onClick={() => {
+                onConfirm();
+              }}
+              icon={variant === "danger" ? faTrash : icon}
+              disabled={disabled}
+            >
+              {confirmText ? confirmText : "Confirm"}
+            </AggieButton>
+          </div>
+        </Dialog.Panel>
+      </div>
+    </Dialog>
+  );
 };
 
 export default ConfirmationDialog;
