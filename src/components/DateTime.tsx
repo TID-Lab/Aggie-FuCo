@@ -1,5 +1,9 @@
 import ReactTimeAgo from "react-time-ago";
-import { stringToDate } from "../helpers";
+
+const stringToDate = (str: string) => {
+  if (!str) return undefined;
+  return new Date(str);
+};
 
 interface IPropsDateString {
   dateString: string | undefined;

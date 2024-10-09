@@ -21,10 +21,10 @@ interface IIncidentFilters {
   get: (value: keyof GroupQueryState) => string;
   set: (values: GroupQueryState) => void;
   clearAll: () => void;
-  reportCount?: number;
+  totalCount?: number;
 }
 const IncidentsFilters = ({
-  reportCount,
+  totalCount,
   get,
   set,
   clearAll,
@@ -83,11 +83,11 @@ const IncidentsFilters = ({
         </div>
         <div className='text-xs flex items-center gap-2'>
           <p className={"font-medium text-slate-600"}>
-            {formatPageCount(Number(get("page")), 50, reportCount)}
+            {formatPageCount(Number(get("page")), 50, totalCount)}
           </p>
           <Pagination
             currentPage={Number(get("page")) || 0}
-            totalCount={reportCount || 0}
+            totalCount={totalCount || 0}
             onPageChange={(num) => set({ page: num })}
             size={0}
           />

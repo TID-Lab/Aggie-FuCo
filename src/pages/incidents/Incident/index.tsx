@@ -217,7 +217,7 @@ const Incident = () => {
               </span>{" "}
               <span>
                 {" "}
-                <DateTime dateString={groupData?.storedAt} />
+                <DateTime dateString={groupData?.storedAt || ""} />
               </span>
             </h2>
             <p></p>

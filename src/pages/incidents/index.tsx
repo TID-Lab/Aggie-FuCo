@@ -44,7 +44,7 @@ const Incidents = () => {
       </header>
 
       <IncidentsFilters
-        reportCount={data && data.total}
+        totalCount={data && data.total}
         get={getParam}
         set={setParams}
         isQuery={!!searchParams.size}

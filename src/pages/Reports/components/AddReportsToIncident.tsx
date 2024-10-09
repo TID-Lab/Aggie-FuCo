@@ -136,6 +136,7 @@ const AddReportsToIncidents = ({
               set={setParams}
               isQuery={!!searchParams.size}
               clearAll={clearAllParams}
+              totalCount={incidents && incidents.total}
             />
             <div className='overflow-y-auto bg-white border border-slate-300 rounded-lg'>
               <NestedIncidentsList
