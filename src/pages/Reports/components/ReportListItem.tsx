@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Report } from "../../../api/reports/types";
+import { Report, ReportQueryState } from "../../../api/reports/types";
 import { formatText } from "../../../utils/format";
 import { getGroup } from "../../../api/groups";
 
@@ -30,6 +30,7 @@ import {
 import AggieButton from "../../../components/AggieButton";
 import { useReportMutations } from "../useReportMutations";
 import AddReportsToIncidents from "./AddReportsToIncident";
+import { useQueryParams } from "../../../hooks/useQueryParams";
 //TODO: refactor and clean up tech debt
 interface IProps {
   report: Report;
@@ -48,7 +49,13 @@ const ReportListItem = ({
 
   const { id: currentPageId } = useParams();
   const navigate = useNavigate();
-  const { setRead, setIrrelevance } = useReportMutations();
+  const { getParam } = useQueryParams<ReportQueryState>();
+
+  const isBatchMode = getParam("batch") === "true";
+
+  const { setRead, setIrrelevance } = useReportMutations({
+    key: isBatchMode ? ["batch"] : ["reports"],
+  });
 
   const { data: incident } = useQuery(
     ["group", report._group],
