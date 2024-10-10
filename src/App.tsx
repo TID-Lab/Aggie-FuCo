@@ -11,7 +11,6 @@ import { getSession } from "./api/session";
 import type { AxiosError } from "axios";
 import type { Session } from "./api/session/types";
 
-import "./App.css";
 //import "@yaireo/tagify/dist/tagify.css";
 
 import AggieNavbar from "./components/AggieNavbar";

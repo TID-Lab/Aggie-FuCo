@@ -23,8 +23,10 @@ exports.group_create = (req, res) => {
   });
 };
 
+// lean option means only return name and id
 exports.group_all_groups = (req, res) => {
-  Group.find({}, (err, groups) => {
+  const projection = req.query.lean === "true" ? 'title' : '';
+  Group.find({}, projection, {}, (err, groups) => {
     if (err) res.status(err.status).send(err.message);
     else res.status(200).send(groups);
   });
@@ -194,7 +196,27 @@ exports.group_escalated_update = (req, res) => {
     });
   });
 };
-
+// assign users to selected groups
+exports.group_assigned_update = (req, res) => {
+  if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
+  Group.find({ _id: { $in: req.body.ids } }, (err, groups) => {
+    if (err) return res.status(err.status).send(err.message);
+    if (groups.length === 0) return res.sendStatus(200);
+    let remaining = groups.length;
+    groups.forEach((group) => {
+      // Mark each report as escalated to catch it in model
+      group.setAssigned(req.body.assignedTo);
+      group.save((err) => {
+        if (err) {
+          if (!res.headersSent) res.status(err.status).send(err.message);
+          return;
+        }
+        writelog.writeReport(req, group, 'assignedGroup');
+        if (--remaining === 0) return res.sendStatus(200);
+      });
+    });
+  });
+};
 // Change name of selected groups
 exports.group_title_update = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);

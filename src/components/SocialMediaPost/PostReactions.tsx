@@ -38,7 +38,8 @@ const PostReactions = ({ stats, media }: IProps) => {
       return <></>;
     return (
       <span className='flex gap-1 items-center'>
-        <FontAwesomeIcon icon={props.icon} /> {props.value}
+        <FontAwesomeIcon icon={props.icon} />{" "}
+        {Number(props.value).toLocaleString()}
       </span>
     );
   };

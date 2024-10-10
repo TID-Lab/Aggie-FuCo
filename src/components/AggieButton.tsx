@@ -13,6 +13,10 @@ export const VariantCSS = {
   transparent: "hover:bg-slate-200 hover:underline  rounded-lg",
   danger: "bg-red-700 text-white hover:bg-red-600 rounded-lg ",
   warning: "bg-red-200 text-red-700 hover:bg-red-300 rounded-lg",
+  "light:green": "bg-green-100 text-green-800 hover:bg-green-200",
+  "light:lime": "hover:bg-lime-200 bg-lime-100 text-lime-800",
+  "light:amber": "hover:bg-amber-200 bg-amber-100 text-amber-800",
+  "light:rose": "bg-rose-200 text-rose-800 hover:bg-rose-300",
 };
 
 interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -22,6 +26,7 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   padding?: string;
   loading?: boolean;
   icon?: IconProp;
+  stopPropagation?: boolean;
 }
 
 const AggieButton = ({

@@ -1,5 +1,4 @@
 import { CTList, Group, hasId, Report, Source, Tag } from "./objectTypes";
-import { useLocation } from "react-router-dom";
 import { FormikValues } from "formik";
 
 export function tagById(tagId: string, tags: Tag[] | undefined) {
@@ -115,10 +114,6 @@ export const objectsToIds = (objects: hasId[]) => {
   return listOfIds;
 };
 
-export const stringToDate = (str: string) => {
-  return new Date(str);
-};
-
 export const facebookUrlToEmbedUrl = (url: string) => {
   let embedUrl = url.slice(8, url.length);
   return (
@@ -130,6 +125,7 @@ export const facebookUrlToEmbedUrl = (url: string) => {
 
 export const hasSearchParams = (searchParams: URLSearchParams) => {
   // TODO: Is there a better way of finding the length of searchParams?
+  // yes: searchparams.size returns the number
   let counter = 0;
   for (const [index, element] of searchParams.entries()) {
     counter++;

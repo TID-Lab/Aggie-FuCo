@@ -39,7 +39,7 @@ body {
   height: 100%;
   width: 100%;
   background: #fafafa;
-  @apply font-emojisans;
+  @apply font-emojisans scroll-smooth;
 }
 
 html {
@@ -53,4 +53,13 @@ code {
 
 #root {
   width: 100%;
+}
+
+/* truth social needs special css*/
+.truthsocial .quote-inline {
+  @apply text-xs flex;
+}
+/* truth social needs special css*/
+.truthsocial a {
+  @apply text-blue-600 underline;
 }

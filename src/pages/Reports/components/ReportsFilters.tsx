@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faXmarkSquare } from "@fortawesome/free-solid-svg-icons";
 import AggieButton from "../../../components/AggieButton";
 import Pagination from "../../../components/Pagination";
+import { getAllGroups, getGroups } from "../../../api/groups";
+import { useCallback } from "react";
 
 interface IReportFilters {
   reportCount?: number;
@@ -22,16 +24,29 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
   const { searchParams, getParam, setParams, clearAllParams } =
     useQueryParams<ReportQueryState>();
 
-  const sourcesQuery = useQuery(["sources"], getSources);
-
-  function sourcesRemapComboBox(query: typeof sourcesQuery) {
-    if (!query.data) return [];
-    const array = query.data.map((source) => ({
+  const { data: sources } = useQuery(["sources"], getSources);
+  function sourcesRemapComboBox(query: typeof sources) {
+    if (!query) return [];
+    const array = query.map((source) => ({
       key: source._id,
       value: source.nickname,
     }));
     return [{ key: "", value: "All Sources" }, ...array];
   }
+  const sourcesList = useCallback(sourcesRemapComboBox, [sources]);
+
+  const { data: groups } = useQuery(["allgroups"], () => getAllGroups());
+
+  function groupsRemapComboBox(query: typeof groups) {
+    if (!query || "total" in query) return [];
+    const array = query?.map((group) => ({
+      key: group._id,
+      value: group.title,
+    }));
+    if (!array) return [];
+    return [{ key: "", value: "All Incidents" }, ...array];
+  }
+  const groupsList = useCallback(groupsRemapComboBox, [groups]);
 
   return (
     <>
@@ -63,7 +78,7 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
                     className='hover:underline hover:bg-slate-100 px-2 py-1 text-sm rounded'
                     onClick={() => {
                       clearAllParams();
-                      resetForm();
+                      resetForm({ values: { keywords: "" } });
                     }}
                   >
                     <FontAwesomeIcon icon={faXmarkSquare} />
@@ -94,11 +109,19 @@ const ReportFilters = ({ reportCount, headerElement }: IReportFilters) => {
           />
           <FilterComboBox
             label='Sources'
-            list={sourcesRemapComboBox(sourcesQuery)}
+            list={sourcesList(sources)}
             onChange={(e) => {
               setParams({ sourceId: e.key });
             }}
             selectedKey={getParam("sourceId")}
+          />
+          <FilterComboBox
+            label='Incidents'
+            list={groupsList(groups)}
+            onChange={(e) => {
+              setParams({ groupId: e.key });
+            }}
+            selectedKey={getParam("groupId")}
           />
         </div>
       </div>

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { deleteTag, getTags } from "../../../api/tags";
-import { stringToDate } from "../../../helpers";
 
 import AggieButton from "../../../components/AggieButton";
 import UserToken from "../../../components/UserToken";
@@ -18,6 +17,7 @@ import {
   faPlusCircle,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import DateTime from "../../../components/DateTime";
 
 interface IProps {}
 
@@ -69,7 +69,9 @@ const TagsIndex = (props: IProps) => {
                   <span className='italic'>created by </span>
                   <UserToken id={tag.user?._id || ""} loading={!data} />
                   <span className='italic'> on </span>
-                  <span>{stringToDate(tag.storedAt).toLocaleDateString()}</span>
+                  <span>
+                    <DateTime dateString={tag.storedAt} />
+                  </span>
                 </p>
               </header>
               <main className='col-span-2 text-sm'>{tag.description}</main>

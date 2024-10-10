@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MediaOptions } from "../../api/common";
 import { Report } from "../../api/reports/types";
 import YouTube, { YouTubeProps } from "react-youtube";
+import { getTweetImages } from "./reportParser";
 
 interface IProps {
   mediaUrl: string;
@@ -10,8 +11,11 @@ interface IProps {
 }
 const MediaPreview = ({ mediaUrl, media, report }: IProps) => {
   const [loaded, setLoaded] = useState(false);
-
-  if (!mediaUrl) return <></>;
+  function formatTwitter(index: number, total: number) {
+    if (total === 1) return "h-auto col-span-2 max-h-[60vh]";
+    if (total === 3 && index === 2) return "h-full col-span-2";
+    return "h-full";
+  }
   switch (media) {
     case "youtube":
       return (
@@ -19,7 +23,31 @@ const MediaPreview = ({ mediaUrl, media, report }: IProps) => {
           <YoutubeVideo src={report.url} />{" "}
         </div>
       );
+
+    case "twitter": {
+      const images = getTweetImages(report);
+      console.log(images);
+
+      if (!images || images.length === 0) return <></>;
+      return (
+        <div className='min-h-[30vh] relative grid grid-cols-2 gap-1'>
+          {images.map((url: string, index: number) => (
+            <img
+              key={index}
+              className={`w-full rounded object-cover ${formatTwitter(
+                index,
+                images.length
+              )}`}
+              src={url}
+              onLoad={() => setLoaded(true)}
+            />
+          ))}
+        </div>
+      );
+    }
     default:
+      if (!mediaUrl) return <></>;
+
       return (
         <div className='min-h-[30vh] relative'>
           {!loaded && (

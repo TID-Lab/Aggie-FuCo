@@ -19,6 +19,7 @@ const mediaIcons: Record<MediaOptions, IconDefinition | BrandsDef> = {
   twitter: faTwitter,
   RSS: faRss,
   facebook: faFacebook,
+  truthsocial: faQuestionCircle,
   // elmo: faQuestionCircle,
   // "SMS GH": faQuestionCircle,
 };

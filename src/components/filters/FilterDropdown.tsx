@@ -25,16 +25,21 @@ const FilterDropdown = ({
   return (
     <Popover className='relative'>
       <Popover.Button
-        className={`focus-theme py-1 hover:bg-slate-100 ui-open:bg-slate-100 rounded ${
-          value ? "bg-slate-200 px-2" : "px-1"
-        }`}
+        className={({ open }) =>
+          `focus-theme py-1 hover:bg-slate-100 ${
+            open ? "bg-slate-100" : ""
+          } rounded ${value ? "bg-slate-200 px-2" : "px-1"}`
+        }
       >
-        <FontAwesomeIcon
-          icon={faCaretDown}
-          className='ui-open:rotate-180 mr-1 text-slate-500'
-        />
-
-        {value ? value : label}
+        {({ open }) => (
+          <>
+            <FontAwesomeIcon
+              icon={faCaretDown}
+              className={`${open ? "rotate-180" : ""} mr-1 text-slate-500`}
+            />
+            {value ? value : label}
+          </>
+        )}
       </Popover.Button>
       <Popover.Panel className='absolute mt-1 right-0 rounded-lg border border-slate-300  bg-slate-100 overflow-hidden min-w-[12em] drop-shadow-lg z-10'>
         {({ close }) => (
