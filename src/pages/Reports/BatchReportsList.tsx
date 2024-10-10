@@ -83,7 +83,8 @@ const BatchReportList = ({}: IProps) => {
     return (
       <div className='w-full px-4 py-8 rounded-lg border border-slate-300 bg-white flex flex-col items-center'>
         <p className='font-medium mb-1'>
-          Temporarily individually assigns you 50 reports to look at
+          Get 50 unread reports to look at (assigned individually, each user
+          will get a separate batch)
         </p>
         <AggieButton
           className=''
