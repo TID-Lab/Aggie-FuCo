@@ -6,7 +6,7 @@ const formatters = [
     key: "username",
     desc: "format usernames with @mark",
     regex: /@[a-z0-9_]+/g,
-    defaultStyle: "bg-slate-200 px-1",
+    defaultStyle: "bg-slate-200/75 px-1",
   },
   {
     key: "hashtag",

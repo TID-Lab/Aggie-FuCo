@@ -16,7 +16,10 @@ import {
   faDotCircle,
   faEnvelope,
   faEnvelopeOpen,
+  faExclamationTriangle,
+  faMinusCircle,
   faPlus,
+  faRetweet,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import DateTime from "../../../components/DateTime";
@@ -109,26 +112,22 @@ const ReportListItem = ({
         )}
 
         <header className='flex justify-between mb-2 relative'>
-          <div>
-            <div className='flex gap-1 text-sm items-baseline'>
-              <h1 className={`text-sm text-black mx-1 font-medium `}>
-                <span className='mr-2 text-slate-600 text-xs'>
-                  <SocialMediaIcon mediaKey={report._media[0]} />
-                </span>
-                {report.author}
-              </h1>
-              <TagsList values={report.smtcTags} />
-              {report.irrelevant && report.irrelevant === "true" && (
-                <span className='px-2 text-sm font-medium bg-red-200 text-red-800'>
-                  Irrelevant
-                </span>
-              )}
-            </div>
+          <div className='flex gap-1 text-sm items-baseline'>
+            <h1 className={`text-sm text-black mx-1 font-medium `}>
+              <span className='mr-2 text-slate-600 text-xs'>
+                <SocialMediaIcon mediaKey={report._media[0]} />
+              </span>
+              {report.author}
+            </h1>
+            <TagsList values={report.smtcTags} />
+            {report.irrelevant && report.irrelevant === "true" && (
+              <span className='px-2 text-sm font-medium bg-red-200 text-red-800'>
+                Irrelevant
+              </span>
+            )}
           </div>
           <div className='text-xs flex gap-2 group-hover:opacity-0'>
-            <p>
-              <DateTime dateString={report.authoredAt} />
-            </p>
+            <DateTime dateString={report.authoredAt} />
           </div>
           <div className='flex absolute right-0 top-0 text-xs shadow-md rounded-lg border border-slate-300 group-hover:opacity-100 opacity-0'>
             <AggieButton
@@ -170,7 +169,13 @@ const ReportListItem = ({
             </AggieButton>
           </div>
         </header>
-        <div>
+        <div className='flex gap-2'>
+          {contentType === "twitterRetweet" && (
+            <div className='grid place-items-center'>
+              {" "}
+              <FontAwesomeIcon icon={faRetweet} />
+            </div>
+          )}
           {contentType === "truthsocial" ? (
             <p
               className='truthsocial text-black'
@@ -191,11 +196,26 @@ const ReportListItem = ({
         </div> */}
         {!!report._group && !!incident ? (
           <div
-            className='rounded-lg bg-slate-50 px-2 py-1 flex-grow border border-slate-300 hover:cursor-pointer hover:bg-white'
+            className='rounded-lg text-slate-700 bg-slate-50 px-2 py-1 flex-grow border border-slate-300 hover:cursor-pointer hover:bg-white'
             onClick={(e) => onAttachedReportClick(e, incident._id)}
           >
             <p className='font-medium flex justify-between'>
-              {incident?.title} <span>#{incident?.idnum}</span>
+              <span>
+                {incident?.title}{" "}
+                {incident?.escalated && (
+                  <FontAwesomeIcon
+                    icon={faExclamationTriangle}
+                    className='text-red-600'
+                  />
+                )}{" "}
+                {incident?.closed && (
+                  <FontAwesomeIcon
+                    icon={faMinusCircle}
+                    className='text-purple-600'
+                  />
+                )}
+              </span>{" "}
+              <span>#{incident?.idnum}</span>
             </p>
             <p>({incident._reports.length}) total Reports</p>
           </div>
