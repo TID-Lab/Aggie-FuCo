@@ -4,7 +4,11 @@ import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
 import { IrrelevanceOptions } from "../../api/common";
-import { setSelectedRead, setSelectedIrrelevance } from "../../api/reports";
+import {
+  setSelectedRead,
+  setSelectedIrrelevance,
+  setSelectedTags,
+} from "../../api/reports";
 import { updateByIds } from "../../utils/immutable";
 
 import type {
@@ -18,12 +22,13 @@ const defaultOptions = {
 };
 
 export const useReportMutations = (
-  options: typeof defaultOptions = defaultOptions
+  userOptions: Partial<typeof defaultOptions> = defaultOptions
 ) => {
   const queryData = useUpdateQueryData();
   const navigate = useNavigate();
   const { searchParams } = useQueryParams<ReportQueryState>();
 
+  const options = { ...defaultOptions, ...userOptions };
   // this is an exmaple of optimistic mutation
 
   const setRead = useMutation({
@@ -47,7 +52,7 @@ export const useReportMutations = (
       // update single report
       if (params.currentPageId) {
         contextReport = queryData.update<Report>(
-          ["report", params.currentPageId],
+          [...options.key, params.currentPageId],
           (data) => {
             return {
               read: params.read,
@@ -69,7 +74,7 @@ export const useReportMutations = (
       queryData.queryClient.setQueryData(options.key, context.reports);
       if (context.reportId && context.report)
         queryData.queryClient.setQueryData(
-          ["report", context.reportId],
+          [...options.key, context.reportId],
           context.report
         );
     },
@@ -93,18 +98,54 @@ export const useReportMutations = (
       });
       // update single report
       if (params.currentPageId) {
-        queryData.update<Report>(["report", params.currentPageId], (data) => {
-          return {
-            irrelevant: params.irrelevant,
-          };
-        });
-        if (params.irrelevant === "true")
-          navigate({ pathname: "/reports", search: searchParams.toString() });
+        queryData.update<Report>(
+          [...options.key, params.currentPageId],
+          (data) => {
+            return {
+              irrelevant: params.irrelevant,
+            };
+          }
+        );
+        //   if (params.irrelevant === "true")
+        //     navigate({ pathname: "/reports", search: searchParams.toString() });
       }
     },
   });
+
+  const doSetTags = useMutation({
+    mutationFn: (params: {
+      reportIds: string[];
+      tagIds: string[];
+      currentPageId?: string;
+    }) =>
+      setSelectedTags({ reportIds: params.reportIds, tagIds: params.tagIds }),
+    onSuccess: (_, params) => {
+      // update reports list
+      queryData.update<Reports>(options.key, (previousData) => {
+        const updateData = updateByIds(params.reportIds, previousData.results, {
+          smtcTags: params.tagIds,
+        });
+        return {
+          results: updateData,
+        };
+      });
+      // update single report
+      if (params.currentPageId) {
+        queryData.update<Report>(
+          [...options.key, params.currentPageId],
+          (data) => {
+            return {
+              smtcTags: params.tagIds,
+            };
+          }
+        );
+      }
+    },
+  });
+
   return {
     setRead,
     setIrrelevance,
+    doSetTags,
   };
 };

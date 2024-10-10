@@ -94,7 +94,9 @@ schema.methods.setVeracity = function (veracity) {
 schema.methods.setEscalated = function (escalated) {
   this.escalated = escalated;
 };
-
+schema.methods.setAssigned = function (assignedTo) {
+  this.assignedTo = assignedTo;
+};
 schema.methods.addSMTCTag = function (smtcTagId, callback) {
   // TODO: Use Functional Programming
   // ML This finds the smtcTag to add (if it doesn't exists) then add it.

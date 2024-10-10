@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { Field } from "formik";
-import { isNil, omitBy } from "lodash";
 import * as Yup from "yup";
 import { VERACITY_OPTIONS } from "../../api/common";
 import { Group, GroupEditableData } from "../../api/groups/types";
@@ -55,6 +54,7 @@ const CreateEditIncidentForm = ({
           onSubmit({ ...values, _id: group?._id });
         }}
         loading={isLoading}
+        onSubmitText={!!group ? "Update Incident" : "Create Incident"}
         onClose={onCancel}
       >
         <div className='flex gap-6 text-slate-200 pb-1'>
@@ -85,12 +85,12 @@ const CreateEditIncidentForm = ({
         <FormikInput name='locationName' label='Location' />
 
         <label>
-          <span className='text-slate-600'>Notes:</span>
+          <span className='text-slate-600'>Description:</span>
           <Field
             as='textarea'
-            name='commentdata'
+            name='notes'
             className='focus-theme px-3 py-2 border border-slate-300 bg-slate-50 rounded w-full min-h-36'
-            placeholder='Write a comment here...'
+            placeholder='Write description here...'
           />
         </label>
       </FormikWithSchema>

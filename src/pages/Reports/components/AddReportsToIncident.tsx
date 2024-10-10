@@ -93,12 +93,12 @@ const AddReportsToIncidents = ({
       groupId: selectedIncident,
     });
   }
-
+  if (!isOpen) return <></>;
   return (
     <Dialog open={isOpen} onClose={onClose} className='relative z-50'>
       <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
       <div className='fixed inset-0 flex w-screen items-center justify-center p-4'>
-        <Dialog.Panel className='bg-gray-50 rounded-xl border border-slate-200 shadow-xl min-w-24 h-[90vh] min-h-12 p-3 grid grid-cols-2 gap-2	grid-rows-[auto_1fr]'>
+        <Dialog.Panel className='bg-gray-50 rounded-xl border border-slate-200 shadow-xl min-w-24 h-[90vh] min-h-12 p-3 grid grid-cols-2 gap-2 w-full	grid-rows-[auto_1fr]'>
           <div className='col-span-2 flex justify-between '>
             <div className='flex-1'>
               <AggieButton variant='secondary' onClick={onClose}>
@@ -136,6 +136,7 @@ const AddReportsToIncidents = ({
               set={setParams}
               isQuery={!!searchParams.size}
               clearAll={clearAllParams}
+              totalCount={incidents && incidents.total}
             />
             <div className='overflow-y-auto bg-white border border-slate-300 rounded-lg'>
               <NestedIncidentsList

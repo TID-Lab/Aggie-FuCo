@@ -7,7 +7,6 @@ import { newGroup } from "../../../api/groups";
 import { setReportsToGroup } from "../../../api/reports";
 import type { Report, Reports } from "../../../api/reports/types";
 
-import IncidentForm from "../IncidentForm_old";
 import { Dialog } from "@headlessui/react";
 import SocialMediaPost from "../../../components/SocialMediaPost";
 

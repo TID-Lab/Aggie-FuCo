@@ -33,7 +33,7 @@ const NestedIncidentsList = ({
             className={`w-full text-left ${
               selectedIncident?._id === item._id
                 ? "bg-blue-200"
-                : "hover:bg-slate-50"
+                : "hover:bg-blue-100"
             }`}
             onClick={() => onIncidentClicked(item)}
           >
