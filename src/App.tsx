@@ -72,7 +72,7 @@ const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
 
       <Route index element={<Navigate to={"/reports"} />} />
       <Route path='/reports' element={<Reports />}>
-        <Route path=':id' element={<Report />} />
+        <Route path=':id' element={<Report />}></Route>
       </Route>
 
       <Route path='/incidents' element={<Incidents />} />
