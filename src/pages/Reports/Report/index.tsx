@@ -7,8 +7,9 @@ import { useQueryParams } from "../../../hooks/useQueryParams";
 
 import { getReport } from "../../../api/reports";
 import { getSources } from "../../../api/sources";
+import * as Yup from "yup";
 
-import type { ReportQueryState, Reports, Tag } from "../../../objectTypes";
+import type { ReportQueryState } from "../../../api/reports/types";
 
 import AggieButton from "../../../components/AggieButton";
 import AddReportsToIncidents from "../components/AddReportsToIncident";
@@ -21,15 +22,32 @@ import {
   faEnvelope,
   faEnvelopeOpen,
   faFile,
+  faFileEdit,
   faPlus,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import FormikWithSchema from "../../../components/FormikWithSchema";
+import FormikMultiCombobox from "../../../components/FormikMultiCombobox";
+import TagsList from "../../../components/Tags/TagsList";
+import { getTags } from "../../../api/tags";
+import { Form, Formik } from "formik";
+
+const tagsSchema = Yup.object().shape({
+  smtcTags: Yup.array().of(Yup.string()).optional().default([]),
+});
+
 const Report = () => {
   let { id } = useParams();
-  const { setParams } = useQueryParams<ReportQueryState>();
+  const { setParams, getParam } = useQueryParams<ReportQueryState>();
+
+  const isBatchMode = getParam("batch") === "true";
+
   const navigate = useNavigate();
-  const queryData = useUpdateQueryData();
-  const { setRead, setIrrelevance } = useReportMutations();
+  const { setRead, setIrrelevance, doSetTags } = useReportMutations({
+    key: isBatchMode ? ["batch"] : ["reports"],
+  });
+
+  const { data: tags } = useQuery(["tags"], getTags);
 
   const { data: report, isLoading } = useQuery(["reports", id], () =>
     getReport(id)
@@ -98,9 +116,9 @@ const Report = () => {
       </span>
     );
   if (!report || !id) return <> error loading page</>;
+  console.log(report);
   return (
     <article className='pt-4 pr-2 sticky top-0 overflow-y-auto max-h-[93vh]  '>
-      {console.log(report)}
       <AddReportsToIncidents
         selection={id ? [id] : undefined}
         isOpen={addReportModal}
@@ -155,10 +173,17 @@ const Report = () => {
               className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-300 hover:bg-slate-200'
               onClick={addReportsToIncidents}
             >
-              <>
-                <FontAwesomeIcon icon={faPlus} />
-                Add to Incident
-              </>
+              {!!report._group ? (
+                <>
+                  <FontAwesomeIcon icon={faFileEdit} />
+                  Change Incident
+                </>
+              ) : (
+                <>
+                  <FontAwesomeIcon icon={faPlus} />
+                  Add to Incident
+                </>
+              )}
             </AggieButton>
             <DropdownMenu
               variant='secondary'
@@ -183,13 +208,63 @@ const Report = () => {
         </div>
       </nav>
       <div className='flex flex-col gap-1 my-2'>
-        <div className='grid grid-cols-3'>
-          <p className='font-medium text-sm py-1 px-2 '>Source</p>
-          <p className='col-span-2 '>{getSourceFromId(report._sources)}</p>
+        <div className=''>
+          <p className='font-medium text-sm '>Source</p>
+          <p className=' '>{getSourceFromId(report._sources)}</p>
         </div>
-        <div className='grid grid-cols-3'>
-          <p className='font-medium text-sm py-1 px-2 '>Tags</p>
-          <p className='col-span-2'>Tags don't work right now</p>
+        <div className=''>
+          <Formik
+            initialValues={{
+              smtcTags: report?.smtcTags || [],
+            }}
+            validationSchema={tagsSchema}
+            enableReinitialize
+            onSubmit={(values) => {
+              if (!id) return;
+              doSetTags.mutate({
+                tagIds: values.smtcTags,
+                reportIds: [id],
+                currentPageId: id,
+              });
+            }}
+          >
+            {({ isValid, resetForm, touched }) => (
+              <Form className='flex flex-col gap-3'>
+                <FormikMultiCombobox
+                  name={"smtcTags"}
+                  label={"Tags"}
+                  unitLabel='Tag'
+                  list={
+                    tags?.map((i) => {
+                      return { key: i._id, value: i.name };
+                    }) || [{ key: "", value: "loading" }] ||
+                    []
+                  }
+                />
+                {console.log(touched.smtcTags)}
+                {!!touched.smtcTags && (
+                  <div className='flex text-xs'>
+                    <AggieButton
+                      disabled={doSetTags.isLoading}
+                      variant='transparent'
+                      type='button'
+                      onClick={() => resetForm()}
+                    >
+                      cancel
+                    </AggieButton>
+                    <AggieButton
+                      variant='primary'
+                      disabled={doSetTags.isLoading || !isValid}
+                      loading={doSetTags.isLoading}
+                      type={"submit"}
+                    >
+                      Save Changes
+                    </AggieButton>
+                  </div>
+                )}
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
 

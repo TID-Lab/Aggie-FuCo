@@ -31,10 +31,10 @@ const Reports = () => {
           <div className='flex justify-between text-slate-500 mt-3 mb-1'>
             <Tab.List className={"text-3xl font-medium flex"}>
               <Tab className='focus-theme ui-selected:text-black hover:bg-slate-200 ui-selected:hover:bg-transparent rounded-lg px-2 py-1'>
-                <h1 className=''>All Reports</h1>
+                <h1 className=''>Batch Mode</h1>
               </Tab>
               <Tab className='focus-theme ui-selected:text-black hover:bg-slate-200 ui-selected:hover:bg-transparent rounded-lg px-2 py-1'>
-                <h1 className=''>Batch Mode</h1>
+                <h1 className=''>All Reports</h1>
               </Tab>
             </Tab.List>
             <p className='font-medium text-sm'>
@@ -48,10 +48,10 @@ const Reports = () => {
 
           <Tab.Panels>
             <Tab.Panel>
-              <AllReportsList />
+              <BatchReportList />
             </Tab.Panel>
             <Tab.Panel>
-              <BatchReportList />
+              <AllReportsList />
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>

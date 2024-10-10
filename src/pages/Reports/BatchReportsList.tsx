@@ -141,7 +141,7 @@ const BatchReportList = ({}: IProps) => {
                 Mark {multiSelect.selection.length} report{"(s)"} as:
               </p>
               <MultiSelectActions
-                queryKey={["reports"]}
+                queryKey={["batch"]}
                 selection={multiSelect.selection}
                 disabled={!multiSelect.any()}
                 currentPageId={currentPageId}

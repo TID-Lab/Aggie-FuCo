@@ -4,7 +4,11 @@ import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
 import { useQueryParams } from "../../hooks/useQueryParams";
 
 import { IrrelevanceOptions } from "../../api/common";
-import { setSelectedRead, setSelectedIrrelevance } from "../../api/reports";
+import {
+  setSelectedRead,
+  setSelectedIrrelevance,
+  setSelectedTags,
+} from "../../api/reports";
 import { updateByIds } from "../../utils/immutable";
 
 import type {
@@ -102,13 +106,46 @@ export const useReportMutations = (
             };
           }
         );
-        if (params.irrelevant === "true")
-          navigate({ pathname: "/reports", search: searchParams.toString() });
+        //   if (params.irrelevant === "true")
+        //     navigate({ pathname: "/reports", search: searchParams.toString() });
       }
     },
   });
+
+  const doSetTags = useMutation({
+    mutationFn: (params: {
+      reportIds: string[];
+      tagIds: string[];
+      currentPageId?: string;
+    }) =>
+      setSelectedTags({ reportIds: params.reportIds, tagIds: params.tagIds }),
+    onSuccess: (_, params) => {
+      // update reports list
+      queryData.update<Reports>(options.key, (previousData) => {
+        const updateData = updateByIds(params.reportIds, previousData.results, {
+          smtcTags: params.tagIds,
+        });
+        return {
+          results: updateData,
+        };
+      });
+      // update single report
+      if (params.currentPageId) {
+        queryData.update<Report>(
+          [...options.key, params.currentPageId],
+          (data) => {
+            return {
+              smtcTags: params.tagIds,
+            };
+          }
+        );
+      }
+    },
+  });
+
   return {
     setRead,
     setIrrelevance,
+    doSetTags,
   };
 };

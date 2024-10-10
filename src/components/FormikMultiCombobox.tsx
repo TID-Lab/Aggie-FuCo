@@ -33,7 +33,7 @@ const FormikMultiCombobox = ({
 }: IProps) => {
   const [field, meta, helpers] = useField(name);
   const { value } = meta;
-  const { setValue } = helpers;
+  const { setValue, setTouched } = helpers;
 
   const [filteredList, setFilteredList] = useState(list);
   const [rawSearch, setRawSearch] = useState("");
@@ -61,6 +61,7 @@ const FormikMultiCombobox = ({
 
   function addRemoveItem(key: string) {
     if (!Array.isArray(value)) return;
+    setTouched(true);
 
     if (!value.some((i: string) => i === key)) {
       //key isnt selected

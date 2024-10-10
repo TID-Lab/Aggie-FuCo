@@ -43,7 +43,7 @@ const Pagination = ({
           onClick={() => onPageChange(props.toPage)}
           disabled={props.disabled}
         >
-          {props.children || props.toPage}
+          {props.children || props.toPage + 1}
         </AggieButton>
       );
     }

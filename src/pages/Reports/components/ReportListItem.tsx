@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -16,6 +16,7 @@ import {
   faDotCircle,
   faEnvelope,
   faEnvelopeOpen,
+  faPlus,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import DateTime from "../../../components/DateTime";
@@ -25,6 +26,7 @@ import {
 } from "../../../components/SocialMediaPost/reportParser";
 import AggieButton from "../../../components/AggieButton";
 import { useReportMutations } from "../useReportMutations";
+import AddReportsToIncidents from "./AddReportsToIncident";
 //TODO: refactor and clean up tech debt
 interface IProps {
   report: Report;
@@ -51,6 +53,8 @@ const ReportListItem = ({
     { enabled: !!report._group }
   );
 
+  const [openAttachModal, setOpenAttachModal] = useState(false);
+
   function onChange(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
     onCheckChange();
@@ -69,7 +73,7 @@ const ReportListItem = ({
     id: string
   ) {
     e.stopPropagation();
-    navigate("/incidents/" + id);
+    window.open(`${window.location.origin}/incidents/${id}`, "_blank");
   }
 
   return (
@@ -187,7 +191,7 @@ const ReportListItem = ({
         </div> */}
         {!!report._group && !!incident ? (
           <div
-            className='rounded-lg bg-slate-100 px-2 py-1 flex-grow border border-slate-200 hover:cursor-pointer hover:bg-white'
+            className='rounded-lg bg-slate-50 px-2 py-1 flex-grow border border-slate-300 hover:cursor-pointer hover:bg-white'
             onClick={(e) => onAttachedReportClick(e, incident._id)}
           >
             <p className='font-medium flex justify-between'>
@@ -196,11 +200,24 @@ const ReportListItem = ({
             <p>({incident._reports.length}) total Reports</p>
           </div>
         ) : (
-          <button className='rounded-lg flex-grow bg-slate-50 border border-dashed border-slate-200 grid place-items-center h-full'>
+          <AggieButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenAttachModal(true);
+            }}
+            className='rounded-lg flex-grow flex gap-1 bg-slate-50 border border-dashed hover:border-slate-300 border-slate-300 focus-theme hover:bg-white justify-center items-center h-full'
+            icon={faPlus}
+          >
             Attach Incident
-          </button>
+          </AggieButton>
         )}
       </div>
+      <AddReportsToIncidents
+        selection={[report._id]}
+        isOpen={openAttachModal}
+        queryKey={["reports"]}
+        onClose={() => setOpenAttachModal(false)}
+      />
     </article>
   );
 };
