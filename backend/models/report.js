@@ -33,7 +33,7 @@ let schema = new Schema({
   escalated: { type: Boolean, default: false, required: true, index: true },
   content_lang: { type: String },
   irrelevant: { type: String, default: 'false', required: false, enum: ['false', 'true', 'maybe'] },
-  tags: { 
+  aitags: { 
     type: Map, 
     of: new Schema({
       value: Schema.Types.Mixed, // Allows for both Boolean and String types
@@ -41,7 +41,7 @@ let schema = new Schema({
     }), 
     default: {}
   },
-  tagNames: { type: [String], default: [] }
+  aitagnames: { type: [String], default: [] }
 });
 
 schema.index({ 'metadata.ct_tag': 1 }, { background: true });

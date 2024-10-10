@@ -103,7 +103,7 @@ const ReportListItem = ({
                 </span>
                 {report.author}
               </h1>
-              <GeneratedTagsList tags={report.tags} />
+              <GeneratedTagsList tags={report.aitags} />
               <TagsList values={report.smtcTags} />
               {report.irrelevant && report.irrelevant === "true" && (
                 <span className='px-2 text-sm font-medium bg-red-200 text-red-800'>

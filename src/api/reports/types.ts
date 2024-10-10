@@ -27,8 +27,8 @@ export interface Report extends hasId {
   originalPost: string;
   irrelevant?: IrrelevanceOptions;
   __v: number;
-  tags: GeneratedTags;
-  tagNames: string[];
+  aitags: GeneratedTags;
+  aitagnames: string[];
 }
 
 export interface GeneratedTagValue {

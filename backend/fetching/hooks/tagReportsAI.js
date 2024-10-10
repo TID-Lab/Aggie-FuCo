@@ -26,8 +26,8 @@ module.exports = async function tagReportsAI(report, next) {
     }
     console.log(aiTags);
     console.log(tagNames);
-    report.tags = aiTags;
-    report.tagNames = tagNames;
+    report.aitags = aiTags;
+    report.aitagnames = tagNames;
   } catch (error) {
     console.error("Error fetching AI tags:", error);
     const aiTags = {
@@ -37,8 +37,8 @@ module.exports = async function tagReportsAI(report, next) {
         rationale: "Default rationale for key2",
       },
     };
-    report.tags = aiTags;
-    report.tagNames = Object.keys(aiTags);
+    report.aitags = aiTags;
+    report.aitagnames = Object.keys(aiTags);
   }
   console.log(report);
 
