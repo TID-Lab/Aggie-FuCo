@@ -70,12 +70,12 @@ const AddReportsToIncidents = ({
     refetch();
   }, [query]);
 
-  const addReportsMutation = useMutation({
+  const doAddReportToIncident = useMutation({
     mutationFn: setReportsToGroup,
     onSuccess: (_, params) => {
       onClose();
       // update reports list
-      queryData.update<Reports>(["reports"], (previousData) => {
+      queryData.update<Reports>(queryKey, (previousData) => {
         const updateData = updateByIds(params.reportIds, previousData.results, {
           _group: params.groupId?._id,
         });
@@ -88,7 +88,7 @@ const AddReportsToIncidents = ({
 
   function onAddIncident() {
     if (!selection || selection.length === 0 || !selectedIncident) return;
-    addReportsMutation.mutate({
+    doAddReportToIncident.mutate({
       reportIds: selection,
       groupId: selectedIncident,
     });
@@ -111,8 +111,8 @@ const AddReportsToIncidents = ({
               <AggieButton
                 variant='primary'
                 onClick={onAddIncident}
-                loading={addReportsMutation.isLoading}
-                disabled={addReportsMutation.isLoading || !selectedIncident}
+                loading={doAddReportToIncident.isLoading}
+                disabled={doAddReportToIncident.isLoading || !selectedIncident}
               >
                 Add {selection ? `${selection.length}` : ""} report(s) to
                 incident
