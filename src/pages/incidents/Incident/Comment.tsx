@@ -13,9 +13,10 @@ import { Formik, Field, Form } from "formik";
 import Linkify from "linkify-react";
 
 import { faComment, faCommentAlt } from "@fortawesome/free-regular-svg-icons";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DateTime from "../../../components/DateTime";
+import DropdownMenu from "../../../components/DropdownMenu";
 
 const CommentSchema = Yup.object().shape({
   commentdata: Yup.string().required("Cannot Post Empty Comment!"),
@@ -32,12 +33,12 @@ const Comment = ({ data, groupdId }: IProps) => {
     staleTime: 50000,
   });
 
-  const deleteComment = useMutation(removeComment, {
+  const doDeleteComment = useMutation(removeComment, {
     onSuccess() {
       queryClient.invalidateQueries(["group", groupdId]);
     },
   });
-  const updateComment = useMutation(editComment, {
+  const doUpdateComment = useMutation(editComment, {
     onSuccess() {
       queryClient.invalidateQueries(["group", groupdId]);
     },
@@ -47,7 +48,7 @@ const Comment = ({ data, groupdId }: IProps) => {
     formData: { commentdata: string },
     resetForm: () => void
   ) {
-    updateComment.mutate(
+    doUpdateComment.mutate(
       {
         id: groupdId,
         comment: { ...data, data: formData.commentdata },
@@ -82,20 +83,26 @@ const Comment = ({ data, groupdId }: IProps) => {
               <AggieButton
                 variant='secondary'
                 onClick={() => setEdit(true)}
+                icon={faEdit}
+                className='h-full'
                 disabled={edit}
-              >
-                <FontAwesomeIcon icon={faEdit} />
-              </AggieButton>
-              <AggieButton
+              ></AggieButton>
+              <DropdownMenu
                 variant='secondary'
-                onClick={() =>
-                  deleteComment.mutate({ id: groupdId, comment: data })
-                }
-                loading={deleteComment.isLoading}
-                disabled={deleteComment.isLoading}
+                className='px-2 py-1 rounded-lg bg-slate-100 border border-slate-300'
+                panelClassName='overflow-hidden right-0'
+                buttonElement={<FontAwesomeIcon icon={faEllipsisH} />}
               >
-                <FontAwesomeIcon icon={faTrashAlt} />
-              </AggieButton>
+                <AggieButton
+                  className='w-full px-2 py-1 hover:bg-red-100  font-medium flex gap-2 text-nowrap items-center flex-grow text-red-800 '
+                  onClick={() =>
+                    doDeleteComment.mutate({ id: groupdId, comment: data })
+                  }
+                >
+                  <FontAwesomeIcon icon={faEdit} />
+                  delete comment
+                </AggieButton>
+              </DropdownMenu>
             </>
           )}
         </div>

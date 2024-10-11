@@ -81,7 +81,7 @@ const BatchReportList = ({}: IProps) => {
   // when batch mode not activated
   if (!getParam("batch"))
     return (
-      <div className='w-full px-4 py-8 rounded-lg border border-slate-300 bg-white flex flex-col items-center'>
+      <div className='w-full px-4 py-8 mt-2 rounded-lg border border-slate-300 bg-white flex flex-col items-center'>
         <p className='font-medium mb-1'>
           Get 50 unread reports to look at (assigned individually, each user
           will get a separate batch)
