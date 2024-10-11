@@ -26,7 +26,6 @@ const MediaPreview = ({ mediaUrl, media, report }: IProps) => {
 
     case "twitter": {
       const images = getTweetImages(report);
-      console.log(images);
 
       if (!images || images.length === 0) return <></>;
       return (

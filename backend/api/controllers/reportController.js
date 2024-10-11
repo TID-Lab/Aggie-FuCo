@@ -8,6 +8,7 @@ var _ = require('lodash');
 var writelog = require('../../writeLog');
 var tags = require('../../shared/tags');
 const Group = require("../../models/group");
+const eventRouter = require('../sockets/event-router');
 
 // Determine the search keywords
 const parseQueryData = (queryString) => {
@@ -174,7 +175,12 @@ exports.reports_read_update = (req, res) => {
           return;
         }
         writelog.writeReport(req, report, 'markAsRead');
-        if (--remaining === 0) return res.sendStatus(200);
+        if (--remaining === 0) {
+          eventRouter.publish('reports:read', { ids: req.body.ids, read: req.body.read }).then(() => {
+            return res.sendStatus(200)
+          });
+
+        };
       });
     });
   });

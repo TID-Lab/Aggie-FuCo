@@ -40,7 +40,7 @@ module.exports = (httpServer) => {
   ns['reports'].on('connection', onConnection('reports'));
 
   const handleEvent = (nsName) => async (eventName, data) => {
-    // console.log('Received event', eventName, 'with data', data);
+    console.log('Received event', eventName, 'with data', data);
 
     ns[nsName].emit(eventName, {
       event: eventName,
@@ -63,4 +63,6 @@ module.exports = (httpServer) => {
   EventRouter.on('reports:update', handleEvent('reports'));
   EventRouter.on('reports:create', handleEvent('reports'));
   EventRouter.on('reports:delete', handleEvent('reports'));
+  EventRouter.on('reports:read', handleEvent('reports'));
+
 };

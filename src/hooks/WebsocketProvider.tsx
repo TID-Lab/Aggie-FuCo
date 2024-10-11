@@ -6,14 +6,19 @@ export const SocketContext = React.createContext<{ socket: any }>({
   socket: null,
 });
 
+export interface SocketEvent {
+  event: string;
+  data: unknown;
+}
+
 const SocketProvider: React.FC = ({ children }) => {
   const SocketURL =
     process.env.NODE_ENV === "production" ? undefined : "ws://localhost:3000";
 
   // we use a ref to store the socket as it won't be updated frequently
   const socket = useRef(
-    io(SocketURL, {
-      autoConnect: false,
+    io(SocketURL + "/reports", {
+      autoConnect: true,
     })
   );
 

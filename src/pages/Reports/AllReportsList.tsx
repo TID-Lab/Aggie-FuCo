@@ -22,7 +22,6 @@ interface IProps {}
 const AllReportsList = ({}: IProps) => {
   const { id: currentPageId } = useParams();
   const navigate = useNavigate();
-
   const { searchParams, getAllParams, setParams, getParam } =
     useQueryParams<ReportQueryState>();
 
