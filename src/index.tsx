@@ -13,7 +13,7 @@ import { BrowserRouter } from "react-router-dom";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 
-import App from "./App";
+import AppRouter from "./AppRouter";
 
 //locale for rendering relative time react
 TimeAgo.addDefaultLocale(en);
@@ -37,7 +37,7 @@ ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <App />
+        <AppRouter />
       </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>,

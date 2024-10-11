@@ -32,6 +32,7 @@ import AggieButton from "../../../components/AggieButton";
 import { useReportMutations } from "../useReportMutations";
 import AddReportsToIncidents from "./AddReportsToIncident";
 import { useQueryParams } from "../../../hooks/useQueryParams";
+import AggieToken from "../../../components/AggieToken";
 //TODO: refactor and clean up tech debt
 interface IProps {
   report: Report;
@@ -128,13 +129,27 @@ const ReportListItem = ({
               </span>
               {report.author}
             </h1>
+
+            {report.irrelevant && report.irrelevant === "true" && (
+              <AggieToken
+                variant='light:red'
+                icon={faXmark}
+                className='text-xs'
+              >
+                Irrelevant
+              </AggieToken>
+            )}
+            {report.redFlag && (
+              <AggieToken
+                variant='dark:red'
+                icon={faExclamationTriangle}
+                className='text-xs'
+              >
+                Red Flag
+              </AggieToken>
+            )}
             <GeneratedTagsList tags={report.aitags} />
             <TagsList values={report.smtcTags} />
-            {report.irrelevant && report.irrelevant === "true" && (
-              <span className='px-2 text-sm font-medium bg-red-200 text-red-800'>
-                Irrelevant
-              </span>
-            )}
           </div>
           <div className='text-xs flex gap-2 group-hover:opacity-0'>
             <DateTime dateString={report.authoredAt} />

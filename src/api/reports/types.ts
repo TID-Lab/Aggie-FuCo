@@ -6,6 +6,7 @@ import type {
 } from "../common";
 
 export interface Report extends hasId {
+  redFlag: boolean;
   veracity: VeracityOptions;
   smtcTags: string[];
   hasSMTCTags: boolean;
@@ -29,6 +30,7 @@ export interface Report extends hasId {
   __v: number;
   aitags: GeneratedTags;
   aitagnames: string[];
+  redflag: boolean;
 }
 
 export interface GeneratedTagValue {

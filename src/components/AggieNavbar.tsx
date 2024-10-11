@@ -18,8 +18,17 @@ import { useState } from "react";
 import { logOut } from "../api/session";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const mainLinks = {
-  Reports: { to: "/reports" },
+interface LinkOptions {
+  to: string;
+  type?: string;
+  not?: string[];
+}
+const mainLinks: Record<string, LinkOptions> = {
+  Reports: { to: "/r/batch" },
+  "All Reports": { to: "/r", not: ["batch", "search"] },
+  Search: { to: "/r/search" },
+
+  divider1: { type: "divider", to: "" },
   Incidents: { to: "/incidents" },
 };
 
@@ -39,7 +48,13 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const isActive = (to: string) => location.pathname.includes(to);
+  const isActive = (to: string, not: string[] = [""]) => {
+    const doesNotHave = !!not
+      ? !not.some((n) => location.pathname.includes(n))
+      : true;
+    console.log(to, doesNotHave);
+    return location.pathname.includes(to) && doesNotHave;
+  };
 
   const [logoutModal, setLogoutModal] = useState(false);
 
@@ -69,23 +84,29 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
           </svg>
         </div>
         <div className='flex rounded-lg font-medium gap-1 mx-2 '>
-          {Object.entries(mainLinks).map(([name, path]) => (
-            <Link
-              key={name}
-              to={path.to}
-              className={`px-2 rounded-lg focus-theme hover:bg-gray-100 rounded-lg text-[#416B34] hover:text-[#416B34] ${
-                isActive(path.to) ? "" : ""
-              }`}
-            >
-              <p
-                className={`py-1 border-b-2  ${
-                  isActive(path.to) ? " border-[#416B34]" : "border-transparent"
+          {Object.entries(mainLinks).map(([name, path]) =>
+            !path.type ? (
+              <Link
+                key={name}
+                to={path.to}
+                className={`px-2 focus-theme hover:bg-gray-100 rounded-lg text-[#416B34] hover:text-[#416B34] ${
+                  isActive(path.to, path.not || [""]) ? "" : ""
                 }`}
               >
-                <span>{name}</span>
-              </p>
-            </Link>
-          ))}
+                <p
+                  className={`py-1 border-b-2  ${
+                    isActive(path.to, path.not || [""])
+                      ? " border-[#416B34]"
+                      : "border-transparent"
+                  }`}
+                >
+                  <span>{name}</span>
+                </p>
+              </Link>
+            ) : (
+              <div className='border border-l border-gray-300'></div>
+            )
+          )}
         </div>
       </div>
       <div className='flex gap-2 '>

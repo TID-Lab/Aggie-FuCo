@@ -61,7 +61,7 @@ const BatchReportList = ({}: IProps) => {
     cancelCurrentBatch.mutate(undefined, {
       onSuccess: () => {
         setParams({ batch: undefined });
-        navigate({ pathname: "/reports", search: searchParams.toString() });
+        navigate({ pathname: "/r", search: searchParams.toString() });
       },
     });
   }
@@ -74,7 +74,7 @@ const BatchReportList = ({}: IProps) => {
   }
 
   function onReportClick(id: string, isRead: boolean) {
-    navigate({ pathname: id, search: searchParams.toString() });
+    navigate({ pathname: `/r/batch/${id}`, search: searchParams.toString() });
     if (!isRead)
       setRead.mutate({ reportIds: [id], read: true, currentPageId: id });
   }
