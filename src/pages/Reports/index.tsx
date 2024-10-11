@@ -1,29 +1,42 @@
-import { useOutlet, useNavigate, useLocation } from "react-router-dom";
+import { useOutlet, useParams, useLocation } from "react-router-dom";
 import { useUpdateQueryData } from "../../hooks/useUpdateQueryData";
 import { SocketEvent, useSocketSubscribe } from "../../hooks/WebsocketProvider";
-import type { Reports as IReports } from "../../api/reports/types";
+import type { Report, Reports as IReports } from "../../api/reports/types";
 import { updateByIds } from "../../utils/immutable";
 
 const Reports = ({ children }: { children: React.ReactNode }) => {
   const queryData = useUpdateQueryData();
   const location = useLocation();
-
+  const { id: pageId } = useParams();
   const outlet = useOutlet();
-  const handleSocketUpdate = (message: SocketEvent) => {
-    const d = message.data as any;
-    if (message.event !== "reports:read") return;
+  interface ReportUpdateEvent extends SocketEvent {
+    data: {
+      ids: string[];
+      update: Record<string, any>;
+    };
+  }
+  const handleSocketUpdate = (message: ReportUpdateEvent) => {
+    if (message.event !== "reports:update") return;
     console.log("catch", message);
-
-    queryData.update<IReports>(["reports"], (data) => {
-      const updateData = updateByIds(d.ids, data.results, {
-        read: d.read,
-      });
+    const key = location.pathname.includes("batch") ? ["batch"] : ["reports"];
+    queryData.update<IReports>(key, (data) => {
+      const updateData = updateByIds(
+        message.data.ids,
+        data.results,
+        message.data.update
+      );
       return {
         results: updateData,
       };
     });
+    // update single report
+    if (pageId) {
+      queryData.update<Report>([...key, pageId], (data) => {
+        return message.data.update;
+      });
+    }
   };
-  useSocketSubscribe("reports:read", handleSocketUpdate);
+  useSocketSubscribe("reports:update", handleSocketUpdate);
   return (
     <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-3 gap-3'>
       <main className='col-span-2 '>{children}</main>
