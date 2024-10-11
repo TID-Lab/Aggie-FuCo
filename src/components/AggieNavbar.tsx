@@ -52,7 +52,6 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
     const doesNotHave = !!not
       ? !not.some((n) => location.pathname.includes(n))
       : true;
-    console.log(to, doesNotHave);
     return location.pathname.includes(to) && doesNotHave;
   };
 
