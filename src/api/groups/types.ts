@@ -19,7 +19,7 @@ export interface Group extends hasId {
   public: boolean;
   _reports: string[];
   title: string;
-  assignedTo?: AssignedToUser[]; // AssignedToUser | AssignedToUser[] <- i dont think its ever not an array
+  assignedTo?: AssignedToUser[] | User[]; // AssignedToUser | AssignedToUser[] <- i dont think its ever not an array
   creator: Creator | null;
   storedAt: string;
   updatedAt: string;
@@ -66,8 +66,8 @@ export interface GroupQueryState {
 }
 
 export interface GroupComment extends EditableGroupComment {
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   _id: string;
 }
 

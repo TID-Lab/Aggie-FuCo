@@ -1,31 +1,42 @@
 import ReactTimeAgo from "react-time-ago";
-import { stringToDate } from "../helpers";
 
-const DateTime = ({ dateString }: { dateString: string }) => {
-  function timeOrDate(datestring: string) {
-    const date = stringToDate(datestring);
+const stringToDate = (str: string) => {
+  if (!str) return undefined;
+  return new Date(str);
+};
+
+interface IPropsDateString {
+  dateString: string | undefined;
+  date?: never;
+}
+interface IPropsDate {
+  dateString?: never;
+  date: Date | undefined;
+}
+type IProps = IPropsDate | IPropsDateString;
+const DateTime = (props: IProps) => {
+  const date =
+    "date" in props && !!props.date
+      ? props.date
+      : stringToDate(props.dateString || "");
+
+  if (!date) return <></>;
+  function timeOrDate(d: Date) {
     const today = new Date();
-    if (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth()
-    )
-      return date.toLocaleTimeString([], {
+    if (d.getDate() === today.getDate() && d.getMonth() === today.getMonth())
+      return d.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       });
-    return date.toLocaleDateString();
+    return d.toLocaleDateString();
   }
 
   return (
     <>
       <span className='font-medium'>
-        <ReactTimeAgo
-          date={stringToDate(dateString)}
-          locale='en-US'
-          timeStyle='twitter'
-        />
+        <ReactTimeAgo date={date} locale='en-US' timeStyle='twitter' />
       </span>{" "}
-      ({timeOrDate(dateString)})
+      ({timeOrDate(date)})
     </>
   );
 };

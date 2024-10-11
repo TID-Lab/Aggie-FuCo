@@ -6,17 +6,17 @@ import { useIncidentMutations } from "../useIncidentMutations";
 import { addComment, getGroup, getGroupReports } from "../../../api/groups";
 import { getSession } from "../../../api/session";
 import { EditableGroupComment, GroupComment } from "../../../api/groups/types";
+import * as Yup from "yup";
 
 import { Form, Formik, Field } from "formik";
 import AxiosErrorCard from "../../../components/AxiosErrorCard";
-import TagsList from "../../../components/tag/TagsList";
+import TagsList from "../../../components/Tags/TagsList";
 import VeracityToken from "../../../components/VeracityToken";
 import SocialMediaPost from "../../../components/SocialMediaPost";
 import { Link } from "react-router-dom";
 import AggieButton from "../../../components/AggieButton";
 import DropdownMenu from "../../../components/DropdownMenu";
 import PlaceholderDiv from "../../../components/PlaceholderDiv";
-import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
 import UserToken from "../../../components/UserToken";
 import Comment from "./Comment";
 import { Dialog } from "@headlessui/react";
@@ -30,6 +30,8 @@ import {
   faTrashAlt,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
+import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
+import DateTime from "../../../components/DateTime";
 
 const Incident = () => {
   const queryClient = useQueryClient();
@@ -37,7 +39,7 @@ const Incident = () => {
   let { id } = useParams();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const { update } = useIncidentMutations();
+  const { doUpdate } = useIncidentMutations();
 
   const {
     isLoading,
@@ -49,17 +51,13 @@ const Incident = () => {
       console.log(data?.comments);
     },
   });
-  const { data: groupReports, refetch: refetchGroup } = useQuery(
-    ["reports", { groupId: id }],
+  const { data: groupReports } = useQuery(
+    ["groups", "reports", { groupId: id }],
     () => getGroupReports(id, 0)
   );
   const { data: session } = useQuery(["session"], getSession, {
     staleTime: 50000,
   });
-  // TODO: refactor into its own component or something
-  // if (isLoading) {
-  //   return <span>Loading...</span>;
-  // }
 
   const postNewComment = useMutation(addComment);
 
@@ -69,9 +67,8 @@ const Incident = () => {
       data: formData.commentdata,
       author: session._id,
     };
-    console.log(formData.commentdata);
     postNewComment.mutate(
-      { groupId: id, comment: post },
+      { id: id, comment: post },
       {
         onSuccess: () => {
           resetForm();
@@ -154,9 +151,14 @@ const Incident = () => {
               <span className='font-medium'>{groupData?._reports.length}</span>{" "}
               reports attached
             </PlaceholderDiv>
+
             <PlaceholderDiv as='p' width='7em' loading={isLoading}>
-              located at{" "}
-              <span className='font-medium'>{groupData?.locationName}</span>
+              {groupData?.locationName && (
+                <>
+                  located at{" "}
+                  <span className='font-medium'>{groupData?.locationName}</span>
+                </>
+              )}
             </PlaceholderDiv>
             <PlaceholderDiv as='p' width='7em' loading={isLoading}>
               created by{" "}
@@ -213,32 +215,45 @@ const Incident = () => {
                 {" "}
                 created this incident on
               </span>{" "}
-              <span>{groupData?.storedAt}</span>
+              <span>
+                {" "}
+                <DateTime dateString={groupData?.storedAt || ""} />
+              </span>
             </h2>
             <p></p>
           </div>
           <div>
             {!!groupData?.comments &&
-              groupData.comments.map((comment) => (
+              groupData.comments.map((comment: GroupComment) => (
                 <Comment data={comment} groupdId={id} key={comment._id} />
               ))}
           </div>
-          <div className=' bg-white border border-slate-300 rounded-lg'>
+          <div className=' bg-slate-50 border border-slate-300 rounded-lg'>
             <h2 className='font-medium ml-3 my-2'>Add Comment</h2>
             <Formik
               initialValues={{ commentdata: "" }}
               onSubmit={(e, { resetForm }) => {
                 onPostAdd(e, resetForm);
               }}
+              validationSchema={Yup.object().shape({
+                commentdata: Yup.string().required(
+                  "Cannot Post Empty Comment!"
+                ),
+              })}
             >
-              {({ resetForm }) => (
-                <Form noValidate>
+              {({ resetForm, errors }) => (
+                <Form>
                   <Field
                     as='textarea'
                     name='commentdata'
-                    className='focus-theme px-3 py-1 border-y border-slate-300 bg-slate-50 w-full min-h-36'
+                    className='focus-theme px-3 py-1 border-y border-slate-300 bg-white w-full min-h-36'
                     placeholder='Write a comment here...'
                   />
+                  {errors && (
+                    <p className='text-sm text-rose-700 italic ml-2'>
+                      {errors.commentdata}
+                    </p>
+                  )}
 
                   <AggieButton
                     type='submit'
@@ -277,7 +292,7 @@ const Incident = () => {
                 <Link to='/reports' className='underline text-blue-600'>
                   Reports Page
                 </Link>{" "}
-                to add relevent reports to this page
+                to add relevant reports to this page
               </p>
             </div>
           )}
@@ -296,7 +311,7 @@ const Incident = () => {
                 group={groupData}
                 onCancel={() => setIsEditOpen(false)}
                 onSubmit={(values) =>
-                  update.mutate(
+                  doUpdate.mutate(
                     { ...values, _id: groupData?._id },
                     {
                       onSuccess: () => {
@@ -306,7 +321,7 @@ const Incident = () => {
                     }
                   )
                 }
-                isLoading={update.isLoading}
+                isLoading={doUpdate.isLoading}
               />
             </Dialog.Panel>
           </div>

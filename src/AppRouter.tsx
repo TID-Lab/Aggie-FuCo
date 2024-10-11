@@ -11,15 +11,10 @@ import { getSession } from "./api/session";
 import type { AxiosError } from "axios";
 import type { Session } from "./api/session/types";
 
-import "./App.css";
-import "@yaireo/tagify/dist/tagify.css";
+//import "@yaireo/tagify/dist/tagify.css";
 
 import AggieNavbar from "./components/AggieNavbar";
 import AlertService, { AlertContent } from "./components/AlertService";
-import ReportsIndex from "./pages/report_old/ReportsIndex";
-import ReportDetails from "./pages/report_old/ReportDetails";
-import GroupsIndex from "./pages/group_old/GroupsIndex";
-import GroupDetails from "./pages/group_old/GroupDetails";
 import SourcesIndex from "./pages/Settings/source/SourcesIndex";
 import SourceDetails from "./pages/Settings/source/SourceDetails";
 import UsersIndex from "./pages/Settings/user/UsersIndex";
@@ -28,10 +23,8 @@ import TagsIndex from "./pages/Settings/tag/TagsIndex";
 import Configuration from "./pages/Settings/Configuration";
 import CredentialsIndex from "./pages/Settings/Credentials/CredentialsIndex";
 import Login from "./pages/Login";
-import Analysis from "./pages/Analysis";
+import Analysis from "./pages/Analysis_old";
 import NotFound from "./pages/NotFound";
-import ResetPassword from "./pages/ResetPassword";
-import RelevantReportsIndex from "./pages/report_old/RelevantReportsIndex";
 import Incidents from "./pages/incidents";
 import Incident from "./pages/incidents/Incident";
 import Reports from "./pages/Reports";
@@ -40,9 +33,11 @@ import NewIncident from "./pages/incidents/NewIncident";
 import FetchIndicator from "./components/FetchIndicator";
 import Settings from "./pages/Settings";
 import { useQueryClient } from "@tanstack/react-query";
+import AllReportsList from "./pages/Reports/AllReportsList";
+import BatchReportList from "./pages/Reports/BatchReportsList";
+import FlaggedReportsList from "./pages/Reports/FlaggedReportsList";
 
 // im currently working on this
-//TODO: BIG TODO is to correctly type all of react-query usage. Its not critical for function, but it is good for clarity in development.
 //TODO: Also BIG TODO is to ensure EVERY API call has a way of surfacing an error message. I want readble UI alerts but at least console.errors.
 const isSafari = () =>
   /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -60,7 +55,6 @@ const RerouteToLogin = () => {
 const PublicRoutes = () => {
   return (
     <Routes>
-      <Route path='/reset-password' element={<ResetPassword />} />
       <Route path='/login' element={<Login />} />
       <Route path='/*' element={<RerouteToLogin />} />
     </Routes>
@@ -75,29 +69,44 @@ interface IPrivateRouteProps {
 const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
   return (
     <Routes>
-      <Route path='/reset-password' element={<ResetPassword />} />
-      <Route path='/login' element={<Navigate to='/reports' />} />
+      <Route path='/login' element={<Navigate to='/r/batch' />} />
       {/* <Route path='*' element={<Navigate replace to='login' />} /> */}
 
-      <Route index element={<Navigate to={"/reports"} />} />
-      <Route path='/reports' element={<Reports />}>
-        <Route path=':id' element={<Report />} />
+      <Route index element={<Navigate to={"/r/batch"} />} />
+      <Route
+        path='/r'
+        element={
+          <Reports>
+            <AllReportsList />
+          </Reports>
+        }
+      >
+        <Route path=':id' element={<Report />}></Route>
+      </Route>
+
+      <Route
+        path='/r/batch'
+        element={
+          <Reports>
+            <BatchReportList />
+          </Reports>
+        }
+      >
+        <Route path=':id' element={<Report />}></Route>
       </Route>
       <Route
-        path='/reports-old'
-        element={<ReportsIndex setGlobalAlert={setGlobalAlert} />}
-      />
-      <Route path='/report-old/:id' element={<ReportDetails />} />
-      <Route
-        path='/relevant-reports'
-        element={<RelevantReportsIndex setGlobalAlert={setGlobalAlert} />}
-      />
+        path='/r/search'
+        element={
+          <Reports>
+            <FlaggedReportsList />
+          </Reports>
+        }
+      >
+        <Route path=':id' element={<Report />}></Route>
+      </Route>
       <Route path='/incidents' element={<Incidents />} />
       <Route path='/incidents/:id' element={<Incident />} />
       <Route path='/incidents/new' element={<NewIncident />} />
-      <Route path='/groups-old' element={<GroupsIndex />} />
-      <Route path='/group-old/:id' element={<GroupDetails />} />
-
       <Route path='/settings' element={<Settings />}>
         <Route path='sources' element={<SourcesIndex />} />
         <Route path='source/:id' element={<SourceDetails />} />
@@ -111,11 +120,11 @@ const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
         <Route path='credentials' element={<CredentialsIndex />} />
       </Route>
       <Route path='/analysis' element={<Analysis />} />
-      <Route path='/404' element={<NotFound />} />
+      <Route path='/*' element={<NotFound />} />
     </Routes>
   );
 };
-const App = () => {
+const AppRouter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [userData, setUserData] = useState<Session | undefined>(undefined);
 
@@ -133,7 +142,7 @@ const App = () => {
           queryClient.setQueryData(["session"], data);
         }
         if (location.pathname === "/login") {
-          navigate("/reports");
+          navigate("/r/batch");
         }
       })
       .catch((err: AxiosError) => {
@@ -185,4 +194,4 @@ const App = () => {
   return InitialApp;
 };
 
-export default App;
+export default AppRouter;

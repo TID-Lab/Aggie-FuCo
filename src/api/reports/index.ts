@@ -46,20 +46,7 @@ export const getReport = async (id: string | undefined) => {
   }
 };
 
-//TODO: deprecate
-export const getReport_untyped = async (id: string | undefined) => {
-  if (id) {
-    const { data } = await axios.get("/api/report/" + id);
-    return data;
-  }
-};
 export const editReport = async (report: Report) => {
-  const { data } = await axios.put("/api/report/" + report._id, report);
-  return data;
-};
-
-//TODO: deprecate, same thing using old types
-export const editReport_old = async (report: Report_old) => {
   const { data } = await axios.put("/api/report/" + report._id, report);
   return data;
 };
@@ -128,10 +115,14 @@ export const setSelectedEscalated = async (
   return data;
 };
 
-export const setSelectedTags = async (reportIds: string[], tagIds: hasId[]) => {
+interface setTagsParams {
+  reportIds: string[];
+  tagIds: string[];
+}
+export const setSelectedTags = async (params: setTagsParams) => {
   const { data } = await axios.patch("/api/report/_tags", {
-    ids: reportIds,
-    tags: tagIds,
+    ids: params.reportIds,
+    tags: params.tagIds,
   });
   return data;
 };

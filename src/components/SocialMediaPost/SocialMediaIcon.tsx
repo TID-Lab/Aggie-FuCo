@@ -19,8 +19,9 @@ const mediaIcons: Record<MediaOptions, IconDefinition | BrandsDef> = {
   twitter: faTwitter,
   RSS: faRss,
   facebook: faFacebook,
-  elmo: faQuestionCircle,
-  "SMS GH": faQuestionCircle,
+  truthsocial: faQuestionCircle,
+  // elmo: faQuestionCircle,
+  // "SMS GH": faQuestionCircle,
 };
 
 const SocialMediaIcon = ({
@@ -28,7 +29,6 @@ const SocialMediaIcon = ({
 }: {
   mediaKey: MediaOptions | undefined;
 }) => {
-  console.log(mediaKey);
   if (!!mediaKey && mediaKey in mediaIcons) {
     //@ts-ignore
     return <FontAwesomeIcon icon={mediaIcons[mediaKey]} />;

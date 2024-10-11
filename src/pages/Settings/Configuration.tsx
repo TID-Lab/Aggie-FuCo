@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from "react";
-// import ExportCSVModal from "../components/configuration/ExportCSVModal";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  getEmailSettings,
-  getFetchStatus,
-  putFetchingStatus,
-} from "../../api/configuration";
-import { Switch } from "@headlessui/react";
+
+import { getFetchStatus, putFetchingStatus } from "../../api/configuration";
+
 import AggieSwitch from "../../components/AggieSwitch";
 
 const Configuration = () => {
   const [fetchStatus, setFetchStatus] = useState<boolean>(false);
-  const [appEmail, setAppEmail] = useState("");
-  // const emailSettingsQuery = useQuery(["emailSettings"], getEmailSettings, {
-  //   onSuccess: (data) => {
-  //     console.log(data);
-  //   },
-  // });
+
   const { data: fetchData, isSuccess: fetchSuccess } = useQuery(
     ["fetchStatus"],
     getFetchStatus

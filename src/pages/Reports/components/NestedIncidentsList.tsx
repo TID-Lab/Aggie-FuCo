@@ -2,7 +2,7 @@ import { faMinusCircle, faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { Groups, Group } from "../../../api/groups/types";
-import TagsList from "../../../components/tag/TagsList";
+import TagsList from "../../../components/Tags/TagsList";
 import VeracityToken from "../../../components/VeracityToken";
 
 interface IProps {
@@ -33,7 +33,7 @@ const NestedIncidentsList = ({
             className={`w-full text-left ${
               selectedIncident?._id === item._id
                 ? "bg-blue-200"
-                : "hover:bg-slate-50"
+                : "hover:bg-blue-100"
             }`}
             onClick={() => onIncidentClicked(item)}
           >

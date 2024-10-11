@@ -9,24 +9,22 @@ import FormikWithSchema from "../../../components/FormikWithSchema";
 
 import { faChevronDown, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CredentialOption, CREDENTIAL_OPTIONS } from "../../../api/common";
 
 // credential type dropdown
-
-const credentialTypes = ["telegram", "junkipedia"] as const;
-type Credential = (typeof credentialTypes)[number];
 
 interface IProps {
   onClose: () => void;
 }
 const CreateCredentialForm = ({ onClose }: IProps) => {
   const [credentialType, setCredentialType] =
-    useState<Credential>("junkipedia");
+    useState<CredentialOption>("junkipedia");
 
   const queryClient = useQueryClient();
   const doCreateCredential = useMutation(newCredential, {
     onSuccess: () => {
       queryClient.invalidateQueries(["credentials"]);
-      onClose && onClose();
+      onClose();
     },
   });
 
@@ -116,7 +114,7 @@ const CreateCredentialForm = ({ onClose }: IProps) => {
           />
         </Listbox.Button>
         <Listbox.Options className='absolute left-0 mt-1 right-0 shadow-md border border-slate-300 bg-white rounded'>
-          {[...credentialTypes].map((item) => (
+          {[...CREDENTIAL_OPTIONS].map((item) => (
             <Listbox.Option
               key={item}
               value={item}

@@ -1,23 +1,19 @@
-import React, { useState } from "react";
-import {
-  Container,
-  Col,
-  Row,
-  Card,
-  Table,
-  ButtonGroup,
-  ButtonToolbar,
-  Image,
-  Form,
-} from "react-bootstrap";
-import ConfirmModal from "../../../components/ConfirmModal";
-import SourceModal from "../../../components/source/SourceModal";
-import { capitalizeFirstLetter } from "../../../helpers";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteSource, editSource, getSource } from "../../../api/sources";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Credential, Source, SourceEvent } from "../../../objectTypes";
-import { getCredentials } from "../../../api/credentials";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { deleteSource, editSource, getSource } from "../../../api/sources";
+import { getSession } from "../../../api/session";
+import type { SourceEvent } from "../../../api/session/types";
+
+import AggieSwitch from "../../../components/AggieSwitch";
+import PlaceholderDiv from "../../../components/PlaceholderDiv";
+import DropdownMenu from "../../../components/DropdownMenu";
+import AggieButton from "../../../components/AggieButton";
+import AggieDialog from "../../../components/AggieDialog";
+import ConfirmationDialog from "../../../components/ConfirmationDialog";
+import CreateEditSourceForm from "./CreateEditSourceForm";
+
 import {
   faEdit,
   faEllipsisH,
@@ -26,14 +22,6 @@ import {
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AggieSwitch from "../../../components/AggieSwitch";
-import PlaceholderDiv from "../../../components/PlaceholderDiv";
-import { getSession } from "../../../api/session";
-import DropdownMenu from "../../../components/DropdownMenu";
-import AggieButton from "../../../components/AggieButton";
-import AggieDialog from "../../../components/AggieDialog";
-import ConfirmationDialog from "../../../components/ConfirmationDialog";
-import CreateEditSourceForm from "./CreateEditSourceForm";
 
 const SourceDetails = () => {
   let { id } = useParams<{ id: string }>();

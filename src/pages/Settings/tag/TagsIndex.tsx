@@ -1,32 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Container, Col, Row, Card, ButtonToolbar } from "react-bootstrap";
-import StatsBar from "../../../components/StatsBar";
-import TagTable from "../../../components/tag/TagTable";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { deleteTag, getTags } from "../../../api/tags";
-import TagModal from "../../../components/tag/TagModal";
-import { io, Socket } from "socket.io-client";
+
+import AggieButton from "../../../components/AggieButton";
+import UserToken from "../../../components/UserToken";
+import DropdownMenu from "../../../components/DropdownMenu";
+import AggieDialog from "../../../components/AggieDialog";
+import CreateEditTagForm from "./CreateEditTagForm";
+import ConfirmationDialog from "../../../components/ConfirmationDialog";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
   faEllipsisH,
   faPlusCircle,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import AggieButton from "../../../components/AggieButton";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import UserToken from "../../../components/UserToken";
-import { stringToDate } from "../../../helpers";
-import DropdownMenu from "../../../components/DropdownMenu";
-import { Tag } from "../../../api/tags/types";
-import AggieDialog from "../../../components/AggieDialog";
-import CreateEditTagForm from "./CreateEditTagForm";
-import ConfirmationDialog from "../../../components/ConfirmationDialog";
+import DateTime from "../../../components/DateTime";
 
 interface IProps {}
-
-let socket: Socket;
-const SocketURL =
-  process.env.NODE_ENV === "production" ? undefined : "http://localhost:3000";
 
 const TagsIndex = (props: IProps) => {
   const [editOpen, setEditOpen] = useState("");
@@ -48,22 +41,9 @@ const TagsIndex = (props: IProps) => {
   }
 
   function onDeleteTag(id: string) {
-    const tag = tagfromId(deleteOpen);
+    const tag = tagfromId(id);
     !!tag && doDeleteTag.mutate(tag);
   }
-  // useEffect(() => {
-  //   if (!socket) {
-  //     const SocketURL =
-  //       process.env.NODE_ENV === "production"
-  //         ? window.location.host
-  //         : "ws://localhost:3000";
-  //     socket = io(`${SocketURL}/tags`);
-  //     socket.onAny((eventName, tag) => {
-  //       console.log("Message Received from Server", eventName, tag);
-  //       tagsQuery.refetch();
-  //     });
-  //   }
-  // });
 
   return (
     <div className='my-3'>
@@ -89,7 +69,9 @@ const TagsIndex = (props: IProps) => {
                   <span className='italic'>created by </span>
                   <UserToken id={tag.user?._id || ""} loading={!data} />
                   <span className='italic'> on </span>
-                  <span>{stringToDate(tag.storedAt).toLocaleDateString()}</span>
+                  <span>
+                    <DateTime dateString={tag.storedAt} />
+                  </span>
                 </p>
               </header>
               <main className='col-span-2 text-sm'>{tag.description}</main>

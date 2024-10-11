@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { render, cleanup, screen } from "@testing-library/react";
-import App from "./App";
+import App from "./AppRouter";
 import { BrowserRouter } from "react-router-dom";
 
 afterEach(cleanup);

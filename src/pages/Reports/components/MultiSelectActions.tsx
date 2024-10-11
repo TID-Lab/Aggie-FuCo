@@ -45,10 +45,12 @@ const MultiSelectActions = ({
 
   return (
     <>
-      <div className=' rounded-lg flex overflow-hidden min-w-fit'>
+      <div className=' rounded-lg flex border border-slate-300 min-w-fit'>
         <AggieButton
-          className='py-1 px-2 hover:bg-lime-200 bg-lime-100 text-lime-800'
+          variant='light:amber'
+          className='rounded-l-lg'
           disabled={disabled || setRead.isLoading}
+          icon={faEnvelopeOpen}
           onClick={() =>
             setRead.mutate({
               reportIds: selection,
@@ -57,12 +59,13 @@ const MultiSelectActions = ({
             })
           }
         >
-          <FontAwesomeIcon icon={faEnvelopeOpen} />
           Read
         </AggieButton>
         <AggieButton
-          className='py-1 px-2 hover:bg-amber-200 bg-amber-100 text-amber-800'
+          variant='light:lime'
+          className='rounded-r-lg'
           disabled={disabled || setRead.isLoading}
+          icon={faEnvelope}
           onClick={() =>
             setRead.mutate({
               reportIds: selection,
@@ -71,14 +74,15 @@ const MultiSelectActions = ({
             })
           }
         >
-          <FontAwesomeIcon icon={faEnvelope} />
           Unread
         </AggieButton>
       </div>
-      <div className='flex'>
+      <div className='flex rounded-lg border border-slate-300'>
         <AggieButton
-          className='bg-rose-200 text-rose-800 border border-rose-300 border-r-0  px-2 py-1 rounded-l-lg hover:bg-rose-300'
+          variant='light:rose'
+          className='rounded-l-lg'
           disabled={disabled || setIrrelevance.isLoading}
+          icon={faXmark}
           onClick={() =>
             setIrrelevance.mutate({
               reportIds: selection,
@@ -87,12 +91,13 @@ const MultiSelectActions = ({
             })
           }
         >
-          <FontAwesomeIcon icon={faXmark} />
           Not Relevant
         </AggieButton>
         <AggieButton
-          className='bg-green-100 text-green-800 border border-green-200 border-l-0  px-2 py-1 rounded-r-lg hover:bg-green-300'
+          variant='light:green'
+          className='rounded-r-lg'
           disabled={disabled || setIrrelevance.isLoading}
+          icon={faDotCircle}
           onClick={() =>
             setIrrelevance.mutate({
               reportIds: selection,
@@ -101,7 +106,6 @@ const MultiSelectActions = ({
             })
           }
         >
-          <FontAwesomeIcon icon={faDotCircle} />
           Relevant
         </AggieButton>
       </div>

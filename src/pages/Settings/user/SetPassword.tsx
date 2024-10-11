@@ -1,11 +1,12 @@
-import { Formik, Form } from "formik";
-import schema from "yup/lib/schema";
-import { User, USER_ROLES } from "../../../api/users/types";
-import AggieButton from "../../../components/AggieButton";
-import FormikInput from "../../../components/FormikInput";
 import * as Yup from "yup";
+
 import { useMutation } from "@tanstack/react-query";
 import { setPassword as setPasswordApi } from "../../../api/users";
+import type { User } from "../../../api/users/types";
+
+import { Formik, Form } from "formik";
+import AggieButton from "../../../components/AggieButton";
+import FormikInput from "../../../components/FormikInput";
 
 const updatePasswordSchema = Yup.object().shape({
   password: Yup.string()

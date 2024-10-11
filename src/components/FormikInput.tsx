@@ -22,7 +22,7 @@ const FormikInput = ({ name, label, type, placeholder }: IProps) => {
 
       <input
         name={name}
-        placeholder={placeholder ? placeholder : "enter " + label}
+        placeholder={placeholder ? placeholder : "Enter " + label}
         value={value || ""}
         onChange={(e) => setValue(e.target.value)}
         className='px-3 py-2 focus-theme rounded border border-slate-300 bg-slate-50'

@@ -13,8 +13,9 @@ import { BrowserRouter } from "react-router-dom";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 
-import App from "./App";
+import AppRouter from "./AppRouter";
 
+//locale for rendering relative time react
 TimeAgo.addDefaultLocale(en);
 
 // default queryClient stuff. will need to refactor as this is deprecated in v5
@@ -22,6 +23,7 @@ TimeAgo.addDefaultLocale(en);
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      staleTime: 10000,
       onError: (err) => {
         const error = err as AxiosError;
         if (error.response && error.response.status === 401) {
@@ -35,7 +37,7 @@ ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <App />
+        <AppRouter />
       </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>,
