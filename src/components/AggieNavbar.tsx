@@ -103,7 +103,7 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
                 </p>
               </Link>
             ) : (
-              <div className='border border-l border-gray-300'></div>
+              <div key={name} className='border border-l border-gray-300'></div>
             )
           )}
         </div>
@@ -123,7 +123,7 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
 
         <Menu as='div' className='relative'>
           <Menu.Button className='focus-theme px-3 py-1 rounded-lg bg-slate-100 border-y border border-slate-300 hover:bg-slate-200 ui-open:bg-slate-300 disabled:opacity-70 disabled:pointer-events-none'>
-            <FontAwesomeIcon icon={faBars} className='' />
+            <FontAwesomeIcon icon={faBars} />
           </Menu.Button>
           <Menu.Items className='absolute top-full right-0 mt-1 shadow-md overflow-hidden rounded-lg bg-white border border-slate-200 z-30 text-sm font-medium'>
             {Object.entries(menuLinks).map(([name, link]) => (
