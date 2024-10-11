@@ -37,7 +37,7 @@ export interface GeneratedTagValue {
   value: string | boolean;
   rationale: string | null;
 }
-export type GeneratedTags = Record<string, GeneratedTagValue>;
+export type GeneratedTags = Record<string, string | boolean>;
 
 export interface Reports {
   total: number;
