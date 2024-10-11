@@ -13,7 +13,9 @@ export interface SocketEvent {
 
 const SocketProvider: React.FC = ({ children }) => {
   const SocketURL =
-    process.env.NODE_ENV === "production" ? undefined : "ws://localhost:3000";
+    process.env.NODE_ENV === "production"
+      ? window.location.host
+      : "ws://localhost:3000";
 
   // we use a ref to store the socket as it won't be updated frequently
   const socket = useRef(
