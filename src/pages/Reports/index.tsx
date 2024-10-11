@@ -17,7 +17,7 @@ const Reports = ({ children }: { children: React.ReactNode }) => {
   }
   const handleSocketUpdate = (message: ReportUpdateEvent) => {
     if (message.event !== "reports:update") return;
-    console.log("catch", message);
+    console.log("sockets", message);
     const key = location.pathname.includes("batch") ? ["batch"] : ["reports"];
     queryData.update<IReports>(key, (data) => {
       const updateData = updateByIds(

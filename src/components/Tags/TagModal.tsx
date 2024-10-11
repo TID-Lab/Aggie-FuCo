@@ -91,7 +91,6 @@ export default function TagModal(props: IProps) {
   /* Modal state handling */
   const [modalShow, setModalShow] = useState(false);
   const handleModalClose = () => {
-    console.log("Handle Modal Show");
     if (props.tag) {
       // editTagMutation.mutate({
       //   ...props.tag,
@@ -108,7 +107,6 @@ export default function TagModal(props: IProps) {
     setModalShow(false);
   };
   const handleModalShow = () => {
-    console.log("Handle Modal Show");
     if (props.tag) {
       // editTagMutation.mutate({
       //   ...props.tag,

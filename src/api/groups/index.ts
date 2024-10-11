@@ -59,7 +59,6 @@ export const newGroup = async (groupData: Partial<GroupEditableData>) => {
 
 export const editGroup = async (group: Group | Partial<GroupEditableData>) => {
   const updateValues = omitBy(group, (v) => isNil(v) || v === "");
-  console.log(updateValues);
 
   const { data } = await axios.put<Group>(
     "/api/group/" + group._id,
@@ -212,7 +211,6 @@ function urlFromQuery(queryState: GroupQueryState, tagIds: hasId[]) {
     } else {
       url.set(key, value);
     }
-    console.log(key, value);
   });
   if (tagIds && tagIds.length > 0) {
     url.set("tags", tagIds.toString());

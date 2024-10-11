@@ -47,9 +47,7 @@ const Incident = () => {
     data: groupData,
     error: groupError,
   } = useQuery(["group", id], () => getGroup(id), {
-    onSuccess: (data) => {
-      console.log(data?.comments);
-    },
+    onSuccess: (data) => {},
   });
   const { data: groupReports } = useQuery(
     ["groups", "reports", { groupId: id }],
@@ -300,7 +298,7 @@ const Incident = () => {
       </aside>
       <Dialog
         open={isEditOpen}
-        onClose={() => console.log()}
+        onClose={() => setIsEditOpen(false)}
         className='relative z-50'
       >
         <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
