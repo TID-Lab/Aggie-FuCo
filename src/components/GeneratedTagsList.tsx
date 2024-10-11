@@ -32,25 +32,23 @@ const GeneratedTagsList = ({
 }: IProps) => {
   if (!tags) return <></>;
 
-  const tagsList = Object.entries(tags).map(([key, value]) => {
-    return {
-      key: key.replaceAll("_", " "),
-      ...value,
-    };
-  });
+  const tagsList = Object.entries(tags).filter(
+    ([key, value]) => !key.includes("rationale")
+  );
+
   if (!tagsList) return <></>;
   const keyClass = "pl-1 pr-2 flex items-center gap-1 rounded-full font-medium";
 
   const booleanTagsList = tagsList
-    .filter((i) => isBoolean(i.value) && i.value)
+    .filter(([key, value]) => isBoolean(value) && value)
     .slice(0, showCount);
   const moreTagsLength = tagsList.length - booleanTagsList.length;
   return (
     <>
-      {booleanTagsList?.map(({ key, value, rationale }) => (
-        <GeneratedTag name={key} key={key}>
+      {booleanTagsList?.map(([key, value]) => (
+        <GeneratedTag name={key.replaceAll("_", " ")} key={key.replaceAll("_", " ")}>
           <span className='block '>
-            {key}
+            {key.replaceAll("_", " ")}
             {isBoolean(value) ? (
               <span className='rounded-full px-2 bg-purple-600 text-white'>
                 {`${value}`}
@@ -59,7 +57,7 @@ const GeneratedTagsList = ({
               <span className='block font-medium'>{value}</span>
             )}
           </span>
-          <span className='block mb-1 text-xs italic'>{rationale}</span>
+          <span className='block mb-1 text-xs italic'>{value}</span>
         </GeneratedTag>
       ))}
       {moreTagsLength > 0 && (
@@ -68,20 +66,20 @@ const GeneratedTagsList = ({
           className='rounded-full hover:bg-purple-100  text-purple-900 border border-purple-400'
         >
           <div className='divide-y divide-purple-400'>
-            {tagsList.map((item) => (
-              <div key={item.key} className='py-1'>
+            {tagsList.map(([key, value]) => (
+              <div key={key} className='py-1'>
                 <span className='block '>
-                  {item.key}{" "}
-                  {isBoolean(item.value) ? (
+                  {key.replaceAll("_", " ")}{" "}
+                  {isBoolean(value) ? (
                     <span className='rounded-full px-2 bg-purple-600 text-white'>
-                      {`${item.value}`}
+                      {`${value}`}
                     </span>
                   ) : (
-                    <span className='block font-medium'>{item.value}</span>
+                    <span className='block font-medium'>{value}</span>
                   )}
                 </span>
                 <span className='block mb-1 text-xs italic'>
-                  {item.rationale}
+                  {`${key}_rationale` in tags && tags[`${key}_rationale`]}
                 </span>
               </div>
             ))}
