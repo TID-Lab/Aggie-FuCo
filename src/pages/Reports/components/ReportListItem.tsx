@@ -139,7 +139,7 @@ const ReportListItem = ({
                 Irrelevant
               </AggieToken>
             )}
-            {report.redFlag && (
+            {report.red_flag && (
               <AggieToken
                 variant='dark:red'
                 icon={faExclamationTriangle}

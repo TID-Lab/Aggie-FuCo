@@ -36,10 +36,7 @@ let schema = new Schema({
   irrelevant: { type: String, default: 'false', required: false, enum: ['false', 'true', 'maybe'] },
   aitags: { 
     type: Map, 
-    of: new Schema({
-      value: Schema.Types.Mixed, // Allows for both Boolean and String types
-      rationale: { type: String, default: null }
-    }), 
+    of: SchemaTypes.Mixed, 
     default: {},
   },
   aitagnames: { type: [String], default: [] },

@@ -46,9 +46,9 @@ const GeneratedTagsList = ({
   return (
     <>
       {booleanTagsList?.map(([key, value]) => (
-        <GeneratedTag name={key} key={key}>
+        <GeneratedTag name={key.replaceAll("_", " ")} key={key.replaceAll("_", " ")}>
           <span className='block '>
-            {key}
+            {key.replaceAll("_", " ")}
             {isBoolean(value) ? (
               <span className='rounded-full px-2 bg-purple-600 text-white'>
                 {`${value}`}
@@ -69,7 +69,7 @@ const GeneratedTagsList = ({
             {tagsList.map(([key, value]) => (
               <div key={key} className='py-1'>
                 <span className='block '>
-                  {key}{" "}
+                  {key.replaceAll("_", " ")}{" "}
                   {isBoolean(value) ? (
                     <span className='rounded-full px-2 bg-purple-600 text-white'>
                       {`${value}`}
