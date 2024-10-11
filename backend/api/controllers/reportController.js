@@ -14,7 +14,7 @@ const parseQueryData = (queryString) => {
   if (!queryString) return {};
   // Data passed through URL parameters
   var query = _.pick(queryString, ['keywords', 'status', 'after', 'before', 'media',
-    'sourceId', 'groupId', 'author', 'tags', 'list', 'escalated', 'veracity', 'isRelevantReports']);
+    'sourceId', 'groupId', 'author', 'tags', 'list', 'escalated', 'veracity', 'isRelevantReports',]);
   if (query.tags) query.tags = tags.toArray(query.tags);
   return query;
 }

@@ -15,7 +15,7 @@ module.exports = async function tagReportsAI(report, next) {
     const tagNames = [];
 
     for (const key in data) {
-      if (!key.endsWith("_rationale")) {
+      if (!key.endsWith("_rationale") && !key == "red_flag") {
         const rationaleKey = `${key}_rationale`;
         aiTags[key] = {
           value: data[key],
@@ -28,6 +28,7 @@ module.exports = async function tagReportsAI(report, next) {
     console.log(tagNames);
     report.aitags = aiTags;
     report.aitagnames = tagNames;
+    report.red_flag = Boolean(data["red_flag"]);
   } catch (error) {
     console.error("Error fetching AI tags:", error);
     const aiTags = {

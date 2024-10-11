@@ -7,6 +7,7 @@ const Schema = mongoose.Schema;
 const SchemaTypes = mongoose.SchemaTypes;
 const SMTCTag = require('./tag');
 const { addPost, removePost } = require('../comments');
+const { strict } = require('assert');
 
 let schema = new Schema({
   authoredAt: { type: Date, index: true },
@@ -39,9 +40,10 @@ let schema = new Schema({
       value: Schema.Types.Mixed, // Allows for both Boolean and String types
       rationale: { type: String, default: null }
     }), 
-    default: {}
+    default: {},
   },
-  aitagnames: { type: [String], default: [] }
+  aitagnames: { type: [String], default: [] },
+  red_flag: { type: Boolean, default: false, index: true }
 });
 
 schema.index({ 'metadata.ct_tag': 1 }, { background: true });
