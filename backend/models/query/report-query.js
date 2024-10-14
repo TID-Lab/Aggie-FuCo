@@ -69,6 +69,7 @@ ReportQuery.prototype.toMongooseFilter = function () {
 
   if (this.keywords) {
 
+
     // Replace non-operator spacing with % to support perfect match
     this.keywords = this.keywords.replace(/\s+/gi, "%")
     // Replace ! with NOT
@@ -90,13 +91,14 @@ ReportQuery.prototype.toMongooseFilter = function () {
 
     // Convert raw query into nested logical array, e.g (Amhara OR Oromo) AND Ethiopia => [ 'AND', [ 'OR', 'Amhara', 'Oromo' ], 'Ethiopia' ]
     let exp = new Expression(this.keywords.toString());
-    console.log(JSON.stringify(exp))
+
     // Convert the nested logical array into the approriate mongo query with $and, $or and $not
     // Change to true if you want to use $regex for all queries (instead of $text for some queries)
     let res = exp.generate_search_query(false);
 
-
-    filter.$and = [res]
+    filter = { ...filter, ...res }
+    console.log(JSON.stringify(filter))
+    // filter.$and = [res]
     //filter.$and.push(res)
   }
 

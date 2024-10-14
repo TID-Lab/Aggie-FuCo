@@ -47,7 +47,7 @@ const ReportListItem = ({
   isSelectMode,
   onCheckChange,
 }: IProps) => {
-  const contentType = parseContentType(report._media, report.metadata);
+  const contentType = parseContentType(report);
 
   const { id: currentPageId } = useParams();
   const navigate = useNavigate();
@@ -195,9 +195,8 @@ const ReportListItem = ({
           </div>
         </header>
         <div className='flex gap-2'>
-          {contentType === "twitterRetweet" && (
+          {contentType === "twitter:retweet" && (
             <div className='grid place-items-center'>
-              {" "}
               <FontAwesomeIcon icon={faRetweet} />
             </div>
           )}

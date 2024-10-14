@@ -40,7 +40,8 @@ export function formatText(text: string, options: IFormatOptions = {}) {
   return (
     <>
       {words.map((word, index) => {
-        if (!wordsToFormat.has(index)) return word + " ";
+        if (!wordsToFormat.has(index))
+          return <Fragment key={index}>{word + " "}</Fragment>;
         const style = formatters.find(
           (i) => i.key === wordsToFormat.get(index)
         )?.defaultStyle;

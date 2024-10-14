@@ -10,12 +10,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Menu } from "@headlessui/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Session } from "../api/session/types";
+import { Session } from "./api/session/types";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import AggieButton from "./AggieButton";
-import ConfirmationDialog from "./ConfirmationDialog";
+import AggieButton from "./components/AggieButton";
+import ConfirmationDialog from "./components/ConfirmationDialog";
 import { useState } from "react";
-import { logOut } from "../api/session";
+import { logOut } from "./api/session";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface LinkOptions {
@@ -24,8 +24,8 @@ interface LinkOptions {
   not?: string[];
 }
 const mainLinks: Record<string, LinkOptions> = {
-  Reports: { to: "/r/batch" },
-  "All Reports": { to: "/r", not: ["batch", "search"] },
+  Reports: { to: "/rpt/batch" },
+  "All Reports": { to: "/rpt", not: ["batch", "search"] },
   // Search: { to: "/r/search" },
 
   divider1: { type: "divider", to: "" },

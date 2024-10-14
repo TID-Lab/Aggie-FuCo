@@ -13,7 +13,7 @@ import type { Session } from "./api/session/types";
 
 //import "@yaireo/tagify/dist/tagify.css";
 
-import AggieNavbar from "./components/AggieNavbar";
+import AggieNavbar from "./AggieNavbar";
 import AlertService, { AlertContent } from "./components/AlertService";
 import SourcesIndex from "./pages/Settings/source/SourcesIndex";
 import SourceDetails from "./pages/Settings/source/SourceDetails";
@@ -61,6 +61,8 @@ const PublicRoutes = () => {
   );
 };
 
+const defaultRoute = "/rpt/batch";
+
 interface IPrivateRouteProps {
   sessionData: Session | undefined;
   setGlobalAlert: React.Dispatch<AlertContent>;
@@ -69,12 +71,12 @@ interface IPrivateRouteProps {
 const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
   return (
     <Routes>
-      <Route path='/login' element={<Navigate to='/r/batch' />} />
+      <Route path='/login' element={<Navigate to={defaultRoute} />} />
       {/* <Route path='*' element={<Navigate replace to='login' />} /> */}
 
-      <Route index element={<Navigate to={"/r/batch"} />} />
+      <Route index element={<Navigate to={defaultRoute} />} />
       <Route
-        path='/r'
+        path='/rpt'
         element={
           <Reports>
             <AllReportsList />
@@ -85,7 +87,7 @@ const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
       </Route>
 
       <Route
-        path='/r/batch'
+        path='/rpt/batch'
         element={
           <Reports>
             <BatchReportList />
@@ -95,7 +97,7 @@ const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
         <Route path=':id' element={<Report />}></Route>
       </Route>
       <Route
-        path='/r/search'
+        path='/rpt/search'
         element={
           <Reports>
             <FlaggedReportsList />
@@ -142,7 +144,7 @@ const AppRouter = () => {
           queryClient.setQueryData(["session"], data);
         }
         if (location.pathname === "/login") {
-          navigate("/r/batch");
+          navigate(defaultRoute);
         }
       })
       .catch((err: AxiosError) => {

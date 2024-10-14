@@ -7,107 +7,18 @@ import SocialMediaIcon from "./SocialMediaIcon";
 
 import DateTime from "../DateTime";
 
-import {
-  parseContentType,
-  isTwitterReply,
-  parseTwitterQuote,
-  parseTwitterRetweet,
-  sanitize,
-} from "./reportParser";
+import { parseContentType, isTwitterReply, sanitize } from "./reportParser";
 
 import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TwitterPost from "./TwitterPost";
 
 interface IProps {
   report: Report;
   showMedia?: boolean;
 }
 const SocialMediaPost = ({ report, showMedia }: IProps) => {
-  const contentType = parseContentType(report._media, report.metadata);
-
-  const QuoteContent = (props: { report: Report }) => {
-    const { report } = props;
-
-    const { author, authoredAt, content, statistics } =
-      parseTwitterQuote(report);
-
-    return (
-      <>
-        <div className='whitespace-pre-line mb-1'>
-          <Linkify
-            options={{
-              target: "_blank",
-              className: "underline text-blue-600 hover:bg-slate-100 ",
-            }}
-          >
-            {formatText(report.content)}
-          </Linkify>
-        </div>
-        {showMedia && (
-          <MediaPreview
-            mediaUrl={report.metadata.mediaUrl}
-            media={report._media[0]}
-            report={report}
-          />
-        )}
-        <div className='border border-slate-300 py-2 px-2 rounded-lg'>
-          <div>
-            <h2 className='font-medium'>{author?.username}</h2>
-            <p className='text-sm text-slate-600'>
-              {" "}
-              <DateTime dateString={authoredAt} />
-            </p>
-          </div>
-          <div className='whitespace-pre-line my-2'>
-            <Linkify
-              options={{
-                target: "_blank",
-                className: "underline text-blue-600 hover:bg-slate-100 ",
-              }}
-            >
-              {formatText(content)}
-            </Linkify>
-          </div>
-          <div className='flex gap-3 text-sm text-slate-500 font-medium mt-1 items-center'>
-            <PostReactions stats={statistics} media={report._media[0]} />
-          </div>
-        </div>
-      </>
-    );
-  };
-
-  const RetweetContent = (props: { report: Report }) => {
-    const { report } = props;
-    const { author, authoredAt, content, statistics } =
-      parseTwitterRetweet(report);
-
-    return (
-      <>
-        <p>Retweeted:</p>
-        <div className='border border-slate-300 py-2 px-2 rounded-lg'>
-          <div>
-            <h2 className='font-medium'>{author?.username}</h2>
-            <p className='text-sm text-slate-600'>
-              <DateTime dateString={authoredAt} />
-            </p>
-          </div>
-          <div className='whitespace-pre-line my-2'>
-            <Linkify
-              options={{
-                target: "_blank",
-                className: "underline text-blue-600 hover:bg-slate-100 ",
-              }}
-            >
-              {formatText(content)}
-            </Linkify>
-          </div>
-          <div className='flex gap-3 text-sm text-slate-500 font-medium mt-1 items-center'>
-            <PostReactions stats={statistics} media={report._media[0]} />
-          </div>
-        </div>
-      </>
-    );
-  };
+  const contentType = parseContentType(report);
 
   const TwitterReply = (props: { report: Report }) => {
     const { report } = props;
@@ -166,8 +77,7 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
         </p>
       </div>
 
-      {contentType === "twitterRetweet" && <RetweetContent report={report} />}
-      {contentType === "twitterQuote" && <QuoteContent report={report} />}
+      {contentType.includes("twitter") && <TwitterPost report={report} />}
       {contentType === "youtube" && <></>}
       {contentType === "truthsocial" && (
         <>
