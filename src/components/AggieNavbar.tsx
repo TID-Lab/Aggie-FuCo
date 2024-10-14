@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Menu } from "@headlessui/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Session } from "../objectTypes";
+import { Session } from "../api/session/types";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import AggieButton from "./AggieButton";
 import ConfirmationDialog from "./ConfirmationDialog";

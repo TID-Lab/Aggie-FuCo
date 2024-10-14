@@ -4,7 +4,7 @@ import { useQueryParamsInternal } from "../../../hooks/useQueryParamsInternal";
 
 import { getGroups } from "../../../api/groups";
 import { setReportsToGroup } from "../../../api/reports";
-import type { Group } from "../../../objectTypes";
+import type { Group } from "../../../api/groups/types";
 import type { Report, Reports } from "../../../api/reports/types";
 
 import { Dialog } from "@headlessui/react";

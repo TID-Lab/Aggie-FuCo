@@ -1,6 +1,6 @@
 //change key deep inside object, and returns new object
 
-import { hasId } from "../objectTypes";
+import { hasId } from "../api/common";
 
 // todo: refactor to accept multiple ids. could be generic to accept any parameter...?
 // /**

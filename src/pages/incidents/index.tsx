@@ -4,7 +4,7 @@ import { useQueryParams } from "../../hooks/useQueryParams";
 import _ from "lodash";
 
 import { getGroups } from "../../api/groups";
-import type { GroupQueryState } from "../../objectTypes";
+import type { GroupQueryState } from "../../api/groups/types";
 
 import { Link } from "react-router-dom";
 import IncidentsFilters from "./IncidentsFilters";

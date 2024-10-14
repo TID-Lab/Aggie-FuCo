@@ -1,9 +1,6 @@
 import axios from "axios";
 import type { Report, ReportQueryState, Reports } from "./types";
-import type {
-  ReportQueryState_old,
-  Report as Report_old,
-} from "../../objectTypes";
+
 import type { hasId, IrrelevanceOptions, VeracityOptions } from "../common";
 
 export const getReports = async (
@@ -22,23 +19,7 @@ export const getReports = async (
     return data;
   }
 };
-//TODO: deprecate
-export const getReports_untyped = async (
-  searchState: ReportQueryState | ReportQueryState_old,
-  tagIds: hasId[] | string[] = [],
-  isRelevantReports = false
-) => {
-  if (generateReportsSearchURL(searchState, tagIds, isRelevantReports) != "") {
-    const { data } = await axios.get(
-      "/api/report?" +
-        generateReportsSearchURL(searchState, tagIds, isRelevantReports)
-    );
-    return data;
-  } else {
-    const { data } = await axios.get("/api/report");
-    return data;
-  }
-};
+
 export const getReport = async (id: string | undefined) => {
   if (id) {
     const { data } = await axios.get<Report | undefined>("/api/report/" + id);
@@ -153,7 +134,7 @@ export const setSelectedGroup = async (
 
 //TODO: refactor
 const generateReportsSearchURL = (
-  searchState: ReportQueryState | ReportQueryState_old,
+  searchState: ReportQueryState,
   tagIds: hasId[] | string[],
   isRelevantReports: boolean
 ) => {

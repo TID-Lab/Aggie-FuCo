@@ -8,7 +8,6 @@ import {
   GroupComment,
   EditableGroupComment,
 } from "./types";
-import type { GroupSearchState } from "../../objectTypes";
 import type { Reports } from "../reports/types";
 import { hasId, VeracityOptions } from "../common";
 import { omitBy, isNil } from "lodash";
@@ -217,66 +216,3 @@ function urlFromQuery(queryState: GroupQueryState, tagIds: hasId[]) {
   }
   return url.toString();
 }
-
-//TODO: refactor with URLSearchParam Object
-const generateGroupsSearchURL = (
-  searchState: GroupSearchState,
-  tagIds: hasId[]
-) => {
-  let url = "";
-  if (tagIds.length > 0) {
-    url += "tags=" + tagIds;
-  }
-  if (searchState.title) {
-    if (url === "") url += "title=" + searchState.title;
-    else url += "&title=" + searchState.title;
-  }
-  if (searchState.creator) {
-    if (url === "") url += "creator=" + searchState.creator;
-    else url += "&creator=" + searchState.creator;
-  }
-  if (searchState.idnum) {
-    if (url === "") url += "idnum=" + searchState.idnum;
-    else url += "&idnum=" + searchState.idnum;
-  }
-  if (searchState.locationName) {
-    if (url === "") url += "location=" + searchState.locationName;
-    else url += "&location=" + searchState.locationName;
-  }
-  if (searchState.assignedTo) {
-    if (url === "") url += "assignedTo=" + searchState.assignedTo;
-    else url += "&assignedTo=" + searchState.assignedTo;
-  }
-  if (searchState.veracity) {
-    if (url === "") url += "veracity=" + searchState.veracity;
-    else url += "&veracity=" + searchState.veracity;
-  }
-  if (searchState.totalReports) {
-    if (url === "") url += "totalReports=" + searchState.totalReports;
-    else url += "&totalReports=" + searchState.totalReports;
-  }
-  if (searchState.closed) {
-    if (url === "") url += "closed=" + searchState.closed;
-    else url += "&closed=" + searchState.closed;
-  }
-
-  if (searchState.escalated) {
-    if (url === "") url += "escalated=" + searchState.escalated;
-    else url += "&escalated=" + searchState.escalated;
-  }
-
-  if (searchState.before) {
-    if (url === "") url += "before=" + searchState.before;
-    else url += "&before=" + searchState.before;
-  }
-  if (searchState.after) {
-    if (url === "") url += "after=" + searchState.after;
-    else url += "&after=" + searchState.after;
-  }
-
-  if (searchState.page) {
-    if (url === "") url += "page=" + searchState.page;
-    else url += "&page=" + searchState.page;
-  }
-  return url;
-};
