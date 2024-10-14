@@ -5,7 +5,11 @@ import { useIncidentMutations } from "../useIncidentMutations";
 
 import { addComment, getGroup, getGroupReports } from "../../../api/groups";
 import { getSession } from "../../../api/session";
-import { EditableGroupComment, GroupComment } from "../../../api/groups/types";
+import {
+  EditableGroupComment,
+  Group,
+  GroupComment,
+} from "../../../api/groups/types";
 import * as Yup from "yup";
 
 import { Form, Formik, Field } from "formik";
@@ -27,11 +31,13 @@ import {
   faArrowLeft,
   faEllipsisH,
   faMinusCircle,
-  faTrashAlt,
+  faEdit,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
 import DateTime from "../../../components/DateTime";
+import AggieSwitch from "../../../components/AggieSwitch";
+import { useUpdateQueryData } from "../../../hooks/useUpdateQueryData";
 
 const Incident = () => {
   const queryClient = useQueryClient();
@@ -39,17 +45,15 @@ const Incident = () => {
   let { id } = useParams();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const { doUpdate } = useIncidentMutations();
-
+  const { doUpdate, doSetEscalate, doSetClosed } = useIncidentMutations();
+  const queryData = useUpdateQueryData();
   const {
     isLoading,
     isError,
-    data: groupData,
+    data: group,
     error: groupError,
   } = useQuery(["group", id], () => getGroup(id), {
-    onSuccess: (data) => {
-      console.log(data?.comments);
-    },
+    onSuccess: (data) => {},
   });
   const { data: groupReports } = useQuery(
     ["groups", "reports", { groupId: id }],
@@ -84,26 +88,115 @@ const Incident = () => {
   return (
     <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-2 pt-6 gap-8 h-full '>
       <main className='col-span-1 h-full mb-12'>
-        <AggieButton
-          variant='transparent'
-          className='text-sm'
-          onClick={() => navigate("/incidents")}
-        >
-          <FontAwesomeIcon icon={faArrowLeft} />
-          Go Back
-        </AggieButton>
+        <div className='flex gap-1 h-min justify-between items-center'>
+          <AggieButton
+            variant='transparent'
+            className='text-sm'
+            onClick={() => navigate("/incidents")}
+          >
+            <FontAwesomeIcon icon={faArrowLeft} />
+            Go Back
+          </AggieButton>
+          <div className='flex items-center gap-2'>
+            {group && (
+              <div className='flex justify-between items-center px-2 py-1 gap-2 font-medium text-sm bg-white rounded-lg border border-slate-300'>
+                Escalate:
+                <AggieSwitch
+                  checked={group.escalated}
+                  disabled={doSetEscalate.isLoading}
+                  onChange={() =>
+                    doSetEscalate.mutate(
+                      {
+                        ids: [group._id],
+                        escalated: !group.escalated,
+                      },
+                      {
+                        onSuccess: (_, params) => {
+                          // update single report
+                          if (!id) return;
+                          queryData.update<Group>(["group", id], (data) => {
+                            return {
+                              escalated: params.escalated,
+                            };
+                          });
+                        },
+                      }
+                    )
+                  }
+                />
+              </div>
+            )}
+
+            <DropdownMenu
+              variant='secondary'
+              className='px-2 py-1 rounded-lg bg-slate-100 border border-slate-300'
+              panelClassName='overflow-hidden right-0'
+              buttonElement={<FontAwesomeIcon icon={faEllipsisH} />}
+            >
+              <AggieButton
+                className='w-full px-2 py-1 hover:bg-slate-200  font-medium flex gap-2 text-nowrap items-center flex-grow '
+                onClick={() => setIsEditOpen(true)}
+              >
+                <FontAwesomeIcon icon={faEdit} />
+                Edit Incident
+              </AggieButton>
+              {group?.closed ? (
+                <AggieButton
+                  className={`w-full px-2 py-1 hover:bg-green-100 text-green-700  font-medium flex gap-2 text-nowrap items-center flex-grow `}
+                  onClick={() =>
+                    doSetClosed.mutate(
+                      {
+                        ids: !!group?._id ? [group?._id] : [""],
+                        closed: false,
+                      },
+                      {
+                        onSuccess: (_, params) => {
+                          // update single report
+                          if (id) {
+                            queryData.update<Group>(["group", id], (data) => {
+                              return {
+                                closed: params.closed,
+                              };
+                            });
+                          }
+                        },
+                      }
+                    )
+                  }
+                >
+                  <FontAwesomeIcon icon={faDotCircle} />
+                  Open Incident
+                </AggieButton>
+              ) : (
+                <AggieButton
+                  className={`w-full px-2 py-1 hover:bg-red-100 text-red-700  font-medium flex gap-2 text-nowrap items-center flex-grow `}
+                  onClick={() =>
+                    doSetClosed.mutate({
+                      ids: !!group?._id ? [group?._id] : [""],
+                      closed: true,
+                    })
+                  }
+                >
+                  <FontAwesomeIcon icon={faMinusCircle} />
+                  Close Incident
+                </AggieButton>
+              )}
+            </DropdownMenu>
+          </div>
+        </div>
+
         <header className='text-slate-600 border-b border-slate-300 py-2'>
           <div className='flex justify-between'>
             <div>
               <div className='flex gap-1 flex-wrap'>
-                <VeracityToken value={groupData?.veracity} />
-                {groupData?.closed && (
+                <VeracityToken value={group?.veracity} />
+                {group?.closed && (
                   <span className='px-1 bg-purple-200 text-purple-700 font-medium inline-flex gap-1 items-center'>
                     <FontAwesomeIcon icon={faMinusCircle} />
                     Closed
                   </span>
                 )}
-                <TagsList values={groupData?.smtcTags} />
+                <TagsList values={group?.smtcTags} />
               </div>
               <PlaceholderDiv
                 loading={isLoading}
@@ -112,8 +205,8 @@ const Incident = () => {
                 width='12em'
               >
                 <h1>
-                  {groupData?.title}{" "}
-                  {groupData?.escalated && (
+                  {group?.title}{" "}
+                  {group?.escalated && (
                     <span className='px-1 bg-orange-700 text-white font-medium text-base inline-flex gap-1 items-center no-underline'>
                       <FontAwesomeIcon icon={faWarning} />
                       Escalated
@@ -122,64 +215,45 @@ const Incident = () => {
                 </h1>
               </PlaceholderDiv>
             </div>
-
-            <div className='flex gap-1 h-min'>
-              <AggieButton
-                variant='secondary'
-                onClick={() => setIsEditOpen(true)}
-              >
-                Edit
-              </AggieButton>
-              <DropdownMenu
-                variant='secondary'
-                className='px-2 py-1 rounded-lg bg-slate-100 border border-slate-300'
-                panelClassName='overflow-hidden right-0'
-                buttonElement={<FontAwesomeIcon icon={faEllipsisH} />}
-              >
-                <AggieButton className='px-3 py-2 hover:bg-slate-100  text-red-600'>
-                  <FontAwesomeIcon icon={faTrashAlt} />
-                  Permanently Delete
-                </AggieButton>
-              </DropdownMenu>
-            </div>
           </div>
           <div className='flex gap-12 my-2'>
             <PlaceholderDiv as='p' width='7em' loading={isLoading}>
-              Id #{groupData?.idnum}
+              Id #{group?.idnum}
             </PlaceholderDiv>
             <PlaceholderDiv as='p' width='7em' loading={isLoading}>
-              <span className='font-medium'>{groupData?._reports.length}</span>{" "}
+              <span className='font-medium'>{group?._reports.length}</span>{" "}
               reports attached
             </PlaceholderDiv>
 
             <PlaceholderDiv as='p' width='7em' loading={isLoading}>
-              {groupData?.locationName && (
+              {group?.locationName && (
                 <>
                   located at{" "}
-                  <span className='font-medium'>{groupData?.locationName}</span>
+                  <span className='font-medium'>{group?.locationName}</span>
                 </>
               )}
             </PlaceholderDiv>
             <PlaceholderDiv as='p' width='7em' loading={isLoading}>
               created by{" "}
-              <span className='font-medium'>
-                {groupData?.creator?.username}
-              </span>
+              <span className='font-medium'>{group?.creator?.username}</span>
             </PlaceholderDiv>
           </div>
-          <div className='border-t border-slate-300 flex gap-2  py-2'>
+          <div className='border-t border-slate-300 flex gap-2 items-center py-2'>
             <span className='whitespace-nowrap'>Assigned To:</span>
             <PlaceholderDiv
               loading={isLoading}
               className='flex flex-wrap gap-x-2 gap-y-1 items-center '
             >
-              {groupData?.assignedTo?.map((user) => (
+              {group?.assignedTo?.map((user) => (
                 <UserToken
                   id={user._id}
-                  className='bg-white border border-slate-300 rounded-full px-2'
+                  className='bg-white border border-slate-300 rounded-full px-2 text-sm font-medium'
                 />
               ))}
-              <AggieButton className='hover:underline text-blue-600'>
+              <AggieButton
+                className='hover:underline text-blue-600 text-sm '
+                onClick={() => setIsEditOpen(true)}
+              >
                 Change
               </AggieButton>
             </PlaceholderDiv>
@@ -188,10 +262,10 @@ const Incident = () => {
           <div className='flex gap-2'>
             <p>Description:</p>
 
-            {groupData?.notes ? (
+            {group?.notes ? (
               <div className='px-2 py-1 border border-slate-200 rounded w-full bg-white overflow-y-auto max-h-40'>
                 <p className='whitespace-pre-line max-w-prose '>
-                  {groupData?.notes}
+                  {group?.notes}
                 </p>
               </div>
             ) : (
@@ -207,24 +281,21 @@ const Incident = () => {
                 className='text-slate-600 mr-1'
               />
               <span className='font-normal italic text-slate-600'> user </span>
-              <UserToken
-                id={groupData?.creator?._id || ""}
-                loading={isLoading}
-              />
+              <UserToken id={group?.creator?._id || ""} loading={isLoading} />
               <span className='font-normal italic text-slate-600'>
                 {" "}
                 created this incident on
               </span>{" "}
               <span>
                 {" "}
-                <DateTime dateString={groupData?.storedAt || ""} />
+                <DateTime dateString={group?.storedAt || ""} />
               </span>
             </h2>
             <p></p>
           </div>
           <div>
-            {!!groupData?.comments &&
-              groupData.comments.map((comment: GroupComment) => (
+            {!!group?.comments &&
+              group.comments.map((comment: GroupComment) => (
                 <Comment data={comment} groupdId={id} key={comment._id} />
               ))}
           </div>
@@ -277,8 +348,7 @@ const Incident = () => {
           loading={isLoading}
           className='text-xl font-medium'
         >
-          <span className=''>({groupData?._reports.length})</span> reports
-          attached
+          <span className=''>({group?._reports.length})</span> reports attached
         </PlaceholderDiv>
         <div className='flex flex-col gap-1 overflow-y-auto'>
           {groupReports && groupReports.total > 0 ? (
@@ -300,7 +370,7 @@ const Incident = () => {
       </aside>
       <Dialog
         open={isEditOpen}
-        onClose={() => console.log()}
+        onClose={() => setIsEditOpen(false)}
         className='relative z-50'
       >
         <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
@@ -308,11 +378,11 @@ const Incident = () => {
           <div className='flex min-h-full items-center justify-center p-4'>
             <Dialog.Panel className='bg-white rounded-xl border border-slate-200 shadow-xl min-w-[30rem] min-h-12 p-4 flex flex-col gap-2'>
               <CreateEditIncidentForm
-                group={groupData}
+                group={group}
                 onCancel={() => setIsEditOpen(false)}
                 onSubmit={(values) =>
                   doUpdate.mutate(
-                    { ...values, _id: groupData?._id },
+                    { ...values, _id: group?._id },
                     {
                       onSuccess: () => {
                         setIsEditOpen(false);

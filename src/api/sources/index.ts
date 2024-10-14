@@ -14,7 +14,6 @@ export const getSource = async (id: string | undefined) => {
 };
 
 export const newSource = async (sourceData: any) => {
-  console.log(sourceData);
   const { data } = await axios.post("/api/source", sourceData);
   return data;
 };

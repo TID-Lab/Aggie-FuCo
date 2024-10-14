@@ -12,7 +12,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
-
+import SocketProvider from "./hooks/WebsocketProvider";
 import AppRouter from "./AppRouter";
 
 //locale for rendering relative time react
@@ -37,7 +37,9 @@ ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <AppRouter />
+        <SocketProvider>
+          <AppRouter />
+        </SocketProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>,

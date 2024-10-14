@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useField } from "formik";
 import { Combobox, Popover } from "@headlessui/react";
+import AggieButton from "./AggieButton";
 interface Item {
   key: string;
   value: string;
@@ -143,15 +144,15 @@ const FormikMultiCombobox = ({
                 )}
               </div>
 
-              {value && (
-                <button
+              {value && value.length > 0 && (
+                <AggieButton
                   type='button'
-                  className='border-b-2 bg-white hover:bg-red-50 hover:text-red-700 border-slate-300 px-2 py-1 flex gap-1 items-center w-full'
+                  className='border-b-2 bg-white hover:bg-red-50 hover:text-red-700 text-red-800 border-slate-300 px-2 py-1 flex gap-1 items-center w-full'
                   onClick={() => setValue([])}
                 >
                   <FontAwesomeIcon icon={faClose} />
                   Clear All
-                </button>
+                </AggieButton>
               )}
 
               <div className='bg-white divide-y divide-slate-200 max-h-[15em] overflow-y-auto'>

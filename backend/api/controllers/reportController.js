@@ -8,6 +8,7 @@ var _ = require('lodash');
 var writelog = require('../../writeLog');
 var tags = require('../../shared/tags');
 const Group = require("../../models/group");
+const eventRouter = require('../sockets/event-router');
 
 // Determine the search keywords
 const parseQueryData = (queryString) => {
@@ -174,7 +175,12 @@ exports.reports_read_update = (req, res) => {
           return;
         }
         writelog.writeReport(req, report, 'markAsRead');
-        if (--remaining === 0) return res.sendStatus(200);
+        if (--remaining === 0) {
+          eventRouter.publish('reports:update', { ids: req.body.ids, update: { read: req.body.read } }).then(() => {
+            return res.sendStatus(200)
+          });
+
+        };
       });
     });
   });
@@ -217,7 +223,12 @@ exports.reports_irrelevant_update = (req, res) => {
           return;
         }
         writelog.writeReport(req, report, 'irreleventReport');
-        if (--remaining === 0) return res.sendStatus(200);
+        if (--remaining === 0) {
+          eventRouter.publish('reports:update', { ids: req.body.ids, update: { irrelevant: req.body.irrelevance } }).then(() => {
+            return res.sendStatus(200)
+          });
+
+        };
       });
     });
   });
@@ -254,7 +265,12 @@ exports.reports_group_update = (req, res) => {
           })
         })
         writelog.writeReport(req, report, 'addToGroup');
-        if (--remaining === 0) return res.sendStatus(200);
+        if (--remaining === 0) {
+          eventRouter.publish('reports:update', { ids: req.body.ids, update: { _group: req.body.group._id } }).then(() => {
+            return res.sendStatus(200)
+          });
+
+        };
       });
     });
   });
@@ -296,12 +312,17 @@ exports.reports_tags_update = (req, res) => {
           return;
         }
         writelog.writeReport(req, report, 'updateTags');
-        if (--remaining === 0) return res.sendStatus(200);
+        if (--remaining === 0) {
+          eventRouter.publish('reports:update', { ids: req.body.ids, update: { smtcTags: req.body.tags } }).then(() => {
+            return res.sendStatus(200)
+          });
+
+        };
       });
     });
   });
 }
-
+// dont think we are using these....
 exports.reports_tags_add = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
   Report.find({ _id: { $in: req.body.ids } }, (err, reports) => {
@@ -324,6 +345,7 @@ exports.reports_tags_add = (req, res) => {
     });
   });
 }
+// dont think we are using these....
 
 exports.reports_tags_remove = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);
@@ -346,6 +368,7 @@ exports.reports_tags_remove = (req, res) => {
     });
   });
 }
+// dont think we are using these....
 
 exports.reports_tags_clear = (req, res) => {
   if (!req.body.ids || !req.body.ids.length) return res.sendStatus(200);

@@ -116,9 +116,8 @@ const Report = () => {
       </span>
     );
   if (!report || !id) return <> error loading page</>;
-  console.log(report);
   return (
-    <article className='pt-4 pr-2 sticky top-0 overflow-y-auto max-h-[93vh]  '>
+    <article className='pt-4 pr-2 sticky top-0 overflow-y-auto min-h-[70vh] max-h-[93vh]  '>
       <AddReportsToIncidents
         selection={id ? [id] : undefined}
         isOpen={addReportModal}
@@ -241,7 +240,6 @@ const Report = () => {
                     []
                   }
                 />
-                {console.log(touched.smtcTags)}
                 {!!touched.smtcTags && (
                   <div className='flex text-xs'>
                     <AggieButton

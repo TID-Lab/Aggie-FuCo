@@ -122,7 +122,7 @@ const ReportListItem = ({
         )}
 
         <header className='flex justify-between mb-2 relative'>
-          <div className='flex flex-wrap gap-1 text-sm items-baseline'>
+          <div className='flex flex-wrap gap-1 text-sm items-baseline max-w-[43em]'>
             <h1 className={`text-sm text-black mx-1 font-medium `}>
               <span className='mr-2 text-slate-600 text-xs'>
                 <SocialMediaIcon mediaKey={report._media[0]} />
