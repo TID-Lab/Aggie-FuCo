@@ -7,7 +7,6 @@ import type {
 
 export interface Report extends hasId {
   veracity: VeracityOptions;
-  tags: string[];
   smtcTags: string[];
   hasSMTCTags: boolean;
   read: boolean;
@@ -28,7 +27,16 @@ export interface Report extends hasId {
   originalPost: string;
   irrelevant?: IrrelevanceOptions;
   __v: number;
+  aitags: GeneratedTags;
+  aitagnames: string[];
+  red_flag: boolean;
 }
+
+export interface GeneratedTagValue {
+  value: string | boolean;
+  rationale: string | null;
+}
+export type GeneratedTags = Record<string, string | boolean>;
 
 export interface Reports {
   total: number;
@@ -44,7 +52,7 @@ export interface ReportQueryState {
   list?: string;
   before?: Date | string;
   after?: Date | string;
-  tags?: string[];
+  tagNames?: string[];
   page?: number;
   batch?: boolean;
 }

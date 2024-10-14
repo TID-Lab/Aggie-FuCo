@@ -23,6 +23,7 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import DateTime from "../../../components/DateTime";
+import GeneratedTagsList from "../../../components/GeneratedTagsList";
 import {
   parseContentType,
   sanitize,
@@ -31,6 +32,7 @@ import AggieButton from "../../../components/AggieButton";
 import { useReportMutations } from "../useReportMutations";
 import AddReportsToIncidents from "./AddReportsToIncident";
 import { useQueryParams } from "../../../hooks/useQueryParams";
+import AggieToken from "../../../components/AggieToken";
 //TODO: refactor and clean up tech debt
 interface IProps {
   report: Report;
@@ -120,19 +122,34 @@ const ReportListItem = ({
         )}
 
         <header className='flex justify-between mb-2 relative'>
-          <div className='flex gap-1 text-sm items-baseline'>
+          <div className='flex flex-wrap gap-1 text-sm items-baseline'>
             <h1 className={`text-sm text-black mx-1 font-medium `}>
               <span className='mr-2 text-slate-600 text-xs'>
                 <SocialMediaIcon mediaKey={report._media[0]} />
               </span>
               {report.author}
             </h1>
-            <TagsList values={report.smtcTags} />
+
             {report.irrelevant && report.irrelevant === "true" && (
-              <span className='px-2 text-sm font-medium bg-red-200 text-red-800'>
+              <AggieToken
+                variant='light:red'
+                icon={faXmark}
+                className='text-xs'
+              >
                 Irrelevant
-              </span>
+              </AggieToken>
             )}
+            {report.red_flag && (
+              <AggieToken
+                variant='dark:red'
+                icon={faExclamationTriangle}
+                className='text-xs'
+              >
+                Red Flag
+              </AggieToken>
+            )}
+            <GeneratedTagsList tags={report.aitags} />
+            <TagsList values={report.smtcTags} />
           </div>
           <div className='text-xs flex gap-2 group-hover:opacity-0'>
             <DateTime dateString={report.authoredAt} />

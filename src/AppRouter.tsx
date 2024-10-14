@@ -33,6 +33,9 @@ import NewIncident from "./pages/incidents/NewIncident";
 import FetchIndicator from "./components/FetchIndicator";
 import Settings from "./pages/Settings";
 import { useQueryClient } from "@tanstack/react-query";
+import AllReportsList from "./pages/Reports/AllReportsList";
+import BatchReportList from "./pages/Reports/BatchReportsList";
+import FlaggedReportsList from "./pages/Reports/FlaggedReportsList";
 
 // im currently working on this
 //TODO: Also BIG TODO is to ensure EVERY API call has a way of surfacing an error message. I want readble UI alerts but at least console.errors.
@@ -66,14 +69,41 @@ interface IPrivateRouteProps {
 const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
   return (
     <Routes>
-      <Route path='/login' element={<Navigate to='/reports' />} />
+      <Route path='/login' element={<Navigate to='/r/batch' />} />
       {/* <Route path='*' element={<Navigate replace to='login' />} /> */}
 
-      <Route index element={<Navigate to={"/reports"} />} />
-      <Route path='/reports' element={<Reports />}>
-        <Route path=':id' element={<Report />} />
+      <Route index element={<Navigate to={"/r/batch"} />} />
+      <Route
+        path='/r'
+        element={
+          <Reports>
+            <AllReportsList />
+          </Reports>
+        }
+      >
+        <Route path=':id' element={<Report />}></Route>
       </Route>
 
+      <Route
+        path='/r/batch'
+        element={
+          <Reports>
+            <BatchReportList />
+          </Reports>
+        }
+      >
+        <Route path=':id' element={<Report />}></Route>
+      </Route>
+      <Route
+        path='/r/search'
+        element={
+          <Reports>
+            <FlaggedReportsList />
+          </Reports>
+        }
+      >
+        <Route path=':id' element={<Report />}></Route>
+      </Route>
       <Route path='/incidents' element={<Incidents />} />
       <Route path='/incidents/:id' element={<Incident />} />
       <Route path='/incidents/new' element={<NewIncident />} />
@@ -94,7 +124,7 @@ const PrivateRoutes = ({ sessionData, setGlobalAlert }: IPrivateRouteProps) => {
     </Routes>
   );
 };
-const App = () => {
+const AppRouter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [userData, setUserData] = useState<Session | undefined>(undefined);
 
@@ -112,7 +142,7 @@ const App = () => {
           queryClient.setQueryData(["session"], data);
         }
         if (location.pathname === "/login") {
-          navigate("/reports");
+          navigate("/r/batch");
         }
       })
       .catch((err: AxiosError) => {
@@ -164,4 +194,4 @@ const App = () => {
   return InitialApp;
 };
 
-export default App;
+export default AppRouter;

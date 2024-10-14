@@ -19,17 +19,18 @@ import MultiSelectActions from "./components/MultiSelectActions";
 
 interface IProps {}
 
-const AllReportsList = ({}: IProps) => {
+interface FlaggedReportQueryState extends ReportQueryState {}
+
+const FlaggedReportsList = ({}: IProps) => {
   const { id: currentPageId } = useParams();
   const navigate = useNavigate();
 
   const { searchParams, getAllParams, setParams, getParam } =
-    useQueryParams<ReportQueryState>();
+    useQueryParams<FlaggedReportQueryState>();
 
   const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()), {
     refetchInterval: 120000,
   });
-  const { status: reportsStatus } = reportsQuery;
   useEffect(() => {
     // refetch on filter change
     reportsQuery.refetch();
@@ -145,4 +146,4 @@ const AllReportsList = ({}: IProps) => {
   );
 };
 
-export default AllReportsList;
+export default FlaggedReportsList;

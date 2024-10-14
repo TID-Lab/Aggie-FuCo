@@ -5,6 +5,7 @@ const { parseJunkipediaPostMetadata } = require('../util');
 
 module.exports = async function postToReport(post, next) {
     console.log(post);
+    console.log('postToReport');
     const {
         channel: channelID,
         platform,
