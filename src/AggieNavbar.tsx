@@ -10,12 +10,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Menu } from "@headlessui/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Session } from "../objectTypes";
+import { Session } from "./api/session/types";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import AggieButton from "./AggieButton";
-import ConfirmationDialog from "./ConfirmationDialog";
+import AggieButton from "./components/AggieButton";
+import ConfirmationDialog from "./components/ConfirmationDialog";
 import { useState } from "react";
-import { logOut } from "../api/session";
+import { logOut } from "./api/session";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface LinkOptions {
@@ -24,8 +24,8 @@ interface LinkOptions {
   not?: string[];
 }
 const mainLinks: Record<string, LinkOptions> = {
-  Reports: { to: "/r/batch" },
-  "All Reports": { to: "/r", not: ["batch", "search"] },
+  Reports: { to: "/rpt/batch" },
+  "All Reports": { to: "/rpt", not: ["batch", "search"] },
   // Search: { to: "/r/search" },
 
   divider1: { type: "divider", to: "" },
@@ -48,7 +48,7 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const isActive = (to: string, not: string[] = [""]) => {
+  const isActive = (to: string, not: string[] | undefined) => {
     const doesNotHave = !!not
       ? !not.some((n) => location.pathname.includes(n))
       : true;
@@ -89,12 +89,12 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
                 key={name}
                 to={path.to}
                 className={`px-2 focus-theme hover:bg-gray-100 rounded-lg text-[#416B34] hover:text-[#416B34] ${
-                  isActive(path.to, path.not || [""]) ? "" : ""
+                  isActive(path.to, path.not) ? "" : ""
                 }`}
               >
                 <p
                   className={`py-1 border-b-2  ${
-                    isActive(path.to, path.not || [""])
+                    isActive(path.to, path.not)
                       ? " border-[#416B34]"
                       : "border-transparent"
                   }`}

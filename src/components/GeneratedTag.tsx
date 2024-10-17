@@ -1,15 +1,5 @@
-import {
-  useFloating,
-  useInteractions,
-  useHover,
-  useFocus,
-  FloatingPortal,
-  safePolygon,
-  flip,
-  offset,
-} from "@floating-ui/react";
-import { useState } from "react";
-
+import { FloatingPortal } from "@floating-ui/react";
+import { usePopover } from "../hooks/usePopover";
 const starIcon = (
   <svg
     width='16'
@@ -31,26 +21,8 @@ interface IProps {
   className?: string;
 }
 const GeneratedTag = ({ name, children, className }: IProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const { refs, floatingStyles, context } = useFloating({
-    middleware: [flip({ fallbackAxisSideDirection: "start" }), offset(3)],
-
-    open: isOpen,
-    onOpenChange: setIsOpen,
-  });
-  const hover = useHover(context, {
-    restMs: 100,
-    // If their cursor never rests, open it after 1000ms as a
-    // fallback.
-    delay: { open: 500 },
-    handleClose: safePolygon({ blockPointerEvents: true }),
-  });
-  const focus = useFocus(context);
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    hover,
-    focus,
-  ]);
+  const { isOpen, refs, getReferenceProps, getFloatingProps, floatingStyles } =
+    usePopover();
 
   return (
     <>

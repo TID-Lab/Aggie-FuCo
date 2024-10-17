@@ -24,11 +24,11 @@ const DateTime = (props: IProps) => {
   function timeOrDate(d: Date) {
     const today = new Date();
     if (d.getDate() === today.getDate() && d.getMonth() === today.getMonth())
-      return d.toLocaleTimeString([], {
+      return `ago (${d.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
-      });
-    return d.toLocaleDateString();
+      })})`;
+    return d.toLocaleDateString([], { year: "numeric" });
   }
 
   return (
@@ -36,7 +36,7 @@ const DateTime = (props: IProps) => {
       <span className='font-medium'>
         <ReactTimeAgo date={date} locale='en-US' timeStyle='twitter' />
       </span>{" "}
-      ({timeOrDate(date)})
+      {timeOrDate(date)}
     </>
   );
 };

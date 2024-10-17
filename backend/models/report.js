@@ -13,8 +13,8 @@ let schema = new Schema({
   authoredAt: { type: Date, index: true },
   fetchedAt: { type: Date, index: true },
   storedAt: { type: Date, index: true },
-  content: { type: String, index: true },
-  author: { type: String, index: true },
+  content: { type: String },
+  author: { type: String },
   veracity: { type: String, default: 'Unconfirmed', enum: ['Unconfirmed', 'Confirmed True', 'Confirmed False'] },
   url: String,
   metadata: Schema.Types.Mixed,
@@ -34,19 +34,19 @@ let schema = new Schema({
   escalated: { type: Boolean, default: false, required: true, index: true },
   content_lang: { type: String },
   irrelevant: { type: String, default: 'false', required: false, enum: ['false', 'true', 'maybe'] },
-  aitags: { 
-    type: Map, 
-    of: SchemaTypes.Mixed, 
+  aitags: {
+    type: Map,
+    of: SchemaTypes.Mixed,
     default: {},
   },
   aitagnames: { type: [String], default: [] },
   red_flag: { type: Boolean, default: false, index: true }
 });
 
-schema.index({ 'metadata.ct_tag': 1 }, { background: true });
+// schema.index({ 'metadata.ct_tag': 1 }, { background: true });
 // Add fulltext index to the `content` and `author` field.
 // this increases RAM useage, lets keep an eye out for this
-schema.index({ content: 'text', author: 'text' });
+schema.index({ author: 'text', content: 'text' });
 schema.path('_group').set(function (_group) {
   this._prevGroup = this._group;
   return _group;
@@ -242,7 +242,7 @@ Report.queryReports = function (query, page, callback) {
 
 
 Report.findSortedPage = function (filter, page, callback) {
-  Report.findPage(filter, page, { sort: '-storedAt' }, function (err, reports) {
+  Report.findPage(filter, page, { sort: '-authoredAt' }, function (err, reports) {
     if (err) return callback(err);
     callback(null, reports);
   });

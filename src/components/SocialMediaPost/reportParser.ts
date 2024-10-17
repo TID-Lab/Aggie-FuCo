@@ -3,56 +3,46 @@
  * this is a very trial-and-error process.
  * would love to refactor this into something that makes more sense
  */
-import {
-  BaseMetadata,
-  Report,
-  TwitterStatistics,
-} from "../../api/reports/types";
+import { Report } from "../../api/reports/types";
 //import sanitizeHtml from "sanitize-html";
-import { MediaOptions } from "../../api/common";
 
-// key for custom parsing, default means i dont have a specialized parser for this
+//  default means i dont have a specialized parser for this
 
-type ContentType =
-  | "default"
-  | "twitterQuote"
-  | "twitterRetweet"
-  | "truthsocial"
-  | "youtube";
-
-export function parseContentType(
-  _media: MediaOptions[],
-  metadata: BaseMetadata
-): ContentType {
-  if (!_media) return "default";
-  if (_media[0] === "truthsocial") return "truthsocial";
-  if (_media[0] === "youtube") return "youtube";
-
-  if (_media[0] !== "twitter") return "default";
-  const rawPostData = (metadata.rawAPIResponse.attributes as any)?.post_data;
-  if (!rawPostData) return "default";
-  const isQuoteRetweet = rawPostData.quoted_status_result?.result;
-  if (isQuoteRetweet) {
-    return "twitterQuote";
+export function parseContentType(report: Report) {
+  if (!report._media) return "default";
+  if (report._media[0] === "truthsocial") return "truthsocial";
+  if (report._media[0] === "youtube") return "youtube";
+  if (report._media[0] === "twitter") {
+    // some goofy coding practices going on here
+    const type = tweetType(report);
+    return type;
   }
-  const isRetweet = rawPostData.retweeted_status_result?.result;
-  if (isRetweet) {
-    return "twitterRetweet";
-  }
+
   return "default";
 }
 
-export function parseTwitterUser(rawPostData: any) {
-  const userData = rawPostData?.core?.user_results?.result?.legacy;
-  if (!userData) return undefined;
-  return {
-    name: userData.name,
-    username: userData.screen_name,
-    followers: userData.followers_count,
-    url: userData.url,
-    createdAt: userData.created_at,
-  };
-}
+export type ContentType = ReturnType<typeof parseContentType>;
+
+export const isQuoteRetweet = (report: Report) =>
+  !!(report.metadata.rawAPIResponse.attributes as any)?.post_data?.api_data
+    ?.quoted_status_result?.result;
+
+export const tweetType = (report: Report) => {
+  const post_data = (report.metadata.rawAPIResponse.attributes as any)
+    ?.post_data;
+
+  if (post_data?.api_data?.quoted_status_result) return "twitter:quote";
+  if (post_data?.retweeted_status_result) {
+    if (post_data?.retweeted_status_result?.result?.quoted_status_result)
+      return "twitter:quoteRetweet";
+    return "twitter:retweet";
+  }
+  return "twitter";
+};
+
+export const isRetweet = (report: Report) =>
+  !!(report.metadata.rawAPIResponse.attributes as any)?.post_data
+    .retweeted_status_result?.result;
 
 export function isTwitterReply(report: Report) {
   const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
@@ -65,71 +55,16 @@ export function isTwitterReply(report: Report) {
   };
 }
 
-export function getTweetImages(report: Report) {
-  const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
-    ?.search_data_fields;
+// export function getTweetImages(report: Report) {
+//   const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
+//     ?.search_data_fields;
 
-  const images = rawPostData?.media_data?.map((imgData: any) => {
-    return imgData.thumb_url + "?format=jpg&name=medium";
-  });
-  return images as string[];
-}
+//   const images = rawPostData?.media_data?.map((imgData: any) => {
+//     return imgData.thumb_url + "?format=jpg&name=medium";
+//   });
+//   return images as string[];
+// }
 
-export function parseTwitterRetweet(report: Report) {
-  const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
-    ?.post_data;
-  const retweetResult = rawPostData?.retweeted_status_result?.result;
-
-  const innerAuthor = parseTwitterUser(retweetResult);
-
-  const statistics: TwitterStatistics = {
-    reply_count: retweetResult.legacy?.reply_count,
-    retweet_count:
-      retweetResult.legacy?.retweet_count + retweetResult.legacy?.quote_count,
-    like_count: retweetResult.legacy?.favorite_count,
-    view_count: retweetResult.views?.count,
-  };
-
-  return {
-    author: innerAuthor,
-    authoredAt: retweetResult.legacy?.created_at,
-    content: retweetResult.legacy?.full_text,
-    statistics,
-  };
-}
-
-export function parseTwitterQuote(report: Report) {
-  const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
-    ?.post_data;
-  const quotedResult = rawPostData.quoted_status_result?.result;
-
-  const innerAuthor = parseTwitterUser(quotedResult);
-
-  const statistics: TwitterStatistics = {
-    reply_count: quotedResult.legacy?.reply_count,
-    retweet_count:
-      quotedResult.legacy?.retweet_count + quotedResult.legacy?.quote_count,
-    like_count: quotedResult.legacy?.favorite_count,
-    view_count: quotedResult.views?.count,
-  };
-
-  return {
-    author: innerAuthor,
-    authoredAt: quotedResult.legacy?.created_at,
-    content: quotedResult.legacy?.full_text,
-    statistics,
-  };
-}
-
-export function parseYoutube(report: Report) {
-  const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
-    ?.post_data;
-  const youtubeData = rawPostData.snippet.data;
-  return {
-    title: youtubeData.title,
-    description: youtubeData.description,
-  };
-}
 // temporary, should be done server-side
 export function sanitize(string: string) {
   return string;

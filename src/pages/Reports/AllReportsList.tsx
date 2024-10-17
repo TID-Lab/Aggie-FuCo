@@ -51,7 +51,7 @@ const AllReportsList = ({}: IProps) => {
   });
 
   function onReportItemClick(id: string, isRead: boolean) {
-    navigate({ pathname: `/r/${id}`, search: searchParams.toString() });
+    navigate({ pathname: `${id}`, search: searchParams.toString() });
   }
 
   return (

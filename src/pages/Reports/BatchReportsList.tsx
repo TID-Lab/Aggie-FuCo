@@ -74,7 +74,7 @@ const BatchReportList = ({}: IProps) => {
   }
 
   function onReportClick(id: string, isRead: boolean) {
-    navigate({ pathname: `/r/batch/${id}`, search: searchParams.toString() });
+    navigate({ pathname: `${id}`, search: searchParams.toString() });
     if (!isRead)
       setRead.mutate({ reportIds: [id], read: true, currentPageId: id });
   }
