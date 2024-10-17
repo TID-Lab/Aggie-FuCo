@@ -1,6 +1,7 @@
+// this component is uh... one of the components of all time
 import React, { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
 import { Report, ReportQueryState } from "../../../api/reports/types";
 import { formatText } from "../../../utils/format";
@@ -33,6 +34,7 @@ import { useReportMutations } from "../useReportMutations";
 import AddReportsToIncidents from "./AddReportsToIncident";
 import { useQueryParams } from "../../../hooks/useQueryParams";
 import AggieToken from "../../../components/AggieToken";
+import { parseYoutube } from "../../../components/SocialMediaPost/YoutubePost";
 //TODO: refactor and clean up tech debt
 interface IProps {
   report: Report;
@@ -50,7 +52,7 @@ const ReportListItem = ({
   const contentType = parseContentType(report);
 
   const { id: currentPageId } = useParams();
-  const navigate = useNavigate();
+
   const { getParam } = useQueryParams<ReportQueryState>();
 
   const isBatchMode = getParam("batch") === "true";
@@ -86,6 +88,45 @@ const ReportListItem = ({
   ) {
     e.stopPropagation();
     window.open(`${window.location.origin}/incidents/${id}`, "_blank");
+  }
+
+  function renderText(type: typeof contentType) {
+    switch (type) {
+      case "twitter:quoteRetweet":
+      case "twitter:retweet":
+        return (
+          <>
+            <div className='grid place-items-center'>
+              <FontAwesomeIcon icon={faRetweet} />
+            </div>
+            <p className=' text-black max-h-[10em] line-clamp-4'>
+              {formatText(report.content)}
+            </p>
+          </>
+        );
+      case "truthsocial":
+        return (
+          <p
+            className='truthsocial text-black'
+            dangerouslySetInnerHTML={{
+              __html: sanitize(report.content),
+            }}
+          ></p>
+        );
+      case "youtube":
+        const { title, description } = parseYoutube(report);
+        return (
+          <p className=' text-black max-h-[10em] line-clamp-4'>
+            <span className=''>{title} </span>
+          </p>
+        );
+      default:
+        return (
+          <p className=' text-black max-h-[10em] line-clamp-4'>
+            {formatText(report.content)}
+          </p>
+        );
+    }
   }
 
   return (
@@ -151,7 +192,7 @@ const ReportListItem = ({
             <GeneratedTagsList tags={report.aitags} />
             <TagsList values={report.smtcTags} />
           </div>
-          <div className='text-xs flex gap-2 group-hover:opacity-0'>
+          <div className='text-xs group-hover:opacity-0'>
             <DateTime dateString={report.authoredAt} />
           </div>
           <div className='flex absolute right-0 top-0 text-xs shadow-md rounded-lg border border-slate-300 group-hover:opacity-100 opacity-0'>
@@ -194,25 +235,7 @@ const ReportListItem = ({
             </AggieButton>
           </div>
         </header>
-        <div className='flex gap-2'>
-          {contentType === "twitter:retweet" && (
-            <div className='grid place-items-center'>
-              <FontAwesomeIcon icon={faRetweet} />
-            </div>
-          )}
-          {contentType === "truthsocial" ? (
-            <p
-              className='truthsocial text-black'
-              dangerouslySetInnerHTML={{
-                __html: sanitize(report.content),
-              }}
-            ></p>
-          ) : (
-            <p className=' text-black max-h-[10em] line-clamp-5'>
-              {formatText(report.content)}
-            </p>
-          )}
-        </div>
+        <div className='flex gap-2'>{renderText(contentType)}</div>
       </div>
       <div className='flex flex-col'>
         {/* <div className='flex gap-1 opacity-0 group-hover:opacity-100'>
@@ -252,7 +275,7 @@ const ReportListItem = ({
             className='rounded-lg flex-grow flex gap-1 bg-slate-50 border border-dashed hover:border-slate-300 border-slate-300 focus-theme hover:bg-white justify-center items-center h-full'
             icon={faPlus}
           >
-            Attach Incident
+            Add to Incident
           </AggieButton>
         )}
       </div>

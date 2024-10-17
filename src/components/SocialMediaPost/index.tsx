@@ -3,7 +3,6 @@ import { Report } from "../../api/reports/types";
 import { formatText } from "../../utils/format";
 import PostReactions from "./PostReactions";
 import MediaPreview from "./MediaPreview";
-import SocialMediaIcon from "./SocialMediaIcon";
 
 import DateTime from "../DateTime";
 
@@ -12,6 +11,9 @@ import { parseContentType, isTwitterReply, sanitize } from "./reportParser";
 import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TwitterPost from "./TwitterPost";
+import YoutubePost from "./YoutubePost";
+import SocialMediaAuthor from "./SocialMediaAuthor";
+import TruthSocialPost from "./TruthSocialPost";
 
 interface IProps {
   report: Report;
@@ -38,32 +40,18 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
       </div>
     );
   };
-
+  console.log(report);
   return (
     <div className='pb-2 px-3 pt-3 bg-white rounded-xl border border-slate-300 text-base '>
       {report._media[0] === "twitter" && <TwitterReply report={report} />}
       <div className='flex justify-between mb-2'>
         {/* <TagsList values={report.smtcTags} /> */}
         <div className=' font-medium  '>
-          <a
-            target='_blank'
-            href={report.metadata.accountUrl}
-            title={`open ${report._media[0]} account`}
-            className='hover:underline hover:bg-slate-100 group hover:text-blue-600'
-          >
-            <h1>
-              <span className='mr-1 text-slate-600 '>
-                <SocialMediaIcon mediaKey={report._media[0]} />
-              </span>
-              {report.author}
-              <span className='opacity-0 group-hover:opacity-100'>
-                <FontAwesomeIcon icon={faExternalLink} size='xs' />
-              </span>
-            </h1>
-          </a>
-          <p className='text-slate-600 text-xs font-normal mt-1'>
-            <DateTime dateString={report.authoredAt} />
-          </p>
+          <SocialMediaAuthor
+            username={report.metadata.accountHandle}
+            createdAt={report.authoredAt}
+            url={report.metadata.accountUrl}
+          />
         </div>
         <p className='flex flex-col items-end gap-1'>
           <a
@@ -78,29 +66,11 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
       </div>
 
       {contentType.includes("twitter") && <TwitterPost report={report} />}
-      {contentType === "youtube" && <></>}
-      {contentType === "truthsocial" && (
-        <>
-          <div className='whitespace-pre-line break-all mb-1'>
-            <p
-              className='truthsocial'
-              dangerouslySetInnerHTML={{
-                __html: sanitize(report.content),
-              }}
-            ></p>
-          </div>
-          {showMedia && (
-            <MediaPreview
-              mediaUrl={report.metadata.mediaUrl}
-              media={report._media[0]}
-              report={report}
-            />
-          )}
-        </>
-      )}
+      {contentType === "youtube" && <YoutubePost report={report} />}
+      {contentType === "truthsocial" && <TruthSocialPost report={report} />}
       {contentType === "default" && (
         <>
-          <div className='whitespace-pre-line mb-1'>
+          <div className='whitespace-pre-wrap mb-1 break-all '>
             <Linkify
               options={{
                 target: "_blank",
@@ -128,8 +98,8 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
           />
         </div>
         <p className='text-xs text-slate-600 text-right'>
-          last fetched: <br />
-          <DateTime dateString={report.fetchedAt} />
+          posted: <br />
+          <DateTime dateString={report.authoredAt} />
         </p>
       </div>
     </div>

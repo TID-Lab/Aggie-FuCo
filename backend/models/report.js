@@ -242,7 +242,7 @@ Report.queryReports = function (query, page, callback) {
 
 
 Report.findSortedPage = function (filter, page, callback) {
-  Report.findPage(filter, page, { sort: '-storedAt' }, function (err, reports) {
+  Report.findPage(filter, page, { sort: '-authoredAt' }, function (err, reports) {
     if (err) return callback(err);
     callback(null, reports);
   });

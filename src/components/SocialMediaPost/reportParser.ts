@@ -3,37 +3,42 @@
  * this is a very trial-and-error process.
  * would love to refactor this into something that makes more sense
  */
-import {
-  BaseMetadata,
-  Report,
-  TwitterStatistics,
-} from "../../api/reports/types";
+import { Report } from "../../api/reports/types";
 //import sanitizeHtml from "sanitize-html";
-import { MediaOptions } from "../../api/common";
 
-// key for custom parsing, default means i dont have a specialized parser for this
+//  default means i dont have a specialized parser for this
 
-type ContentType =
-  | "default"
-  | "twitter"
-  | "twitter:retweet"
-  | "truthsocial"
-  | "youtube";
-
-export function parseContentType(report: Report): ContentType {
+export function parseContentType(report: Report) {
   if (!report._media) return "default";
   if (report._media[0] === "truthsocial") return "truthsocial";
   if (report._media[0] === "youtube") return "youtube";
   if (report._media[0] === "twitter") {
-    if (isRetweet(report)) return "twitter:retweet";
-    return "twitter";
+    // some goofy coding practices going on here
+    const type = tweetType(report);
+    return type;
   }
 
   return "default";
 }
+
+export type ContentType = ReturnType<typeof parseContentType>;
+
 export const isQuoteRetweet = (report: Report) =>
-  !!(report.metadata.rawAPIResponse.attributes as any)?.post_data
-    .quoted_status_result?.result;
+  !!(report.metadata.rawAPIResponse.attributes as any)?.post_data?.api_data
+    ?.quoted_status_result?.result;
+
+export const tweetType = (report: Report) => {
+  const post_data = (report.metadata.rawAPIResponse.attributes as any)
+    ?.post_data;
+
+  if (post_data?.api_data?.quoted_status_result) return "twitter:quote";
+  if (post_data?.retweeted_status_result) {
+    if (post_data?.retweeted_status_result?.result?.quoted_status_result)
+      return "twitter:quoteRetweet";
+    return "twitter:retweet";
+  }
+  return "twitter";
+};
 
 export const isRetweet = (report: Report) =>
   !!(report.metadata.rawAPIResponse.attributes as any)?.post_data
@@ -50,25 +55,16 @@ export function isTwitterReply(report: Report) {
   };
 }
 
-export function getTweetImages(report: Report) {
-  const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
-    ?.search_data_fields;
+// export function getTweetImages(report: Report) {
+//   const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
+//     ?.search_data_fields;
 
-  const images = rawPostData?.media_data?.map((imgData: any) => {
-    return imgData.thumb_url + "?format=jpg&name=medium";
-  });
-  return images as string[];
-}
+//   const images = rawPostData?.media_data?.map((imgData: any) => {
+//     return imgData.thumb_url + "?format=jpg&name=medium";
+//   });
+//   return images as string[];
+// }
 
-export function parseYoutube(report: Report) {
-  const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
-    ?.post_data;
-  const youtubeData = rawPostData.snippet.data;
-  return {
-    title: youtubeData.title,
-    description: youtubeData.description,
-  };
-}
 // temporary, should be done server-side
 export function sanitize(string: string) {
   return string;
