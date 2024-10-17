@@ -48,7 +48,7 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const isActive = (to: string, not: string[] = [""]) => {
+  const isActive = (to: string, not: string[] | undefined) => {
     const doesNotHave = !!not
       ? !not.some((n) => location.pathname.includes(n))
       : true;
@@ -89,12 +89,12 @@ const AggieNavbar = ({ isAuthenticated, session }: IProps) => {
                 key={name}
                 to={path.to}
                 className={`px-2 focus-theme hover:bg-gray-100 rounded-lg text-[#416B34] hover:text-[#416B34] ${
-                  isActive(path.to, path.not || [""]) ? "" : ""
+                  isActive(path.to, path.not) ? "" : ""
                 }`}
               >
                 <p
                   className={`py-1 border-b-2  ${
-                    isActive(path.to, path.not || [""])
+                    isActive(path.to, path.not)
                       ? " border-[#416B34]"
                       : "border-transparent"
                   }`}

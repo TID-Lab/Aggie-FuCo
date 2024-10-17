@@ -1,7 +1,6 @@
 import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { url } from "inspector";
-import { report } from "process";
+
 import DateTime from "../DateTime";
 
 interface IProps {
@@ -28,7 +27,7 @@ const SocialMediaAuthor = ({ name, username, pfp, createdAt, url }: IProps) => {
       target='_blank'
       href={url}
       title={`open ${username}'s account`}
-      className=' hover:bg-slate-100 block group p-1 -m-1 hover:text-blue-600 relative rounded-lg'
+      className=' hover:bg-slate-100 block group p-1 pr-6 -m-1 hover:text-blue-600 relative rounded-lg'
     >
       <h1>
         <h2 className='font-medium group-hover:underline'>
