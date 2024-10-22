@@ -5,24 +5,16 @@ import { useIncidentMutations } from "../useIncidentMutations";
 
 import { addComment, getGroup, getGroupReports } from "../../../api/groups";
 import { getSession } from "../../../api/session";
-import {
-  EditableGroupComment,
-  Group,
-  GroupComment,
-} from "../../../api/groups/types";
-import * as Yup from "yup";
+import { EditableGroupComment, Group } from "../../../api/groups/types";
 
-import { Form, Formik, Field } from "formik";
 import AxiosErrorCard from "../../../components/AxiosErrorCard";
-import TagsList from "../../../components/Tags/TagsList";
-import VeracityToken from "../../../components/VeracityToken";
+
 import SocialMediaPost from "../../../components/SocialMediaPost";
 import { Link } from "react-router-dom";
 import AggieButton from "../../../components/AggieButton";
 import DropdownMenu from "../../../components/DropdownMenu";
 import PlaceholderDiv from "../../../components/PlaceholderDiv";
-import UserToken from "../../../components/UserToken";
-import Comment from "./Comment";
+
 import { Dialog } from "@headlessui/react";
 import CreateEditIncidentForm from "../CreateEditIncidentForm";
 
@@ -32,12 +24,17 @@ import {
   faEllipsisH,
   faMinusCircle,
   faEdit,
-  faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
-import DateTime from "../../../components/DateTime";
 import AggieSwitch from "../../../components/AggieSwitch";
 import { useUpdateQueryData } from "../../../hooks/useUpdateQueryData";
+import CommentTimeline from "./CommentTimeline";
+import IncidentInfo from "./IncidentInfo";
+import ReportFilters from "../../Reports/components/ReportsFilters";
+import { useQueryParams } from "../../../hooks/useQueryParams";
+import { ReportQueryState } from "../../../api/reports/types";
+import { useMultiSelect } from "../../../hooks/useMultiSelect";
+import GroupReportListItem from "./GoupReportListItem";
 
 const Incident = () => {
   const queryClient = useQueryClient();
@@ -55,39 +52,32 @@ const Incident = () => {
   } = useQuery(["group", id], () => getGroup(id), {
     onSuccess: (data) => {},
   });
-  const { data: groupReports } = useQuery(
+  const { data: groupReports, refetch: groupRefetch } = useQuery(
     ["groups", "reports", { groupId: id }],
     () => getGroupReports(id, 0)
   );
-  const { data: session } = useQuery(["session"], getSession, {
-    staleTime: 50000,
+  const multiSelect = useMultiSelect({
+    allItems: groupReports?.results,
+    mapFn: (i) => i._id,
   });
-
-  const postNewComment = useMutation(addComment);
-
-  function onPostAdd(formData: { commentdata: string }, resetForm: () => void) {
-    if (!session || !id) return false;
-    const post: EditableGroupComment = {
-      data: formData.commentdata,
-      author: session._id,
-    };
-    postNewComment.mutate(
-      { id: id, comment: post },
-      {
-        onSuccess: () => {
-          resetForm();
-          queryClient.invalidateQueries(["group", id]);
-        },
-      }
-    );
-  }
+  const { searchParams, getAllParams, setParams, getParam } =
+    useQueryParams<ReportQueryState>();
+  useEffect(() => {
+    // refetch on filter change
+    groupRefetch();
+    multiSelect.set([]);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [searchParams]);
 
   if (isError) {
     return <AxiosErrorCard error={groupError} />;
   }
   return (
-    <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-2 pt-6 gap-8 h-full '>
-      <main className='col-span-1 h-full mb-12'>
+    <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-2 pt-6 gap-8 '>
+      <main className='col-span-1 h-full mb-12 '>
         <div className='flex gap-1 h-min justify-between items-center'>
           <AggieButton
             variant='transparent'
@@ -152,13 +142,13 @@ const Incident = () => {
                       {
                         onSuccess: (_, params) => {
                           // update single report
-                          if (id) {
-                            queryData.update<Group>(["group", id], (data) => {
-                              return {
-                                closed: params.closed,
-                              };
-                            });
-                          }
+                          if (!id) return;
+
+                          queryData.update<Group>(["group", id], (data) => {
+                            return {
+                              closed: params.closed,
+                            };
+                          });
                         },
                       }
                     )
@@ -184,164 +174,11 @@ const Incident = () => {
             </DropdownMenu>
           </div>
         </div>
+        <IncidentInfo group={group} isLoading={isLoading} />
 
-        <header className='text-slate-600 border-b border-slate-300 py-2'>
-          <div className='flex justify-between'>
-            <div>
-              <div className='flex gap-1 flex-wrap'>
-                <VeracityToken value={group?.veracity} />
-                {group?.closed && (
-                  <span className='px-1 bg-purple-200 text-purple-700 font-medium inline-flex gap-1 items-center'>
-                    <FontAwesomeIcon icon={faMinusCircle} />
-                    Closed
-                  </span>
-                )}
-                <TagsList values={group?.smtcTags} />
-              </div>
-              <PlaceholderDiv
-                loading={isLoading}
-                className='text-black text-3xl font-medium my-2'
-                loadingClass='mt-1 bg-slate-200 rounded-lg'
-                width='12em'
-              >
-                <h1>
-                  {group?.title}{" "}
-                  {group?.escalated && (
-                    <span className='px-1 bg-orange-700 text-white font-medium text-base inline-flex gap-1 items-center no-underline'>
-                      <FontAwesomeIcon icon={faWarning} />
-                      Escalated
-                    </span>
-                  )}
-                </h1>
-              </PlaceholderDiv>
-            </div>
-          </div>
-          <div className='flex gap-12 my-2'>
-            <PlaceholderDiv as='p' width='7em' loading={isLoading}>
-              Id #{group?.idnum}
-            </PlaceholderDiv>
-            <PlaceholderDiv as='p' width='7em' loading={isLoading}>
-              <span className='font-medium'>{group?._reports.length}</span>{" "}
-              reports attached
-            </PlaceholderDiv>
-
-            <PlaceholderDiv as='p' width='7em' loading={isLoading}>
-              {group?.locationName && (
-                <>
-                  located at{" "}
-                  <span className='font-medium'>{group?.locationName}</span>
-                </>
-              )}
-            </PlaceholderDiv>
-            <PlaceholderDiv as='p' width='7em' loading={isLoading}>
-              created by{" "}
-              <span className='font-medium'>{group?.creator?.username}</span>
-            </PlaceholderDiv>
-          </div>
-          <div className='border-t border-slate-300 flex gap-2 items-center py-2'>
-            <span className='whitespace-nowrap'>Assigned To:</span>
-            <PlaceholderDiv
-              loading={isLoading}
-              className='flex flex-wrap gap-x-2 gap-y-1 items-center '
-            >
-              {group?.assignedTo?.map((user) => (
-                <UserToken
-                  id={user._id}
-                  className='bg-white border border-slate-300 rounded-full px-2 text-sm font-medium'
-                />
-              ))}
-              <AggieButton
-                className='hover:underline text-blue-600 text-sm '
-                onClick={() => setIsEditOpen(true)}
-              >
-                Change
-              </AggieButton>
-            </PlaceholderDiv>
-          </div>
-
-          <div className='flex gap-2'>
-            <p>Description:</p>
-
-            {group?.notes ? (
-              <div className='px-2 py-1 border border-slate-200 rounded w-full bg-white overflow-y-auto max-h-40'>
-                <p className='whitespace-pre-line max-w-prose '>
-                  {group?.notes}
-                </p>
-              </div>
-            ) : (
-              <p className='italic text-slate-600'>No Description Set</p>
-            )}
-          </div>
-        </header>
-        <article className='mt-4'>
-          <div className='px-2 py-2 flex justify-between'>
-            <h2 className='text-sm font-medium flex gap-1 items-center'>
-              <FontAwesomeIcon
-                icon={faDotCircle}
-                className='text-slate-600 mr-1'
-              />
-              <span className='font-normal italic text-slate-600'> user </span>
-              <UserToken id={group?.creator?._id || ""} loading={isLoading} />
-              <span className='font-normal italic text-slate-600'>
-                {" "}
-                created this incident on
-              </span>{" "}
-              <span>
-                {" "}
-                <DateTime dateString={group?.storedAt || ""} />
-              </span>
-            </h2>
-            <p></p>
-          </div>
-          <div>
-            {!!group?.comments &&
-              group.comments.map((comment: GroupComment) => (
-                <Comment data={comment} groupdId={id} key={comment._id} />
-              ))}
-          </div>
-          <div className=' bg-slate-50 border border-slate-300 rounded-lg'>
-            <h2 className='font-medium ml-3 my-2'>Add Comment</h2>
-            <Formik
-              initialValues={{ commentdata: "" }}
-              onSubmit={(e, { resetForm }) => {
-                onPostAdd(e, resetForm);
-              }}
-              validationSchema={Yup.object().shape({
-                commentdata: Yup.string().required(
-                  "Cannot Post Empty Comment!"
-                ),
-              })}
-            >
-              {({ resetForm, errors }) => (
-                <Form>
-                  <Field
-                    as='textarea'
-                    name='commentdata'
-                    className='focus-theme px-3 py-1 border-y border-slate-300 bg-white w-full min-h-36'
-                    placeholder='Write a comment here...'
-                  />
-                  {errors && (
-                    <p className='text-sm text-rose-700 italic ml-2'>
-                      {errors.commentdata}
-                    </p>
-                  )}
-
-                  <AggieButton
-                    type='submit'
-                    variant='primary'
-                    className='mb-2 ml-2 mt-1'
-                    loading={postNewComment.isLoading}
-                    disabled={postNewComment.isLoading}
-                  >
-                    Post
-                  </AggieButton>
-                </Form>
-              )}
-            </Formik>
-          </div>
-        </article>
+        <CommentTimeline group={group} isLoading={isLoading} />
       </main>
-      <aside className='h-[90vh] grid grid-rows-[auto_1fr] sticky top-0'>
+      <aside className='overflow-y-auto flex flex-col gap-1 h-[90vh] sticky top-0'>
         <PlaceholderDiv
           as='h2'
           width='7em'
@@ -350,10 +187,16 @@ const Incident = () => {
         >
           <span className=''>({group?._reports.length})</span> reports attached
         </PlaceholderDiv>
-        <div className='flex flex-col gap-1 overflow-y-auto'>
+        <ReportFilters />
+        <div className='flex flex-col rounded-lg bg-slate-50 border border-slate-300'>
           {groupReports && groupReports.total > 0 ? (
             groupReports.results.map((report) => (
-              <SocialMediaPost report={report} key={report._id} />
+              <GroupReportListItem
+                report={report}
+                isChecked={multiSelect.exists(report._id)}
+                isSelectMode={multiSelect.isActive}
+                onCheckChange={() => multiSelect.addRemove(report._id)}
+              />
             ))
           ) : (
             <div className='grid place-items-center py-8 border border-slate-300 bg-white rounded-lg'>

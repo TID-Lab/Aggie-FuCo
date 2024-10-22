@@ -35,6 +35,7 @@ import AddReportsToIncidents from "./AddReportsToIncident";
 import { useQueryParams } from "../../../hooks/useQueryParams";
 import AggieToken from "../../../components/AggieToken";
 import { parseYoutube } from "../../../components/SocialMediaPost/YoutubePost";
+import SocialMediaListItem from "../../../components/SocialMediaListItem";
 //TODO: refactor and clean up tech debt
 interface IProps {
   report: Report;
@@ -49,8 +50,6 @@ const ReportListItem = ({
   isSelectMode,
   onCheckChange,
 }: IProps) => {
-  const contentType = parseContentType(report);
-
   const { id: currentPageId } = useParams();
 
   const { getParam } = useQueryParams<ReportQueryState>();
@@ -90,45 +89,6 @@ const ReportListItem = ({
     window.open(`${window.location.origin}/incidents/${id}`, "_blank");
   }
 
-  function renderText(type: typeof contentType) {
-    switch (type) {
-      case "twitter:quoteRetweet":
-      case "twitter:retweet":
-        return (
-          <>
-            <div className='grid place-items-center'>
-              <FontAwesomeIcon icon={faRetweet} />
-            </div>
-            <p className=' text-black max-h-[10em] line-clamp-4'>
-              {formatText(report.content)}
-            </p>
-          </>
-        );
-      case "truthsocial":
-        return (
-          <p
-            className='truthsocial text-black'
-            dangerouslySetInnerHTML={{
-              __html: sanitize(report.content),
-            }}
-          ></p>
-        );
-      case "youtube":
-        const { title, description } = parseYoutube(report);
-        return (
-          <p className=' text-black max-h-[10em] line-clamp-4'>
-            <span className=''>{title} </span>
-          </p>
-        );
-      default:
-        return (
-          <p className=' text-black max-h-[10em] line-clamp-4'>
-            {formatText(report.content)}
-          </p>
-        );
-    }
-  }
-
   return (
     <article
       className={`px-2 py-2 pb-4 border-b ${bgState()} ${
@@ -162,80 +122,60 @@ const ReportListItem = ({
           </div>
         )}
 
-        <header className='flex justify-between mb-2 relative'>
-          <div className='flex flex-wrap gap-1 text-sm items-baseline max-w-[43em]'>
-            <h1 className={`text-sm text-black mx-1 font-medium `}>
-              <span className='mr-2 text-slate-600 text-xs'>
-                <SocialMediaIcon mediaKey={report._media[0]} />
-              </span>
-              {report.author}
-            </h1>
+        <SocialMediaListItem
+          report={report}
+          header={
+            <>
+              <div className='text-xs group-hover:opacity-0'>
+                <DateTime dateString={report.authoredAt} />
+              </div>
+              <div className='flex absolute right-0 top-0 text-xs shadow-md rounded-lg border border-slate-300 group-hover:opacity-100 opacity-0'>
+                <AggieButton
+                  variant={report.read ? "light:lime" : "light:amber"}
+                  className='rounded-l-lg'
+                  onClick={(e) => {
+                    e.stopPropagation();
 
-            {report.irrelevant && report.irrelevant === "true" && (
-              <AggieToken
-                variant='light:red'
-                icon={faXmark}
-                className='text-xs'
-              >
-                Irrelevant
-              </AggieToken>
-            )}
-            {report.red_flag && (
-              <AggieToken
-                variant='dark:red'
-                icon={faExclamationTriangle}
-                className='text-xs'
-              >
-                Red Flag
-              </AggieToken>
-            )}
-            <GeneratedTagsList tags={report.aitags} />
-            <TagsList values={report.smtcTags} />
-          </div>
-          <div className='text-xs group-hover:opacity-0'>
-            <DateTime dateString={report.authoredAt} />
-          </div>
-          <div className='flex absolute right-0 top-0 text-xs shadow-md rounded-lg border border-slate-300 group-hover:opacity-100 opacity-0'>
-            <AggieButton
-              variant={report.read ? "light:lime" : "light:amber"}
-              className='rounded-l-lg'
-              onClick={(e) => {
-                e.stopPropagation();
-
-                setRead.mutate({
-                  reportIds: [report._id],
-                  read: !report.read,
-                  currentPageId: currentPageId,
-                });
-              }}
-              loading={setRead.isLoading}
-              disabled={!report || setRead.isLoading}
-              icon={report.read ? faEnvelopeOpen : faEnvelope}
-            >
-              {report.read ? <> unread</> : <> read</>}
-            </AggieButton>
-            <AggieButton
-              variant={
-                report.irrelevant === "true" ? "light:green" : "light:rose"
-              }
-              className='rounded-r-lg'
-              onClick={(e) => {
-                e.stopPropagation();
-                setIrrelevance.mutate({
-                  reportIds: [report._id],
-                  irrelevant: report.irrelevant === "true" ? "false" : "true",
-                  currentPageId: currentPageId,
-                });
-              }}
-              icon={report.irrelevant === "true" ? faDotCircle : faXmark}
-              loading={setIrrelevance.isLoading}
-              disabled={!report || setIrrelevance.isLoading}
-            >
-              {report.irrelevant === "true" ? <>relevant</> : <>irrelevant</>}
-            </AggieButton>
-          </div>
-        </header>
-        <div className='flex gap-2'>{renderText(contentType)}</div>
+                    setRead.mutate({
+                      reportIds: [report._id],
+                      read: !report.read,
+                      currentPageId: currentPageId,
+                    });
+                  }}
+                  loading={setRead.isLoading}
+                  disabled={!report || setRead.isLoading}
+                  icon={report.read ? faEnvelopeOpen : faEnvelope}
+                >
+                  {report.read ? <> unread</> : <> read</>}
+                </AggieButton>
+                <AggieButton
+                  variant={
+                    report.irrelevant === "true" ? "light:green" : "light:rose"
+                  }
+                  className='rounded-r-lg'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIrrelevance.mutate({
+                      reportIds: [report._id],
+                      irrelevant:
+                        report.irrelevant === "true" ? "false" : "true",
+                      currentPageId: currentPageId,
+                    });
+                  }}
+                  icon={report.irrelevant === "true" ? faDotCircle : faXmark}
+                  loading={setIrrelevance.isLoading}
+                  disabled={!report || setIrrelevance.isLoading}
+                >
+                  {report.irrelevant === "true" ? (
+                    <>relevant</>
+                  ) : (
+                    <>irrelevant</>
+                  )}
+                </AggieButton>
+              </div>
+            </>
+          }
+        />
       </div>
       <div className='flex flex-col'>
         {/* <div className='flex gap-1 opacity-0 group-hover:opacity-100'>
