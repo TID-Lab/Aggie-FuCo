@@ -24,6 +24,7 @@ import {
   faEllipsisH,
   faMinusCircle,
   faEdit,
+  faMinus,
 } from "@fortawesome/free-solid-svg-icons";
 import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
 import AggieSwitch from "../../../components/AggieSwitch";
@@ -35,6 +36,7 @@ import { useQueryParams } from "../../../hooks/useQueryParams";
 import { ReportQueryState } from "../../../api/reports/types";
 import { useMultiSelect } from "../../../hooks/useMultiSelect";
 import GroupReportListItem from "./GoupReportListItem";
+import AggieCheck from "../../../components/AggieCheck";
 
 const Incident = () => {
   const queryClient = useQueryClient();
@@ -52,16 +54,19 @@ const Incident = () => {
   } = useQuery(["group", id], () => getGroup(id), {
     onSuccess: (data) => {},
   });
+  const { searchParams, getAllParams, setParams, getParam } =
+    useQueryParams<ReportQueryState>();
+
   const { data: groupReports, refetch: groupRefetch } = useQuery(
     ["groups", "reports", { groupId: id }],
-    () => getGroupReports(id, 0)
+    () => getGroupReports({ ...getAllParams(), groupId: id })
   );
+
   const multiSelect = useMultiSelect({
     allItems: groupReports?.results,
     mapFn: (i) => i._id,
   });
-  const { searchParams, getAllParams, setParams, getParam } =
-    useQueryParams<ReportQueryState>();
+
   useEffect(() => {
     // refetch on filter change
     groupRefetch();
@@ -187,7 +192,46 @@ const Incident = () => {
         >
           <span className=''>({group?._reports.length})</span> reports attached
         </PlaceholderDiv>
-        <ReportFilters />
+        <ReportFilters
+          reportCount={groupReports && groupReports.total}
+          headerElement={
+            multiSelect.isActive ? (
+              <AggieButton
+                variant='secondary'
+                className='text-xs font-medium '
+                onClick={() => multiSelect.toggleActive()}
+              >
+                Cancel Selection
+              </AggieButton>
+            ) : (
+              <AggieCheck
+                active={multiSelect.isActive}
+                onClick={() => {
+                  multiSelect.toggleActive();
+                  multiSelect.addRemoveAll(groupReports?.results);
+                }}
+              />
+            )
+          }
+        />
+        <div
+          className={`px-1 flex gap-2 text-xs font-medium items-center ${
+            multiSelect.isActive ? "mt-2" : ""
+          }`}
+        >
+          {multiSelect.isActive && (
+            <>
+              <AggieCheck
+                active={multiSelect.any()}
+                icon={!multiSelect.all() ? faMinus : undefined}
+                onClick={() => multiSelect.addRemoveAll(groupReports?.results)}
+              />
+              <p>
+                Mark {multiSelect.selection.length} report{"(s)"} as:
+              </p>
+            </>
+          )}
+        </div>
         <div className='flex flex-col rounded-lg bg-slate-50 border border-slate-300'>
           {groupReports && groupReports.total > 0 ? (
             groupReports.results.map((report) => (
