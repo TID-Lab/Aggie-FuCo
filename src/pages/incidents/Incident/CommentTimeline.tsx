@@ -25,8 +25,6 @@ interface IProps {
 const CommentTimeline = ({ group, isLoading }: IProps) => {
   const queryClient = useQueryClient();
 
-  if (!group) return <></>;
-
   const postNewComment = useMutation(addComment);
 
   const { data: session } = useQuery(["session"], getSession, {
@@ -48,6 +46,7 @@ const CommentTimeline = ({ group, isLoading }: IProps) => {
       }
     );
   }
+  if (!group) return <></>;
 
   return (
     <article className='mt-4'>

@@ -28,11 +28,10 @@ interface IProps {
 }
 const Comment = ({ data, groupId }: IProps) => {
   const queryClient = useQueryClient();
-  const [edit, setEdit] = useState(false);
   const { data: session } = useQuery(["session"], getSession, {
     staleTime: 50000,
   });
-  if (!groupId) return <></>;
+  const [edit, setEdit] = useState(false);
 
   const doDeleteComment = useMutation(removeComment, {
     onSuccess() {
@@ -44,7 +43,6 @@ const Comment = ({ data, groupId }: IProps) => {
       queryClient.invalidateQueries(["group", groupId]);
     },
   });
-
   function onEditSubmit(
     formData: { commentdata: string },
     resetForm: () => void
@@ -63,6 +61,8 @@ const Comment = ({ data, groupId }: IProps) => {
       }
     );
   }
+  if (!groupId) return <></>;
+
   return (
     <div
       key={data._id}
