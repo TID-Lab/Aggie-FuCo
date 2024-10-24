@@ -26,18 +26,13 @@ const GroupReportListItem = ({
     if (isChecked && !isSelectMode)
       return "border-2 border-slate-300 bg-slate-100 rounded-lg ";
     else if (isChecked && isSelectMode) return "bg-blue-100 ";
-    else if (report.read) return "bg-slate-50 hover:bg-slate-100 ";
     return "bg-white hover:bg-slate-100";
   }
   return (
     <article
       className={`px-2 py-3 pb-4 border-b border-slate-300 ${bgState()} relative group`}
     >
-      <div
-        className={`col-span-4 pl-7  ${
-          report.read ? "" : " border-l-2 border-blue-600 "
-        }`}
-      >
+      <div className={`col-span-4 pl-8  `}>
         {isSelectMode ? (
           <div
             className='flex items-center absolute top-0 bottom-0 left-0 w-12 pointer-events-none '

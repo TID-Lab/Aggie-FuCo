@@ -220,7 +220,7 @@ const ReportListItem = ({
         )}
       </div>
       <AddReportsToIncidents
-        selection={[report._id]}
+        selection={[report]}
         isOpen={openAttachModal}
         queryKey={["reports"]}
         onClose={() => setOpenAttachModal(false)}

@@ -1,21 +1,20 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+// i need to refactor this...
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useIncidentMutations } from "../useIncidentMutations";
 
 import { addComment, getGroup, getGroupReports } from "../../../api/groups";
 import { getSession } from "../../../api/session";
-import { EditableGroupComment, Group } from "../../../api/groups/types";
+import { Group } from "../../../api/groups/types";
 
 import AxiosErrorCard from "../../../components/AxiosErrorCard";
 
 import SocialMediaPost from "../../../components/SocialMediaPost";
-import { Link } from "react-router-dom";
 import AggieButton from "../../../components/AggieButton";
 import DropdownMenu from "../../../components/DropdownMenu";
 import PlaceholderDiv from "../../../components/PlaceholderDiv";
 
-import { Dialog } from "@headlessui/react";
 import CreateEditIncidentForm from "../CreateEditIncidentForm";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,6 +25,11 @@ import {
   faEdit,
   faMinus,
   faClose,
+  faCaretDown,
+  faFile,
+  faPlus,
+  faFilePen,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
 import AggieSwitch from "../../../components/AggieSwitch";
@@ -39,6 +43,8 @@ import { useMultiSelect } from "../../../hooks/useMultiSelect";
 import GroupReportListItem from "./GoupReportListItem";
 import AggieCheck from "../../../components/AggieCheck";
 import AggieDialog from "../../../components/AggieDialog";
+import AddReportsToIncidents from "../../Reports/components/AddReportsToIncident";
+import { useReportMutations } from "../../Reports/useReportMutations";
 
 const Incident = () => {
   const { id } = useParams();
@@ -47,10 +53,13 @@ const Incident = () => {
   const { searchParams, getAllParams, setParams, getParam } =
     useQueryParams<ReportQueryState>();
   const { doUpdate, doSetEscalate, doSetClosed } = useIncidentMutations();
+  const { setIrrelevance } = useReportMutations({
+    key: ["groups", "reports", { groupId: id }],
+  });
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [activePost, setActivePost] = useState<Report | undefined>();
-
+  const [addReportModal, setAddReportModal] = useState(false);
   const queryData = useUpdateQueryData();
   const {
     isLoading,
@@ -80,12 +89,29 @@ const Incident = () => {
       behavior: "smooth",
     });
   }, [searchParams]);
+  function onNewIncidentFromReports() {
+    const params = new URLSearchParams({
+      reports: multiSelect.selection.map((i) => i._id).join(":"),
+    });
+
+    navigate({ pathname: "/incidents/new", search: params.toString() });
+  }
 
   if (isError) {
     return <AxiosErrorCard error={groupError} />;
   }
   return (
     <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-2 pt-6 gap-6 '>
+      <AddReportsToIncidents
+        selection={multiSelect.selection}
+        isOpen={addReportModal}
+        queryKey={["groups", "reports", { groupId: id }]}
+        onClose={() => setAddReportModal(false)}
+        onSuccess={() => {
+          multiSelect.set([]);
+          queryClient.invalidateQueries(["groups", "reports", { groupId: id }]);
+        }}
+      />
       <main className='col-span-1 h-full mb-12 '>
         <div className='flex gap-1 h-min justify-between items-center'>
           <AggieButton
@@ -170,10 +196,24 @@ const Incident = () => {
                 <AggieButton
                   className={`w-full px-2 py-1 hover:bg-red-100 text-red-700  font-medium flex gap-2 text-nowrap items-center flex-grow `}
                   onClick={() =>
-                    doSetClosed.mutate({
-                      ids: !!group?._id ? [group?._id] : [""],
-                      closed: true,
-                    })
+                    doSetClosed.mutate(
+                      {
+                        ids: !!group?._id ? [group?._id] : [""],
+                        closed: true,
+                      },
+                      {
+                        onSuccess: (_, params) => {
+                          // update single report
+                          if (!id) return;
+
+                          queryData.update<Group>(["group", id], (data) => {
+                            return {
+                              closed: params.closed,
+                            };
+                          });
+                        },
+                      }
+                    )
                   }
                 >
                   <FontAwesomeIcon icon={faMinusCircle} />
@@ -231,8 +271,69 @@ const Incident = () => {
                 onClick={() => multiSelect.addRemoveAll(groupReports?.results)}
               />
               <p>
-                Mark {multiSelect.selection.length} report{"(s)"} as:
+                {multiSelect.selection.length} report{"(s)"}
               </p>
+              <div className='flex rounded-lg border border-slate-300'>
+                <AggieButton
+                  variant='light:rose'
+                  className='rounded-l-lg'
+                  disabled={!multiSelect.any() || setIrrelevance.isLoading}
+                  icon={faXmark}
+                  onClick={() =>
+                    setIrrelevance.mutate({
+                      reportIds: multiSelect.toIdList(),
+                      irrelevant: "true",
+                    })
+                  }
+                >
+                  Not Relevant
+                </AggieButton>
+                <AggieButton
+                  variant='light:green'
+                  className='rounded-r-lg'
+                  disabled={!multiSelect.any() || setIrrelevance.isLoading}
+                  icon={faDotCircle}
+                  onClick={() =>
+                    setIrrelevance.mutate({
+                      reportIds: multiSelect.toIdList(),
+                      irrelevant: "false",
+                    })
+                  }
+                >
+                  Relevant
+                </AggieButton>
+              </div>
+
+              <div className='flex font-medium'>
+                <AggieButton
+                  className='px-2 py-1 rounded-l-lg bg-slate-100 border border-slate-300 hover:bg-slate-200'
+                  onClick={() => setAddReportModal(true)}
+                  disabled={!multiSelect.any()}
+                >
+                  <FontAwesomeIcon icon={faFilePen} />
+                  Move to Another Incident
+                </AggieButton>
+                <DropdownMenu
+                  variant='secondary'
+                  buttonElement={
+                    <FontAwesomeIcon
+                      icon={faCaretDown}
+                      className='ui-open:rotate-180'
+                    />
+                  }
+                  className='px-2 py-1 rounded-r-lg border-y border-r'
+                  panelClassName='right-0'
+                  disabled={!multiSelect.any()}
+                >
+                  <AggieButton
+                    className='px-3 py-2 hover:bg-slate-200'
+                    onClick={onNewIncidentFromReports}
+                  >
+                    <FontAwesomeIcon icon={faFile} />
+                    Move to a New Incident
+                  </AggieButton>
+                </DropdownMenu>
+              </div>
             </>
           )}
         </div>
@@ -245,9 +346,9 @@ const Incident = () => {
               >
                 <GroupReportListItem
                   report={report}
-                  isChecked={multiSelect.exists(report._id)}
+                  isChecked={multiSelect.exists(report)}
                   isSelectMode={multiSelect.isActive}
-                  onCheckChange={() => multiSelect.addRemove(report._id)}
+                  onCheckChange={() => multiSelect.addRemove(report)}
                 />
               </div>
             ))
@@ -267,7 +368,7 @@ const Incident = () => {
             <div className='absolute p-3 inset-0 h-full w-full overflow-y-auto  grid place-items-center'>
               <div className='p-3 bg-slate-50 rounded-xl border border-slate-300 shadow-md max-w-md'>
                 <header className='flex justify-between items-center mb-2'>
-                  <p></p>
+                  <h2 className='font-medium text-lg'>Preview</h2>
                   <AggieButton
                     variant='secondary'
                     icon={faClose}

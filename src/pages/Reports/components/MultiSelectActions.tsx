@@ -17,10 +17,12 @@ import {
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { hasId } from "../../../api/common";
+import { Report } from "../../../api/reports/types";
 
 interface IProps {
   disabled: boolean;
-  selection: string[];
+  selection: Report[];
   currentPageId: string | undefined;
   queryKey: string[];
 }
@@ -37,11 +39,13 @@ const MultiSelectActions = ({
 
   function onNewIncidentFromReports() {
     const params = new URLSearchParams({
-      reports: selection.join(":"),
+      reports: selection.map((i) => i._id).join(":"),
     });
 
     navigate({ pathname: "/incidents/new", search: params.toString() });
   }
+
+  const idList = selection.map((i) => i._id);
 
   return (
     <>
@@ -53,7 +57,7 @@ const MultiSelectActions = ({
           icon={faEnvelopeOpen}
           onClick={() =>
             setRead.mutate({
-              reportIds: selection,
+              reportIds: idList,
               read: true,
               currentPageId,
             })
@@ -68,7 +72,7 @@ const MultiSelectActions = ({
           icon={faEnvelope}
           onClick={() =>
             setRead.mutate({
-              reportIds: selection,
+              reportIds: idList,
               read: false,
               currentPageId,
             })
@@ -85,7 +89,7 @@ const MultiSelectActions = ({
           icon={faXmark}
           onClick={() =>
             setIrrelevance.mutate({
-              reportIds: selection,
+              reportIds: idList,
               irrelevant: "true",
               currentPageId,
             })
@@ -100,7 +104,7 @@ const MultiSelectActions = ({
           icon={faDotCircle}
           onClick={() =>
             setIrrelevance.mutate({
-              reportIds: selection,
+              reportIds: idList,
               irrelevant: "false",
               currentPageId,
             })

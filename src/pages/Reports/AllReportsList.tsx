@@ -118,9 +118,9 @@ const AllReportsList = ({}: IProps) => {
             >
               <ReportListItem
                 report={report}
-                isChecked={multiSelect.exists(report._id)}
+                isChecked={multiSelect.exists(report)}
                 isSelectMode={multiSelect.isActive}
-                onCheckChange={() => multiSelect.addRemove(report._id)}
+                onCheckChange={() => multiSelect.addRemove(report)}
               />
             </div>
           ))

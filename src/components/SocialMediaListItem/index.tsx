@@ -23,14 +23,39 @@ const SocialMediaListItem = ({ report, header }: IProps) => {
   const contentType = parseContentType(report);
 
   function renderText(type: typeof contentType) {
-    if (report.author.includes("Thomas")) console.log(report.author, type);
     switch (type) {
-      case "twitter:quoteRetweet":
+      case "twitter:quoteRetweet": {
+        const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
+          ?.post_data;
+        const data = parseQuoteRetweet(rawPostData);
 
+        return (
+          <>
+            <div className='grid place-items-center text-slate-600'>
+              <FontAwesomeIcon icon={faRetweet} />
+            </div>
+            <div className=' max-h-[10em] text-black'>
+              <p className='font-medium text-sm'>{data.author?.name}</p>
+              <p className='text-black line-clamp-2 mb-1'>
+                {formatText(data.content)}
+              </p>
+
+              <div className='border border-slate-300 rounded-lg py-2 px-3 '>
+                <p className='font-medium text-sm'>
+                  {data.innerPost.author?.name}
+                </p>
+                <p className='line-clamp-2'>
+                  {formatText(data.innerPost.content)}
+                </p>
+              </div>
+            </div>
+          </>
+        );
+      }
       case "twitter:retweet":
         return (
           <>
-            <div className='grid place-items-center'>
+            <div className='grid place-items-center text-slate-600'>
               <FontAwesomeIcon icon={faRetweet} />
             </div>
             <p className=' text-black max-h-[10em] line-clamp-4'>
@@ -38,7 +63,7 @@ const SocialMediaListItem = ({ report, header }: IProps) => {
             </p>
           </>
         );
-      case "twitter:quote":
+      case "twitter:quote": {
         const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
           ?.post_data;
         const data = parseQuoteRetweet(rawPostData);
@@ -57,7 +82,7 @@ const SocialMediaListItem = ({ report, header }: IProps) => {
             </div>
           </>
         );
-
+      }
       case "truthsocial":
         return (
           <p

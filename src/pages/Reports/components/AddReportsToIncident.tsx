@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useQueryParamsInternal } from "../../../hooks/useQueryParamsInternal";
+import { useUpdateQueryData } from "../../../hooks/useUpdateQueryData";
 
 import { getGroups } from "../../../api/groups";
 import { setReportsToGroup } from "../../../api/reports";
-import type { Group } from "../../../api/groups/types";
+import type { Group, GroupQueryState } from "../../../api/groups/types";
 import type { Report, Reports } from "../../../api/reports/types";
+import { updateByIds } from "../../../utils/immutable";
 
 import { Dialog } from "@headlessui/react";
 import AggieButton from "../../../components/AggieButton";
@@ -14,14 +16,12 @@ import SocialMediaPost from "../../../components/SocialMediaPost";
 
 import NestedIncidentsList from "./NestedIncidentsList";
 import IncidentsFilters from "../../incidents/IncidentsFilters";
-import { GroupQueryState } from "../../../api/groups/types";
-import { updateByIds } from "../../../utils/immutable";
-import { useUpdateQueryData } from "../../../hooks/useUpdateQueryData";
 
 interface IAddReportsToIncidents {
   isOpen: boolean;
-  selection?: string[];
-  queryKey: string[];
+  selection?: Report[];
+  queryKey: any[];
+  onSuccess?: () => void;
   onClose: () => void;
 }
 const AddReportsToIncidents = ({
@@ -29,6 +29,7 @@ const AddReportsToIncidents = ({
   selection,
   queryKey,
   onClose,
+  onSuccess,
 }: IAddReportsToIncidents) => {
   const [selectedIncident, setSelectedIncident] = useState<Group>();
   const queryClient = useQueryClient();
@@ -43,20 +44,20 @@ const AddReportsToIncidents = ({
     clearAllParams,
   } = useQueryParamsInternal<GroupQueryState>();
 
-  function ReportsFromSelection(
-    ids: string[] | undefined,
-    openStatus: boolean
-  ) {
-    // dont run if window not open
-    if (!openStatus) return [];
-    if (!ids || ids.length === 0) return [];
-    const data = queryClient.getQueryData<Reports>(queryKey);
-    //TODO: nice error window
-    if (!data) return [];
-    const getReports = data?.results.filter((i) => ids.includes(i._id));
-    if (!getReports) return [];
-    return getReports;
-  }
+  // function ReportsFromSelection(
+  //   ids: string[] | undefined,
+  //   openStatus: boolean
+  // ) {
+  //   // dont run if window not open
+  //   if (!openStatus) return [];
+  //   if (!ids || ids.length === 0) return [];
+  //   const data = queryClient.getQueryData<Reports>(queryKey);
+  //   //TODO: nice error window
+  //   if (!data) return [];
+  //   const getReports = data?.results.filter((i) => ids.includes(i._id));
+  //   if (!getReports) return [];
+  //   return getReports;
+  // }
 
   const { data: incidents, refetch } = useQuery({
     queryKey: ["groups"],
@@ -83,13 +84,14 @@ const AddReportsToIncidents = ({
           results: updateData,
         };
       });
+      if (!!onSuccess) onSuccess();
     },
   });
 
   function onAddIncident() {
     if (!selection || selection.length === 0 || !selectedIncident) return;
     doAddReportToIncident.mutate({
-      reportIds: selection,
+      reportIds: selection.map((i) => i._id),
       groupId: selectedIncident,
     });
   }
@@ -123,9 +125,10 @@ const AddReportsToIncidents = ({
           <div className='overflow-y-auto flex flex-col gap-1 h-full'>
             <h2 className='font-medium text-lg mb-1'>Selected Reports:</h2>
 
-            {ReportsFromSelection(selection, isOpen).map((report) => (
-              <SocialMediaPost key={report._id} report={report} />
-            ))}
+            {selection &&
+              selection.map((report) => (
+                <SocialMediaPost key={report._id} report={report} />
+              ))}
           </div>
 
           <div className='flex flex-col h-full overflow-y-auto'>
