@@ -223,7 +223,11 @@ const Incident = () => {
             </DropdownMenu>
           </div>
         </div>
-        <IncidentInfo group={group} isLoading={isLoading} />
+        <IncidentInfo
+          group={group}
+          isLoading={isLoading}
+          onEdit={() => setIsEditOpen(true)}
+        />
 
         <CommentTimeline group={group} isLoading={isLoading} />
       </main>

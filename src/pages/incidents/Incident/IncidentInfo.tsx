@@ -10,8 +10,9 @@ import VeracityToken from "../../../components/VeracityToken";
 interface IProps {
   group?: Group;
   isLoading: boolean;
+  onEdit: () => void;
 }
-const IncidentInfo = ({ group, isLoading }: IProps) => {
+const IncidentInfo = ({ group, isLoading, onEdit }: IProps) => {
   return (
     <header className='text-slate-600 border-b border-slate-300 py-2'>
       <div className='flex justify-between'>
@@ -79,8 +80,8 @@ const IncidentInfo = ({ group, isLoading }: IProps) => {
             />
           ))}
           <AggieButton
-            className='hover:underline text-blue-600 text-sm '
-            onClick={() => console.log()}
+            className='hover:underline text-blue-600 text-xs '
+            onClick={() => onEdit()}
           >
             Change
           </AggieButton>

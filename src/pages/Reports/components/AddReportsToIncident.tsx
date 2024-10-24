@@ -16,6 +16,11 @@ import SocialMediaPost from "../../../components/SocialMediaPost";
 
 import NestedIncidentsList from "./NestedIncidentsList";
 import IncidentsFilters from "../../incidents/IncidentsFilters";
+import MultiSelectListItem from "../../../components/MultiSelectListItem";
+import SocialMediaListItem from "../../../components/SocialMediaListItem";
+import { useMultiSelect } from "../../../hooks/useMultiSelect";
+import AggieCheck from "../../../components/AggieCheck";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
 
 interface IAddReportsToIncidents {
   isOpen: boolean;
@@ -44,20 +49,9 @@ const AddReportsToIncidents = ({
     clearAllParams,
   } = useQueryParamsInternal<GroupQueryState>();
 
-  // function ReportsFromSelection(
-  //   ids: string[] | undefined,
-  //   openStatus: boolean
-  // ) {
-  //   // dont run if window not open
-  //   if (!openStatus) return [];
-  //   if (!ids || ids.length === 0) return [];
-  //   const data = queryClient.getQueryData<Reports>(queryKey);
-  //   //TODO: nice error window
-  //   if (!data) return [];
-  //   const getReports = data?.results.filter((i) => ids.includes(i._id));
-  //   if (!getReports) return [];
-  //   return getReports;
-  // }
+  const multiSelect = useMultiSelect({
+    allItems: selection,
+  });
 
   const { data: incidents, refetch } = useQuery({
     queryKey: ["groups"],
@@ -100,7 +94,7 @@ const AddReportsToIncidents = ({
     <Dialog open={isOpen} onClose={onClose} className='relative z-50'>
       <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
       <div className='fixed inset-0 flex w-screen items-center justify-center p-4'>
-        <Dialog.Panel className='bg-gray-50 rounded-xl border border-slate-200 shadow-xl min-w-24 h-[90vh] min-h-12 p-3 grid grid-cols-2 gap-2 w-full	grid-rows-[auto_1fr]'>
+        <Dialog.Panel className='bg-gray-50 rounded-xl border border-slate-200 shadow-xl min-w-24 h-[90vh] min-h-12 p-3 grid grid-cols-2 gap-y-1 gap-x-4 w-full	grid-rows-[auto_1fr]'>
           <div className='col-span-2 flex justify-between '>
             <div className='flex-1'>
               <AggieButton variant='secondary' onClick={onClose}>
@@ -124,11 +118,50 @@ const AddReportsToIncidents = ({
 
           <div className='overflow-y-auto flex flex-col gap-1 h-full'>
             <h2 className='font-medium text-lg mb-1'>Selected Reports:</h2>
+            <div className='flex gap-1 items-center'>
+              <AggieCheck
+                active={multiSelect.isActive}
+                icon={!multiSelect.all() ? faMinus : undefined}
+                onClick={() => {
+                  if (multiSelect.isActive && multiSelect.any()) {
+                    multiSelect.setActive(false);
+                    multiSelect.set([]);
+                  } else if (!multiSelect.isActive && !multiSelect.any()) {
+                    multiSelect.setActive(true);
+                    multiSelect.addRemoveAll(selection);
+                  } else {
+                    multiSelect.addRemoveAll(selection);
+                  }
+                }}
+              />
 
-            {selection &&
-              selection.map((report) => (
-                <SocialMediaPost key={report._id} report={report} />
-              ))}
+              {multiSelect.isActive && (
+                <>
+                  <AggieButton
+                    variant='secondary'
+                    className='text-xs font-medium '
+                    onClick={() => multiSelect.toggleActive()}
+                  >
+                    Cancel Selection
+                  </AggieButton>
+                </>
+              )}
+            </div>
+            <div className='rounded-lg border overflow-x-hidden border-slate-300 overflow-y-auto'>
+              {selection &&
+                selection.map((report) => (
+                  <MultiSelectListItem
+                    isChecked={multiSelect.exists(report)}
+                    isSelectMode={multiSelect.isActive}
+                    onCheckChange={() => multiSelect.addRemove(report)}
+                    key={report._id}
+                  >
+                    <div className='text-sm'>
+                      <SocialMediaListItem report={report} />
+                    </div>
+                  </MultiSelectListItem>
+                ))}
+            </div>
           </div>
 
           <div className='flex flex-col h-full overflow-y-auto'>
