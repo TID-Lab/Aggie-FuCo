@@ -119,7 +119,7 @@ const Report = () => {
   return (
     <article className='pt-4 pr-2 sticky top-0 overflow-y-auto min-h-[70vh] max-h-[93vh]  '>
       <AddReportsToIncidents
-        selection={id ? [id] : undefined}
+        selection={report ? [report] : undefined}
         isOpen={addReportModal}
         queryKey={["reports"]}
         onClose={() => setAddReportModal(false)}

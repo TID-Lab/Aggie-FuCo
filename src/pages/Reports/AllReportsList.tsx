@@ -28,7 +28,6 @@ const AllReportsList = ({}: IProps) => {
   const reportsQuery = useQuery(["reports"], () => getReports(getAllParams()), {
     refetchInterval: 120000,
   });
-  const { status: reportsStatus } = reportsQuery;
   useEffect(() => {
     // refetch on filter change
     reportsQuery.refetch();
@@ -60,13 +59,23 @@ const AllReportsList = ({}: IProps) => {
         <ReportsFilters
           reportCount={reportsQuery.data && reportsQuery.data.total}
           headerElement={
-            <AggieButton
-              variant='secondary'
-              className='text-xs font-medium '
-              onClick={() => multiSelect.toggleActive()}
-            >
-              {multiSelect.isActive ? "Cancel Selection" : "Select Multiple"}
-            </AggieButton>
+            multiSelect.isActive ? (
+              <AggieButton
+                variant='secondary'
+                className='text-xs font-medium '
+                onClick={() => multiSelect.toggleActive()}
+              >
+                Cancel Selection
+              </AggieButton>
+            ) : (
+              <AggieCheck
+                active={multiSelect.isActive}
+                onClick={() => {
+                  multiSelect.toggleActive();
+                  multiSelect.addRemoveAll(reportsQuery.data?.results);
+                }}
+              />
+            )
           }
         />
         <div
@@ -97,7 +106,7 @@ const AllReportsList = ({}: IProps) => {
         </div>
       </div>
 
-      <div className='flex flex-col border border-slate-300 rounded-lg'>
+      <div className='flex flex-col border border-slate-300 rounded-lg bg-white'>
         {!!reportsQuery.data?.results && reportsQuery.data?.total > 0 ? (
           reportsQuery.data?.results.map((report) => (
             <div
@@ -109,9 +118,9 @@ const AllReportsList = ({}: IProps) => {
             >
               <ReportListItem
                 report={report}
-                isChecked={multiSelect.exists(report._id)}
+                isChecked={multiSelect.exists(report)}
                 isSelectMode={multiSelect.isActive}
-                onCheckChange={() => multiSelect.addRemove(report._id)}
+                onCheckChange={() => multiSelect.addRemove(report)}
               />
             </div>
           ))
