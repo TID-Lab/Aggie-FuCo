@@ -50,7 +50,7 @@ const FlaggedReportsList = ({}: IProps) => {
   });
 
   function onReportItemClick(id: string, isRead: boolean) {
-    navigate({ pathname: `/r/${id}`, search: searchParams.toString() });
+    navigate({ pathname: `/rpt/search/${id}`, search: searchParams.toString() });
   }
 
   return (
