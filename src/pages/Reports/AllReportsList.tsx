@@ -106,7 +106,7 @@ const AllReportsList = ({}: IProps) => {
         </div>
       </div>
 
-      <div className='flex flex-col border border-slate-300 rounded-lg'>
+      <div className='flex flex-col border border-slate-300 rounded-lg bg-white'>
         {!!reportsQuery.data?.results && reportsQuery.data?.total > 0 ? (
           reportsQuery.data?.results.map((report) => (
             <div

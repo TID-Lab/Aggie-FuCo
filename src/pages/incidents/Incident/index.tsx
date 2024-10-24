@@ -25,6 +25,7 @@ import {
   faMinusCircle,
   faEdit,
   faMinus,
+  faClose,
 } from "@fortawesome/free-solid-svg-icons";
 import { faDotCircle } from "@fortawesome/free-regular-svg-icons";
 import AggieSwitch from "../../../components/AggieSwitch";
@@ -33,18 +34,23 @@ import CommentTimeline from "./CommentTimeline";
 import IncidentInfo from "./IncidentInfo";
 import ReportFilters from "../../Reports/components/ReportsFilters";
 import { useQueryParams } from "../../../hooks/useQueryParams";
-import { ReportQueryState } from "../../../api/reports/types";
+import { Report, ReportQueryState } from "../../../api/reports/types";
 import { useMultiSelect } from "../../../hooks/useMultiSelect";
 import GroupReportListItem from "./GoupReportListItem";
 import AggieCheck from "../../../components/AggieCheck";
+import AggieDialog from "../../../components/AggieDialog";
 
 const Incident = () => {
+  const { id } = useParams();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  let { id } = useParams();
+  const { searchParams, getAllParams, setParams, getParam } =
+    useQueryParams<ReportQueryState>();
+  const { doUpdate, doSetEscalate, doSetClosed } = useIncidentMutations();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const { doUpdate, doSetEscalate, doSetClosed } = useIncidentMutations();
+  const [activePost, setActivePost] = useState<Report | undefined>();
+
   const queryData = useUpdateQueryData();
   const {
     isLoading,
@@ -54,8 +60,6 @@ const Incident = () => {
   } = useQuery(["group", id], () => getGroup(id), {
     onSuccess: (data) => {},
   });
-  const { searchParams, getAllParams, setParams, getParam } =
-    useQueryParams<ReportQueryState>();
 
   const { data: groupReports, refetch: groupRefetch } = useQuery(
     ["groups", "reports", { groupId: id }],
@@ -81,7 +85,7 @@ const Incident = () => {
     return <AxiosErrorCard error={groupError} />;
   }
   return (
-    <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-2 pt-6 gap-8 '>
+    <section className='max-w-screen-2xl mx-auto px-4 grid grid-cols-2 pt-6 gap-6 '>
       <main className='col-span-1 h-full mb-12 '>
         <div className='flex gap-1 h-min justify-between items-center'>
           <AggieButton
@@ -183,7 +187,7 @@ const Incident = () => {
 
         <CommentTimeline group={group} isLoading={isLoading} />
       </main>
-      <aside className='overflow-y-auto flex flex-col gap-1 h-[90vh] sticky top-0'>
+      <aside className='flex flex-col gap-1 h-[90vh] sticky top-0 px-4 '>
         <PlaceholderDiv
           as='h2'
           width='7em'
@@ -232,58 +236,74 @@ const Incident = () => {
             </>
           )}
         </div>
-        <div className='flex flex-col rounded-lg bg-slate-50 border border-slate-300'>
+        <div className='overflow-y-auto flex flex-col rounded-lg bg-slate-50 border border-slate-300'>
           {groupReports && groupReports.total > 0 ? (
             groupReports.results.map((report) => (
-              <GroupReportListItem
-                report={report}
-                isChecked={multiSelect.exists(report._id)}
-                isSelectMode={multiSelect.isActive}
-                onCheckChange={() => multiSelect.addRemove(report._id)}
-              />
+              <div
+                onClick={() => setActivePost(report)}
+                className='cursor-pointer'
+              >
+                <GroupReportListItem
+                  report={report}
+                  isChecked={multiSelect.exists(report._id)}
+                  isSelectMode={multiSelect.isActive}
+                  onCheckChange={() => multiSelect.addRemove(report._id)}
+                />
+              </div>
             ))
           ) : (
             <div className='grid place-items-center py-8 border border-slate-300 bg-white rounded-lg'>
-              <p className='font-medium text-center px-3'>
-                No Reports Attached! head to the{" "}
-                <Link to='/reports' className='underline text-blue-600'>
-                  Reports Page
-                </Link>{" "}
-                to add relevant reports to this page
-              </p>
+              <p className='font-medium text-center px-3'>No Reports Found</p>
             </div>
           )}
         </div>
+        {activePost && (
+          <section className='absolute inset-0'>
+            <div
+              className='absolute inset-0 bg-black/30'
+              aria-hidden='true'
+              onClick={() => setActivePost(undefined)}
+            />
+            <div className='absolute p-3 inset-0 h-full w-full overflow-y-auto  grid place-items-center'>
+              <div className='p-3 bg-slate-50 rounded-xl border border-slate-300 shadow-md max-w-md'>
+                <header className='flex justify-between items-center mb-2'>
+                  <p></p>
+                  <AggieButton
+                    variant='secondary'
+                    icon={faClose}
+                    onClick={() => setActivePost(undefined)}
+                  >
+                    close
+                  </AggieButton>
+                </header>
+                <SocialMediaPost report={activePost} />
+              </div>
+            </div>
+          </section>
+        )}
       </aside>
-      <Dialog
-        open={isEditOpen}
+      <AggieDialog
+        isOpen={isEditOpen}
         onClose={() => setIsEditOpen(false)}
-        className='relative z-50'
+        className='p-4 max-w-lg w-full'
       >
-        <div className='fixed inset-0 bg-black/30' aria-hidden='true' />
-        <div className='fixed inset-0 w-screen overflow-y-auto'>
-          <div className='flex min-h-full items-center justify-center p-4'>
-            <Dialog.Panel className='bg-white rounded-xl border border-slate-200 shadow-xl min-w-[30rem] min-h-12 p-4 flex flex-col gap-2'>
-              <CreateEditIncidentForm
-                group={group}
-                onCancel={() => setIsEditOpen(false)}
-                onSubmit={(values) =>
-                  doUpdate.mutate(
-                    { ...values, _id: group?._id },
-                    {
-                      onSuccess: () => {
-                        setIsEditOpen(false);
-                        queryClient.invalidateQueries(["group", id]);
-                      },
-                    }
-                  )
-                }
-                isLoading={doUpdate.isLoading}
-              />
-            </Dialog.Panel>
-          </div>
-        </div>
-      </Dialog>
+        <CreateEditIncidentForm
+          group={group}
+          onCancel={() => setIsEditOpen(false)}
+          onSubmit={(values) =>
+            doUpdate.mutate(
+              { ...values, _id: group?._id },
+              {
+                onSuccess: () => {
+                  setIsEditOpen(false);
+                  queryClient.invalidateQueries(["group", id]);
+                },
+              }
+            )
+          }
+          isLoading={doUpdate.isLoading}
+        />
+      </AggieDialog>
     </section>
   );
 };

@@ -117,7 +117,7 @@ const MultiSelectActions = ({
           disabled={disabled}
         >
           <FontAwesomeIcon icon={faPlus} />
-          Attach Incident
+          Add to Incident
         </AggieButton>
         <DropdownMenu
           variant='secondary'

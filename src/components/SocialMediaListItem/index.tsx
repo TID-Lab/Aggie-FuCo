@@ -11,6 +11,7 @@ import DateTime from "../DateTime";
 import GeneratedTagsList from "../GeneratedTagsList";
 import { parseContentType, sanitize } from "../SocialMediaPost/reportParser";
 import SocialMediaIcon from "../SocialMediaPost/SocialMediaIcon";
+import { parseQuoteRetweet } from "../SocialMediaPost/TwitterPost";
 import { parseYoutube } from "../SocialMediaPost/YoutubePost";
 import TagsList from "../Tags/TagsList";
 interface IProps {
@@ -22,8 +23,10 @@ const SocialMediaListItem = ({ report, header }: IProps) => {
   const contentType = parseContentType(report);
 
   function renderText(type: typeof contentType) {
+    if (report.author.includes("Thomas")) console.log(report.author, type);
     switch (type) {
       case "twitter:quoteRetweet":
+
       case "twitter:retweet":
         return (
           <>
@@ -35,10 +38,30 @@ const SocialMediaListItem = ({ report, header }: IProps) => {
             </p>
           </>
         );
+      case "twitter:quote":
+        const rawPostData = (report.metadata.rawAPIResponse.attributes as any)
+          ?.post_data;
+        const data = parseQuoteRetweet(rawPostData);
+
+        return (
+          <>
+            <div className=' max-h-[10em] text-black'>
+              <p className='text-black line-clamp-2 mb-1'>
+                {formatText(report.content)}
+              </p>
+
+              <div className='border border-slate-300 rounded-lg py-2 px-3 '>
+                <p className='font-medium text-sm'>{data.author?.name}</p>
+                <p className='line-clamp-2'>{formatText(data.content)}</p>
+              </div>
+            </div>
+          </>
+        );
+
       case "truthsocial":
         return (
           <p
-            className='truthsocial text-black'
+            className='truthsocial text-black line-clamp-4'
             dangerouslySetInnerHTML={{
               __html: sanitize(report.content),
             }}
@@ -94,7 +117,7 @@ const SocialMediaListItem = ({ report, header }: IProps) => {
           </div>
         )}
       </header>
-      <div className='flex gap-2'>{renderText(contentType)}</div>
+      <div className='flex gap-2 max-w-prose'>{renderText(contentType)}</div>
     </>
   );
 };

@@ -40,7 +40,6 @@ const SocialMediaPost = ({ report, showMedia }: IProps) => {
       </div>
     );
   };
-  console.log(report);
   return (
     <div className='pb-2 px-3 pt-3 bg-white rounded-xl border border-slate-300 text-base '>
       {report._media[0] === "twitter" && <TwitterReply report={report} />}

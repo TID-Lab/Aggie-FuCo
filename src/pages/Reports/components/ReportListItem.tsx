@@ -77,8 +77,8 @@ const ReportListItem = ({
     if (isChecked && !isSelectMode)
       return "border-2 border-slate-300 bg-slate-100 rounded-lg ";
     else if (isChecked && isSelectMode) return "bg-blue-100 ";
-    else if (report.read) return "bg-slate-100 hover:bg-slate-50 ";
-    return "bg-white hover:bg-slate-50";
+    else if (report.read) return "bg-slate-50 hover:bg-slate-100 ";
+    return "bg-white hover:bg-slate-100";
   }
 
   function onAttachedReportClick(
