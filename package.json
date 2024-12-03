@@ -76,7 +76,7 @@
     "migrate-mongoose": "^4.0.0",
     "mkdirp": "^1.0.4",
     "moment": "^2.30.1",
-    "mongoose": "^5.9.16",
+    "mongoose": "^8.8.3",
     "mongoose-sequence": "^5.2.2",
     "morgan": "^1.10.0",
     "nconf": "^0.10.0",
