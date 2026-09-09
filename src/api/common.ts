@@ -22,7 +22,6 @@ export const MEDIA_OPTIONS = [
   "mastodon",
   "ioda",
   "cloudflare",
-  "ooni",
 ] as const;
 export type MediaOptions = (typeof MEDIA_OPTIONS)[number];
 
@@ -42,7 +41,6 @@ export const SOCIAL_MEDIA_OPTIONS = [
 export const ALERT_MEDIA_OPTIONS = [
   "ioda",
   "cloudflare",
-  "ooni",
 ] as const satisfies readonly MediaOptions[];
 
 export const DATA_SOURCE_OPTIONS = [
@@ -80,7 +78,6 @@ export const CREDENTIAL_OPTIONS = [
   "mastodon",
   "ioda",
   "cloudflare",
-  "ooni",
 ] as const;
 export type CredentialOption = (typeof CREDENTIAL_OPTIONS)[number];
 

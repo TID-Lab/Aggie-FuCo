@@ -115,8 +115,6 @@ function renderAuthor(
       return "IODA";
     case "cloudflare":
       return report?.metadata?.rawAPIResponse?.dataSource;
-    case "ooni":
-      return report?.metadata?.rawAPIResponse?.networkName || report.author;
     case "mastodon":
       return report.metadata.accountHandle || report.author;
     default:
@@ -285,15 +283,6 @@ function renderText(
           {endDate === "now" ? "now" : formatDateTime(endDate, prefs)}
         </p>
       );
-    case "ooni": {
-      const windowEnd = report?.metadata?.rawAPIResponse?.windowEnd;
-      return (
-        <p className='text-black max-h-[10em] line-clamp-4 dark:text-gray-300'>
-          {formatText(report.content)}
-          {windowEnd && <> measured at {formatDateTime(windowEnd, prefs)}.</>}
-        </p>
-      );
-    }
     default:
       return (
         <p className=' text-black max-h-[10em] line-clamp-4 dark:text-gray-300'>

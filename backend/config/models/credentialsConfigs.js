@@ -5,7 +5,6 @@ const credentialsTypes = [
   'telegramBot',
   'telegramUser',
   'mastodon',
-  'ooni',
 ];
 
 module.exports = credentialsTypes;

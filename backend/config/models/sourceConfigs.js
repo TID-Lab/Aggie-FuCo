@@ -5,7 +5,6 @@ const sourceMediaValues = [
     'telegramBot',
     'telegramUser',
     'mastodon',
-    'ooni',
 ]
 
 module.exports = sourceMediaValues;
