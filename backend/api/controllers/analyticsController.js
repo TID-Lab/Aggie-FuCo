@@ -18,6 +18,7 @@ const {
   removeReportsFromGroup,
 } = require('../utils/reportGroupActions');
 const { countReports } = require('../utils/reportCounts');
+const { filterNotableActivitiesForUser } = require('../utils/analyticsAccess');
 
 // All entity levels — matches the frontend's ENTITY_LEVEL_OPTIONS (src/api/common.ts).
 // Alert metric counts carry these so their filter/dedup matches the deduped alerts list.
@@ -39,11 +40,41 @@ const METRIC_CATEGORIES = [
   { key: 'social', label: 'Social Media', isOutageEvent: false },
 ];
 
+// Project a materialized (global) result set down to what this request may see.
+const applyAccessToActivities = async (req, data) => {
+  const notableActivities = await filterNotableActivitiesForUser(
+    data.notableActivities,
+    {
+      user: req.accessUser || req.user,
+      accessFilter: req.reportSourceAccessFilter,
+      incidentAccess: req.incidentAccess,
+    }
+  );
+
+  return {
+    ...data,
+    notableActivities,
+    highConfidenceActivities: notableActivities.filter(
+      (activity) => activity.isHighConfidence
+    ),
+  };
+};
+
 exports.analytics_notable_activities = async (req, res) => {
   try {
-    const data = await getMaterializedNotableActivities(
-      parseAnalyticsQuery(req.query, { allowLimit: true })
+    // Fetch unlimited, project for this user, then apply the caller's limit, so a
+    // restricted user still receives a full page rather than a page with holes in it.
+    const { limit, ...options } = parseAnalyticsQuery(req.query, { allowLimit: true });
+    const data = await applyAccessToActivities(
+      req,
+      await getMaterializedNotableActivities(options)
     );
+
+    if (typeof limit === 'number' && limit >= 0) {
+      data.notableActivities = data.notableActivities.slice(0, limit);
+      data.highConfidenceActivities = data.highConfidenceActivities.slice(0, limit);
+    }
+
     return res.status(200).send(data);
   } catch (err) {
     return handleAnalyticsError(res, err, 'Error fetching notable activities');
@@ -52,7 +83,10 @@ exports.analytics_notable_activities = async (req, res) => {
 
 exports.analytics_overview = async (req, res) => {
   try {
-    const data = await getMaterializedNotableActivities(parseAnalyticsQuery(req.query));
+    const data = await applyAccessToActivities(
+      req,
+      await getMaterializedNotableActivities(parseAnalyticsQuery(req.query))
+    );
     return res.status(200).send({
       cacheKey: data.cacheKey,
       cacheStatus: data.cacheStatus,
@@ -114,7 +148,13 @@ exports.analytics_report_metrics = async (req, res) => {
               hideDuplicateASNs = 'true';
             }
 
-            const count = await countReports(queryData, { hideDuplicateASNs });
+            // The access filter is mandatory here: without it the metric counts
+            // reports from sources the caller cannot see, and stops matching the
+            // deep-linked list's "Showing X of N".
+            const count = await countReports(queryData, {
+              hideDuplicateASNs,
+              accessFilter: req.reportSourceAccessFilter,
+            });
             return { key: row.key, label: row.label, count, query };
           })
         );

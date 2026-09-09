@@ -20,8 +20,10 @@ const {
 const { resolveUseDedup } = require('../utils/reportCounts');
 
 const Source = require('../../models/source');
-const User = require('../../models/user');
-const { buildReportSourceAccessFilter } = require('../../access/sourceAccess');
+const {
+  combineReportFilters,
+  getReportSourceAccessFilter,
+} = require('../utils/reportSourceAccess');
 const { normalizeIds } = require('../../access/teamAccess');
 const {
   hideRestrictedIncidentReferences,
@@ -56,49 +58,6 @@ const parseQueryData = (queryString) => {
   if (query.tags) query.tags = tags.toArray(query.tags);
   return query;
 }
-
-//report AccessUser
-const getReportAccessUser = async (req) => {
-  if (req.accessUser) {
-    return req.accessUser;
-  }
-
-  if (!req.user) {
-    return null;
-  }
-
-  if (req.user.role === 'admin') {
-    return req.user;
-  }
-
-  const userId = req.user._id || req.user.id;
-
-  return User.findById(userId)
-    .select('_id role teams teamMemberships')
-    .lean();
-};
-
-const getReportSourceAccessFilter = async (req) => {
-  const accessUser = await getReportAccessUser(req);
-
-  if (accessUser && accessUser.role === 'admin') {
-    return {};
-  }
-
-  const sources = await Source.find({}, '_id accessPolicy')
-    .lean()
-    .exec();
-
-  return buildReportSourceAccessFilter(accessUser, sources);
-};
-
-const combineReportFilters = (filter, sourceAccessFilter) => {
-  if (!sourceAccessFilter || Object.keys(sourceAccessFilter).length === 0) {
-    return filter;
-  }
-
-  return { $and: [filter, sourceAccessFilter] };
-};
 
 const canModifyReportsWithinScope = async (
   reportIds,

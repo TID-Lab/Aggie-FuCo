@@ -166,10 +166,64 @@ function getDistinctNonEmptyStrings(values) {
   }))];
 }
 
+
+function toDistinctSet(values) {
+  const distinct = new Set();
+  values.forEach(function (value) {
+    if (value === null || typeof value === 'undefined' || value === '') {
+      distinct.add(null);
+      return;
+    }
+    distinct.add(value.toString());
+  });
+  return [...distinct];
+}
+
+// Re-derive a notable activity's fields from a subset of its reports.
+function projectNotableActivityToReports(activity, reports) {
+  if (!Array.isArray(reports) || reports.length === 0) return null;
+
+  const sources = getDistinctNonEmptyStrings(
+    flattenArrayValues(reports.map((report) => report._media))
+  ).sort();
+  const signals = getDistinctNonEmptyStrings(
+    reports.map((report) => {
+      const metadata = report.metadata || {};
+      const rawAPIResponse = metadata.rawAPIResponse || {};
+      return rawAPIResponse.dataSource;
+    })
+  ).sort();
+  const sourceCnt = sources.length;
+  const signalCnt = signals.length;
+
+  return {
+    ...activity,
+    sourceCnt,
+    sources,
+    signalCnt,
+    signals,
+    totalReports: reports.length,
+    reportIds: reports.map((report) => report._id),
+    isHighConfidence:
+      sourceCnt >= HIGH_CONFIDENCE_MIN_COUNT ||
+      signalCnt >= HIGH_CONFIDENCE_MIN_COUNT,
+    asn: getSingleDisplayValue(
+      getDistinctNonEmptyStrings(reports.map((report) => report.asn))
+    ),
+    geoScope: getSingleDisplayValue(
+      getDistinctNonEmptyStrings(reports.map((report) => report.geoScope))
+    ),
+    incidentId: getSingleIncidentId(
+      toDistinctSet(reports.map((report) => report._group))
+    ),
+  };
+}
+
 module.exports = {
   HIGH_CONFIDENCE_MIN_COUNT,
   buildOutageReportMatch,
   aggregateNotableActivities,
   buildEventAggKey,
   compareNotableActivities,
+  projectNotableActivityToReports,
 };

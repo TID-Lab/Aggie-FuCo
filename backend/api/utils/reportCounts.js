@@ -27,10 +27,12 @@ const resolveUseDedup = (queryData, { hideDuplicateASNs } = {}) => {
 
 // Count reports for a parsed query (as produced by reportController.parseQueryData),
 // using the same dedup-aware counting path the list uses. `hideDuplicateASNs` is the
-// same 'true'/'false' toggle the list honors. Returns a Promise<number>.
-const countReports = (queryData, { hideDuplicateASNs } = {}) => {
+// same 'true'/'false' toggle the list honors. `accessFilter` is the caller's source
+// access filter and MUST be passed wherever the list would pass one, or the count
+// includes reports the requesting user cannot see. Returns a Promise<number>.
+const countReports = (queryData, { hideDuplicateASNs, accessFilter } = {}) => {
   const query = new ReportQuery(queryData);
-  const filter = query.toMongooseFilter();
+  let filter = query.toMongooseFilter();
 
   // Same extra overrides queryReports/queryReportsDeduped apply on top of the filter.
   if (query.escalated === 'escalated') filter.escalated = true;
@@ -38,6 +40,10 @@ const countReports = (queryData, { hideDuplicateASNs } = {}) => {
   if (query.veracity === 'confirmed true') filter.veracity = 'Confirmed True';
   if (query.veracity === 'confirmed false') filter.veracity = 'Confirmed False';
   if (query.veracity === 'unconfirmed') filter.veracity = 'Unconfirmed';
+
+  if (accessFilter && Object.keys(accessFilter).length > 0) {
+    filter = { $and: [filter, accessFilter] };
+  }
 
   if (resolveUseDedup(queryData, { hideDuplicateASNs })) {
     return Report.countReportsDedupedTotal(filter);
