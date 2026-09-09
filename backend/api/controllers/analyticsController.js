@@ -182,8 +182,10 @@ exports.analytics_create_incident = async (req, res) => {
       return res.status(400).send('group payload is required');
     }
 
+    const { accessPolicy, ...safeGroupPayload } = groupPayload;
+
     const group = await Group.create({
-      ...groupPayload,
+      ...safeGroupPayload,
       creator: req.user,
     });
 
