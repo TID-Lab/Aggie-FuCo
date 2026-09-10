@@ -221,9 +221,8 @@ const serializeReport = (report, { stripChart = false } = {}) => {
 };
 
 // Wraps list/feed responses; strips the IODA chart series from each row (detail keeps it).
-const serializeReportResponse = (payload) => {
-  const serializeRow = (row) => serializeReport(row, { stripChart: true });
-
+const serializeReportResponse = (payload, { stripChart = true } = {}) => {
+  const serializeRow = (row) => serializeReport(row, { stripChart });
   if (Array.isArray(payload)) {
     return payload.map(serializeRow);
   }
@@ -238,9 +237,9 @@ const serializeReportResponse = (payload) => {
   return serializeRow(payload);
 };
 
-const sendReportResponse = async (req, res, payload, status = 200) => {
+const sendReportResponse = async (req, res, payload, status = 200, options = {}) => {
   try {
-    const serialized = serializeReportResponse(payload);
+    const serialized = serializeReportResponse(payload, options);
     const safePayload = await hideRestrictedIncidentReferences(
       req.accessUser || req.user,
       serialized
@@ -364,7 +363,7 @@ exports.report_details = (req, res) => {
     else if (!report) res.sendStatus(404);
     else {
       
-      return sendReportResponse(req, res, report);
+      return sendReportResponse(req, res, report, 200, { stripChart: false });
     }
   });
 }
